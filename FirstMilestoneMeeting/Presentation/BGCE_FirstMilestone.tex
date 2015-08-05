@@ -1,0 +1,70 @@
+\documentclass[9pt,pdftex]{beamer}
+\setbeamertemplate{section in toc}[sections numbered]
+\setbeamertemplate{subsection in toc}%
+{\leavevmode\leftskip=3em\rlap{\hskip-2em\inserttocsectionnumber.\inserttocsubsectionnumber}\inserttocsubsection\par}
+% use git: import repository as new project in eclipse: http://www.eclipse.org/forums/index.php/t/226301/
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amsfonts, amsmath, amssymb}
+\usepackage[bf,small, format=plain]{caption}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{tikz,tikzscale,pgfplots,grffile}
+\usepgflibrary{arrows}
+\usetikzlibrary{plotmarks}
+%\usepackage{multirow}
+% \usepackage{paralist}
+%\usepackage[colorinlistoftodos]{todonotes}
+%\usepackage{biblatex}
+%usepackage[nolist,nohyperlinks]{acronym}
+%\usepackage{amstext}
+%\usepackage{hyperref} 
+%\usepackage{comment}
+%\usepackage{subcaption}
+%\renewcommand*{\figureautorefname}{fig.}
+%\renewcommand*{\equationautorefname}{eq.}
+\usepackage{bm}
+\usepackage{comment}
+%\usepackage{beamerthemeshadow}
+%\usepackage{tikz}
+%\usepackage{pgfplots}
+%\usepackage{ulem}
+%\usepackage[lofdepth,lotdepth]{subfig}
+%\newenvironment{figure*}%
+%{\begin{figure}}
+%{\end{figure}}
+%\usepackage[style=mla,babel=hyphen,backend=biber]{biblatex}
+% CSE-Beamer-Styles:
+%\usepackage[conference]{beamertheme_sccstalk}
+\usepackage[lecture]{beamertheme_sccstalk}
+\usepackage{beamercolorscheme_sccs}
+\usepackage{beamerfontthemestructurebold}
+\setcounter{tocdepth}{3} 
+%some useful commands
+%\newcommand{\der}[2]{\frac{\text{d}#1}{\text{d}#2}}
+\title{BGCE Project: CAD -- Integrated Topology Optimization}
+\subtitle{BGCE First Milestone Meeting}
+\author[E. Wannerberg, B. Rüth] {S. Joshi, J.C. Medina, F. Menhorn, S. Reiz, \textit{B. Rüth}, \textit{E. Wannerberg}, A. Yurova} %[displayed in footer]{displayed on title page}
+\date{\today}
+\institute{Technische Universität München}
+\newtheorem*{rem}{Remark}
+
+\begin{document}
+\titlepage
+\begin{frame}{Contents}
+\tableofcontents
+\end{frame}
+
+\input{Sections/Workflow}
+
+\input{Sections/CAD}
+
+\input{Sections/Voxelization}
+
+\input{Sections/BoundaryConditions}
+
+\input{Sections/TopologyOptimization}
+
+\input{Sections/FeatureRecognition}
+
+\end{document}
