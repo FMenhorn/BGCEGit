@@ -51,30 +51,38 @@ B--Splines
 \end{frame}
 
 \begin{frame}{B--Spline Fitting}
-\only<1>{
-\input{Pictures/EasyBSplineFit/onlyData}
-}
-\only<2>{
-\input{Pictures/EasyBSplineFit/withFit}
-%this works quite good!
-}
+
+\begin{figure}
+			\only<1>{\includegraphics[scale=0.7]{Pictures/EasyBSplineFit/onlyData.pdf}}
+			\only<2>{\includegraphics[scale=0.7]{Pictures/EasyBSplineFit/withFit.pdf}}
+\end{figure}
+%\input{Pictures/EasyBSplineFit/onlyData}
+%}
+%
+%\input{Pictures/EasyBSplineFit/withFit}
+%%this works quite good!
+%}
 
 \begin{variableblock}{Goal:}{bg=cyan,fg=white}{bg=white,fg=black}
+{
 Find B--Spline representation of our data!\\
 \begin{equation*}
 \vec{S}\left(u_\alpha,v_\alpha\right) \approx \vec{P}_{\alpha} 
 \end{equation*}
+}
 \end{variableblock}
 
 \end{frame}
 
 \begin{frame}{B--spline fitting: Least squares}
 \begin{variableblock}{The task:}{bg=cyan,fg=white}{bg=white,fg=black}
+{
 Find control points $C_{i,j}$, such that the B--Spline surface
 \begin{equation*}
 \vec{S}\left(u,v\right)=\sum\limits_{i,j=1}^{n,m} \vec{C}_{i,j} N_i^p\left(u\right) N_j^p\left(v\right)
 \end{equation*}
 approximates our dataset of points $\left\lbrace \vec{P}_{\alpha} \right\rbrace $. 
+}
 \end{variableblock}
 
 This leads to \textit{minimization problem}:
@@ -96,8 +104,10 @@ A C \approx P
 
 
 \begin{variableblock}{}{bg=white,fg=white}{bg=red,fg=black}
+{
 \textbf{
 Our system matrix $A$ depends on $\left\lbrace u_\alpha,v_\alpha \right\rbrace$}
+}
 \end{variableblock}
 
 \end{frame}
@@ -141,25 +151,31 @@ Our system matrix $A$ depends on $\left\lbrace u_\alpha,v_\alpha \right\rbrace$}
 
 \begin{frame}{B--Spline Fitting: Parameter correction}
 \begin{variableblock}{The task:}{bg=cyan,fg=white}{bg=white,fg=black}
+{
 For \textit{fixed} control points $C_{i,j}$, find an optimal parametrization $\left\lbrace u_\alpha,v_\alpha \right\rbrace$.
+}
 \end{variableblock}
 \input{Pictures/ParameterOpt/parameterOpti}
 \end{frame}
 
 \begin{frame}{Summary}
 \begin{variableblock}{What's done?}{bg=cyan,fg=white}{bg=white,fg=black}
+{
 \begin{itemize}
 \item first part of the pipeline from CAD model to optimized voxel model
 \item identified crucial points in the fitting problem
 \end{itemize}
+}
 \end{variableblock}
 \end{frame}
 
 \begin{frame}{Outlook}
 \begin{variableblock}{What's next?}{bg=cyan,fg=white}{bg=white,fg=black}
+{
 \begin{itemize}
 \item further work on M.Eck \& H.Hoppe paper
 \item search for algorithm which considers voxel geometry
 \end{itemize}
+}
 \end{variableblock}
 \end{frame}
