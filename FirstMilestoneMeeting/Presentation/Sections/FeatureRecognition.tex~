@@ -93,7 +93,7 @@
 					\scalebox{0.08}{\includegraphics{Pictures/4TPD.pdf}}\\
 					\scalebox{0.08}{\includegraphics{Pictures/5TOPOPT.pdf}}\\
 					\scalebox{0.08}{\includegraphics{Pictures/6TOPYOUT.pdf}}\\
-					\scalebox{0.08}{\includegraphics{Pictures/7MC.pdf}}  %THIS NEEDS TO BE CHANGED FOR MARK!
+					\scalebox{0.08}{\includegraphics{Pictures/7MC.pdf}}\\  %THIS NEEDS TO BE CHANGED FOR MARK!
 		\end{figure}
 	\end{minipage}
 
