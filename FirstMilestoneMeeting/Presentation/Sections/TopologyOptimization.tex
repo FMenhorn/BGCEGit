@@ -1,13 +1,14 @@
 \begin{frame}
-		\frametitle{From STL To Voxels}
+		\frametitle{Topology Optimization}
 		\begin{minipage}{0.85\textwidth}
+			Tools:
 			\begin{itemize}
 			\item ToPy for topology optimization
-			\item Script for generating .tpd file
-			\item Takes binary output from CVMLCPP and generates ToPy input
+			\item Custom script for generating .tpd file
 			\begin{itemize}
-				\item Non-Voxel cells are set to passive elements
-				\item Fixture and load nodes set manually at the moment
+				\item Takes binary output from CVMLCPP and generates ToPy input
+				\item Sets non-voxel cells to passive elements
+				\item Adds boundary conditions manually
 			\end{itemize}
 			\end{itemize}
 			\only<1>{			
@@ -69,9 +70,9 @@
 			\begin{figure}
 				\scalebox{0.08}{\includegraphics{Pictures/1CAD.pdf}}\\
 				\scalebox{0.08}{\includegraphics{Pictures/2STL.pdf}}\\
-				\scalebox{0.08}{\input{Pictures/3VOXmark}}\\
-				\scalebox{0.08}{\includegraphics{Pictures/4TPD.pdf}}\\
-				\scalebox{0.08}{\includegraphics{Pictures/5TOPOPT.pdf}}\\
+				\scalebox{0.08}{\includegraphics{Pictures/3VOX.pdf}}\\
+				\scalebox{0.08}{\includegraphics{Pictures/4TPDmark2.pdf}}\\
+				\scalebox{0.08}{\includegraphics{Pictures/5TOPOPTmark1.pdf}}\\
 				\scalebox{0.08}{\includegraphics{Pictures/6TOPYOUT.pdf}}\\
 				\scalebox{0.08}{\includegraphics{Pictures/7MC.pdf}}
 			\end{figure}

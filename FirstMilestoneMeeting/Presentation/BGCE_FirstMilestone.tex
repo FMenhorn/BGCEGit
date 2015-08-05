@@ -35,6 +35,8 @@
 \pgfsetlayers{bg,main}
 
 \usepackage{mdframed}
+\usepackage{multicol}
+\usepackage{tcolorbox}
 %\usepackage{multirow}
 % \usepackage{paralist}
 %\usepackage[colorinlistoftodos]{todonotes}
@@ -83,7 +85,9 @@
 \begin{frame}{Contents}
 \tableofcontents
 \end{frame}
+
 \section{Workflow Overview}
+
 \input{Sections/Workflow}
 \section{Schedule \& Deadlines}
 \input{Sections/Schedule}
@@ -101,8 +105,8 @@
 
 %-------------------------------------------------------
 
-%\subsection{Boundary conditions}
-%\input{Sections/BoundaryConditions}
+\subsection{Boundary conditions}
+\input{Sections/BoundaryConditions}
 
 %-------------------------------------------------------
 
@@ -111,7 +115,7 @@
 
 %-------------------------------------------------------
 
-\section{Feature recognition}
+\subsection{Feature recognition}
 \input{Sections/FeatureRecognition}
 
 %-------------------------------------------------------
