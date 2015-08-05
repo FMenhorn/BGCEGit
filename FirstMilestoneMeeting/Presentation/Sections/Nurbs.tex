@@ -1,7 +1,7 @@
 \newcommand{\norm}[1]{\parallel #1 \parallel_2}
 
 %\subsection{Current Status}
-\begin{frame}{Current status}
+\begin{frame}{Current Status}
 \begin{minipage}[t]{0.4\linewidth}
 
 \begin{itemize}
@@ -71,7 +71,7 @@ Find B--Spline representation of our data!\\
 
 \end{frame}
 
-\begin{frame}{B--spline fitting: Least squares}
+\begin{frame}{B--Spline Fitting: Least Squares}
 \begin{variableblock}{The task:}{bg=cyan,fg=white}{bg=white,fg=black}
 {
 Find control points $C_{i,j}$, such that the B--Spline surface
@@ -89,7 +89,7 @@ This leads to \textit{minimization problem}:
 \end{equation*}
 \end{frame}
 
-\begin{frame}{B--spline fitting: Least squares (cont.)}
+\begin{frame}{B--Spline Fitting: Least Squares (cont.)}
 Resulting system looks like:
 \begin{equation*}
 \sum\limits_{i,j=1}^{n,m} \vec{C}_{i,j} N_i^p\left(u_\alpha\right) N_j^p\left(v_\alpha\right) \approx \vec{P}_{\alpha} \quad \forall \alpha
@@ -109,7 +109,7 @@ Our system matrix $A$ depends on $\left\lbrace u_\alpha,v_\alpha \right\rbrace$}
 
 \end{frame}
 
-\begin{frame}{B--Spline Fitting pipeline according to Becker, Schäfer, Jameson}
+\begin{frame}{B--Spline Fitting Pipeline [Becker, Schäfer, Jameson]}
 \center{How to deal with a complex shape?}
         \begin{tikzpicture} 
         \begin{pgfonlayer}{bg}
@@ -132,7 +132,7 @@ Our system matrix $A$ depends on $\left\lbrace u_\alpha,v_\alpha \right\rbrace$}
         \end{tikzpicture}
 \end{frame}
 
-\begin{frame}{B--Spline Fitting: Open questions}
+\begin{frame}{B--Spline Fitting: Open Questions}
 \begin{itemize}
 \item How to distribute our data into patches?
 \item How to parameterize obtained patches?
@@ -140,13 +140,13 @@ Our system matrix $A$ depends on $\left\lbrace u_\alpha,v_\alpha \right\rbrace$}
 \end{itemize}
 \end{frame}
 
-\begin{frame}{B--Spline Fitting pipeline according to M. Eck \& H. Hoppe}
+\begin{frame}{B--Spline Fitting Pipeline [M. Eck \& H. Hoppe]}
 \begin{figure}
 \includegraphics[width=0.625\linewidth]{Pictures/HoppePipeline.png}
 \end{figure}
 \end{frame}
 
-\begin{frame}{B--Spline Fitting: Parameter correction}
+\begin{frame}{B--Spline Fitting: Parameter Correction}
 \begin{variableblock}{The task:}{bg=cyan,fg=white}{bg=white,fg=black}
 {
 For \textit{fixed} control points $C_{i,j}$, find an optimal parametrization $\left\lbrace u_\alpha,v_\alpha \right\rbrace$.
