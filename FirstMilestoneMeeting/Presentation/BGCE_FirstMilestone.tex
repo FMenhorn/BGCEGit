@@ -14,7 +14,9 @@
 \usepackage{tikz,tikzscale,pgfplots,grffile}
 \usetikzlibrary{arrows,shapes,backgrounds}
 \usetikzlibrary{plotmarks}
+\usepackage{bbding}
 
+\usepackage[clock]{ifsym}
 
 \usepackage{pgfplots}
 \usepackage{grffile}
@@ -84,6 +86,10 @@
 \tableofcontents
 \end{frame}
 
+\section{Introduction}
+\subsection{Motivation}
+\input{Sections/Motivation}
+
 \section{Workflow Overview}
 
 \input{Sections/Workflow}
@@ -113,8 +119,8 @@
 
 %-------------------------------------------------------
 
-\subsection{Feature recognition}
-\input{Sections/FeatureRecognition}
+\subsection{Surface Extraction}
+\input{Sections/SurfaceExtraction}
 
 %-------------------------------------------------------
 
@@ -122,5 +128,12 @@
 
 \subsection{B--Spline Fitting}
 \input{Sections/Nurbs}
-
+\section{Summary}
+\input{Sections/Summary}
+\section{Outlook}
+\input{Sections/Outlook}
+\section*{Thank You}
+\input{Sections/ThankYou}
+\section*{Literature}
+\input{Sections/Literature}
 \end{document}
