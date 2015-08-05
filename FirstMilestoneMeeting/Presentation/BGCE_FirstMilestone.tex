@@ -13,6 +13,7 @@
 \usetikzlibrary{arrows,shapes,backgrounds}
 \usetikzlibrary{plotmarks}
 
+
 \usepackage{pgfplots}
 \usepackage{grffile}
 \pgfplotsset{compat=newest}
@@ -58,10 +59,10 @@
 \usepackage{beamercolorscheme_sccs}
 \usepackage{beamerfontthemestructurebold}
 \setcounter{tocdepth}{3} 
-%colored blocks, example \begin{variableblock}{Title}{bg=blue,fg=white}{bg=green,fg=red}
+%colored blocks, example \begin{variableblock}{Title}{bg=blue,fg=white}{bg=white,fg=black}
 \newenvironment{variableblock}[3]{%
-\setbeamercolor{block body}{#2}
-\setbeamercolor{block title}{#3}
+\setbeamercolor{block title}{#2}
+\setbeamercolor{block body}{#3}
 \begin{block}{#1}}{\end{block}}
 
 %some useful commands

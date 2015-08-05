@@ -59,23 +59,23 @@ B--Splines
 %this works quite good!
 }
 
-\begin{block}{Goal:}
+\begin{variableblock}{Goal:}{bg=cyan,fg=white}{bg=white,fg=black}
 Find B--Spline representation of our data!\\
 \begin{equation*}
 \vec{S}\left(u_\alpha,v_\alpha\right) \approx \vec{P}_{\alpha} 
 \end{equation*}
-\end{block}
+\end{variableblock}
 
 \end{frame}
 
 \begin{frame}{B--spline fitting: Least squares}
-\begin{block}{The task:}
+\begin{variableblock}{The task:}{bg=cyan,fg=white}{bg=white,fg=black}
 Find control points $C_{i,j}$, such that the B--Spline surface
 \begin{equation*}
 \vec{S}\left(u,v\right)=\sum\limits_{i,j=1}^{n,m} \vec{C}_{i,j} N_i^p\left(u\right) N_j^p\left(v\right)
 \end{equation*}
 approximates our dataset of points $\left\lbrace \vec{P}_{\alpha} \right\rbrace $. 
-\end{block}
+\end{variableblock}
 
 This leads to \textit{minimization problem}:
 \begin{equation*}
@@ -95,17 +95,15 @@ A C \approx P
 \end{equation*}
 
 
-\begin{mdframed}
+\begin{variableblock}{}{bg=white,fg=white}{bg=red,fg=black}
 \textbf{
 Our system matrix $A$ depends on $\left\lbrace u_\alpha,v_\alpha \right\rbrace$}
-\end{mdframed}
+\end{variableblock}
 
 \end{frame}
 
 \begin{frame}{B--Spline Fitting pipeline according to Becker, Schäfer, Jameson}
 \center{How to deal with a complex shape?}
-
-
         \begin{tikzpicture} 
         \begin{pgfonlayer}{bg}
         \path (0,0) arc (180:0:4)
@@ -130,7 +128,7 @@ Our system matrix $A$ depends on $\left\lbrace u_\alpha,v_\alpha \right\rbrace$}
 \begin{frame}{B--Spline Fitting: Open questions}
 \begin{itemize}
 \item How to distribute our data into patches?
-\item How to parametrize obtained patches?
+\item How to parameterize obtained patches?
 \item How to connect several patches after fitting?
 \end{itemize}
 \end{frame}
@@ -142,26 +140,26 @@ Our system matrix $A$ depends on $\left\lbrace u_\alpha,v_\alpha \right\rbrace$}
 \end{frame}
 
 \begin{frame}{B--Spline Fitting: Parameter correction}
-\begin{block}{The task:}
+\begin{variableblock}{The task:}{bg=cyan,fg=white}{bg=white,fg=black}
 For \textit{fixed} control points $C_{i,j}$, find an optimal parametrization $\left\lbrace u_\alpha,v_\alpha \right\rbrace$.
-\end{block}
+\end{variableblock}
 \input{Pictures/ParameterOpt/parameterOpti}
 \end{frame}
 
 \begin{frame}{Summary}
-\begin{block}{What's done?}
+\begin{variableblock}{What's done?}{bg=cyan,fg=white}{bg=white,fg=black}
 \begin{itemize}
 \item first part of the pipeline from CAD model to optimized voxel model
 \item identified crucial points in the fitting problem
 \end{itemize}
-\end{block}
+\end{variableblock}
 \end{frame}
 
 \begin{frame}{Outlook}
-\begin{block}{What's next?}
+\begin{variableblock}{What's next?}{bg=cyan,fg=white}{bg=white,fg=black}
 \begin{itemize}
 \item further work on M.Eck \& H.Hoppe paper
 \item search for algorithm which considers voxel geometry
 \end{itemize}
-\end{block}
+\end{variableblock}
 \end{frame}
