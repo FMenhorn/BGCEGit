@@ -1,13 +1,14 @@
 \begin{frame}
 		\frametitle{From STL To Voxels}
 		\begin{minipage}{0.85\textwidth}
+			Tools:
 			\begin{itemize}
 			\item ToPy for topology optimization
-			\item Script for generating .tpd file
-			\item Takes binary output from CVMLCPP and generates ToPy input
+			\item Custom script for generating .tpd file
 			\begin{itemize}
-				\item Non-Voxel cells are set to passive elements
-				\item Fixture and load nodes set manually at the moment
+				\item Takes binary output from CVMLCPP and generates ToPy input
+				\item Sets non-voxel cells to passive elements
+				\item Adds boundary conditions manually 
 			\end{itemize}
 			\end{itemize}
 			\only<1>{			
