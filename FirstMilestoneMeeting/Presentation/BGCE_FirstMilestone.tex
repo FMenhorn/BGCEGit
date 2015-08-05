@@ -58,6 +58,12 @@
 \usepackage{beamercolorscheme_sccs}
 \usepackage{beamerfontthemestructurebold}
 \setcounter{tocdepth}{3} 
+%colored blocks, example \begin{variableblock}{Title}{bg=blue,fg=white}{bg=green,fg=red}
+\newenvironment{variableblock}[3]{%
+\setbeamercolor{block body}{#2}
+\setbeamercolor{block title}{#3}
+\begin{block}{#1}}{\end{block}}
+
 %some useful commands
 %\newcommand{\der}[2]{\frac{\text{d}#1}{\text{d}#2}}
 \title{BGCE Project: CAD -- Integrated Topology Optimization}
