@@ -1,0 +1,79 @@
+\begin{frame}
+		\frametitle{From STL To Voxels}
+		\begin{minipage}{0.85\textwidth}
+			\begin{itemize}
+			\item ToPy for topology optimization
+			\item Script for generating .tpd file
+			\item Takes binary output from CVMLCPP and generates ToPy input
+			\begin{itemize}
+				\item Non-Voxel cells are set to passive elements
+				\item Fixture and load nodes set manually at the moment
+			\end{itemize}
+			\end{itemize}
+			\only<1>{			
+			\centering
+			\begin{figure}
+			\includegraphics[scale=0.1706]{Pictures/STLToVoxels/Star_VTK_Trans.png}
+			\end{figure}
+			}
+			\only<2>{
+			\centering
+			\begin{figure}
+			\includegraphics[scale=0.15]{Pictures/TopOp/Star_Optimized0_Trans.png}
+			\end{figure}
+			}
+			\only<3>{
+			\centering
+			\begin{figure}
+			\includegraphics[scale=0.15]{Pictures/TopOp/Star_Optimized1_Trans.png}
+			\end{figure}
+			}
+			\only<4>{
+			\centering
+			\begin{figure}
+			\includegraphics[scale=0.15]{Pictures/TopOp/Star_Optimized2_Trans.png}
+			\end{figure}
+			}
+			\only<5>{
+			\centering
+			\begin{figure}
+			\includegraphics[scale=0.15]{Pictures/TopOp/Star_Optimized3_Trans.png}
+			\end{figure}
+			}
+			\only<6>{
+			\centering
+			\begin{figure}
+			\includegraphics[scale=0.15]{Pictures/TopOp/Star_Optimized4_Trans.png}
+			\end{figure}
+			}
+			\only<7>{
+			\centering
+			\begin{figure}
+			\includegraphics[scale=0.15]{Pictures/TopOp/Star_Optimized5_Trans.png}
+			\end{figure}
+			}
+			\only<8>{
+			\centering
+			\begin{figure}
+			\includegraphics[scale=0.05]{Pictures/STLToVoxels/Star_VTK_Trans.png}
+			\includegraphics[scale=0.05]{Pictures/TopOp/Star_Optimized0_Trans.png}
+			\includegraphics[scale=0.05]{Pictures/TopOp/Star_Optimized1_Trans.png}
+			\includegraphics[scale=0.05]{Pictures/TopOp/Star_Optimized2_Trans.png}
+			\includegraphics[scale=0.05]{Pictures/TopOp/Star_Optimized3_Trans.png}
+			\includegraphics[scale=0.05]{Pictures/TopOp/Star_Optimized4_Trans.png}
+			\includegraphics[scale=0.05]{Pictures/TopOp/Star_Optimized5_Trans.png}
+			\end{figure}
+			}
+		\end{minipage}
+		\begin{minipage}{0.14\textwidth}
+			\begin{figure}
+				\scalebox{0.08}{\includegraphics{Pictures/1CAD.pdf}}\\
+				\scalebox{0.08}{\includegraphics{Pictures/2STL.pdf}}\\
+				\scalebox{0.08}{\input{Pictures/3VOXmark}}\\
+				\scalebox{0.08}{\includegraphics{Pictures/4TPD.pdf}}\\
+				\scalebox{0.08}{\includegraphics{Pictures/5TOPOPT.pdf}}\\
+				\scalebox{0.08}{\includegraphics{Pictures/6TOPYOUT.pdf}}\\
+				\scalebox{0.08}{\includegraphics{Pictures/7MC.pdf}}
+			\end{figure}
+		\end{minipage}
+\end{frame}
