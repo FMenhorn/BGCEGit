@@ -1,27 +1,74 @@
+%\frame{
+%	\frametitle{Workflow Overview}
+%
+%    \center{
+%	\begin{tikzpicture} 
+%        \begin{pgfonlayer}{bg}
+%        \path (0,0) arc (180:-128:2.5)
+%        node [pos=0,inner sep=0pt](N1)
+%                {\includegraphics[width=1.75cm]{Pictures/1CAD.pdf}}
+%        node [pos=.15,inner sep=0pt](N2)
+%                {\includegraphics[width=1.75cm]{Pictures/2STL.pdf}}
+%        node [pos=.32,inner sep=0pt](N3)
+%                {\includegraphics[width=1.75cm]{Pictures/3VOX.pdf}}
+%        node [pos=.5,inner sep=0pt](N4)             
+%                {\includegraphics[width=1.75cm]{Pictures/4TPD.pdf}}
+%        node [pos=.68,inner sep=0pt](N5) 
+%                {\includegraphics[width=1.75cm]{Pictures/5TOPOPT.pdf}}
+%        node [pos=.85,inner sep=0pt](N6)
+%                {\includegraphics[width=1.75cm]{Pictures/7MC.pdf}}
+%        node [pos=1,inner sep=0pt](N7)
+%                {\includegraphics[width=1.8cm,height=1.8cm]{Pictures/End.png}};
+%        \end{pgfonlayer}
+%        \draw[thick,->] (N1) -- (N2);
+%        \draw[thick,->] (N2) -- (N3);
+%        \draw[thick,->] (N3) -- (N4);
+%        \draw[thick,->] (N4) -- (N5); 
+%        \draw[thick,->] (N5) -- (N6); 
+%        \draw[thick,->] (N6) -- (N7);                
+%        \end{tikzpicture}
+%}
+}
 \frame{
 	\frametitle{Workflow Overview}
-	\only<1>{CAD design}
+    \only<1>{CAD design}
 	\only<2>{STL Interface}
-	\only<3>{Voxelization}
-	\only<4>{TPD input file - Specification of loads and fixtures}
-	\only<5>{Topology optimization}
-	\only<6>{Voxelised geometry}
-	\only<7>{Post-processing: Parametrization, Feature recognition}
-	\begin{figure}
-		\scalebox{0.14}{\includegraphics{Pictures/1CAD.pdf}}
-		\pause
-		\scalebox{0.14}{\includegraphics{Pictures/2STL.pdf}}
-		\pause
-		\scalebox{0.14}{\includegraphics{Pictures/3VOX.pdf}}
-		\pause
-		\scalebox{0.14}{\includegraphics{Pictures/4TPD.pdf}}
-		\pause
-		\scalebox{0.14}{\includegraphics{Pictures/5TOPOPT.pdf}}
-		\pause
-		\scalebox{0.14}{\includegraphics{Pictures/7MC.pdf}}
-		\pause
-		\scalebox{0.14}{\includegraphics[scale=1.3]{Pictures/End.png}}
-	\end{figure}
-	\only<0>{CAD design}
-	\only<2>{STL interface}
+	\only<3>{Voxelized topology}
+	\only<4>{Specification of loads and fixtures}
+	\only<5>{Optimized topology}
+	\only<6>{Surface extraction}
+	\only<7>{Parametrized CAD-geometries}
+    \center{
+	\begin{tikzpicture} 
+        \node at (0,3)[inner sep=0pt](N1)
+                {\includegraphics[width=2cm]{Pictures/1CAD.pdf}};
+                \pause
+        \node at (3,3) [inner sep=0pt](N2)
+                {\includegraphics[width=2cm]{Pictures/2STL.pdf}};
+        \draw[thick,->] (N1) -- (N2);
+                \pause
+        \node at (6,3)[inner sep=0pt](N3)
+                {\includegraphics[width=2cm]{Pictures/3VOX.pdf}};
+        \draw[thick,->] (N2) -- (N3);
+                \pause
+        \node at (9,1.5)[inner sep=0pt](N4)             
+                {\includegraphics[width=2cm]{Pictures/4TPD.pdf}};
+        \draw[thick,->] (N3) -- (N4);
+                \pause
+        \node at (6,0)[inner sep=0pt](N5) 
+                {\includegraphics[width=2cm]{Pictures/5TOPOPT.pdf}};
+        \draw[thick,->] (N4) -- (N5); 
+                \pause
+        \node at (3,0)[inner sep=0pt](N6)
+                {\includegraphics[width=2cm]{Pictures/7MC.pdf}};
+        \draw[thick,->] (N5) -- (N6); 
+                \pause
+        \node at (0,0)[inner sep=0pt](N7)
+                {\includegraphics[width=2.2cm,height=2.2cm]{Pictures/End.png}};
+        
+        \draw[thick,->] (N6) -- (N7);                
+                \pause
+        \draw[thick,->] (N7) -- (N1); 
+        \end{tikzpicture}
+}
 }
