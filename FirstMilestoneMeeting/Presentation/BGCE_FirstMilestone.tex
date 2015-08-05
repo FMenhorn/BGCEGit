@@ -10,8 +10,25 @@
 \usepackage{color}
 \usepackage{graphicx}
 \usepackage{tikz,tikzscale,pgfplots,grffile}
-\usepgflibrary{arrows}
+\usetikzlibrary{arrows,shapes,backgrounds}
 \usetikzlibrary{plotmarks}
+
+\usepackage{pgfplots}
+\usepackage{grffile}
+\pgfplotsset{compat=newest}
+
+%\author{}
+%\title{}
+%\setbeamercovered{transparent} 
+%\setbeamertemplate{navigation symbols}{} 
+%\logo{} 
+%\institute{} 
+%\date{} 
+%\subject{} 
+
+\pgfdeclarelayer{bg}
+\pgfsetlayers{bg,main}
+
 %\usepackage{multirow}
 % \usepackage{paralist}
 %\usepackage[colorinlistoftodos]{todonotes}
@@ -66,5 +83,7 @@
 \input{Sections/TopologyOptimization}
 
 \input{Sections/FeatureRecognition}
+
+\input{Sections/Nurbs}
 
 \end{document}
