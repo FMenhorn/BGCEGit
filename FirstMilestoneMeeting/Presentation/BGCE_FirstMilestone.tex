@@ -8,6 +8,8 @@
 \usepackage{amsfonts, amsmath, amssymb}
 \usepackage[bf,small, format=plain]{caption}
 \usepackage{color}
+
+%\usepackage[usenames,dvipsnames]{xcolor}
 \usepackage{graphicx}
 \usepackage{tikz,tikzscale,pgfplots,grffile}
 \usetikzlibrary{arrows,shapes,backgrounds}
@@ -62,10 +64,10 @@
 \usepackage{beamerfontthemestructurebold}
 \setcounter{tocdepth}{3} 
 %colored blocks, example \begin{variableblock}{Title}{bg=blue,fg=white}{bg=white,fg=black}
-\newenvironment{variableblock}[3]{%
+\newenvironment{variableblock}[4]{%
 \setbeamercolor{block title}{#2}
 \setbeamercolor{block body}{#3}
-\begin{block}{#1}}{\end{block}}
+\begin{block}{#1}\begin{mdframed}{#4}\end{mdframed}\end{block}}
 
 %some useful commands
 %\newcommand{\der}[2]{\frac{\text{d}#1}{\text{d}#2}}
@@ -82,20 +84,43 @@
 \tableofcontents
 \end{frame}
 
-\input{Sections/Motivation}
+\section{Workflow Overview}
 
 \input{Sections/Workflow}
+\section{Schedule \& Deadlines}
+\input{Sections/Schedule}
+\section{CAD to Optimized Surface}
 
-\input{Sections/CAD}
+%-------------------------------------------------------
 
-\input{Sections/Voxelization}
+\subsection{CAD To STL}
+\input{Sections/CADToSTL}
 
+%-------------------------------------------------------
+
+\subsection{STL To Voxels}
+\input{Sections/STLToVoxels}
+
+%-------------------------------------------------------
+
+\subsection{Boundary conditions}
 \input{Sections/BoundaryConditions}
 
+%-------------------------------------------------------
+
+\subsection{Topology Optimization}
 \input{Sections/TopologyOptimization}
 
+%-------------------------------------------------------
+
+\subsection{Feature recognition}
 \input{Sections/FeatureRecognition}
 
+%-------------------------------------------------------
+
+\section{Optimized Surface to CAD}
+
+\subsection{B--Spline Fitting}
 \input{Sections/Nurbs}
 
 \end{document}
