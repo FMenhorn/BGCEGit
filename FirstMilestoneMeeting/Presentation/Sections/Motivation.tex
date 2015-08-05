@@ -1,7 +1,9 @@
-\section{Introduction} %Change this based on section
-\newcommand{\norm}[1]{\parallel #1 \parallel_2}
-
+\section{Introduction}
 \subsection{Motivation}
+\input{Sections/Motivation}
+
+%\newcommand{\norm}[1]{\parallel #1 \parallel_2}
+
 \begin{frame}{Motivation}
 \begin{multicols}{2}
 Current Design Process:
@@ -13,173 +15,27 @@ Current Design Process:
 \item Time consuming
 \end{itemize}~\\
 %\newline
-\pause
 
-Topology optimization ignored so far
-\newline
-\newline
-Hindrance: \textbf{Manufacturing optimized topology was not feasible!}
-\newline
 \vfill
 \columnbreak
 
 \pause
-%\begin{figure}
-%\includegraphics[width=0.7\linewidth]{Pictures/Motivation/AdditiveManufac.jpg}
-%\end{figure}
 
-Advent of additive manufacturing
+Topology optimization
+\begin{figure}
+\includegraphics[width=0.9\linewidth]{Pictures/Motivation/TopOpt.jpg}
+\end{figure}
 \begin{itemize}
-\item Increased design space
-\item Smoother, faster design process
+\item Promoted by additive manufacturing
 \end{itemize}
-Calls for an integrated toolchain
-\newline
+
 
 \pause
+\end{multicols}
 \begin{tcolorbox}
-\textbf{Focus}: Fit smooth surfaces through optimised topology (STL)
-\begin{itemize}
-\item Scalability
-\item Optimal file size
-\end{itemize}
+\textbf{Focus}: Convert optimized geometry to \textbf{lightweight} and \textbf{scalable} CAD formats
 \end{tcolorbox}
 
-
-\end{multicols}
 \end{frame}
 
-\subsection{B--Spline}
-\begin{frame}{B--Spline}
-\begin{equation*}
-\vec{S}\left(u,v\right)=\sum\limits_{i,j=1}^{n,m} \vec{C}_{i,j} N_i^p\left(u\right) N_j^p\left(v\right),
-\end{equation*}
-where $p$ -- degree of the B--Spline surface and $n,m$ -- number of control points in each direction.
-\begin{columns}
-\begin{column}{.45\textwidth}
-B--Splines
-\begin{itemize}
-\item offer great flexibility for handling arbitrary shapes
-\item are CAD--standard
-\end{itemize}
-\textbf{Engineers are working with CAD}
-\end{column}
-\begin{column}{.45\textwidth}
-\include{Pictures/BSplineEx/example}
-\end{column}
-\end{columns}
-\end{frame}
 
-\begin{frame}{B--Spline Fitting}
-\only<1>{
-\input{Pictures/EasyBSplineFit/onlyData}
-}
-\only<2>{
-\input{Pictures/EasyBSplineFit/withFit}
-%this works quite good!
-}
-
-\begin{variableblock}{Goal:}{bg=cyan,fg=white}{bg=white,fg=black}
-Find B--Spline representation of our data!\\
-\begin{equation*}
-\vec{S}\left(u_\alpha,v_\alpha\right) \approx \vec{P}_{\alpha} 
-\end{equation*}
-\end{variableblock}
-
-\end{frame}
-
-\begin{frame}{B--spline fitting: Least squares}
-\begin{variableblock}{The task:}{bg=cyan,fg=white}{bg=white,fg=black}
-Find control points $C_{i,j}$, such that the B--Spline surface
-\begin{equation*}
-\vec{S}\left(u,v\right)=\sum\limits_{i,j=1}^{n,m} \vec{C}_{i,j} N_i^p\left(u\right) N_j^p\left(v\right)
-\end{equation*}
-approximates our dataset of points $\left\lbrace \vec{P}_{\alpha} \right\rbrace $. 
-\end{variableblock}
-
-This leads to \textit{minimization problem}:
-\begin{equation*}
-\vec{S}\left(u_\alpha,v_\alpha\right) \approx \vec{P}_{\alpha} \forall \alpha \leftrightarrow 
-\underset{\vec{C}_{i,j}\in \mathbb{R}^3}{\min} \sum\limits_\alpha \norm{\vec{P}_{\alpha}-\vec{S}\left(u_\alpha,v_\alpha\right)}
-\end{equation*}
-\end{frame}
-
-\begin{frame}{B--spline fitting: Least squares (cont.)}
-Resulting system looks like:
-\begin{equation*}
-\sum\limits_{i,j=1}^{n,m} \vec{C}_{i,j} N_i^p\left(u_\alpha\right) N_j^p\left(v_\alpha\right) \approx \vec{P}_{\alpha} \quad \forall \alpha
-\end{equation*}
-Or, in matrix--vector form:
-\begin{equation*}
-A C \approx P
-\end{equation*}
-
-
-\begin{variableblock}{}{bg=white,fg=white}{bg=red,fg=black}
-\textbf{
-Our system matrix $A$ depends on $\left\lbrace u_\alpha,v_\alpha \right\rbrace$}
-\end{variableblock}
-
-\end{frame}
-
-\begin{frame}{B--Spline Fitting pipeline according to Becker, Schäfer, Jameson}
-\center{How to deal with a complex shape?}
-        \begin{tikzpicture} 
-        \begin{pgfonlayer}{bg}
-        \path (0,0) arc (180:0:4)
-        node [pos=0,inner sep=0pt](N1)
-                {\includegraphics[width=2.9cm]{Pictures/FittingWorkflow/PureCylinder/pure.eps}}
-        node [pos=.21,inner sep=0pt](N2)
-                {\includegraphics[width=2.9cm]{Pictures/FittingWorkflow/DistriCylinder/distri.eps}}
-        node [pos=.5,inner sep=0pt](N3)             
-                {\includegraphics[width=2.9cm]{Pictures/FittingWorkflow/ParameterSpaces/spaces.eps}}
-        node [pos=.79,inner sep=0pt](N4) 
-                {\includegraphics[width=2.9cm]{Pictures/FittingWorkflow/NURBSnotconn/notconn.eps}}
-        node [pos=1,inner sep=0pt](N5)
-                {\includegraphics[width=2.9cm]{Pictures/FittingWorkflow/PureCylinder/pure.eps}};
-        \end{pgfonlayer}
-        \draw[thick,->] (N1) -- (N2);
-        \draw[thick,->] (N2) -- (N3);
-        \draw[thick,->] (N3) -- (N4);
-        \draw[thick,->] (N4) -- (N5);                
-        \end{tikzpicture}
-\end{frame}
-
-\begin{frame}{B--Spline Fitting: Open questions}
-\begin{itemize}
-\item How to distribute our data into patches?
-\item How to parameterize obtained patches?
-\item How to connect several patches after fitting?
-\end{itemize}
-\end{frame}
-
-\begin{frame}{B--Spline Fitting pipeline according to M. Eck\& H. Hoppe}
-\begin{figure}
-\includegraphics[width=0.625\linewidth]{Pictures/HoppePipeline.png}
-\end{figure}
-\end{frame}
-
-\begin{frame}{B--Spline Fitting: Parameter correction}
-\begin{variableblock}{The task:}{bg=cyan,fg=white}{bg=white,fg=black}
-For \textit{fixed} control points $C_{i,j}$, find an optimal parametrization $\left\lbrace u_\alpha,v_\alpha \right\rbrace$.
-\end{variableblock}
-\input{Pictures/ParameterOpt/parameterOpti}
-\end{frame}
-
-\begin{frame}{Summary}
-\begin{variableblock}{What's done?}{bg=cyan,fg=white}{bg=white,fg=black}
-\begin{itemize}
-\item first part of the pipeline from CAD model to optimized voxel model
-\item identified crucial points in the fitting problem
-\end{itemize}
-\end{variableblock}
-\end{frame}
-
-\begin{frame}{Outlook}
-\begin{variableblock}{What's next?}{bg=cyan,fg=white}{bg=white,fg=black}
-\begin{itemize}
-\item further work on M.Eck \& H.Hoppe paper
-\item search for algorithm which considers voxel geometry
-\end{itemize}
-\end{variableblock}
-\end{frame}
