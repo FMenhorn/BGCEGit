@@ -1,0 +1,136 @@
+% Included by MAIN.TEX
+% Defines the settings for the CAMP report document
+
+\renewcommand{\sectfont}{\normalfont \bfseries}        % Schriftart der Kopfzeile
+
+% manipulate footer
+\usepackage{scrpage2}
+\pagestyle{scrheadings}
+\ifoot[\footertext]{\footertext} % \footertext set in INFO.TEX
+%\setkomafont{pagehead}{\normalfont\rmfamily}
+\setkomafont{pagenumber}{\normalfont\rmfamily}
+
+%% allow sophisticated control structures
+\usepackage{ifthen}
+
+% use Palatino as default font
+\usepackage{palatino}
+
+% enable special PostScript fonts
+\usepackage{pifont}
+
+% make thumbnails
+\usepackage{thumbpdf}
+
+%to use the subfigures
+\usepackage{subfigure}
+
+
+\usepackage{colortbl}
+
+
+%% show program code\ldots
+%\usepackage{verbatim}
+%\usepackage{program}
+
+%% enable TUM symbols on title page
+\usepackage{styles/tumlogo}
+
+
+\usepackage{multirow}
+
+%% use colors
+\usepackage{color}
+
+%% make fancy math
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{textcomp}
+\usepackage{yhmath} % fr die adots 
+%% mark text as preliminary
+%\usepackage[draft,german,scrtime]{prelim2e}
+
+%% create an index
+\usepackage{makeidx}
+
+% for the program environment
+\usepackage{float}
+
+%% load german babel package for german abstract
+%\usepackage[german,american]{babel}
+\usepackage[german,english]{babel}
+\selectlanguage{english}
+
+% use german characters as well
+\usepackage[latin1]{inputenc}       % allow Latin1 characters
+
+% use initals dropped caps - doesn't work with PDF
+%\usepackage{dropping}
+ %\usepackage[dvips]{dropping}
+
+\usepackage{styles/shortoverview}
+%----------------------------------------------------
+%      Graphics and Hyperlinks
+%----------------------------------------------------
+
+%% check for pdfTeX
+\ifx\pdftexversion\undefined
+ %% use PostScript graphics
+ \usepackage[dvips]{graphicx}
+
+ \DeclareGraphicsExtensions{.eps,.epsi}
+ \graphicspath{{figures/}{figures/review}} 
+ %% allow rotations
+ \usepackage{rotating}
+ %% mark pages as draft copies
+ %\usepackage[english,all,light]{draftcopy}
+ %% use hypertex version of hyperref
+ \usepackage[hypertex,hyperindex=false,colorlinks=false]{hyperref}
+\else %% reduce output size \pdfcompresslevel=9
+ %% declare pdfinfo
+ %\pdfinfo { 
+ %  /Title (my title) 
+ %  /Creator (pdfLaTeX) 
+ %  /Author (my name) 
+ %  /Subject (my subject	) 
+ %  /Keywords (my keywords)
+ %}
+ %% use pdf or jpg graphics
+ \usepackage[pdftex]{graphicx}
+ \DeclareGraphicsExtensions{.jpg,.JPG,.png,.pdf,.eps}
+ \graphicspath{{figures/}} 
+ 
+ %% Load float package, for enabling floating extensions
+ \usepackage{float}
+ 
+ %% allow rotations
+ \usepackage{rotating}
+ %% use pdftex version of hyperref
+ \usepackage[pdftex,colorlinks=true,linkcolor=red,citecolor=red,%
+ anchorcolor=red,urlcolor=red,bookmarks=true,%
+ bookmarksopen=true,bookmarksopenlevel=0,plainpages=false%
+ bookmarksnumbered=true,hyperindex=false,pdfstartview=%
+ ]{hyperref}
+%
+%\usepackage[pdftex,colorlinks=false,linkcolor=red,citecolor=red,%
+% anchorcolor=red,urlcolor=red,bookmarks=true,%
+% bookmarksopen=true,bookmarksopenlevel=0,plainpages=false%
+% bookmarksnumbered=true,hyperindex=false,pdfstartview=%
+% ]{hyperref}
+\fi
+
+
+
+
+%% Fancy chapters
+%\usepackage[Lenny]{fncychap}
+%\usepackage[Glenn]{fncychap}
+%\usepackage[Bjarne]{fncychap}
+
+%\usepackage[avantgarde]{quotchap}
+
+% set the bibliography style
+%\bibliographystyle{styles/bauermaNum}
+%\bibliographystyle{alpha}
+\bibliographystyle{plain}
