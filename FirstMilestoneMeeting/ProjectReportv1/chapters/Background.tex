@@ -14,6 +14,300 @@
 %marching cubes and so on
 
 \section{From a surface representation to NURBS}
+\subsection{Bezier Curves}
+\emph{Bezier curve} is a \textit{parametric} curve, which often used for producing a smooth approximation of a given set of data points.
+\subsubsection{Analytical expression} 
+An analytical expression for the Bezier curve is given by:
+\begin{equation*}
+\vec{B}(t)=\sum\limits_{i=0}^n b_i^n(t) \vec{P}_i,
+\end{equation*}
+where $\vec{P}_i$ is the $i$--th control point (we have $n+1$ control points). And
+\begin{equation*}
+b_i^n(t)=\left(\begin{array}{c}n\\i\end{array}\right)(1-t)^{(n-i)}t^i
+\end{equation*}
+is the $i$--th Bernstein polynomial of degree $n$.
 
-\subsection{what are nurbs}%move this if it makes more sense elsewhere
+Additionally to the expression with the Bernstein polynomials, one can use a recursion formula (\textbf{de Casteljau Algorithm}) for the construction of the Bezier--curve, which we will not cover here.
+\subsubsection{Surfaces}
+Analogically to Beziercurves, but with $n\cdot m$ Points $\vec{P}_{i,j}$ and the analytical expression
+\begin{equation*}
+\vec{S}(u,v)=\sum\limits_{i=0}^n \sum\limits_{j=0}^m b_i^n(u) b_j^m(v) \vec{P}_{i,j}
+\end{equation*}
+one can define a \textit{Bezier surface}
+\\
+\begin{mdframed}
+Bezier--curves and surfaces may be unstable! Minor changes in control points might lead to major global changes!
+\end{mdframed}
 
+
+\subsection{NURBS basis functions}
+Extending the idea, described in previous section, one could use NURBS basis functions instead of simple Bezier curves. 
+
+Unlike Bezier curves, for the B-spline basis a parameter domain is subdivided with, so-called, \textit{knots}. In particular, given the parameter domain $[u_{0}, u_{m}]$ (in 1D), \textit{knot vector} is given by $u_{0} \leq u_{1} \leq ... \leq u_{m}$. In most cases $u_{0} = 0, u_{m} = 1$, so we get unit interval for our parameter values. Recall, that, N in NURBS stands for \textit{non-uniform}. This means, that our knots $u_{0},..., u_{m}$ are not equidistant.
+
+Given \textit{knot vector} $[u_{0}, u_{m}]$ and a degree of B-spline $p$ one can find $i$-th B-spline basis function recursively as follows:
+\begin{equation}
+N_{i,0}(u) =  \begin{cases} 1, & \mbox{if } u_{i} \leq u < u_{i+1} \\ 0, & \mbox{otherwise } \end{cases}
+\end{equation} 
+\begin{equation}
+N_{i,p}(u) = \frac{u - u_{i}}{u_{i+p} - u_{i}}N_{i, p-1}(u)  + \frac{u_{i+p+1}-u}{u_{i+p+1} - u_{i+1}}N_{i+1, p-1}(u)
+\end{equation}
+For $p=0$ we get just step functions (see fig. \ref{fig:bspline_basis_constant}), for $p=1$ we get familiar hat functions (see fig. \ref{fig:bspline_basis_linear}). Quadratic basis looks a bit more complicated, but also quite intuitive (fig. \ref{fig:lognorm_quadratic}).
+\begin{figure}
+\centering
+\begin{subfigure}[B-spline basis for $p=0$]{
+  \includegraphics[width=.4\linewidth]{basis_constant.eps}}
+  \label{fig:bspline_basis_constant}
+\end{subfigure}%
+\begin{subfigure}[B-spline basis for $p=1$]{
+  \includegraphics[width=.4\linewidth]{basis_linear.eps}}
+  \label{fig:bspline_basis_linear}
+\end{subfigure}
+\begin{subfigure}[B-spline basis for $p=2$]{
+  \includegraphics[width=.4\linewidth]{basis_quadratic.eps}}
+  \label{fig:lognorm_quadratic}
+\end{subfigure}
+\caption{B-spline basis functions}
+\end{figure}
+
+Given these basis functions, Non-Uniform Rational B-Spline curve is given by:
+\begin{equation}
+C(u) = \frac{\sum_{i=1}^{k}N_{i,n}\omega_{i}P_{i}}{\sum_{i=1}^{k}N_{i,n}\omega_{i}},
+\end{equation}
+where $k$ is number of points, $\{P_{i}\}$ are given control points.
+
+B--splines are have the following properties, which are useful for our problem:
+\begin{itemize}
+\item degree $n$ and number of control points $\vec{P}_{i\cdots m}$ are independent!
+\item B--Splines only change locally (depends on the degree $n$) when a control point is changed.
+\end{itemize}
+
+Analogically, one can define B--spline surfaces.
+\subsection{Minimization problem}
+Now, once we defined all necessary tools, we proceed to the fitting problem.
+\begin{mdframed}
+\textbf{The goal:} Fit in a parametric curve to the set of given data points. 
+\end{mdframed}
+In our case our given set of points is a mesh, obtained on a previous step.
+\subsection{Minimization Problem: Bezier curve}
+First we want to find a Bezier--curve $\vec{B}_n\left(t\right)$ of degree $n$ which is approximating a given spline $\vec{s}_m\left(t\right)$ defined by $m$ points in a optimal way. For this purpose we want to minimize the L2--error. This leads to the minimization problem:
+\begin{equation}
+\text{find\ } \underset{\vec{B}_n\in \mathbb{B}_n}{\min} \Ltwonorm{\vec{B}_n-\vec{s}_m}
+\end{equation}
+The function space $\mathbb{B}_n$ is composed of functions of the following form:
+\begin{equation}
+\vec{B}_n\left(t\right)=\sum\limits_{i=0}^n a_{2i}\left(
+\begin{array}{c}
+b_i^n (t)\\0
+\end{array}
+\right)
++ a_{2i+1}
+\left(
+\begin{array}{c}
+0\\b_i^n (t) 
+\end{array}
+\right)
+\end{equation}
+Therefore a control point for the Bezier--curve has the following form:
+\begin{equation}
+\vec{P}_i=\left(
+\begin{array}{c}
+a_{2i}\\a_{2i+1}
+\end{array}
+\right).
+\end{equation}
+Minimizing the L2--norm is equal to minimizing the functional:
+\begin{equation}
+F(\vec{B}_n)=\int\limits_{t=0}^{t=1} \left(\vec{B}_n-\vec{s}_m\right)^2\dt
+\end{equation}
+Varying $B_n$ yields
+\begin{equation}
+\delta F(B_n)=2\int\limits_{t=0}^{t=1} \left(\vec{B}_n-\vec{s}_m\right)^T \delta \vec{B}_n\dt
+\end{equation}
+using the definition of $\vec{B}_n$ and $\delta \vec{B}_n$
+\begin{align}
+\vec{B}_n\left(t\right) &=\sum\limits_{i=0}^n a_{2i}\left(
+\begin{array}{c}
+b_i^n (t)\\0
+\end{array}
+\right)
++ a_{2i+1}
+\left(
+\begin{array}{c}
+0\\b_i^n (t) 
+\end{array}
+\right)
+\\
+\delta \vec{B}_n\left(t\right) &=\sum\limits_{i=0}^n \delta a_{2i}\left(
+\begin{array}{c}
+b_i^n (t)\\0
+\end{array}
+\right)
++ \delta a_{2i+1}
+\left(
+\begin{array}{c}
+0\\b_i^n (t) 
+\end{array}
+\right)
+\end{align}
+leads to
+\begin{multline}
+\delta F(B_n)=2\int\limits_{t=0}^{t=1} \left(\sum\limits_{i=0}^n  a_{2i} \left(
+\begin{array}{c}
+b_i^n (t)\\0
+\end{array}
+\right)
++ a_{2i+1}
+\left(
+\begin{array}{c}
+0\\b_i^n (t) 
+\end{array}
+\right)-\vec{s}_m\right)^T
+\\
+\left(\sum\limits_{j=0}^n \delta a_{2j} \left(
+\begin{array}{c}
+b_j^n (t)\\0
+\end{array}
+\right)
++ \delta a_{2j+1}
+\left(
+\begin{array}{c}
+0\\ b_j^n (t) 
+\end{array}
+\right)\right)\dt \overset{!}{=}0
+\end{multline}
+rewritten
+\begin{multline}
+\int\limits_{t=0}^{t=1} \left(\sum\limits_{i=0}^n  a_{2i}
+\left(
+\begin{array}{c}
+b_i^n (t)\\0
+\end{array}
+\right)
++  a_{2i+1}
+\left(
+\begin{array}{c}
+0\\b_i^n (t)
+\end{array}
+\right)\right)^T
+\left(\sum\limits_{j=0}^n 
+\delta a_{2j} \left(
+\begin{array}{c}
+b_j^n (t)\\0
+\end{array}
+\right)
++ \delta a_{2j+1}
+\left(
+\begin{array}{c}
+0\\ b_j^n (t) 
+\end{array}
+\right)\right)\dt 
+\\
+=
+\int\limits_{t=0}^{t=1}\vec{s}_m^T \left(\sum\limits_{j=0}^n \delta a_{2j} \left(
+\begin{array}{c}
+b_j^n (t)\\0
+\end{array}
+\right)
++ \delta a_{2j+1}
+\left(
+\begin{array}{c}
+0\\ b_j^n (t) 
+\end{array}
+\right)\right)\dt
+\end{multline}
+or using the notation
+\begin{align}
+\phi_{2i}&=
+\left(
+\begin{array}{c}
+b_i^n (t)\\0
+\end{array}
+\right)
+\\
+\phi_{2i+1}&=
+\left(
+\begin{array}{c}
+0\\b_i^n (t)
+\end{array}
+\right)
+\end{align}
+we get
+\begin{equation}
+\int\limits_{t=0}^{t=1} \left(\sum\limits_{i=0}^{2n+1} a_{i}\phi_i
+\right)^T
+\left(\sum\limits_{j=0}^{2n+1}
+\delta a_{j} \phi_j\right)\dt 
+=
+\int\limits_{t=0}^{t=1}\vec{s}_m^T \left(\sum\limits_{j=0}^{2n+1} \delta a_{j} \phi_j\right)\dt
+\end{equation}
+or
+\begin{equation}
+\sum\limits_{i=0}^{2n+1} \sum\limits_{j=0}^{2n+1}
+a_{i} \delta a_{j}\int\limits_{t=0}^{t=1} \phi_i^T
+\phi_j\dt 
+=
+\sum\limits_{j=0}^{2n+1} \delta a_{j} \int\limits_{t=0}^{t=1}\vec{s}_m^T \phi_j\dt
+\end{equation}
+this has to be true for any $j$ and $\delta a_j$, therefore 
+\begin{equation}
+\sum\limits_{i=0}^{2n+1} a_{i} \int\limits_{t=0}^{t=1} \phi_i^T
+\phi_j\dt 
+=
+\int\limits_{t=0}^{t=1}\vec{s}_m^T \phi_j\dt \ \forall j=0\cdots 2n+1
+\end{equation}
+using
+\begin{equation}
+A_{ij}=\int\limits_{t=0}^{t=1} \phi_i^T
+\phi_j\dt 
+\text{\ and \ }
+b_j=\int\limits_{t=0}^{t=1}\vec{s}_m^T \phi_j\dt
+\end{equation}
+we get the linear equation system
+\begin{equation}
+A a = b
+\end{equation}
+which has to be solved for $a$.
+
+\subsection{Minimization problem(least squares): NURBS}
+Although the approach used above showed good results, it appears to be very computationally extensive. Analogically, one could reduce the original problem to the \textit{linear regression problem}, which allows us to reduce computational costs. Also, to improve the locality of our solution, from now on we are going to use NURBS basis functions with weights $\omega_{j} = 1$ instead of Bezier curves.
+
+Let $X^{0}$ be the $n \times 2$ matrix of the given set of points, $N^{p}$ - the basis functions of degree $p$ ($n \times (n+p)$ matrix, where $n$ - number of points), $P^{0}$ - the control points ($(n+p) \times 2$ matrix).
+
+The original problem can be written as:
+\begin{equation}
+X_{i}^{0} = \sum\limits_{j=1}^{n+p} P_{j}^{0} N_{i,j}^{p}, \quad i \in \{1,..,n\}
+\end{equation}
+Or, in short:
+\begin{equation}
+X^{0} = N^{p} P^{0}
+\end{equation}
+The above system needs to be solved for the unknown $P^{0}$. One of the ways to solve it is to use SVD decomposition. So far, we used built-in MATLAB solver.
+\subsection{Reparametrization}
+In our simple case we use coordinates of our points as a parameters, but even more advanced parametrization algorithms usually don't give an optimal parametrization. For handling this issue in (reference!!!) the following iterative algorithm was proposed:
+\begin{enumerate}
+\item \textit{Fitting step:} For \textbf{fixed parametrizations} $\{t_{i}\}$ , the optimal control points are found by solving a linear least-squares problem.
+\item \textit{Parameter correction step:} For \textbf{fixed control points}, optimal
+parametrizations $\{t_{i}\}$ are found by projecting the points onto our surface.
+\end{enumerate}
+The first part of the algorithm is exactly the problem we described in a previous section. The second part can be tackled by solving linearised system of equations, which provide us relatively cheap (we need to solve only a system of linear equations) and good (see fig. ) method for the parameter correction.
+%\begin{figure}
+%  \includegraphics[width=.85\linewidth]{parameterOpti.pdf}
+%  \caption{Reparametrization}
+%  \label{fig:reparametrization}
+%\end{figure}
+\subsection{Fitting pipeline}
+\begin{figure}
+  \includegraphics[width=.85\linewidth]{Fitting_workflow.png}
+  \caption{Fitting pipeline}
+  \label{fig:fitting_pipeline}
+\end{figure}
+Since the geometry obtained after topology optimization can be arbitrary complex, we might not be able to find a food fit using only one patch. We seek a multi step algorithm, allowing us to break the overall big problem into smaller problems, which can be handled relatively easy.
+Based on the algorithm described in (reference to ...), our overall fitting pipeline looks as follows (see fig. \ref{fig:fitting_pipeline}):
+\begin{itemize}
+	\item Patch selection (breaking our problem in small pieces which can be solved using least squares)
+	\item Parametrization of obtained patches
+	\item B--spline fitting using least squares
+	\item Smooth connection of patches
+	\item Conversion back to CAD
+\end{itemize}
