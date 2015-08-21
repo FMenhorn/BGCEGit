@@ -6,8 +6,13 @@ Depending on the discipline different requirements are set on the virtual model.
 \subsection{Geometry representations}
 In general, two different ways of describing a geometry are used in CAD systems: constructive solid geometry consisting of a set of primitive forms or storing the boundary of a part assuming that the interior is filled (BREP). Other approaches, such as a complete voxelised geometry are not common due to extensive memory consumption.
 \subsubsection{Constructive solid geometry}
- insert figure csg tree from wikimedia \\
-One way of representing a geometry in CAD is the approach of \emph{constructive solid geometry} (short: CSG). The basic idea is to start from a set of primitives, e.g. a sphere, cylinder and cube. Basic Boolean operations link these primitives towards a complex geometry. 
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{Pictures/Csg_tree.png}
+\caption{CSG object tree}
+\label{fig:csg_tree}
+\end{figure}
+One way of representing a geometry in CAD is the approach of \emph{constructive solid geometry} (short: CSG). The basic idea is to start from a set of primitives, e.g. a sphere, cylinder and cube. Basic Boolean operations link these primitives towards a complex geometry. This procedure can be seen in figure \ref{fig:csg_tree}.
 
 Key advantages of this format is the precise representation using very few storage memory. However, not all desired forms can be represented by CSG and hence, a second type of geometry description is needed. 
 \subsubsection{Boundary representation}
