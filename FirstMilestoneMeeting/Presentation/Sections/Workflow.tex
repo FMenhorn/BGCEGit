@@ -29,17 +29,16 @@
 %        \end{tikzpicture}
 %}
 %}
-\frame{
-	\frametitle{Workflow Overview}
+\begin{frame}{Workflow Overview}
     \only<1>{CAD design}
-	\only<2>{STL Interface}
+	\only<2>{STL interface}
 	\only<3>{Voxelized topology}
 	\only<4>{Specification of loads and fixtures}
 	\only<5>{Optimized topology}
 	\only<6>{Surface extraction}
 	\only<7>{Parametrized CAD-geometries}
-    \center{
-	\begin{tikzpicture} 
+    \begin{center}
+		\begin{tikzpicture} 
         \node at (0,3)[inner sep=0pt](N1)
                 {\includegraphics[width=2cm]{Pictures/1CAD.pdf}};
                 \pause
@@ -70,5 +69,5 @@
                 \pause
         \draw[thick,->] (N7) -- (N1); 
         \end{tikzpicture}
-}
-}
+	\end{center}
+\end{frame}
