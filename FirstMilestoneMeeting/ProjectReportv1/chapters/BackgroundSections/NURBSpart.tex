@@ -20,9 +20,7 @@ Analogically to Bezier curves, but with $n\cdot m$ Points $\vec{P}_{i,j}$ and th
 \end{equation*}
 one can define a \textit{Bezier surface}
 \\
-\begin{mdframed}
-Bezier curves and surfaces may be unstable! Minor changes in control points might lead to major global changes!
-\end{mdframed}
+Please, note, that Bezier curves and surfaces may be unstable! Minor changes in control points might lead to major global changes!
 
 
 \subsection{NURBS basis functions}
@@ -69,10 +67,8 @@ B--splines are have the following properties, which are useful for our problem:
 
 Analogically, one can define B--spline surfaces.
 \subsection{Minimization problem}
-Now, once we defined all necessary tools, we proceed to the fitting problem.
-\begin{mdframed}
-\textbf{The goal:} Fit in a parametric curve to the set of given data points. 
-\end{mdframed}
+Now, once we defined all necessary tools, we proceed to the fitting problem.\\
+\textbf{The goal:} Fit in a parametric curve to the set of given data points. \\
 In our case our given set of points is a mesh, obtained on a previous step.
 \subsection{Minimization Problem: Bezier curve}
 First we want to find a Bezier--curve $\vec{B}_n\left(t\right)$ of degree $n$ which is approximating a given spline $\vec{s}_m\left(t\right)$ defined by $m$ points in a optimal way. For this purpose we want to minimize the L2--error. This leads to the minimization problem:
