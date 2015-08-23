@@ -45,7 +45,7 @@ data to work with.
 \begin{equation*}
 E(x)= x^TA^TAx-2x^TA^Tb+b^Tb
 \end{equation*}
-Where \textit{A} is a matrix whose rows are the normals and \textit{b} is a vector whose entries are the product of normals and intersection points. To solve this system, a numerical treatment is needed. As proposed in [1] the best approach is to compute the
+Where \textit{A} is a matrix whose rows are the normals and \textit{b} is a vector whose entries are the product of normals and intersection points. To solve this system, a numerical treatment is needed. As proposed in \cite{Hermite2002} the best approach is to compute the
 SVD decomposition of \textit{A} and form the pseudo-inverse by truncating its small singular values. 
 %1=Dual Contouring of HErmite DAta
 
@@ -119,14 +119,14 @@ There are two possible roads to go from the voxel data to the CAD representation
 \subsubsection{Quad Contouring}
 This approach uses the dual contouring algorithm as first step in order to obtain a quad mesh
 representation from the voxel data. The first challenge is to implement correctly the algorithm
-with the ideas presented in [1]. The original marching cubes algorithm is
+with the ideas presented in \cite{Hermite2002}. The original marching cubes algorithm is
 implemented in VTK but the source code is not public, therefore not only an extension
 of it is needed, but a full implementation. Once this first step is done, the quads will be chosen for the
 NURBS parametrization. A second step considers multiple smaller quads which have to be
 combined into one larger patch. This is another challenge, since the remeshing of quad meshes
 is not as straightforward as with the triangles. Different approaches have been taken in order to
-achieve this coarsening. In [2] an incremental and greedy approach, which is based on local operations only, is presented. It depicts an iterative process which performs local optimizing, coarsening and smoothing operations. Another approaches, like
-the one presented in [3] uses smooth harmonic scalar fields to simplify the mesh.
+achieve this coarsening. In \cite{Puppo2010} an incremental and greedy approach, which is based on local operations only, is presented. It depicts an iterative process which performs local optimizing, coarsening and smoothing operations. Another approaches, like
+the one presented in \cite{Dong2005} uses smooth harmonic scalar fields to simplify the mesh.
 %2= “Practical quad mesh simplification”
 %3= “Harmonic Functions for Quadrilateral Remeshing of Arbitrary Manifolds”
 
