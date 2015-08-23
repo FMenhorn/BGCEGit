@@ -251,7 +251,7 @@ A a = b
 which has to be solved for $a$.
 
 \subsection{Minimization problem(least squares): NURBS}
-Although the approach used above showed good results, it appears to be very computationally extensive. Analogically, one could reduce the original problem to the \textit{linear regression problem}, which allows us to reduce computational costs. Also, to improve the locality of our solution, from now on we are going to use NURBS basis functions with weights $\omega_{j} = 1$ instead of Bezier curves. For this purpose, we adopted and algorithm, provided in \cite{becker2011advanced}.
+Although the approach used above showed good results, it appears to be very computationally extensive. Analogically, one could reduce the original problem to the \textit{linear regression problem}, which allows us to reduce computational costs. Also, to improve the locality of our solution, from now on we are going to use NURBS basis functions with weights $\omega_{j} = 1$ instead of Bezier curves. For this purpose, we adopted an algorithm, provided in \cite{becker2011advanced}.
 
 Let $X^{0}$ be the $n \times 2$ matrix of the given set of points, $N^{p}$ - the basis functions of degree $p$ ($n \times (n+p)$ matrix, where $n$ - number of points), $P^{0}$ - the control points ($(n+p) \times 2$ matrix).
 
