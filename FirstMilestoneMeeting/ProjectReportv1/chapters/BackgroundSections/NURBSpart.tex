@@ -1,3 +1,4 @@
+Having said about the importance of the NURBS representation, we define NURBS from a mathematical standpoint. For that, we first define so-called \textit{Bezier curves} which we will use later for the definition of NURBS.
 \subsection{Bezier Curves}
 \emph{Bezier curve} is a \textit{parametric} curve, which often used for producing a smooth approximation of a given set of data points.
 \subsubsection{Analytical expression} 
@@ -11,23 +12,23 @@ b_i^n(t)=\left(\begin{array}{c}n\\i\end{array}\right)(1-t)^{(n-i)}t^i
 \end{equation*}
 is the $i$--th Bernstein polynomial of degree $n$.
 
-Additionally to the expression with the Bernstein polynomials, one can use a recursion formula (\textbf{de Casteljau Algorithm}) for the construction of the Bezier--curve, which we will not cover here.
+Additionally to the expression with the Bernstein polynomials, one can use a recursion formula (so-called \textbf{de Casteljau Algorithm}) for the construction of the Bezier curve, which we will not cover here.
 \subsubsection{Surfaces}
-Analogically to Beziercurves, but with $n\cdot m$ Points $\vec{P}_{i,j}$ and the analytical expression
+Analogically to Bezier curves, but with $n\cdot m$ Points $\vec{P}_{i,j}$ and the analytical expression
 \begin{equation*}
 \vec{S}(u,v)=\sum\limits_{i=0}^n \sum\limits_{j=0}^m b_i^n(u) b_j^m(v) \vec{P}_{i,j}
 \end{equation*}
 one can define a \textit{Bezier surface}
 \\
 \begin{mdframed}
-Bezier--curves and surfaces may be unstable! Minor changes in control points might lead to major global changes!
+Bezier curves and surfaces may be unstable! Minor changes in control points might lead to major global changes!
 \end{mdframed}
 
 
 \subsection{NURBS basis functions}
 Extending the idea, described in previous section, one could use NURBS basis functions instead of simple Bezier curves. 
 
-Unlike Bezier curves, for the B-spline basis a parameter domain is subdivided with, so-called, \textit{knots}. In particular, given the parameter domain $[u_{0}, u_{m}]$ (in 1D), \textit{knot vector} is given by $u_{0} \leq u_{1} \leq ... \leq u_{m}$. In most cases $u_{0} = 0, u_{m} = 1$, so we get unit interval for our parameter values. Recall, that, N in NURBS stands for \textit{non-uniform}. This means, that our knots $u_{0},..., u_{m}$ are not equidistant.
+Unlike Bezier curves, for the B--spline basis a parameter domain is subdivided with, so-called, \textit{knots}. In particular, given the parameter domain $[u_{0}, u_{m}]$ (in 1D), \textit{knot vector} is given by $u_{0} \leq u_{1} \leq ... \leq u_{m}$. In most cases $u_{0} = 0, u_{m} = 1$, so we get unit interval for our parameter values. Recall, that, N in NURBS stands for \textit{non-uniform}. This means, that our knots $u_{0},..., u_{m}$ are not equidistant.
 
 Given \textit{knot vector} $[u_{0}, u_{m}]$ and a degree of B-spline $p$ one can find $i$-th B-spline basis function recursively as follows:
 \begin{equation}
@@ -54,7 +55,7 @@ For $p=0$ we get just step functions (see fig. \ref{fig:bspline_basis_constant})
 \caption{B-spline basis functions}
 \end{figure}
 
-Given these basis functions, Non-Uniform Rational B-Spline curve is given by:
+Given these basis functions, Non-Uniform Rational B-Spline (NURBS) curve is given by:
 \begin{equation}
 C(u) = \frac{\sum_{i=1}^{k}N_{i,n}\omega_{i}P_{i}}{\sum_{i=1}^{k}N_{i,n}\omega_{i}},
 \end{equation}
@@ -62,7 +63,7 @@ where $k$ is number of points, $\{P_{i}\}$ are given control points.
 
 B--splines are have the following properties, which are useful for our problem:
 \begin{itemize}
-\item degree $n$ and number of control points $\vec{P}_{i\cdots m}$ are independent!
+\item Degree $n$ and number of control points $\vec{P}_{i\cdots m}$ are independent.
 \item B--Splines only change locally (depends on the degree $n$) when a control point is changed.
 \end{itemize}
 
@@ -254,7 +255,7 @@ A a = b
 which has to be solved for $a$.
 
 \subsection{Minimization problem(least squares): NURBS}
-Although the approach used above showed good results, it appears to be very computationally extensive. Analogically, one could reduce the original problem to the \textit{linear regression problem}, which allows us to reduce computational costs. Also, to improve the locality of our solution, from now on we are going to use NURBS basis functions with weights $\omega_{j} = 1$ instead of Bezier curves.
+Although the approach used above showed good results, it appears to be very computationally extensive. Analogically, one could reduce the original problem to the \textit{linear regression problem}, which allows us to reduce computational costs. Also, to improve the locality of our solution, from now on we are going to use NURBS basis functions with weights $\omega_{j} = 1$ instead of Bezier curves. For this purpose, we adopted and algorithm, provided in \cite{becker2011advanced}.
 
 Let $X^{0}$ be the $n \times 2$ matrix of the given set of points, $N^{p}$ - the basis functions of degree $p$ ($n \times (n+p)$ matrix, where $n$ - number of points), $P^{0}$ - the control points ($(n+p) \times 2$ matrix).
 
@@ -267,19 +268,7 @@ Or, in short:
 X^{0} = N^{p} P^{0}
 \end{equation}
 The above system needs to be solved for the unknown $P^{0}$. One of the ways to solve it is to use SVD decomposition. So far, we used built-in MATLAB solver.
-\subsection{Reparametrization}
-In our simple case we use coordinates of our points as a parameters, but even more advanced parametrization algorithms usually don't give an optimal parametrization. For handling this issue in (reference!!!) the following iterative algorithm was proposed:
-\begin{enumerate}
-\item \textit{Fitting step:} For \textbf{fixed parametrizations} $\{t_{i}\}$ , the optimal control points are found by solving a linear least-squares problem.
-\item \textit{Parameter correction step:} For \textbf{fixed control points}, optimal
-parametrizations $\{t_{i}\}$ are found by projecting the points onto our surface.
-\end{enumerate}
-The first part of the algorithm is exactly the problem we described in a previous section. The second part can be tackled by solving linearised system of equations, which provide us relatively cheap (we need to solve only a system of linear equations) and good (see fig. ) method for the parameter correction.
-%\begin{figure}
-%  \includegraphics[width=.85\linewidth]{parameterOpti.pdf}
-%  \caption{Reparametrization}
-%  \label{fig:reparametrization}
-%\end{figure}
+
 \subsection{Fitting pipeline}
 \begin{figure}
   \includegraphics[width=.85\linewidth]{Fitting_workflow.png}
@@ -287,7 +276,7 @@ The first part of the algorithm is exactly the problem we described in a previou
   \label{fig:fitting_pipeline}
 \end{figure}
 Since the geometry obtained after topology optimization can be arbitrary complex, we might not be able to find a food fit using only one patch. We seek a multi step algorithm, allowing us to break the overall big problem into smaller problems, which can be handled relatively easy.
-Based on the algorithm described in (reference to ...), our overall fitting pipeline looks as follows (see fig. \ref{fig:fitting_pipeline}):
+Based on the algorithm described in \cite{eck1996automatic}, our overall fitting pipeline looks as follows (see fig. \ref{fig:fitting_pipeline}):
 \begin{itemize}
 	\item Patch selection (breaking our problem in small pieces which can be solved using least squares)
 	\item Parametrization of obtained patches
@@ -295,3 +284,5 @@ Based on the algorithm described in (reference to ...), our overall fitting pipe
 	\item Smooth connection of patches
 	\item Conversion back to CAD
 \end{itemize}
+
+The pipeline given above, once implemented, will provide us with a flexible algorithm for converting an arbitrary complex mesh based geometry into NURBS and, hence, CAD--representation.
