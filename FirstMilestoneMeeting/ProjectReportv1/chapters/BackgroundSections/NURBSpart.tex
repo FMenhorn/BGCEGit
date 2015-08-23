@@ -1,10 +1,10 @@
-Having said about the importance of the NURBS representation, we define NURBS from a mathematical standpoint. For that, we first define so-called \textit{Bezier curves} which we will use later for the definition of NURBS.
+As mentioned in the Introduction, the main challenge of our project is to convert the mesh based geometry, obtained on a previous step, back to CAD representation. Since parametrised geometries are often given in terms of NURBS descriptions (ex. in FreeCAD software), we decided to use NURBS representation.  To define NURBS from a mathematical standpoint, we first define so-called \textit{Bezier curves} which we will use later for the definition of NURBS.
 \subsection{Bezier Curves}
 \emph{Bezier curve} is a \textit{parametric} curve, which often used for producing a smooth approximation of a given set of data points.
 \subsubsection{Analytical expression} 
 An analytical expression for the Bezier curve is given by:
 \begin{equation*}
-\vec{B}(t)=\sum\limits_{i=0}^n b_i^n(t) \vec{P}_i,
+\vec{B}(t)=\sum\limits_{i=0}^n b_i^n(t) \vec{P}_i
 \end{equation*}
 where $\vec{P}_i$ is the $i$--th control point (we have $n+1$ control points). And
 \begin{equation*}
