@@ -1,7 +1,7 @@
 %BEGIN JC
 \subsection{Isosurface Contouring}
 Now when the optimized voxel data was obtained, the next step is to generate a \emph{mesh based
-geometry}. It will be useful in the further NURBS implementation. In order to achieve it, the
+geometry}. It will be useful in the further conversion of our surface back to CAD format. In order to achieve it, the
 data will be represented by a contour of a smooth function, rendering an isosurface. The
 isosurface allows to visualize Scalar Volumetric Data in 3D. It furthermore permits a mesh
 representation of the volume data. The mesh can be composed of triangles or quads, according
@@ -45,19 +45,18 @@ data to work with.
 \begin{equation*}
 E(x)= x^TA^TAx-2x^TA^Tb+b^Tb
 \end{equation*}
-Where \textit{A} is a matrix whose rows are the normals and \textit{b} is a vector whose entries are the product of normals and intersection points. To solve this system, a nummerical treatement is needed. As proposed in [1] the best approach is to compute the
+Where \textit{A} is a matrix whose rows are the normals and \textit{b} is a vector whose entries are the product of normals and intersection points. To solve this system, a numerical treatment is needed. As proposed in [1] the best approach is to compute the
 SVD decomposition of \textit{A} and form the pseudo-inverse by truncating its small singular values. 
 %1=Dual Contouring of HErmite DAta
 
 
-The main advantage of this method over MC is the adquisition of better aspect ratios. On the other hand the need of Hermite Data
+The main advantage of this method over MC is the acquisition of better aspect ratios. On the other hand the need of Hermite Data
 represents a disadvantage. Furthermore there is no open source algorithm that implements the Dual Contouring scheme.
 
 
-\subsection{The VTK Toolbox}
+\subsection{VTK Toolbox}
 \subsubsection{Installing VTK}
-VTK was installed using the Linux platform, for it to be successfully implemented a gcc compiler
-must be already on the machine. VTK offers the possibility to use Python, TLC or C++ for
+VTK was installed using the Linux platform with pre-installed gcc. VTK offers the possibility to use Python, TLC or C++ for
 development. VTK toolbox is actually a C++ library, which is implemented in other languages. We
 decided to continue the project with C++ since it gives the possibility to explore the original code.
 A few dependency problems were encountered, nevertheless they were easy to track back. If any
@@ -74,12 +73,11 @@ is explained step by step.
 The VTK toolbox was used in order to implement the algorithms on our optimized data. It is a heavily object
 oriented toolbox. Our first approach was to use the built in Marching Cubes algorithm,
 nevertheless it did not work with our unstructured grid data. It just works for ImageData and
-PolyData . For structured and unstructured grids the tool to render the isosurface is the contour
-Filter tool. Unfortunately the documentation does not present which algorithm the tool uses. It
-can be inferred that it is an extended Marching cube algorithm.
+PolyData . For structured and unstructured grids the tool to render the isosurface is the \textit{Contour Filter} tool. Unfortunately the documentation does not present which algorithm the tool uses. It
+can be inferred that it is an extended Marching cubes algorithm.
 
 The Contour Filtering seemed to work fine but the visualization of our data was still not possible
-and an intermediate step was needed. We used the Implicit Modelling tool which is a filter that
+and an intermediate step was needed. We used the \textit{Implicit Modelling} tool which is a filter that
 computes the distance from the input geometry to the points of an output structured point set.
 This distance function can then be "contoured" to generate new, offset surfaces from the original
 geometry. It finally allowed visualization but it created one problem. Holes are lost in
@@ -92,12 +90,12 @@ the process.
 \end{figure}
 
 A further idea to solve this problem is to convert at the first step the volume data into point data
-and only then present it to the Contour Filtering Tool. This will be implemented in the next
+and only then present it to the \textit{Contour Filtering} tool. This will be implemented by the next
 milestone.
 
 The next step was to create a coarser mesh from the fine one. The triangles that represent the
-isosurface can be reduced with the Decimation tool. A smoothing step is necessary in between
-to get the new connections right. The top part of figure [2] shows a 50 \% reduction of the
+isosurface can be reduced with the \textit{Decimation} tool. A smoothing step is necessary in between
+to get the new connections right. The top part of figure \ref{fig:Decimation} shows a 50 \% reduction of the
 triangles, a noticeable difference can not be perceived. On the lower part a 90 \% reduction is
 obtained, it is nevertheless still difficult to see a difference. Triangle meshes can be easily
 coarsened since there are many open source algorithms that simplify the triangles. VTK has the
@@ -107,10 +105,11 @@ decimation tool which works for 3D triangle data.
 \centering
    \scalebox{0.4}{\includegraphics{Pictures/Decimation.pdf}}\\
    \caption{Decimation of triangles. \textit{Top:} 50\% \textit{Lower:}90\%}
+   \label{fig:Decimation}
 \end{figure}
 
-\subsection{The Long Road to NURBS}
-There are two possible roads to go from the voxel data to the NURBS representation.
+\subsection{Long Road to NURBS}
+There are two possible roads to go from the voxel data to the CAD representation.
 \subsubsection{Quad Contouring}
 This approach uses the dual contouring algorithm as first step in order to obtain a quad mesh
 representation from the voxel data. The first challenge is to implement correctly the algorithm
@@ -119,7 +118,7 @@ implemented in VTK but the source code is not public, therefore not only an exte
 of it is needed, but a full implementation. Once this first step is done, the quads will be chosen for the
 NURBS parametrization. A second step considers multiple smaller quads which have to be
 combined into one larger patch. This is another challenge, since the remeshing of quad meshes
-is not as straight forward as with the triangles. Different approaches have been taken in order to
+is not as straightforward as with the triangles. Different approaches have been taken in order to
 achieve this coarsening. In [2] an incremental and greedy approach, which is based on local operations only, is presented. It depicts an iterative process which performs local optimizing, coarsening and smoothing operations. Another approaches, like
 the one presented in [3] uses smooth harmonic scalar fields to simplify the mesh.
 %2= “Practical quad mesh simplification”
@@ -129,7 +128,7 @@ the one presented in [3] uses smooth harmonic scalar fields to simplify the mesh
 \subsubsection{Multiresolution Analysis of Arbitrary Meshes}
 With this approach there is no need to apply a Dual Contouring algorithm, since it takes as
 beginning data the triangles from the Marching Cubes. The main concepts are shown in the paper
-of the same name [4]. It mainly takes a series of intermediate steps which permits a parametrization of data. It includes a partitioning scheme based on the ideas of the Voronoi Diagrams and Delaunay triangulations. Large patches or quads are obtained with this method. Further discussion on this approach is explained in the following section.
+of the same name \cite{eck1996automatic}. It mainly takes a series of intermediate steps which permits a parametrization of data. It includes a partitioning scheme based on the ideas of the Voronoi Diagrams and Delaunay triangulations. Large patches or quads are obtained with this method. Further discussion on this approach is explained in the following section.
 
 %4=reference to MAAM, a.k.a Benni's favorite paper!
 
