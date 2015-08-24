@@ -80,7 +80,7 @@
  \usepackage[dvips]{graphicx}
 
  \DeclareGraphicsExtensions{.eps,.epsi}
- \graphicspath{{figures/}{figures/review}} 
+ \graphicspath{{figures/}{figures/review}{Pictures/}} 
  %% allow rotations
  \usepackage{rotating}
  %% mark pages as draft copies
@@ -99,12 +99,12 @@
  %% use pdf or jpg graphics
  \usepackage[pdftex]{graphicx}
  \DeclareGraphicsExtensions{.jpg,.JPG,.png,.pdf,.eps}
- \graphicspath{{figures/}} 
+ \graphicspath{{figures/}{Pictures/}} 
  
  %% Load float package, for enabling floating extensions
  \usepackage{float}
  
- \usepackage{mdframed}
+% \usepackage{mdframed}
  
  %% allow rotations
  \usepackage{rotating}
@@ -121,6 +121,8 @@
 % bookmarksnumbered=true,hyperindex=false,pdfstartview=%
 % ]{hyperref}
 \fi
+\usepackage{epstopdf}
+\epstopdfsetup{update} % only regenerate pdf files when eps file is newer
 
 
 
