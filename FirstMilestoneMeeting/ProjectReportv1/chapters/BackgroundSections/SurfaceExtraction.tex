@@ -8,15 +8,16 @@ representation of the volume data. The mesh can be composed of triangles or quad
 to the algorithm used. There are two main approaches to solve this problem, the most
 famous one is Marching Cubes.
 
+
+
+\subsubsection{Marching Cubes} 
 \begin{figure}
 \centering
    \scalebox{0.8}{\includegraphics{Pictures/cubes.pdf}}\\
-   \caption{Basis cases of Marching Cubes}
+   \caption{Base cases of Marching Cubes}
+   \label{fig:MC_basecase}
 \end{figure}
-
-\subsubsection{Marching Cubes} 
-
-This algorithm takes as an input a regular volumetric data set and extracts a polygonal mesh. It
+The \emph{Marching Cubes} algorithm takes as an input a regular volumetric data set and extracts a polygonal mesh. It
 divides the space into cubes, which are defined by the volume information. Each cube has scalar
 information on its vertices, the value is equal or above a marked isovalue. Therefore each of the
 eight vertices of a cube can be marked or unmarked. According to these values vertices are drawn
@@ -25,7 +26,7 @@ an edge is called active. Non active cubes are not further considered in the alg
 
 By connecting the vertices we obtain a polygon on each cube. There are 256 possible scenarios,
 but most of them are just reflections or rotationally symmetric cases of each other. Therefore
-there are 15 base cases which represent all the possibilities of the marching cubes (Figure 2.1). 
+there are 15 base cases which represent all the possibilities of the marching cubes (see \autoref{fig:MC_basecase}). 
 The original algorithm presents two main problems. Firstly it does not guarantee neither
 correctness nor topological consistency, which means that holes may appear on the surface due
 to inaccurate base case selection. The second problem is ambiguity, which appears when two
@@ -35,8 +36,8 @@ algorithms that tackle the problems of the original one, getting rid of the ambi
 providing correctness.
 
 \subsubsection{Dual Contouring}
-The idea of this algorithm is similar to Marching Cubes, but instead of generating vertices on the
-edges of the cubes, it locates them inside the cube. Figure 2.5 shows the basic differences in both approaches.
+The idea of the \emph{Dual Contouring} algorithm is similar to Marching Cubes, but instead of generating vertices on the
+edges of the cubes, it locates them inside the cube. \autoref{fig:bunny_MCDC} shows the basic differences in both approaches.
 The vertices associated with the four contigous cubes are joined and form a quad. The question now is
 which place inside the cube is the ideal one to insert each vertex. Different dual algorithms are classified 
 according to the answer for this question. Dual contouring generates a vertex positioned at the minimizer of a
@@ -52,7 +53,6 @@ SVD decomposition of \textit{A} and form the pseudo-inverse by truncating its sm
 
 The main advantage of this method over MC is the acquisition of better aspect ratios. On the other hand the need of Hermite Data
 represents a disadvantage. Furthermore there is no open source algorithm that implements the Dual Contouring scheme.
-
 
 %\subsection{VTK Toolbox}
 %\subsubsection{Installing VTK}
@@ -70,6 +70,7 @@ represents a disadvantage. Furthermore there is no open source algorithm that im
 \centering
    \scalebox{0.35}{\includegraphics{Pictures/bunny_MC.pdf}}\\
    \caption{\textit{Left:} The famous Stanford Bunny. \textit{Right:} Main difference between MC and Dual methods }
+   \label{fig:bunny_MCDC}
 \end{figure}
 %The VTK toolbox was used in order to implement the algorithms on our optimized data. It is a heavily object
 %oriented toolbox. Our first approach was to use the built in Marching Cubes algorithm,
@@ -93,10 +94,11 @@ geometry. Although this approach allowed the visualisation, some crucial informa
 \centering
    \scalebox{0.4}{\includegraphics{Pictures/contouring.pdf}}\\
    \caption{Contour Filtering tool after Implicit Modelling}
+   \label{fig:contouring}
 \end{figure}
 
 A further idea to solve this problem is to convert at the first step the volume data into point data
-and only then present it to the \textit{Contour Filtering} tool. This will be implemented by the next
+and only then present it to the \textit{Contour Filtering} tool (\autoref{fig:contouring}). This will be implemented by the next
 milestone.
 
 In order to reduce computational costs of the following \textit{NURBS fitting} process, presented in the next section, we need to create a coarser mesh from the fine one. The number of triangles that represent the
@@ -119,14 +121,14 @@ There are two possible roads to go from the voxel data to the CAD representation
 \subsubsection{Quad Contouring}
 This approach uses the dual contouring algorithm as first step in order to obtain a quad mesh
 representation from the voxel data. The first challenge is to implement correctly the algorithm
-with the ideas presented in [1]. The original marching cubes algorithm is
+with the ideas presented in [??1]. The original marching cubes algorithm is
 implemented in VTK but the source code is not public, therefore not only an extension
 of it is needed, but a full implementation. Once this first step is done, the quads will be chosen for the
 NURBS parametrization. A second step considers multiple smaller quads which have to be
 combined into one larger patch. This is another challenge, since the remeshing of quad meshes
 is not as straightforward as with the triangles. Different approaches have been taken in order to
-achieve this coarsening. In [2] an incremental and greedy approach, which is based on local operations only, is presented. It depicts an iterative process which performs local optimizing, coarsening and smoothing operations. Another approaches, like
-the one presented in [3] uses smooth harmonic scalar fields to simplify the mesh.
+achieve this coarsening. In [??2] an incremental and greedy approach, which is based on local operations only, is presented. It depicts an iterative process which performs local optimizing, coarsening and smoothing operations. Another approaches, like
+the one presented in [??3] uses smooth harmonic scalar fields to simplify the mesh.
 %2= “Practical quad mesh simplification”
 %3= “Harmonic Functions for Quadrilateral Remeshing of Arbitrary Manifolds”
 
@@ -137,6 +139,7 @@ beginning data the triangles from the Marching Cubes. The main concepts are show
 
 %4=reference to MAAM, a.k.a Benni's favorite paper!
 
+%%implementation part!
 Both approaches have not been implemented in open source documentation, therefore there is a need to implement it from scratch. Up to now, the second approach has been chosen.
 
 %END JC

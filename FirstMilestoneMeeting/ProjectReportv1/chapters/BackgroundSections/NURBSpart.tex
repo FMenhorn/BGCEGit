@@ -1,4 +1,6 @@
-As mentioned in the Introduction, the main challenge of our project is to convert the mesh based geometry, obtained on a previous step, back to CAD representation. Since parametrised geometries are often given in terms of NURBS descriptions (ex. in FreeCAD software), we decided to use NURBS representation.  To define NURBS from a mathematical standpoint, we first define so-called \textit{Bezier curves} which we will use later for the definition of NURBS.
+%As mentioned in the Introduction, the main challenge of our project is to convert the mesh based geometry, obtained on a previous step, back to CAD representation. 
+Parametrised geometries are often given in terms of NURBS descriptions (e.g. in FreeCAD software). %REFERENCE.  
+To define NURBS from a mathematical standpoint, we first define so-called \textit{Bezier curves} which we will use later for the definition of NURBS.
 \subsection{Bezier Curves}
 \emph{Bezier curve} is a \textit{parametric} curve, which often used for producing a smooth approximation of a given set of data points.
 \subsubsection{Analytical expression} 
@@ -14,19 +16,19 @@ is the $i$--th Bernstein polynomial of degree $n$.
 
 Additionally to the expression with the Bernstein polynomials, one can use a recursion formula (so-called \textbf{de Casteljau Algorithm}) for the construction of the Bezier curve, which we will not cover here.
 \subsubsection{Surfaces}
-Analogically to Bezier curves, but with $n\cdot m$ Points $\vec{P}_{i,j}$ and the analytical expression
+Analogically to Bezier curves, but with $n\cdot m$ Points $\vec{P}_{i,j}$ ,
+one can define a \textit{Bezier surface}, given by the analytical expression
 \begin{equation*}
 \vec{S}(u,v)=\sum\limits_{i=0}^n \sum\limits_{j=0}^m b_i^n(u) b_j^m(v) \vec{P}_{i,j}
 \end{equation*}
-one can define a \textit{Bezier surface}
 \\
-Note, that Bezier curves and surfaces may be unstable! Minor changes in control points might lead to major global changes!
+Note, that Bezier curves and surfaces may be unstable -- minor changes in control points might lead to major global changes.
 
 
 \subsection{NURBS basis functions}
 Extending the idea, described in previous section, one could use NURBS basis functions instead of simple Bezier curves. 
 
-Unlike Bezier curves, for the B--spline basis a parameter domain is subdivided with, so-called, \textit{knots}. In particular, given the parameter domain $[u_{0}, u_{m}]$ (in 1D), \textit{knot vector} is given by $u_{0} \leq u_{1} \leq ... \leq u_{m}$. In most cases $u_{0} = 0, u_{m} = 1$, so we get unit interval for our parameter values. Recall, that, N in NURBS stands for \textit{non-uniform}. This means, that our knots $u_{0},..., u_{m}$ are not equidistant.
+Unlike Bezier curves, for the B--spline basis a parameter domain is subdivided with so-called \textit{knots}. In particular, given the parameter domain $[u_{0}, u_{m}]$ (in 1D), \textit{knot vector} is given by $u_{0} \leq u_{1} \leq ... \leq u_{m}$. In most cases $u_{0} = 0, u_{m} = 1$, so we get unit interval for our parameter values. Recall, that, N in NURBS stands for \textit{non-uniform}. This means, that our knots $u_{0},..., u_{m}$ are not equidistant. %can't recall... it's not written anywhere else?
 
 Given \textit{knot vector} $[u_{0}, u_{m}]$ and a degree of B-spline $p$ one can find $i$-th B-spline basis function recursively as follows:
 \begin{equation}
@@ -68,7 +70,7 @@ B--splines are have the following properties, which are useful for our problem:
 Analogically, one can define B--spline surfaces.
 \subsection{Minimization problem}
 Now, once we defined all necessary tools, we proceed to the fitting problem.\\
-The goal is to fit in a parametric curve to the set of given data points. In our case our given set of points is a mesh, obtained on a previous step.
+The goal is to fit in a parametric curve to the set of given data points. In our case our given set of points is a mesh, obtained from surface contouring.
 \subsection{Minimization Problem: Bezier curve}
 First we want to find a Bezier--curve $\vec{B}_n\left(t\right)$ of degree $n$ which is approximating a given spline $\vec{s}_m\left(t\right)$ defined by $m$ points in a optimal way. For this purpose we want to minimize the L2--error. This leads to the minimization problem:
 \begin{equation}
@@ -99,7 +101,8 @@ Or, in short:
 \begin{equation}
 X^{0} = N^{p} P^{0}
 \end{equation}
-The above system needs to be solved for the unknown $P^{0}$. One of the ways to solve it is to use SVD decomposition. So far, we used built-in MATLAB solver.
+The above system needs to be solved for the unknown $P^{0}$. One of the ways to solve it is to use SVD decomposition. For prototyping, the built-in MATLAB solver can be used.
+%part of implementation
 
 \subsection{Fitting pipeline}
 \begin{figure}
