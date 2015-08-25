@@ -121,11 +121,7 @@ There are two possible roads to go from the voxel data to the CAD representation
 \subsubsection{Quad Contouring}
 This approach uses the dual contouring algorithm as first step in order to obtain a quad mesh
 representation from the voxel data. The first challenge is to implement correctly the algorithm
-
 with the ideas presented in \cite{Hermite2002}. The original marching cubes algorithm is
-
-with the ideas presented in \cite{Hermite2002}. The original marching cubes algorithm is
-
 implemented in VTK but the source code is not public, therefore not only an extension
 of it is needed, but a full implementation. Once this first step is done, the quads will be chosen for the
 NURBS parametrization. A second step considers multiple smaller quads which have to be
