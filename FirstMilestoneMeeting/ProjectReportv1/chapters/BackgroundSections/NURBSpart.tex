@@ -1,4 +1,6 @@
-As mentioned in the Introduction, the main challenge of our project is to convert the mesh based geometry, obtained on a previous step, back to CAD representation. Since parametrised geometries are often given in terms of NURBS descriptions (ex. in FreeCAD software), we decided to use NURBS representation.  To define NURBS from a mathematical standpoint, we first define so-called \textit{Bezier curves} which we will use later for the definition of NURBS.
+%As mentioned in the Introduction, the main challenge of our project is to convert the mesh based geometry, obtained on a previous step, back to CAD representation. 
+Parametrised geometries are often given in terms of NURBS descriptions (e.g. in FreeCAD software). %REFERENCE.  
+To define NURBS from a mathematical standpoint, we first define so-called \textit{Bezier curves} which we will use later for the definition of NURBS.
 \subsection{Bezier Curves}
 \emph{Bezier curve} is a \textit{parametric} curve, which often used for producing a smooth approximation of a given set of data points.
 \subsubsection{Analytical expression} 
@@ -14,19 +16,19 @@ is the $i$--th Bernstein polynomial of degree $n$.
 
 Additionally to the expression with the Bernstein polynomials, one can use a recursion formula (so-called \textbf{de Casteljau Algorithm}) for the construction of the Bezier curve, which we will not cover here.
 \subsubsection{Surfaces}
-Analogically to Bezier curves, but with $n\cdot m$ Points $\vec{P}_{i,j}$ and the analytical expression
+Analogically to Bezier curves, but with $n\cdot m$ Points $\vec{P}_{i,j}$ ,
+one can define a \textit{Bezier surface}, given by the analytical expression
 \begin{equation*}
 \vec{S}(u,v)=\sum\limits_{i=0}^n \sum\limits_{j=0}^m b_i^n(u) b_j^m(v) \vec{P}_{i,j}
 \end{equation*}
-one can define a \textit{Bezier surface}
 \\
-Please, note, that Bezier curves and surfaces may be unstable! Minor changes in control points might lead to major global changes!
+Note, that Bezier curves and surfaces may be unstable -- minor changes in control points might lead to major global changes.
 
 
 \subsection{NURBS basis functions}
 Extending the idea, described in previous section, one could use NURBS basis functions instead of simple Bezier curves. 
 
-Unlike Bezier curves, for the B--spline basis a parameter domain is subdivided with, so-called, \textit{knots}. In particular, given the parameter domain $[u_{0}, u_{m}]$ (in 1D), \textit{knot vector} is given by $u_{0} \leq u_{1} \leq ... \leq u_{m}$. In most cases $u_{0} = 0, u_{m} = 1$, so we get unit interval for our parameter values. Recall, that, N in NURBS stands for \textit{non-uniform}. This means, that our knots $u_{0},..., u_{m}$ are not equidistant.
+Unlike Bezier curves, for the B--spline basis a parameter domain is subdivided with so-called \textit{knots}. In particular, given the parameter domain $[u_{0}, u_{m}]$ (in 1D), \textit{knot vector} is given by $u_{0} \leq u_{1} \leq ... \leq u_{m}$. In most cases $u_{0} = 0, u_{m} = 1$, so we get unit interval for our parameter values. Recall, that, N in NURBS stands for \textit{non-uniform}. This means, that our knots $u_{0},..., u_{m}$ are not equidistant. %can't recall... it's not written anywhere else?
 
 Given \textit{knot vector} $[u_{0}, u_{m}]$ and a degree of B-spline $p$ one can find $i$-th B-spline basis function recursively as follows:
 \begin{equation}
@@ -68,189 +70,25 @@ B--splines are have the following properties, which are useful for our problem:
 Analogically, one can define B--spline surfaces.
 \subsection{Minimization problem}
 Now, once we defined all necessary tools, we proceed to the fitting problem.\\
-\textbf{The goal:} Fit in a parametric curve to the set of given data points. \\
-In our case our given set of points is a mesh, obtained on a previous step.
+The goal is to fit in a parametric curve to the set of given data points. In our case our given set of points is a mesh, obtained from surface contouring.
 \subsection{Minimization Problem: Bezier curve}
 First we want to find a Bezier--curve $\vec{B}_n\left(t\right)$ of degree $n$ which is approximating a given spline $\vec{s}_m\left(t\right)$ defined by $m$ points in a optimal way. For this purpose we want to minimize the L2--error. This leads to the minimization problem:
 \begin{equation}
 \text{find\ } \underset{\vec{B}_n\in \mathbb{B}_n}{\min} \Ltwonorm{\vec{B}_n-\vec{s}_m}
 \end{equation}
-The function space $\mathbb{B}_n$ is composed of functions of the following form:
-\begin{equation}
-\vec{B}_n\left(t\right)=\sum\limits_{i=0}^n a_{2i}\left(
-\begin{array}{c}
-b_i^n (t)\\0
-\end{array}
-\right)
-+ a_{2i+1}
-\left(
-\begin{array}{c}
-0\\b_i^n (t) 
-\end{array}
-\right)
-\end{equation}
-Therefore a control point for the Bezier--curve has the following form:
-\begin{equation}
-\vec{P}_i=\left(
-\begin{array}{c}
-a_{2i}\\a_{2i+1}
-\end{array}
-\right).
-\end{equation}
+
 Minimizing the L2--norm is equal to minimizing the functional:
 \begin{equation}
 F(\vec{B}_n)=\int\limits_{t=0}^{t=1} \left(\vec{B}_n-\vec{s}_m\right)^2\dt
 \end{equation}
-Varying $B_n$ yields
-\begin{equation}
-\delta F(B_n)=2\int\limits_{t=0}^{t=1} \left(\vec{B}_n-\vec{s}_m\right)^T \delta \vec{B}_n\dt
-\end{equation}
-using the definition of $\vec{B}_n$ and $\delta \vec{B}_n$
-\begin{align}
-\vec{B}_n\left(t\right) &=\sum\limits_{i=0}^n a_{2i}\left(
-\begin{array}{c}
-b_i^n (t)\\0
-\end{array}
-\right)
-+ a_{2i+1}
-\left(
-\begin{array}{c}
-0\\b_i^n (t) 
-\end{array}
-\right)
-\\
-\delta \vec{B}_n\left(t\right) &=\sum\limits_{i=0}^n \delta a_{2i}\left(
-\begin{array}{c}
-b_i^n (t)\\0
-\end{array}
-\right)
-+ \delta a_{2i+1}
-\left(
-\begin{array}{c}
-0\\b_i^n (t) 
-\end{array}
-\right)
-\end{align}
-leads to
-\begin{multline}
-\delta F(B_n)=2\int\limits_{t=0}^{t=1} \left(\sum\limits_{i=0}^n  a_{2i} \left(
-\begin{array}{c}
-b_i^n (t)\\0
-\end{array}
-\right)
-+ a_{2i+1}
-\left(
-\begin{array}{c}
-0\\b_i^n (t) 
-\end{array}
-\right)-\vec{s}_m\right)^T
-\\
-\left(\sum\limits_{j=0}^n \delta a_{2j} \left(
-\begin{array}{c}
-b_j^n (t)\\0
-\end{array}
-\right)
-+ \delta a_{2j+1}
-\left(
-\begin{array}{c}
-0\\ b_j^n (t) 
-\end{array}
-\right)\right)\dt \overset{!}{=}0
-\end{multline}
-rewritten
-\begin{multline}
-\int\limits_{t=0}^{t=1} \left(\sum\limits_{i=0}^n  a_{2i}
-\left(
-\begin{array}{c}
-b_i^n (t)\\0
-\end{array}
-\right)
-+  a_{2i+1}
-\left(
-\begin{array}{c}
-0\\b_i^n (t)
-\end{array}
-\right)\right)^T
-\left(\sum\limits_{j=0}^n 
-\delta a_{2j} \left(
-\begin{array}{c}
-b_j^n (t)\\0
-\end{array}
-\right)
-+ \delta a_{2j+1}
-\left(
-\begin{array}{c}
-0\\ b_j^n (t) 
-\end{array}
-\right)\right)\dt 
-\\
-=
-\int\limits_{t=0}^{t=1}\vec{s}_m^T \left(\sum\limits_{j=0}^n \delta a_{2j} \left(
-\begin{array}{c}
-b_j^n (t)\\0
-\end{array}
-\right)
-+ \delta a_{2j+1}
-\left(
-\begin{array}{c}
-0\\ b_j^n (t) 
-\end{array}
-\right)\right)\dt
-\end{multline}
-or using the notation
-\begin{align}
-\phi_{2i}&=
-\left(
-\begin{array}{c}
-b_i^n (t)\\0
-\end{array}
-\right)
-\\
-\phi_{2i+1}&=
-\left(
-\begin{array}{c}
-0\\b_i^n (t)
-\end{array}
-\right)
-\end{align}
-we get
-\begin{equation}
-\int\limits_{t=0}^{t=1} \left(\sum\limits_{i=0}^{2n+1} a_{i}\phi_i
-\right)^T
-\left(\sum\limits_{j=0}^{2n+1}
-\delta a_{j} \phi_j\right)\dt 
-=
-\int\limits_{t=0}^{t=1}\vec{s}_m^T \left(\sum\limits_{j=0}^{2n+1} \delta a_{j} \phi_j\right)\dt
-\end{equation}
-or
-\begin{equation}
-\sum\limits_{i=0}^{2n+1} \sum\limits_{j=0}^{2n+1}
-a_{i} \delta a_{j}\int\limits_{t=0}^{t=1} \phi_i^T
-\phi_j\dt 
-=
-\sum\limits_{j=0}^{2n+1} \delta a_{j} \int\limits_{t=0}^{t=1}\vec{s}_m^T \phi_j\dt
-\end{equation}
-this has to be true for any $j$ and $\delta a_j$, therefore 
-\begin{equation}
-\sum\limits_{i=0}^{2n+1} a_{i} \int\limits_{t=0}^{t=1} \phi_i^T
-\phi_j\dt 
-=
-\int\limits_{t=0}^{t=1}\vec{s}_m^T \phi_j\dt \ \forall j=0\cdots 2n+1
-\end{equation}
-using
-\begin{equation}
-A_{ij}=\int\limits_{t=0}^{t=1} \phi_i^T
-\phi_j\dt 
-\text{\ and \ }
-b_j=\int\limits_{t=0}^{t=1}\vec{s}_m^T \phi_j\dt
-\end{equation}
-we get the linear equation system
+
+Using the variational principle we get the the system of linear equations
 \begin{equation}
 A a = b
 \end{equation}
-which has to be solved for $a$.
+where $A$ is the stiffness matrix, $b$ is the vector of scalar products of the given spline $s_{m}$ and basis functions (Bernstein polynomials) and $a$ is a required vector of coefficients for Bezier curve representation.
 
-\subsection{Minimization problem(least squares): NURBS}
+\subsection{Minimization problem (least squares): NURBS}
 Although the approach used above showed good results, it appears to be very computationally intensive. Analogically, one could reduce the original problem to the \textit{linear regression problem}, which allows us to reduce computational costs. Also, to improve the locality of our solution, from now on we are going to use NURBS basis functions with weights $\omega_{j} = 1$ instead of Bezier curves. For this purpose, we adopted an algorithm, provided in \cite{becker2011advanced}.
 
 Let $X^{0}$ be the $n \times 2$ matrix of the given set of points, $N^{p}$ - the basis functions of degree $p$ ($n \times (n+p)$ matrix, where $n$ - number of points), $P^{0}$ - the control points ($(n+p) \times 2$ matrix).
@@ -263,7 +101,8 @@ Or, in short:
 \begin{equation}
 X^{0} = N^{p} P^{0}
 \end{equation}
-The above system needs to be solved for the unknown $P^{0}$. One of the ways to solve it is to use SVD decomposition. So far, we used built-in MATLAB solver.
+The above system needs to be solved for the unknown $P^{0}$. One of the ways to solve it is to use SVD decomposition. For prototyping, the built-in MATLAB solver can be used.
+%part of implementation
 
 \subsection{Fitting pipeline}
 \begin{figure}
