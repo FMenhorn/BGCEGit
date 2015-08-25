@@ -1,9 +1,9 @@
 %As mentioned in the Introduction, the main challenge of our project is to convert the mesh based geometry, obtained on a previous step, back to CAD representation. 
-Parametrised geometries are often given in terms of NURBS descriptions (e.g. in FreeCAD software). %REFERENCE.  
-To define NURBS from a mathematical standpoint, we first define so-called \textit{Bezier curves} which we will use later for the definition of NURBS.
+Parametrised geometries are often given in terms of Non-Uniform B--Spline (NURBS) descriptions (see, for example, documentation of FreeCAD software \cite{FreeCAD}). 
+To define NURBS from a mathematical standpoint, we first define so-called \textit{Bezier curves} \cite{farin2002handbook} which we will use later for the definition of NURBS.
 \subsection{Bezier Curves}
 \emph{Bezier curve} is a \textit{parametric} curve, which often used for producing a smooth approximation of a given set of data points.
-\subsubsection{Analytical expression} 
+ 
 An analytical expression for the Bezier curve is given by:
 \begin{equation*}
 \vec{B}(t)=\sum\limits_{i=0}^n b_i^n(t) \vec{P}_i
@@ -12,10 +12,10 @@ where $\vec{P}_i$ is the $i$--th control point (we have $n+1$ control points). A
 \begin{equation*}
 b_i^n(t)=\left(\begin{array}{c}n\\i\end{array}\right)(1-t)^{(n-i)}t^i
 \end{equation*}
-is the $i$--th Bernstein polynomial of degree $n$.
+is the $i$--the Bernstein polynomial (see \cite{lorentz2012bernstein}) of degree $n$.
 
-Additionally to the expression with the Bernstein polynomials, one can use a recursion formula (so-called \textbf{de Casteljau Algorithm}) for the construction of the Bezier curve, which we will not cover here.
-\subsubsection{Surfaces}
+Additionally to the expression with the Bernstein polynomials, one can use a recursion formula (so-called \textbf{de Casteljau Algorithm} \cite{farin2002handbook}) for the construction of the Bezier curve, which we will not cover here. For more information see \cite{farin2002handbook}.
+
 Analogically to Bezier curves, but with $n\cdot m$ Points $\vec{P}_{i,j}$ ,
 one can define a \textit{Bezier surface}, given by the analytical expression
 \begin{equation*}
@@ -26,18 +26,18 @@ Note, that Bezier curves and surfaces may be unstable -- minor changes in contro
 
 
 \subsection{NURBS basis functions}
-Extending the idea, described in previous section, one could use NURBS basis functions instead of simple Bezier curves. 
+Extending the idea, described in previous section, one could use NURBS \cite{farin1999nurbs} basis functions instead of simple Bezier curves. 
 
 Unlike Bezier curves, for the B--spline basis a parameter domain is subdivided with so-called \textit{knots}. In particular, given the parameter domain $[u_{0}, u_{m}]$ (in 1D), \textit{knot vector} is given by $u_{0} \leq u_{1} \leq ... \leq u_{m}$. In most cases $u_{0} = 0, u_{m} = 1$, so we get unit interval for our parameter values. Recall, that, N in NURBS stands for \textit{non-uniform}. This means, that our knots $u_{0},..., u_{m}$ are not equidistant. %can't recall... it's not written anywhere else?
 
-Given \textit{knot vector} $[u_{0}, u_{m}]$ and a degree of B-spline $p$ one can find $i$-th B-spline basis function recursively as follows:
+Given \textit{knot vector} $[u_{0}, u_{m}]$ and a degree of B-spline $p$ one can find $i$-th B-spline basis function recursively as follows \cite{farin1999nurbs}:
 \begin{equation}
 N_{i,0}(u) =  \begin{cases} 1, & \mbox{if } u_{i} \leq u < u_{i+1} \\ 0, & \mbox{otherwise } \end{cases}
 \end{equation} 
 \begin{equation}
 N_{i,p}(u) = \frac{u - u_{i}}{u_{i+p} - u_{i}}N_{i, p-1}(u)  + \frac{u_{i+p+1}-u}{u_{i+p+1} - u_{i+1}}N_{i+1, p-1}(u)
 \end{equation}
-For $p=0$ we get just step functions (see fig. \ref{fig:bspline_basis_constant}), for $p=1$ we get familiar hat functions (see fig. \ref{fig:bspline_basis_linear}). Quadratic basis looks a bit more complicated, but also quite intuitive (fig. \ref{fig:lognorm_quadratic}).
+For $p=0$ we get just step functions (see fig. \ref{fig:bspline_basis_constant}), for $p=1$ we get familiar hat functions (see fig. \ref{fig:bspline_basis_linear}). Quadratic basis looks more complicated (fig. \ref{fig:lognorm_quadratic}).
 \begin{figure}
 \centering
 \begin{subfigure}[B-spline basis for $p=0$]{
@@ -67,7 +67,7 @@ B--splines are have the following properties, which are useful for our problem:
 \item B--Splines only change locally (depends on the degree $n$) when a control point is changed.
 \end{itemize}
 
-Analogically, one can define B--spline surfaces.
+Analogically, one can define B--spline surfaces. For more information about NURBS see \cite{farin1999nurbs}.
 \subsection{Minimization problem}
 Now, once we defined all necessary tools, we proceed to the fitting problem.\\
 The goal is to fit in a parametric curve to the set of given data points. In our case our given set of points is a mesh, obtained from surface contouring.
