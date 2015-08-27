@@ -1,13 +1,12 @@
 %BEGIN JC
 \subsection{Isosurface Contouring}
-Now when the optimized voxel data was obtained, the next step is to generate a \emph{mesh based
+When the optimized voxel data was obtained, the next step is to generate a \emph{mesh based
 geometry}. It will be useful in the further conversion of our surface back to CAD format, in particular, to NURBS representation. In order to achieve it, the
 data will be represented by a contour of a smooth function, rendering an isosurface. The
 isosurface allows to visualize Scalar Volumetric Data in 3D. It furthermore permits a mesh
 representation of the volume data. The mesh can be composed of triangles or quads, according
-to the algorithm used. There are two main approaches to solve this problem, the most
-famous one is Marching Cubes.
-
+to the algorithm used. There are two main approaches to solve this problem-- the most
+famous one being \emph{Marching Cubes}.
 
 
 \subsubsection{Marching Cubes} 
@@ -27,9 +26,9 @@ an edge is called active. Non active cubes are not further considered in the alg
 By connecting the vertices we obtain a polygon on each cube. There are 256 possible scenarios,
 but most of them are just reflections or rotationally symmetric cases of each other. Therefore
 there are 15 base cases which represent all the possibilities of the marching cubes (see \autoref{fig:MC_basecase}). 
-The original algorithm presents two main problems. Firstly it does not guarantee neither
+The original algorithm presents two main problems. Firstly, it does not guarantee neither
 correctness nor topological consistency, which means that holes may appear on the surface due
-to inaccurate base case selection. The second problem is ambiguity, which appears when two
+to inaccurate base case selection. Secondly, another problem is ambiguity, which appears when two
 base cases are possible and the algorithm chooses the incorrect one. These cases can be grouped
 into face ambiguities and internal ambiguities. There are many extended Marching Cubes
 algorithms that tackle the problems of the original one, getting rid of the ambiguities and
@@ -38,11 +37,11 @@ providing correctness.
 \subsubsection{Dual Contouring}
 The idea of the \emph{Dual Contouring} algorithm is similar to Marching Cubes, but instead of generating vertices on the
 edges of the cubes, it locates them inside the cube. \autoref{fig:bunny_MCDC} shows the basic differences in both approaches.
-The vertices associated with the four contigous cubes are joined and form a quad. The question now is
-which place inside the cube is the ideal one to insert each vertex. Different dual algorithms are classified 
-according to the answer for this question. Dual contouring generates a vertex positioned at the minimizer of a
+The vertices associated with the four contiguous cubes are joined and form a quad. The question now is
+which place inside the cube is the ideal one to insert each vertex. Different Dual Contouring algorithms are classified 
+according to the answer for this question. Dual Contouring generates a vertex positioned at the minimizer of a
 quadratic function which depends on the intersection points and normals. Therefore the method needs Hermite 
-data to work with.
+data to work with. The quadratic function is defined as follows:
 \begin{equation*}
 E(x)= x^TA^TAx-2x^TA^Tb+b^Tb
 \end{equation*}
@@ -52,7 +51,7 @@ SVD decomposition of \textit{A} and form the pseudo-inverse by truncating its sm
 
 
 The main advantage of this method over MC is the acquisition of better aspect ratios. On the other hand the need of Hermite Data
-represents a disadvantage. Furthermore there is no open source algorithm that implements the Dual Contouring scheme.
+represents a disadvantage. Furthermore, there is no open source algorithm that implements the Dual Contouring scheme.
 
 %\subsection{VTK Toolbox}
 %\subsubsection{Installing VTK}
@@ -69,7 +68,7 @@ represents a disadvantage. Furthermore there is no open source algorithm that im
 \begin{figure}
 \centering
    \scalebox{0.35}{\includegraphics{Pictures/bunny_MC.pdf}}\\
-   \caption{\textit{Left:} The famous Stanford Bunny. \textit{Right:} Main difference between MC and Dual methods }
+   \caption{\textit{Left:} The famous Stanford Bunny after application of Marching Cubes. \textit{Right:} Main difference between MC and Dual methods }
    \label{fig:bunny_MCDC}
 \end{figure}
 %The VTK toolbox was used in order to implement the algorithms on our optimized data. It is a heavily object
@@ -80,9 +79,9 @@ represents a disadvantage. Furthermore there is no open source algorithm that im
 
 The VTK Toolbox is an open--source tool, providing algorithms for 3D computer graphics, image processing, and visualization. Among the variety of tools, VTK offers algorithms, allowing us to obtain a surface representation from voxel data. 
 
-Since \textit{Marching Cubes} algorithm only works with ImageData and PolyData, it is inapplicable to our case of unstructured grid data.For structured and unstructured grids the tool to render the isosurface is the \textit{Contour Filter} tool. Unfortunately the documentation does not present which algorithm the tool uses. It
+Since \textit{Marching Cubes} algorithm only works with ImageData and PolyData, it is inapplicable to our case of unstructured grid data.For structured and unstructured grids the tool to render the isosurface is the \textit{Contour Filter} tool. Unfortunately, the documentation does not present which algorithm the tool uses. It
 can be inferred that it is an extended \textit{Marching Cubes} algorithm.
-The \textit{Contour Filtering} seemed to work fine but the visualization of our data was still not possible
+The \textit{Contour Filtering} works fine but the visualization of our data was still not possible
 and an intermediate step was needed. We used the \textit{Implicit Modelling} tool which is a filter that
 computes the distance from the input geometry to the points of an output structured point set.
 This distance function can then be "contoured" to generate new, offset surfaces from the original
@@ -119,17 +118,14 @@ decimation tool which works for 3D triangle data.
 \subsection{Long Road to NURBS}
 There are two possible roads to go from the voxel data to the CAD representation (in our case NURBS based representation).
 \subsubsection{Quad Contouring}
-This approach uses the dual contouring algorithm as first step in order to obtain a quad mesh
-representation from the voxel data. The first challenge is to implement correctly the algorithm
-with the ideas presented in \cite{Hermite2002}. The original marching cubes algorithm is
+This approach uses the Dual Contouring algorithm as first step in order to obtain a quad mesh
+representation from the voxel data. The first challenge is to implement the algorithm
+with the ideas presented in \cite{Hermite2002} correctly. The original Marching Cubes algorithm is
 implemented in VTK but the source code is not public, therefore not only an extension
 of it is needed, but a full implementation. Once this first step is done, the quads will be chosen for the
 NURBS parametrization. A second step considers multiple smaller quads which have to be
 combined into one larger patch. This is another challenge, since the remeshing of quad meshes
-is not as straightforward as with the triangles. Different approaches have been taken in order to
-
-achieve this coarsening. In \cite{Puppo2010} an incremental and greedy approach, which is based on local operations only, is presented. It depicts an iterative process which performs local optimizing, coarsening and smoothing operations. Another approaches, like
-the one presented in \cite{Dong2005} uses smooth harmonic scalar fields to simplify the mesh.
+is not as straightforward as with the triangles. Different approaches have been taken in order to achieve this coarsening. In \cite{Puppo2010} an incremental and greedy approach, which is based on local operations only, is presented. It depicts an iterative process which performs local optimizing, coarsening and smoothing operations. Other approaches, like the one presented in \cite{Dong2005} uses smooth harmonic scalar fields to simplify the mesh.
 
 %2= “Practical quad mesh simplification”
 %3= “Harmonic Functions for Quadrilateral Remeshing of Arbitrary Manifolds”
