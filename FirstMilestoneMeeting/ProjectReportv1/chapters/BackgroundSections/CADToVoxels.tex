@@ -4,18 +4,3 @@
 
 The main hurdle with most state-of-the-art open source topology optimization tools is their input format, where many of them require input to be specified as a 3-dimensional voxel grid. Presence (or absence) of material in these voxels is defined by a boolean variable, and boundary conditions are imposed on the appropriate locations. %This section describes how we overcame this hurdle of converting CAD representations to voxelized input.
 
-\subsection{CVMLCPP library}
-The \emph{Common Versatile Multi-purpose Library for C++} (CVMLCPP) is a collection of mathematical algorithms whose objective is "to eliminate this redundancy by offering high-quality implementations of commonly needed functionality" \cite{CVMLCPP}. The library offers an easy-to-use voxelizer, which we use for conversion of CAD input to a boolean voxel grid.
-
-\begin{figure}
-\centering
-\begin{subfigure}{
-  \includegraphics[width=.2\linewidth]{Pictures/STLToVoxels/Star_STL.png}}
-\end{subfigure}
-\begin{subfigure}{
-  \includegraphics[width=.2\linewidth]{Pictures/STLToVoxels/Star_VTK_Trans.png}}
-\end{subfigure}
-\caption{The STL geometry of a star (left) and its voxelized form (right) obtained via the CVMLCPP voxelizer}
-\label{fig: voxelizerStar}
-\end{figure}
-
