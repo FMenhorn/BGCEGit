@@ -1,5 +1,5 @@
 \label{sec:TopOpt}
-\subsection{Definition and motivation}
+%\subsection{Definition and motivation}
 Topology Optimization describes the process of finding the optimal distribution of a limited amount of material for a given area or volume based on a predefined constraint/minimization problem. Possible optimization goals are for example \cite{Hunter2009}:
 \begin{itemize}
 \item \textbf{Minimum compliance} which seeks to find the optimal distribution of material that returns the stiffest possible structure. The structure is thereby subjected to loads (forces) and supports (boundary conditions). By maximizing the stiffness, the compliance is minimized. This is also analogous to minimizing the stress energy stored by the applied loads.
@@ -10,9 +10,10 @@ Topology Optimization describes the process of finding the optimal distribution 
 
 As one can already imagine by this short list of optimization goals, Topology Optimization has a wide field of possible applications. Hence, it has become a well established technology used by engineers in the fields of aeronautics, civil, materials, mechanical and structural optimization. Furthermore, due to the rising significance of additive manufacturing techniques in industry, the realisation of complex optimized designs is now much easier. % REF PLEASE
 
-\subsection{Theory}
+%\subsection{Theory}
 \label{subsec:TopOpTheory}
-\subsubsection{Minimum compliance: Problem formulation}
+%\subsubsection{Minimum compliance: Problem formulation}
+\subsection{Minimum compliance: Problem formulation}
 \begin{figure}
 \centering
 \includegraphics[width=0.6\textwidth]{Pictures/TopOp/design_domain.png}
@@ -23,18 +24,21 @@ In order to constrain the resulting structure as little as possible, the formula
 
 The formulation allows the problem to be cast as finding a displacement field $u$ and a stiffness tensor field $E$ that is in equilibrium with the applied loads, and that minimizes the external work done by the forces. 
 
-\subsubsection{Physical and mathematical simplifications}
+%\subsubsection{Physical and mathematical simplifications}
+\subsection{Physical and mathematical simplifications}
 To turn this into a more tractable mathematical problem, a few physical assumptions are also typically made: the material be isotropic and linearly elastic. From the assumptions of isotropy and linear elasticity of the material, the stiffness field becomes a constant of the material, defined where there is material in the domain.
 
 The problem is also easy to cast into a weak form. First of all, we compute the integrated internal virtual work and external work. The former is the work of deforming the elastic material from equilibrium by an admissible displacement. The latter is done by the loads and forces to bring out this displacement. Having computed these, we set them equal to one another in order to conserve energy. As a result we obtain an equation that relates the equilibrium displacement, stiffness tensor, and the forces and loads. We then cast this into the weak form, which can be solved using Finite Element Methods (FEM). These can also incorporate the calculation of the external work done.
 
-\subsubsection{SIMP: Solid Isotropic Material with Penalization}
+%\subsubsection{SIMP: Solid Isotropic Material with Penalization}
+\subsection{SIMP: Solid Isotropic Material with Penalization}
 
 In trying to minimise this external work done by looking at different material distributions, however, the usual problem of finding an optimum arises: where to look? After discretising the domain with FEM, the possibilities of where to put material at least are not infinite-- but they still grow exponentially with the number of elements; hence, trying out one-by-one is not going to prove efficient. One popular way of recasting the problem to allow for easier solving is the SIMP model. Here, instead of either being present or not at a point, the material presence can take a continuous set of values between one and zero. The total final volume is then obtained and fixed by integrating this presence variable over the domain, instead of constraining the allowed occupied space. This allows for the interpretation as some kind of density.
 
 In order to still obtain topologies where material is predominant in certain areas-- of densities one, with the rest being empty at densities close to zero-- a "penalty" is applied to the intermediate values. This is effected by raising the density to a power $> 1$ in the elastic energy calculation, but not in the volume calculation. That way, an intermediate density value provides less elastic support, but still "costs" as much volume, and will thus be suboptimal. 
 
-\subsubsection{Solution and implementation}
+%\subsubsection{Solution and implementation}
+\subsection{Solution and implementation}
 \begin{figure}
 \centering
 \includegraphics[width=0.6\textwidth]{Pictures/TopOp/Sigmund_cantilever2d.png}

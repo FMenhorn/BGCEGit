@@ -1,5 +1,5 @@
 %BEGIN JC
-\subsection{Isosurface Contouring}
+%\subsection{Isosurface Contouring}
 When the optimized voxel data was obtained, the next step is to generate a \emph{mesh based
 geometry}. It will be useful in the further conversion of our surface back to CAD format, in particular, to NURBS representation. In order to achieve it, the
 data will be represented by a contour of a smooth function, rendering an isosurface. The
@@ -9,7 +9,8 @@ to the algorithm used. There are two main approaches to solve this problem-- the
 famous one being \emph{Marching Cubes}.
 
 
-\subsubsection{Marching Cubes} 
+%\subsubsection{Marching Cubes} 
+\subsection{Marching Cubes} 
 \begin{figure}
 \centering
    \scalebox{0.8}{\includegraphics{Pictures/cubes.pdf}}\\
@@ -34,6 +35,7 @@ into face ambiguities and internal ambiguities. There are many extended Marching
 algorithms that tackle the problems of the original one, getting rid of the ambiguities and
 providing correctness.
 
+%\subsection{Dual Contouring}
 \subsubsection{Dual Contouring}
 The idea of the \emph{Dual Contouring} algorithm is similar to Marching Cubes, but instead of generating vertices on the
 edges of the cubes, it locates them inside the cube. \autoref{fig:bunny_MCDC} shows the basic differences in both approaches.
