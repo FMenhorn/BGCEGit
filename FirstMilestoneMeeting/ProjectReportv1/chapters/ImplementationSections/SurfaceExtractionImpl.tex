@@ -1,12 +1,8 @@
 As was mentioned above, surface extraction is an intermediate step after Topology Optimization and NURBS representation in order to facilitate the conversion. In terms of implementing the surface extraction, we used VTK.
 
 \subsection{VTK Toolbox}
-\begin{figure}
-\centering
-   \scalebox{0.35}{\includegraphics{Pictures/bunny_MC.pdf}}\\
-   \caption{\textit{Left:} The famous Stanford Bunny after application of Marching Cubes. \textit{Right:} Main difference between MC and Dual methods }
-   \label{fig:bunny_MCDC}
-\end{figure}
+
+
 %The VTK toolbox was used in order to implement the algorithms on our optimized data. It is a heavily object
 %oriented toolbox. Our first approach was to use the built in Marching Cubes algorithm,
 %nevertheless it did not work with our unstructured grid data. It just works for ImageData and
@@ -34,9 +30,8 @@ geometry. Although this approach allowed the visualisation, some crucial informa
    \label{fig:contouring}
 \end{figure}
 
-A further idea to solve this problem is to convert at the first step the volume data into point data
-and only then present it to the \textit{Contour Filtering} tool (\autoref{fig:contouring}). This will be implemented by the next
-milestone.
+A further idea to solve this problem is to first convert the volume data into point data
+and only then present it to the \textit{Contour Filtering} tool (\autoref{fig:contouring}).
 
 In order to reduce computational costs of the following \textit{NURBS fitting} process, presented in the next section, we need to create a coarser mesh from the fine one. The number of triangles that represent the
 isosurface can be reduced with the \textit{Decimation} tool. A smoothing step is necessary in between
