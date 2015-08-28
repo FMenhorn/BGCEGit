@@ -1,6 +1,6 @@
 As was mentioned above, surface extraction is an intermediate step after Topology Optimization and NURBS representation in order to facilitate the conversion. In terms of implementing the surface extraction, we used VTK.
 
-\subsection{VTK Toolbox}
+%\subsection{VTK Toolbox}
 
 
 %The VTK toolbox was used in order to implement the algorithms on our optimized data. It is a heavily object
@@ -12,9 +12,8 @@ As was mentioned above, surface extraction is an intermediate step after Topolog
 The VTK Toolbox is an open--source tool, providing algorithms for "3D computer graphics, image processing, and visualization" \cite{VTKToolbox}. Among the variety of tools, VTK offers algorithms, allowing us to obtain a surface representation from voxel data. In the midst of these algorithms, we could find Marching Cubes, Dual Contouring and also a Decimation method, which is useful for reducing the data size even further for the NURBS-representation step.
 
 
-\subsection{Implementation}
-Since \textit{Marching Cubes} algorithm only works with ImageData and PolyData, it is inapplicable to our case of unstructured grid data.For structured and unstructured grids the tool to render the isosurface is the \textit{Contour Filter} tool. Unfortunately, the documentation does not present which algorithm the tool uses. It
-can be inferred that it is an extended \textit{Marching Cubes} algorithm.
+%\subsection{Implementation}
+Since \textit{Marching Cubes} algorithm only works with ImageData and PolyData, it is inapplicable to our case of unstructured grid data. For structured and unstructured grids the tool to render the isosurface is the \textit{Contour Filter} tool. Unfortunately, the documentation does not present which algorithm the tool uses. It can be inferred that it is an extended \textit{Marching Cubes} algorithm.
 The \textit{Contour Filtering} works fine but the visualization of our data was still not possible
 and an intermediate step was needed. We used the \textit{Implicit Modelling} tool which is a filter that
 computes the distance from the input geometry to the points of an output structured point set.
