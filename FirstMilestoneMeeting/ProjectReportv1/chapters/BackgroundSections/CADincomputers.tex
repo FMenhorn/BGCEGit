@@ -2,7 +2,7 @@
 %\subsection{CAD in engineering}
 Computer Aided Design (CAD) refers to the process of designing a product using a computer system. Before CAD applications were used, products were designed using a sketch board. It was a challenge to incorporate changes in the construction drafts as well as to keep documentations up to date; hence, it was no surprise that CAD systems spread rapidly across all design development branches. Computer aided design is now irreplaceable used in architecture, mechanical, electrical and civil engineering.
 
-Depending on the discipline, different requirements are set on the virtual model. One may imagine that in a civil engineering model of a building a 2D floor plan is often sufficient; however, in the design of a mechanical motor a 3D model is always necessary. Given these circumstances, various CAD software bundles evolved in the different disciplines with completely different modelling approaches. Besides the geometry representation additional parameters, such as material properties or manufacturing information, are stored. In order to move between different data structures standardized exchange interfaces are commonly used.
+Depending on the discipline, different requirements are set on the virtual model. One may imagine that in a civil engineering model of a building a 2D floor plan is often sufficient; however, in the design of a mechanical motor a 3D model is always necessary. Given these circumstances, various CAD software bundles evolved in the different disciplines with completely different modelling approaches. Besides the geometry representation additional parameters, such as material properties or manufacturing information, are stored. In order to move between different data structures standardized exchange interfaces are commonly used \cite{sarcarCAD}.
 
 \subsection{Geometry representations}
 In general, two different ways of describing a geometry are used in CAD systems: a \emph{constructive solid geometry} (CSG) or a \emph{boundary representation} (BREP). Other approaches, such as a complete voxelised geometry are not common due to extensive memory consumption.
@@ -10,7 +10,7 @@ In general, two different ways of describing a geometry are used in CAD systems:
 \begin{figure}
 \centering
 \includegraphics[width=0.5\textwidth]{Pictures/Csg_tree.png}
-\caption{CSG object tree}
+\caption{CSG object tree, figure taken from \cite{WikipediaCSG}}
 \label{fig:csg_tree}
 \end{figure}
 One way of representing a geometry in CAD is the approach of \emph{constructive solid geometry}. The basic idea is to start from a set of primitives, e.g. a sphere, cylinder and cube. Basic Boolean operations link these primitives towards a complex geometry. This procedure can be seen in figure \ref{fig:csg_tree}.
@@ -40,8 +40,8 @@ ASCII STL files begin with a name and the data on the triangles is constructed a
 \item a facet normal pointing outward
 \item a sequence of vertex coordinates
 \end{itemize}
-Note that no additional information such as material properties are transferred through STL files. 
+Note that no additional information such as material properties are transferred through STL files \cite{STL}.
 \subsubsection{IGES file format}
 To overcome issues of unsufficient precision there exist also more elaborate exchange formats that save e.g. a circle as a parameter where no discretisation step is involved. Also, the possibility of passing additional parameter information is required by certain users. Popular file types that offer these two functionalities are STEP and IGES files. 
 
-The IGES file format contains five different sections: a \emph{Start}, \emph{Global}, \emph{Directory Entry}, \emph{Parameter Data} and \emph{Terminate} section. The \emph{Start} and \emph{Global} section are used for naming and part information. In the \emph{Directory Entry} section additional information like the node color is saved. The \emph{Parameter Data} section is used for storing the coordinate points; the \emph{Terminate} section signals the end of the file. 
+The IGES file format contains five different sections: a \emph{Start}, \emph{Global}, \emph{Directory Entry}, \emph{Parameter Data} and \emph{Terminate} section. The \emph{Start} and \emph{Global} section are used for naming and part information. In the \emph{Directory Entry} section additional information like the node color is saved. The \emph{Parameter Data} section is used for storing the coordinate points; the \emph{Terminate} section signals the end of the file \cite{sarcarCAD}.
