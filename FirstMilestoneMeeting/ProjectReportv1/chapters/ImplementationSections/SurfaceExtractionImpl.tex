@@ -1,4 +1,4 @@
-As was mentioned above, surface extraction is an intermediate step after Topology Optimization and NURBS representation in order to facilitate the conversion. In terms of implementing the surface extraction, we used VTK.
+As was mentioned above, surface extraction is an intermediate step after Topology Optimization and NURBS representation in order to facilitate the conversion. In terms of implementing the surface extraction, we used VTK \cite{VTKToolbox}.
 
 %\subsection{VTK Toolbox}
 
@@ -9,39 +9,38 @@ As was mentioned above, surface extraction is an intermediate step after Topolog
 %PolyData . For structured and unstructured grids the tool to render the isosurface is the \textit{Contour Filter} tool. Unfortunately the documentation does not present which algorithm the tool uses. It
 %can be inferred that it is an extended Marching cubes algorithm.
 
-The VTK Toolbox is an open--source tool, providing algorithms for "3D computer graphics, image processing, and visualization" \cite{VTKToolbox}. Among the variety of tools, VTK offers algorithms that allow us to obtain a surface representation from voxel data. Among these algorithms, we could find Marching Cubes, Dual Contouring and also a decimation tool, which is useful for reducing the data size further for the NURBS-representation step.
+The VTK Toolbox is an open-source tool, providing algorithms for "3D computer graphics, image processing, and visualization" \cite{VTKToolbox}. Among the variety of tools, VTK offers algorithms that allow us to obtain a surface representation from voxel data. Among these algorithms, we could find Marching Cubes, Dual Contouring and also a Decimation tool, the last of which can useful for reducing the data size further for the NURBS-representation step.
 
 
 %\subsection{Implementation}
-The \textit{Marching Cubes} algorithm is inapplicable to our case of unstructured grid data, since it only works with ImageData and PolyData, which are the main data types in VTK. For structured and unstructured grids the tool to render the isosurface is the \textit{Contour Filter} tool. Unfortunately, the documentation does not present which algorithm the tool uses. It can be inferred that it is an extended \textit{Marching Cubes} algorithm.
-The \textit{Contour Filtering} works fine but the visualization of our data was still not possible
-and an intermediate step was needed. We used the \textit{Implicit Modelling} tool which is a filter that
+The \textit{Marching Cubes} implementation in VTK is however not applicable to our the Unstructured Grid data that we obtain from ToPy, since it only works with ImageData and PolyData, the main data types in VTK. For structured and unstructured grids the tool to render the isosurface is the \textit{Contour Filter} tool. Unfortunately, the documentation does not present which algorithm the tool uses. It can be inferred that it is an extended \textit{Marching Cubes} algorithm. %how?
+Although an implementation with \textit{Contour Filtering} worked, the visualization of the data was still not possible
+making an intermediate step needed. Here, we used the \textit{Implicit Modelling} tool, a filter that
 computes the distance from the input geometry to the points of an output structured point set.
 This distance function can then be "contoured" to generate new, offset surfaces from the original
-geometry. Although this approach allowed the visualisation, some crucial information was lost. In particular, holes are not represented in the final model.  
+geometry. Although this approach allowed the visualisation, some crucial information was lost, as for example holes were not represented in the final model. The result can be shown in \autoref{fig:contouring}.
 
 
 \begin{figure}
 \centering
    \scalebox{0.4}{\includegraphics{Pictures/contouring.pdf}}\\
-   \caption{Contour Filtering tool after Implicit Modelling}
+   \caption{Contour Filtering tool after Implicit Modelling. The original geometry (left) is an optimized geometry output from \emph{ToPy} (see \autoref{sec:ToPy}. Note that some essential features of the geometry after the process (right) are lost, such as the holes through the structure.}
    \label{fig:contouring}
 \end{figure}
 
-A further idea to solve this problem is to first convert the volume data into point data
-and only then present it to the \textit{Contour Filtering} tool (\autoref{fig:contouring}).
+% I don't understand this sentence - I'll leave it out for now.
 
-In order to reduce computational costs of the following \textit{NURBS fitting} process, presented in the next section, we need to create a coarser mesh from the fine one. The number of triangles that represent the
-isosurface can be reduced with the \textit{decimation} tool.  VTK has the
-decimation tool which works for 3D triangle data. A smoothing step is necessary in between
-to get the new connections right. The top part of figure \ref{fig:Decimation} shows a 50 \% reduction of the
-triangles, a noticeable difference can not be perceived. On the lower part a 90 \% reduction is
-obtained, it is nevertheless still difficult to see a difference. Triangle meshes can be easily
-coarsened since there are many open source algorithms that reduce the number of triangles.
+%A further idea to solve this problem is to first convert the volume data into point data
+%and only then present it to the \textit{Contour Filtering} tool .
+
+In order to reduce computational costs of the following \emph{NURBS fitting} process (see \autoref{sec:NURBS}) we also need to create a coarser mesh of polygons from the fine one. The number of triangles that represent the
+isosurface can here be reduced with the VTK \emph{Decimation} tool mentioned above. A smoothing step is however necessary in-between
+to get the new connections right. As can be seen in \autoref{fig:Decimation}, a 50 \% reduction of the
+triangles barely provides a noticeable difference, and even with a 90 \% reduction it is difficult to see a difference. Triangle meshes can be easily coarsened since there are many open source algorithms that reduce the number of triangles. %reference
 
 \begin{figure}
 \centering
    \scalebox{0.4}{\includegraphics{Pictures/Decimation.pdf}}\\
-   \caption{Decimation of triangles. \textit{Top:} 50\% \textit{Lower:} 90\%}
+   \caption{Decimation of triangles. \emph{Top:} 50\% reduction of triangle number from the object in \autoref{fig:contouring}. \emph{Lower:} 90\% reduction. The difference is barely noticable in both cases.}
    \label{fig:Decimation}
 \end{figure}

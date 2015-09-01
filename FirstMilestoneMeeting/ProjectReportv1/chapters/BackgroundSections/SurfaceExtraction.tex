@@ -5,7 +5,7 @@ In order to fit NURBS and other curves to an optimized geometry, a \emph{mesh-ba
 
 In order to produce the mesh-based geometry, the data can be represented by a contour at a value of a smooth function in space, that is, an isosurface. Below, we describe two methods that solve this problem, the \emph{Marching Cubes} and the \emph{Dual Contouring} methods.% We then continue to discuss their applicability for NURBS curve fitting.
 
-\subsubsection{Marching Cubes} 
+\subsection{Marching Cubes} 
 %\subsection{Marching Cubes} 
 \begin{figure}
 \centering
@@ -23,10 +23,10 @@ correctness nor topological consistency, which means that holes may appear on th
 to inaccurate base case selection. Second, another problem is ambiguity, which appears when two
 base cases are possible and the algorithm chooses the incorrect one. There are many extended Marching Cubes
 algorithms that tackle the problems of the original one, getting rid of the ambiguities and
-providing correctness. \cite{ExtendedMC}
+providing correctness (see for example \cite{ExtendedMC}).
 
 %\subsection{Dual Contouring}
-\subsubsection{Dual Contouring}
+\subsection{Dual Contouring}
 The idea of \emph{Dual algorithms}, to which Dual contouring belongs, is similar to Marching Cubes. However, instead of generating polygon vertices on the
 edges of the cubes, it locates them inside the cubes that have vertex values both above and below the isovalues.
 After locating the vertices, the ones associated with four contiguous cubes are joined to form a quad. The approach can be seen in \autoref{fig:bunny_MCDC}, with a similar Marching Cubes illustration for comparison. 
