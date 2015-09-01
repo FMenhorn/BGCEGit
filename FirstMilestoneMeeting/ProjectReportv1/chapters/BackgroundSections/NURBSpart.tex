@@ -2,19 +2,19 @@
 Parametrised geometries are often given in terms of \emph{Non-Uniform Rational B-Spline} (NURBS) curve patches (see for example, documentation of FreeCAD software \cite{FreeCAD}). 
 To define NURBS from a mathematical standpoint, we first define so-called \emph{Bezier curves} and use them later for the definition of NURBS. For these two sections, we refer to \cite{farin2002handbook} for a more in-depth introduction and further material. 
 \subsection{Bezier Curves}
-Bezier curve is a \textit{parametric} curve, which is often used for producing a smooth approximation of a given set of data points.
+A Bezier curve is a \textit{parametric} curve, which is often used for producing a smooth approximation of a given set of data points.
  
-An analytical expression for the Bezier curve parametrized by the variable $t$ is given by:
+An analytical expression for the Bezier curve parametrized by the variable $u$ is given by:
 \begin{equation*}
-\vec{B}(t)=\sum\limits_{i=0}^n b_i^n(t) \vec{P}_i
+\vec{B}(u)=\sum\limits_{i=0}^n b_i^n(u) \vec{P}_i
 \end{equation*}
-where $\vec{P}_i$ is the $i$--th control point, $i\in0,1,...n$ ($n+1$ control points in total), and
+where $\vec{P}_i$ is the $i^{\text{th}}$ control point, $i\in0,1, \dots ,n$ ($n+1$ control points in total), and
 \begin{equation*}
-b_i^n(t)=\binom{n}{i}(1-t)^{(n-i)}t^i
+b_i^n(u)=\binom{n}{i}(1-u)^{(n-i)}u^i
 \end{equation*}
 with $\binom{n}{i}$ being a binomial coefficient, is the $i^{\text{th}}$ \emph{Bernstein polynomial} (see \cite{lorentz2012bernstein}) of degree $n$.
 
-Additionally to the expression with the Bernstein polynomials, one can use a recursion formula (so-called \textbf{de Casteljau Algorithm}) for the construction of the Bezier curve, which we will not cover here.
+Additionally to the expression with the Bernstein polynomials, one can use a recursion formula (so-called \emph{de Casteljau Algorithm}) for the construction of the Bezier curve, which we will not cover here.
 
 Analogically to Bezier curves, but with $n\cdot m$ points $\vec{P}_{i,j}$,
 one can define a \textit{Bezier surface}, given by the analytical expression
@@ -26,11 +26,11 @@ Note that Bezier curves and surfaces may be unstable -- minor changes in control
 
 
 \subsection{NURBS basis functions}
-Extending the idea described in previous section, one could use \emph{B-spline basis functions} (see below) instead of the Bernstein basis polynomials.
+Extending the idea described in previous section, one could use \emph{B-spline basis functions} (see below) instead of the Bernstein polynomial basis.
 
 Unlike with Bezier curves, for the B-splines a parameter domain is subdivided by so-called \textit{knots}. For the one-dimensional parameter domain $[u_{0}, u_{m}]$, the \textit{knot vector} will be given by $u_{0} \leq u_{1} \leq ... \leq u_{m}$. In most cases $u_{0} = 0, u_{m} = 1$ is chosen, so that we get the unit interval for our parameter values. For the case of NURBS, the knots $u_{0},..., u_{m}$ need not be equidistant -- hence the Non-Uniform in the beginning NU of NURBS.
 
-Given a \textit{knot vector} $[u_{0}, u_{m}]$ and a degree of B-spline $p$, the $i$-th B-spline basis function is then defined recursively as follows:
+Given a knot vector $[u_{0}, u_{m}]$ and a degree of B-spline $p$, the $i$-th B-spline basis function is then defined recursively as follows:
 \begin{equation}
 N_{i,0}(u) =  \begin{cases} 1, & \mbox{if } u_{i} \leq u < u_{i+1} \\ 0, & \mbox{otherwise } \end{cases}
 \end{equation} 
@@ -57,7 +57,7 @@ For $p=0$ we get just step functions, and $p=1$ familiar hat functions, whereas 
 \end{figure}
 
 
-By giving each of these basis functions a weight $w_i$ and normalizing them at each point by dividing by the total sum, we get the rational basis functions. Writing them out explicitly, in terms of B-spline basis functions $N_{i,p}$, the $n^{\text{th}}$-degree NURBS curve with $k$ control points $P_i$ is finally given by:
+By giving each of these basis functions a weight $\omega_i$ and normalizing them at each point by dividing by the total sum, we get the rational basis functions. Writing them out explicitly, in terms of B-spline basis functions $N_{i,p}$, the $n^{\text{th}}$-degree NURBS curve with $k$ control points $P_i$ is finally given by:
 \begin{equation}
 C(u) = \frac{\sum_{i=1}^{k}N_{i,n}\omega_{i}P_{i}}{\sum_{i=1}^{k}N_{i,n}\omega_{i}}.
 \end{equation}
@@ -72,13 +72,13 @@ Analogically to the Bezier curve surfaces, one can define B-spline or NURBS surf
 \subsection{Fitting problem}
 In order to represent a given line or surface by Bezier curves or surfaces respectively, just as with NURBS, one has to solve a fitting problem. The goal of it is to fit in a parametric curve to the set of given data points. In the case of interest, the given set of points is a mesh, obtained from surface contouring.
 \subsubsection{Fitting problem: Bezier curve}
-First we want to find a Bezier-curve $\vec{B}_n\left(t\right)$ of degree $n$ which is approximating a given spline $\vec{s}_m\left(t\right)$ defined by $m$ points in a optimal way. For this purpose we want to minimize the L2-error. This leads to the minimization problem
+First we want to find a Bezier-curve $\vec{B}_n\left(u\right)$ of degree $n$ which is approximating a given spline $\vec{s}_m\left(u\right)$ defined by $m$ points in a optimal way. For this purpose we want to minimize the L2-error. This leads to the minimization problem
 \begin{equation}
 \text{find\ } \underset{\vec{B}_n\in \mathbb{B}_n}{\min} \Ltwonorm{\vec{B}_n-\vec{s}_m}.
 \end{equation}
 Minimizing the L2-norm is equal to minimizing the functional:
 \begin{equation}
-F(\vec{B}_n)=\int\limits_{t=0}^{t=1} \left(\vec{B}_n-\vec{s}_m\right)^2\dt
+F(\vec{B}_n)=\int\limits_{u=0}^{u=1} \left(\vec{B}_n-\vec{s}_m\right)^2\du
 \end{equation}
 Using the variational principle we get the the system of linear equations
 \begin{equation}
@@ -87,7 +87,7 @@ A a = b
 where $A$ is the matrix of pair-wise scalar products of basis functions (Bernstein polynomials), $b$ is the vector of scalar products of the given spline $s_{m}$ and basis functions and $a$ is a required vector of coefficients for Bezier curve representation.
 
 \subsubsection{Fitting problem (least squares): NURBS}
-Although the approach used above showed good results, it appears to be very computationally intensive. Analogically, one could reduce the original problem to the \textit{linear regression problem}, which allows us to reduce computational costs. Also, to improve the locality of our solution, from now on we are going to use NURBS basis functions with weights $\omega_{j} = 1$ instead of Bezier curves. For this purpose, we adopted an algorithm, provided in \cite{becker2011advanced}.
+Although the approach used above showed good results, it appears to be very computationally intensive. Analogically, one could reduce the original problem to a \emph{regression problem}, which allows us to reduce computational costs. Also, to improve the locality of our solution, from now on we are going to use NURBS basis functions with weights $\omega_{j} = 1$ instead of Bezier curves. For this purpose, we adopted an algorithm, provided in \cite{becker2011advanced}:
 
 Let $X^{0}$ be the $n \times 2$ matrix of the given set of points, $N^{p}$ the basis functions of degree $p$ ($n \times (n+p)$ matrix, where $n$ is the number of points), and $P^{0}$ the control points ($(n+p) \times 2$ matrix).
 
@@ -99,7 +99,7 @@ Or, in short:
 \begin{equation}
 X^{0} = N^{p} P^{0}
 \end{equation}
-The above system needs to be solved for the unknown $P^{0}$. This can be done numerically, for example through Singular Value Decomposition. 
+The above system needs to be solved for the unknown $P^{0}$. This can be done numerically, for example through singular value decomposition. 
 %part of implementation
 
 \subsection{Fitting pipeline}

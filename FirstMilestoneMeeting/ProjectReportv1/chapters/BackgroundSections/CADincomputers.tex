@@ -15,11 +15,11 @@ In general, two different ways of describing a geometry are used in CAD systems:
 \caption{CSG object tree. The picture shows the construction of a complex object from a cube, a sphere, and a set of cylinders. Figure taken from \cite{WikipediaCSG}.}
 \label{fig:csg_tree}
 \end{figure}
-One way of representing a geometry in CAD is the approach of \emph{constructive solid geometry}. The basic idea is to start from a set of primitives, e.g. spheres, cylinders and/or cubes. Basic Boolean operations link these primitives towards a complex geometry, as illustrated in \autoref{fig:csg_tree}.
+One way of representing a geometry in CAD is the approach of CSG. The basic idea is to start from a set of primitives, e.g. spheres, cylinders and/or cubes. Basic Boolean operations link these primitives towards a complex geometry, as illustrated in \autoref{fig:csg_tree}.
 
 Key advantages of this format is the precise representation using very little storage memory. However, not all desired forms can be represented by CSG and hence, a second type of geometry description is needed. 
 \subsubsection{Boundary representation}
-A different kind of modelling approach is the so-called \emph{boundary representation}. Instead of storing the geometry information as geometrical objects, BREP formats only save the boundary surface of the body. The interior is assumed to be uniformly filled. Especially in complex geometries, this approach simplifies the model to such an extent, that the amount of data becomes much easier to handle. Surfaces can then be for example stored as a set of triangles (as in STL files, see \autoref{subsub:STL} below) or in NURBS patches (see \autoref{sec:NURBS}).
+A different kind of modelling approach is the BREP. Instead of storing the geometry information as geometrical objects, BREP formats only save the boundary surface of the body. The interior is assumed to be uniformly filled. Especially in complex geometries, this approach simplifies the model to such an extent, that the amount of data becomes much easier to handle. Surfaces can then be for example stored as a set of triangles (as in STL files, see \autoref{subsub:STL} below) or in NURBS patches (see \autoref{sec:NURBS}).
 Furthermore, holes in the body are made possible by saving the surface normal of the respective boundary. 
 
 By the boundary representation arbitrary geometries can be created. While the data sizes are commonly larger than in CSG representation, BREP files are usually easier to work with. One also has to keep in mind, that non-physical geometries can result from BREP formats through a not closed surface.
@@ -30,10 +30,10 @@ The STL (from \emph{ST}ereo\emph{L}ithography) file format describes the model o
 \begin{figure}
 \centering
    \scalebox{0.4}{\includegraphics{Pictures/STL.pdf}}\\
-   \caption{STL discretization for a circle, self-made in MATLAB. Note that the circle cannot be exactly represented by the vertices and edges.}
+   \caption{STL discretization for a circle, self-made in MATLAB \cite{MATLAB}. Note that the circle cannot be exactly represented by the vertices and edges.}
    \label{fig:STL}
 \end{figure}
-The aforementioned triangles boil down to lines in two dimensions. The advantages and disadvantages of this approach become clear: It can be applied to an arbitrary geometry, but accuracy causes difficulties. In order to transfer high precision geometries many vertices are necessary, resulting in big files. Still, as can be seen in the figure, a perfect circle can never be represented. 
+The aforementioned triangles boil down to lines in two dimensions. The advantages and disadvantages of this approach become clear: It can be applied to an arbitrary geometry, but accuracy causes difficulties. In order to transfer high precision geometries many vertices are necessary, resulting in big files. Still, as is illustrated in the figure, a perfect circle can never be represented. 
 
 ASCII STL files begin with a name and the data on the triangles is constructed as follows: 
 \begin{itemize}

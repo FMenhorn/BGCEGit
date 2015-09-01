@@ -29,7 +29,7 @@ providing correctness (see for example \cite{ExtendedMC}).
 \subsection{Dual Contouring}
 The idea of \emph{Dual algorithms}, to which Dual contouring belongs, is similar to Marching Cubes. However, instead of generating polygon vertices on the
 edges of the cubes, it locates them inside the cubes that have vertex values both above and below the isovalues.
-After locating the vertices, the ones associated with four contiguous cubes are joined to form a quad. The approach can be seen in \autoref{fig:bunny_MCDC}, with a similar Marching Cubes illustration for comparison. 
+After locating the vertices, the ones associated with four contiguous cubes are joined to form a quadrilateral face, commonly referred to as a \emph{quad}. The approach can be seen in \autoref{fig:bunny_MCDC}, with a similar Marching Cubes illustration for comparison. 
 
 The relevant question is now where in the cube the ideal place for the vertex is, and here is where different dual algorithms are distinguished. Dual Contouring in particular generates a vertex positioned at the minimizer of a
 certain quadratic function, which depends on the (interpolated) isosurface intersection points, as well as the gradient -- or just the normal of the isosurface -- at these points, together the first-order \emph{Hermite data} of the set.
@@ -43,7 +43,9 @@ singular value decomposition of \textit{A} and forming the pseudo-inverse, trunc
 
 
 The main advantage of this method over Marching Cubes is the acquisition of better aspect ratios \cite{Hermite2002}. On the other hand the need of gradient data
-represents a disadvantage. Furthermore, there is no open source algorithm that implements the Dual Contouring scheme.
+represents a disadvantage. %Furthermore, there is no open source algorithm that implements the Dual Contouring scheme. %well, it says later on VTK has one...
+
+
 
 %\subsection{VTK Toolbox}
 %\subsubsection{Installing VTK}
