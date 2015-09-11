@@ -1,6 +1,7 @@
 #MATLAB prototype etiquette
 
 Store all necessary data in git/PrototypesMATLAB
+If you are coding something and it is not agreeing with these rules, please use git/Sandbox/PrototypesMATLAB
 
 ### Relevance
 Is the prototype relevant?
