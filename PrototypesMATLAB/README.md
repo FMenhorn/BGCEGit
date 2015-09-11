@@ -1,7 +1,21 @@
-#MATLAB prototype etiquette
+#MATLAB prototypes
+Here every kind of MATLAB code relevant for the BGCE Project is stored. Please follow the "MATLAB prototype etiquette" when saving something to PrototypesMATLAB. If you don't want to follow those rules use the Sandbox instead.
 
+##Existing and non-existing prototypes
+###Basic Math Algorithms
+- [x] B-Spline basis function evaluation
+###Algorithms
+- [ ] Marching Cubes (would be useful for trying out stuff and comparison to Dual Contouring)
+- [ ] Dual Contouring (would be useful for trying out stuff and comparison to Marching Cubes)
+- [ ] Iterative Parameter Fitting (Already existing in Sandbox)
+
+###Big Tasks
+- [ ] manual NURBS Fitting Pipeline
+- [ ] automatic NURBS Fitting Pipeline
+
+##MATLAB prototype etiquette
 Store all necessary data in git/PrototypesMATLAB
-If you are coding something and it is not agreeing with these rules, please use git/Sandbox/PrototypesMATLAB
+If you are coding something and it is not agreeing with these rules, please use git/PrototypesMATLAB/Sandbox
 
 ### Relevance
 Is the prototype relevant?
