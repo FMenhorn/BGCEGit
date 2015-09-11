@@ -2,8 +2,10 @@
 Here every kind of MATLAB code relevant for the BGCE Project is stored. Please follow the "MATLAB prototype etiquette" when saving something to PrototypesMATLAB. If you don't want to follow those rules use the Sandbox instead.
 
 ##Existing and non-existing prototypes
+
 ###Basic Math Algorithms
 - [x] B-Spline basis function evaluation
+
 ###Algorithms
 - [ ] Marching Cubes (would be useful for trying out stuff and comparison to Dual Contouring)
 - [ ] Dual Contouring (would be useful for trying out stuff and comparison to Marching Cubes)
