@@ -1,4 +1,5 @@
 # B-Splines
+Benni, 11.9.2015
 
 ## Short description
 Here we implement the B-Spline basis functions. The provided functions can be used for getting the values of the i-th B-Spline basis functions of a certain degree, with a certain knot vector at arbitrary evaluation points.
