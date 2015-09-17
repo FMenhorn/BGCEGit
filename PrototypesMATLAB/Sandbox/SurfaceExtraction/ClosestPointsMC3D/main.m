@@ -7,7 +7,7 @@ v=V;
 x=X;
 y=Y;
 z=Z;
-for i=1:2
+for i=1:3
     [v,x,y,z]=coarsen(v,x,y,z);
 end
 v
@@ -28,9 +28,14 @@ for i = 1:size(FV.vertices,1)
     %     delete(h)
     % end
     hold off
+    if(~mod(i,100))
+        str=sprintf('Point %i of %i',i,size(FV.vertices,1));
+        disp(str)
+    end    
 end
 
 figure(1)
 hold on
 patch(fv,'EdgeColor','black','FaceColor','blue');
+patch(FV,'EdgeColor','none','FaceColor','green','FaceAlpha',.5);
 hold off

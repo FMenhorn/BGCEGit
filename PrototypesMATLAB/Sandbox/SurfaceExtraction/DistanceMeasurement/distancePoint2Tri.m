@@ -36,7 +36,7 @@ if((mu+nu)>1 || mu < 0 || nu < 0)
     end
     [dsq,i]=min(dsq);  
     Q=Q(:,i); 
-    d=dsq;
+    d=sqrt(dsq);
 end
 
 

@@ -1,4 +1,4 @@
-function [ dsq,Q ] = distanceSquaredPoint2Segment( P,A,B )
+function [ dsq,Q,mu ] = distanceSquaredPoint2Segment( P,A,B )
 %DISTANCEPOINT2SEGMENT Summary of this function goes here
 %   Detailed explanation goes here
 
