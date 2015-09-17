@@ -4,6 +4,7 @@ Benni & Juan Carlos, 17.9.15
 ##Todo
 - [ ] Implement DualContouring!
 - [ ] Not yet with dual contouring! Sample data generates dual contouring-like data.
+- [ ] Implement `parametrization.patchId` and `parametrization.parameters` with list. Datapoints, which a directly projected on the Start/End point of a Segment, should be part of both segments!
 
 ## Short description
 Uses dual contouring on two different scales, a coarse scale for the line segment patches and a fine scale for the data points. The coarse scale is constructed from the input voxel data by multi-level interpolation of 8 voxels on each level. The data points on the fine scale are distributed to the patches of the coarse scale by projecting them onto the closest patches. After this distribution one can use the information from the projection for giving an initial guess for the local parametrization of the datapoints on the respective patch.
