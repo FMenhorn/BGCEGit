@@ -1,4 +1,12 @@
-sampleData
+%sampleData
+
+[faces,vert]= DualContouring(25);
+
+fv=struct('faces',faces,'vertices',vert);
+
+
+[faces,vert]=DualContouring(125); 
+FV=struct('faces',faces,'vertices',vert);
 
 N=size(FV.vertices,1);
 M=size(fv.vertices,1);
@@ -24,11 +32,11 @@ for i = 1:size(FV.vertices,1)
     parametrization.patchId(i)=id;
 end
 
-patches=struct('patchId',zeros(M,1),'faces',zeros(M,2),'vertices',zeros(M,2));
-
-patches.patchId(:) = 1:size(fv.faces,1);
-patches.faces = FV.faces;
-patches.vertices = FV.vertices;
+% patches=struct('patchId',zeros(M,1),'faces',zeros(M,2),'vertices',zeros(M,2));
+% 
+% patches.patchId(:) = 1:size(fv.faces,1);
+% patches.faces = FV.faces;
+% patches.vertices = FV.vertices;
 
 figure(1)
 hold on
