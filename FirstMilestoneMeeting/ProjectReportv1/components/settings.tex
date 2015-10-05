@@ -51,6 +51,8 @@
 %% mark text as preliminary
 %\usepackage[draft,german,scrtime]{prelim2e}
 
+\usepackage{url}
+
 %% create an index
 \usepackage{makeidx}
 
@@ -109,8 +111,12 @@
  %% allow rotations
  \usepackage{rotating}
  %% use pdftex version of hyperref
- \usepackage[pdftex,colorlinks=true,linkcolor=red,citecolor=red,%
- anchorcolor=red,urlcolor=red,bookmarks=true,%
+ \usepackage[pdftex,pdfauthor={Joshi, Saumitra; Medina, Juan Carlos; Menhorn, Friedrich; Reiz, Severin; R{\"u}th, Benjamin; Wannerberg, Erik; Yurova, Anna},%
+            pdftitle={CAD-integrated Topology Optimization},%
+%            pdfsubject={The Subject},
+            pdfkeywords={Topology Optimization, CAD description generation, CAD-integrated topology optimization},%
+            colorlinks=true,linkcolor=black,citecolor=red,%
+ anchorcolor=red,urlcolor=blue,bookmarks=true,%
  bookmarksopen=true,bookmarksopenlevel=0,plainpages=false%
  bookmarksnumbered=true,hyperindex=false,pdfstartview=%
  ]{hyperref}
@@ -137,4 +143,4 @@
 % set the bibliography style
 %\bibliographystyle{styles/bauermaNum}
 %\bibliographystyle{alpha}
-\bibliographystyle{plain}
+\bibliographystyle{unsrt}

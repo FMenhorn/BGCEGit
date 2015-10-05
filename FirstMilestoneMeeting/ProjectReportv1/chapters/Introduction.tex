@@ -1,12 +1,12 @@
 \chapter{Introduction}
 \label{chapter:Introduction}
 
-In this chapter a motivation for the project and a short description of the problem task is stated. A brief introduction to topology optimisation and the project structure is also given.
+In this chapter, the motivation for the project and a short description of the problem task is provided, together with a brief introduction to topology optimisation and the project structure.
 \section{Motivation}
 % Struggle designer engineer 
 A common problem in product design is to create a functional structure using as few material as possible. Three decades ago engineering design versions were drawn, prototypes created and experimental test performed. Nowadays, the field of topology optimisation simplifies this process and has become a great help in all fields of engineering. 
 
-Topology optimisation tackles the problem of material distribution in a structure in order to fulfil certain target loads. Several topology optimisation open-source tools exist that are ready to use; however, it is still a challenge to incorporate these tools handily in the design process. The idea of this project is to allow these tools to work directly from CAD files and to transfer the obtained mesh based solution back to the CAD world. Unfortunately, at the moment, there is no open source solution for the conversion mesh based geometry to the spline-based CAD format (where in our case Non-Uniform B--Splines, a.k.a. NURBS, are used). The would-be straightforward approach -- to convert each triangle of mesh geometry directly to CAD format -- results in enormous file sizes. One of the biggest challenges of this project is thus to develop a conversion tool that feasibly provides a useful CAD-representation of the optimized surface.
+Topology optimisation tackles the problem of material distribution in a structure in order to fulfil certain target loads. Several topology optimisation open-source tools exist that are ready to use; however, it is still a challenge to incorporate these tools handily in the design process. The idea of this project is to allow these tools to work directly from CAD files and to transfer the obtained mesh based solution of the topology optimization tool back to the CAD world. Unfortunately, at the moment, there is no open source solution for the conversion mesh based geometry to the spline-based CAD format (where in our case \emph{Non-Uniform Rational B-Splines}, commonly referred to as NURBS, are used). The would-be straightforward approach -- to convert each triangle of mesh geometry directly to CAD format -- results in enormous file sizes. One of the biggest challenges of this project is thus to develop a conversion tool that feasibly provides a useful CAD-representation of the optimized surface.
 
 %Concepts are described in the Background theory section
 
@@ -17,11 +17,11 @@ Topology optimisation tackles the problem of material distribution in a structur
 %\subsection{Topology Optimisation}
 
 \section{Project structure}
-%\subsection{Aims and Goals}
-The aim of the project is to provide a tool that allows to \textit{Topology Optimisation} without leaving CAD--framework. Therefore, main goals of the project are as follows:
+%\subsection{Aims and Goals}1
+The aim of the project is to provide a tool that allows to utilize topology optimisation without leaving the CAD-framework. Therefore, the main goals of the project are as follows:
 \begin{itemize}
-\item Implementation of \textit{Topology Optimisation} by using and extending the available open source libraries
-\item Development of a flexible tool for the conversion of the optimized surface back to the CAD format.
+\item Implementation of a CAD format-accepting topology optimisation framework by using and extending available open source libraries
+\item Development of a flexible tool for conversion of an optimized surface back to the CAD format.
 \end{itemize}
 %\subsection{Timeline and Structure}
 
@@ -29,9 +29,9 @@ The duration of the project has been set to 10 months. Hence, this project has b
 
 \textbf{Phase 1:} Getting familiar with the topic and agreement on the project specification.\\
 
-\textbf{Phase 2:} Implementation of the first part of the pipeline (Topology Optimisation from CAD surface using existing tools); investigating the tools and algorithms available for the conversion of the geometry generated after topology optimisation back to CAD format (later referred as \textit{NURBS fitting pipeline}); prototyping (using MATLAB) and evaluating of found results.\\
+\textbf{Phase 2:} Implementation of the first part of the pipeline (Topology Optimisation from CAD surface using existing tools); investigating the tools and algorithms available for the conversion of the geometry generated after topology optimisation back to CAD format (later referred as \emph{NURBS fitting pipeline}); prototyping (using MATLAB) and evaluating of found results.\\
 
-\textbf{Phase 3:} Implementing the prototypes, developed on the previous stage, using a non-proprietary languages, such as Python or C++, extension of the NURBS fitting algorithm to more complex cases, finalising the first part of the pipeline.\\
+\textbf{Phase 3:} Implementing the prototypes developed on the previous stage, using non-proprietary languages; extension of the NURBS fitting pipeline to more complex cases; finalising the first part of the pipeline.\\
 
-\textbf{Phase 4:} Implementation of the extended NURBS fitting algorithm, integrating it with the \textit{Topology Optimisation} part and delivering the final product to costumer.
+\textbf{Phase 4:} Implementation of the extended NURBS fitting pipeline; integration with the topology optimisation part and delivering the final product to costumer.
 
