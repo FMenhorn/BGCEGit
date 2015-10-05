@@ -4,26 +4,36 @@
 CC=g++
 #CC=icpc
 
-include files.mk
+#include files.mk
 # Compiler flags
 # -------------------------------------------------------------------------
 CFLAGS=-g -O3 -std=c++0x
 # Linker flags
 # ------------
 LDFLAGS= -L/usr/local/lib/oce-0.17-dev -lTKTopAlgo -lTKBRep -lTKernel -lTKMath\
--lTKSTL -lTKVoxel
+-lTKSTL -lTKVoxel -lTKIGES -lTKXSBase
 INCLUDES= -I/usr/local/include/oce 
 
-OBJECTS=$(SOURCES:.cpp=.o)
-EXECUTABLE=OpenCascade
+SOURCESSTL= ./STLReader.cpp
+SOURCESIGES= ./IGESReader.cpp
 
-all: $(SOURCES) $(EXECUTABLE)
+OBJECTSSTL=$(SOURCESSTL:.cpp=.o)
+OBJECTSIGES=$(SOURCESIGES:.cpp=.o)
+EXECUTABLESTL=STLReader
+EXECTUBALEIGES=IGESReader
 
-$(EXECUTABLE): $(OBJECTS)
-	$(CC) $(OBJECTS) $(LDFLAGS) -o $@ 
+stl: $(SOURCESSTL) $(EXECUTABLESTL)
+
+iges: $(SOURCESIGES) $(EXECTUBALEIGES)
+
+$(EXECUTABLESTL): $(OBJECTSSTL)
+	$(CC) $(OBJECTSSTL) $(LDFLAGS) -o $@ 
+
+$(EXECTUBALEIGES): $(OBJECTSIGES)
+	$(CC) $(OBJECTSIGES) $(LDFLAGS) -o $@
 
 clean:
-	rm $(OBJECTS) output.txt
+	rm $(EXECUTABLESTL) $(EXECTUBALEIGES) $(OBJECTSSTL) $(OBJECTSIGES)
 
 .cpp.o:
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@

@@ -1,2 +1,4 @@
-SOURCES=\
-./OpenCascade.cpp\
+SOURCESSTL=\
+./STLReader.cpp\
+SOURCESIGES=\
+./IGESReader.cpp\
