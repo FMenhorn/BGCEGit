@@ -16,6 +16,8 @@
 #include <Voxel_FastConverter.hxx>
 #include <Voxel_Writer.hxx>
 #include <Voxel_VoxelFileFormat.hxx>
+#include <Bnd_Box.hxx>
+#include <BRepBndLib.hxx>
 #include <TCollection_ExtendedString.hxx>
 
 int main(void) {
@@ -23,10 +25,22 @@ int main(void) {
 	TopoDS_Shape moonShape;
 	StlAPI_Reader stlReader;
 
-	stlReader.Read(moonShape, "/home/friedrich/Documents/Studium/Master_CSE/BGCE/Project/Program/OpenCascadeTesting/Moon.stl");
+	stlReader.Read(moonShape, "./Moon.stl");
+
+    Bnd_Box B; // Bounding box
+	double Xmin, Ymin, Zmin, Xmax, Ymax, Zmax; // Bounding box bounds
+
+    BRepBndLib::Add(moonShape, B);
+    B.Get(Xmin, Ymin, Zmin, Xmax, Ymax, Zmax);
+
+    int N_X = 20 * (Xmax - Xmin);
+    int N_Y = 20 * (Ymax - Ymin);
+    int N_Z = 20 * (Zmax - Zmin);
+
+    std::cout << "Domain bounds: X[" << Xmin << ", " << Xmax << "]:" << N_X << " | Y[" << Ymin << ", " << Ymax << "]:" << N_Y << " | Z[" << Zmin << ", " << Zmax << "]:" << N_Z << std::endl;
 
 	Voxel_BoolDS voxelBool;
-	Voxel_FastConverter voxelConverter(moonShape, voxelBool, 0.1, 4,4,4);
+	Voxel_FastConverter voxelConverter(moonShape, voxelBool, 0.01, N_X, N_Y, N_Z);
 	Standard_Integer progress;
 	voxelConverter.Convert(progress);
 	voxelConverter.FillInVolume(1);
@@ -45,18 +59,19 @@ int main(void) {
 	std::cout << "Steps: " << xStep << "," << yStep << "," << zStep << std::endl;
 
 	Voxel_Writer voxelWriter;
-	TCollection_ExtendedString fileString("/home/friedrich/Documents/Studium/Master_CSE/BGCE/Project/Program/OpenCascadeTesting/MoonAscii");
+	TCollection_ExtendedString fileString("./StarAscii");
 	voxelWriter.SetFormat(Voxel_VFF_ASCII);
 	voxelWriter.SetVoxels(voxelBool);
 	voxelWriter.Write(fileString);
 
-
-	for(Standard_Real x = 0; x < xLen; x += xStep){
-		for(Standard_Real y = 0; y < yLen; y += yStep){
-			for(Standard_Real z = 0; z < zLen; z += zStep){
-				std::cout << "[x,y,z]=[" << x << "," << y << "," << z << "]" << " " << "Voxel=" << voxelBool.Get(x,y,z) << std::endl;
+    for(int y = 0; y <= N_Y; y++){
+        for(int x = 0; x <= N_X; x++){
+			for(int z = 0; z <= N_Z; z++){
+                std::cout << voxelBool.Get(x, y, z);
 			}
+			std::cout << std::endl;
 		}
+		std::cout << "\n-------------------------------\n";
 	}
 	return EXIT_SUCCESS;
 }
