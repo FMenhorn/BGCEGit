@@ -45,12 +45,16 @@ int main(void) {
 
 	Standard_Integer progress;
 	voxelConverter.Convert(progress);
-	voxelConverter.FillInVolume(1);
+	//voxelConverter.FillInVolume(1);
 	std::cout << "Progress of Conversion: " << progress << std::endl;
 
 	Standard_Real xLen = voxelBool.GetXLen();
 	Standard_Real yLen = voxelBool.GetYLen();
 	Standard_Real zLen = voxelBool.GetZLen();
+
+	Standard_Real nbX = voxelBool.GetNbX();
+	Standard_Real nbY = voxelBool.GetNbY();
+	Standard_Real nbZ = voxelBool.GetNbZ();
 
 	std::cout << "Size: " << xLen << "," << yLen << "," << zLen << std::endl;
 
@@ -69,9 +73,9 @@ int main(void) {
 	voxelWriter.SetVoxels(voxelBool);
 	voxelWriter.Write(fileString);
 
-	for (Standard_Real x = 0; x < xLen; x += xStep) {
-		for (Standard_Real y = 0; y < yLen; y += yStep) {
-			for (Standard_Real z = 0; z < zLen; z += zStep) {
+	for (Standard_Real x = 0; x < nbX; x++) {
+		for (Standard_Real y = 0; y < nbY; y++) {
+			for (Standard_Real z = 0; z < nbZ; z++) {
 				std::cout << "[x,y,z]=[" << x << "," << y << "," << z << "]"
 						<< " " << "Voxel=" << voxelBool.Get(x, y, z)
 						<< std::endl;
@@ -79,9 +83,9 @@ int main(void) {
 		}
 	}
 
-	for (Standard_Real y = 0; y < yLen; y += yStep) {
-		for (Standard_Real x = 0; x < xLen; x += xStep) {
-			for (Standard_Real z = 0; z < zLen; z += zStep) {
+	for (Standard_Real y = 0; y < nbY; y++) {
+		for (Standard_Real x = 0; x < nbX; x++) {
+			for (Standard_Real z = 0; z < nbZ; z++) {
 				std::cout << voxelBool.Get(x, y, z);
 			}
 			std::cout << std::endl;
