@@ -23,7 +23,7 @@ $(EXECUTABLE): $(OBJECTS)
 	$(CC) $(OBJECTS) $(LDFLAGS) -o $@ 
 
 clean:
-	rm $(OBJECTS)
+	rm $(OBJECTS) output.txt
 
 .cpp.o:
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@

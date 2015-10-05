@@ -23,15 +23,15 @@
 
 int main(void) {
 
-	TopoDS_Shape moonShape;
+	TopoDS_Shape topoDSShape;
 	StlAPI_Reader stlReader;
 
-	stlReader.Read(moonShape, "./Moon.stl");
+	stlReader.Read(topoDSShape, "./Moon.stl");
 
     Bnd_Box B; // Bounding box
 	double Xmin, Ymin, Zmin, Xmax, Ymax, Zmax; // Bounding box bounds
 
-    BRepBndLib::Add(moonShape, B);
+    BRepBndLib::Add(topoDSShape, B);
     B.Get(Xmin, Ymin, Zmin, Xmax, Ymax, Zmax);
 
     int N_X = 20 * (Xmax - Xmin);
@@ -41,11 +41,11 @@ int main(void) {
     std::cout << "Domain bounds: X[" << Xmin << ", " << Xmax << "]:" << N_X << " | Y[" << Ymin << ", " << Ymax << "]:" << N_Y << " | Z[" << Zmin << ", " << Zmax << "]:" << N_Z << std::endl;
 
 	Voxel_BoolDS voxelBool;
-	Voxel_FastConverter voxelConverter(moonShape, voxelBool, 0.01, N_X, N_Y, N_Z);
+	Voxel_FastConverter voxelConverter(topoDSShape, voxelBool, 0.01, N_X, N_Y, N_Z);
 
 	Standard_Integer progress;
 	voxelConverter.Convert(progress);
-	//voxelConverter.FillInVolume(1);
+	//voxelConverter.FillInVolume(1,topoDSShape);
 	std::cout << "Progress of Conversion: " << progress << std::endl;
 
 	Standard_Real xLen = voxelBool.GetXLen();
@@ -64,7 +64,6 @@ int main(void) {
 
 	std::cout << "Steps: " << xStep << "," << yStep << "," << zStep
 			<< std::endl;
-	sleep(5);
 
 	Voxel_Writer voxelWriter;
 	TCollection_ExtendedString fileString("./StarAscii");
