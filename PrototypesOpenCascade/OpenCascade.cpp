@@ -45,7 +45,7 @@ int main(void) {
 
 	Standard_Integer progress;
 	voxelConverter.Convert(progress);
-	voxelConverter.FillInVolume(1);
+	//voxelConverter.FillInVolume(1);
 	std::cout << "Progress of Conversion: " << progress << std::endl;
 
 	Standard_Real xLen = voxelBool.GetXLen();
@@ -79,9 +79,9 @@ int main(void) {
 		}
 	}
 
-	for (Standard_Real y = 0; y < yLen; y += yStep) {
-		for (Standard_Real x = 0; x < xLen; x += xStep) {
-			for (Standard_Real z = 0; z < zLen; z += zStep) {
+	for (int y = 0; y <= N_Y; y++) {
+		for (int x = 0; x <= N_X; x++) {
+			for (int z = 0; z < N_Z; z++) {
 				std::cout << voxelBool.Get(x, y, z);
 			}
 			std::cout << std::endl;
