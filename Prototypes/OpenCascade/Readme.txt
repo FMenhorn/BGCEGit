@@ -10,6 +10,9 @@ Documentation:
 IGESReaderTutorial: 
 	http://dev.opencascade.org/doc/overview/html/occt_user_guides__iges.html
 
+STEPReaderTutorial:
+	http://dev.opencascade.org/doc/overview/html/occt_user_guides__step.html
+
 STL/IGESFiles (needs account):
 	https://grabcad.com/library/most-downloaded?page=1&per_page=100
 
