@@ -1,6 +1,8 @@
 #ifndef _WRITER_VTK_
 #define _WRITER_VTK_
 
+#include "Writer.hpp"
+
 #include <stdlib.h>
 #include <iostream>
 #include <math.h>

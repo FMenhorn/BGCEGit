@@ -1,6 +1,8 @@
 #ifndef _WRITER_TOPY_
 #define _WRITER_TOPY_
 
+#include "Writer.hpp"
+
 #include <stdlib.h>
 #include <iostream>
 #include <math.h>

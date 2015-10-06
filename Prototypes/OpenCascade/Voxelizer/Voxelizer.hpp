@@ -20,7 +20,7 @@ public:
     Voxel_BoolDS voxelize(TopoDS_Shape topoDSShape, int refinementLevel);
 
 private:
-    double* getBoundingBox();
+    double* getBoundingBox(TopoDS_Shape topoDSShape, double* shapeDimensions);
 };
 
 #endif // _VOXELIZER_

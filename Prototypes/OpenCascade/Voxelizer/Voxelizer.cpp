@@ -4,16 +4,17 @@ Voxel_BoolDS Voxelizer::voxelize(TopoDS_Shape topoDSShape, int refinementLevel){
 
     std::cout << "Voxelizer: Getting domain bounds .." << std::endl;
 
-    double* shapeDimensions = getBoundingBox(topoDSShape);
+    double shapeDimensions[3];
+    getBoundingBox(topoDSShape, shapeDimensions);
 
     int voxelCount[3];
-    for (sizt_t i = 0; i < 3; i++)
+    for (size_t i = 0; i < 3; i++)
         voxelCount[i] = pow(2, refinementLevel) * shapeDimensions[i];
 
-    Voxel_BoolDS voxelShape = voxelBool; // Result holder of the voxelization
+    Voxel_BoolDS voxelShape; // Result holder of the voxelization
     Standard_Integer progress; // Progress of voxelization (useful in case of parallel code)
     std::cout << "Voxelizer: Voxelizing .." << std::endl;
-	Voxel_FastConverter voxelConverter(topoDSShape, voxelShape, 0.1, N_X, N_Y, N_Z);
+	Voxel_FastConverter voxelConverter(topoDSShape, voxelShape, 0.1, voxelCount[0], voxelCount[1], voxelCount[2]);
 	voxelConverter.Convert(progress);
 	std::cout << "Voxelizer: Progress of Conversion: " << progress << std::endl;
 
@@ -22,13 +23,12 @@ Voxel_BoolDS Voxelizer::voxelize(TopoDS_Shape topoDSShape, int refinementLevel){
     return voxelShape;
 }
 
-double* Voxelizer::getBoundingBox(TopoDS_Shape topoDSShape){
+double* Voxelizer::getBoundingBox(TopoDS_Shape topoDSShape, double* shapeDimensions){
     Bnd_Box B; // Bounding box
 	double Xmin, Ymin, Zmin, Xmax, Ymax, Zmax; // Bounding box bounds
     BRepBndLib::Add(topoDSShape, B);
     B.Get(Xmin, Ymin, Zmin, Xmax, Ymax, Zmax);
 
-    double shapeDimensions[3];
     shapeDimensions[0] = abs(Xmax - Xmin);
     shapeDimensions[1] = abs(Ymax - Ymin);
     shapeDimensions[2] = abs(Zmax - Zmin);

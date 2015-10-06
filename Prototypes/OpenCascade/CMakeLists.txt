@@ -14,7 +14,10 @@ link_directories(/usr/local/lib)
 # Build application
 add_executable(CADToVoxel
 CADToVoxel.cpp
-Reader/STEPReader.cpp)
+Reader/STEPReader.cpp
+Voxelizer/Voxelizer.cpp
+Writer/Writer_ToPy.cpp
+Writer/Writer_VTK.cpp)
 
 target_link_libraries(CADToVoxel
 TKTopAlgo

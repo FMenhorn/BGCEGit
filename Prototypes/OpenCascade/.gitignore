@@ -2,3 +2,9 @@
 .cproject
 .project
 OpenCascade
+cmake_install.cmake
+CADToVoxel
+CMakeCache.txt
+CMakeFiles/
+Makefile
+
