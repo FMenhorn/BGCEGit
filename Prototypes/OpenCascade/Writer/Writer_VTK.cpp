@@ -3,7 +3,7 @@
 
 bool Writer_VTK::write(Voxel_BoolDS voxelShape){
     ofstream outfile;
-    std::cout << "Writer: ";
+    std::cout << "Writer: Writing VTK file for " + filename + " ..";
     outfile.open(filename + ".vtk", ios::out | ios::trunc);
 
     writeHeader(outfile);
