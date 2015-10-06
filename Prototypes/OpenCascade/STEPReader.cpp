@@ -34,5 +34,21 @@ int main(void) {
 		std::cout << "File read not succesful!" << std::endl;
 		exit(-1);
 	}
+	Standard_Boolean failsonly = Standard_False;
+	IFSelect_PrintCount mode;
+	stepReader.PrintCheckLoad(failsonly,mode);
+	std::cout << "Mode: " << mode << std::endl;
+
+	Standard_Integer ic =  Interface_Static::IVal("read.precision.mode");
+	std::cout << "ic: " << ic << std::endl;
+
+	Handle_TColStd_HSequenceOfTransient list = stepReader.GiveList();
+	Standard_Integer nbtrans =  stepReader.TransferList(list);
+	std::cout << "Number of translations: " << nbtrans << std::endl;
+	Standard_Integer nbs =  stepReader.NbShapes();
+	std::cout << "Number of shapes: " << nbs << std::endl;
+	TopoDS_Shape shape = stepReader.OneShape();
+	StlAPI_Writer stlWriter;
+	stlWriter.Write(shape, "./r2d2.stl");
 	return EXIT_SUCCESS;
 }

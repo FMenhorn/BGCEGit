@@ -1,3 +1,11 @@
+If you get the following error:
+	Could not open shared library something something, check your LD_LIBRARY_PATH:
+		echo $LD_LIBRARY_PATH
+	should say:
+		/usr/local/lib
+	If not:
+		export LD_LIBRARY_PATH=$(LD_LIBRARY_PATH):/usr/local/lib
+
 Makefile:
 	Make stlreader executable: 
 		make stl 
