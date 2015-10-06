@@ -25,7 +25,7 @@ int main(void) {
 	TopoDS_Shape topoDSShape;
 	STEPControl_Reader stepReader;
 
-	IFSelect_ReturnStatus returnStatus = stepReader.ReadFile("./TestFiles/r2d2/STEP/R2D2.STEP");
+	IFSelect_ReturnStatus returnStatus = stepReader.ReadFile("./TestFiles/tiefighter/tiefighter.STEP");
 	switch(returnStatus){
 	case IFSelect_RetDone:
 		std::cout << "File read successful" << std::endl;
@@ -49,6 +49,6 @@ int main(void) {
 	std::cout << "Number of shapes: " << nbs << std::endl;
 	TopoDS_Shape shape = stepReader.OneShape();
 	StlAPI_Writer stlWriter;
-	stlWriter.Write(shape, "./r2d2.stl");
+	stlWriter.Write(shape, "./tiefighter.stl");
 	return EXIT_SUCCESS;
 }

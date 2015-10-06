@@ -43,9 +43,9 @@ int main(void) {
 	Standard_Integer ic =  Interface_Static::IVal("read.iges.bspline.continuity");
 	std::cout << "ic: " << ic << std::endl;
 	//All Entities:
-	//Handle(TColStd_HSequenceOfTransient)  list = igesReader.GiveList();
+	Handle_TColStd_HSequenceOfTransient list = igesReader.GiveList();
 	//All faces:
-	Handle_TColStd_HSequenceOfTransient list = igesReader.GiveList("iges-faces");
+	//Handle_TColStd_HSequenceOfTransient list = igesReader.GiveList("iges-faces");
 	//Translate all entitites in one operation
 
 //	for (Standard_Integer i = 1; i  <= 425; i ++) {
@@ -65,7 +65,7 @@ int main(void) {
 //	}
 	TopoDS_Shape shape2 = igesReader.OneShape();
 	StlAPI_Writer stlWriter;
-	stlWriter.Write(shape2, "./buoyCircuit.stl");
+	stlWriter.Write(shape2, "./circuitBuoy.stl");
 	return EXIT_SUCCESS;
 }
 
