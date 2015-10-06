@@ -15,6 +15,7 @@ link_directories(/usr/local/lib)
 add_executable(CADToVoxel
 CADToVoxel.cpp
 Reader/STEPReader.cpp
+Reader/IGESReader.cpp
 Voxelizer/Voxelizer.cpp
 Writer/Writer_ToPy.cpp
 Writer/Writer_VTK.cpp)
@@ -26,7 +27,8 @@ TKernel
 TKMath
 TKVoxel
 TKXSBase
-TKSTEP)
+TKSTEP
+TKIGES)
 
 
 #install(TARGETS CADToVoxel DESTINATION bin)

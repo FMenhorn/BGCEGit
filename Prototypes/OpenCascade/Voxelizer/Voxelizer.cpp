@@ -1,3 +1,10 @@
+/*
+ * STEPReader.hpp
+ *
+ *  Created on: Oct 6, 2015
+ *      Author: saumitra
+ */
+
 #include "Voxelizer.hpp"
 
 Voxel_BoolDS Voxelizer::voxelize(TopoDS_Shape topoDSShape, int refinementLevel){
@@ -34,9 +41,9 @@ double* Voxelizer::getBoundingBox(TopoDS_Shape topoDSShape, double* shapeDimensi
     shapeDimensions[2] = abs(Zmax - Zmin);
 
     std::cout << "Voxelizer-getBoundingBox:" << std::endl;
-    std::cout << " X[" << Xmin << ", " << Xmax << "] | xDimension: " << shapeDimensions[0] << std::endl;
-    std::cout << " Y[" << Ymin << ", " << Ymax << "] | yDimension: " << shapeDimensions[1] << std::endl;
-    std::cout << " Z[" << Zmin << ", " << Zmax << "] | zDimension: " << shapeDimensions[2] << std::endl;
+    std::cout << "    X[" << Xmin << ", " << Xmax << "]     | xDimension: " << shapeDimensions[0] << std::endl;
+    std::cout << "    Y[" << Ymin << ", " << Ymax << "]     | yDimension: " << shapeDimensions[1] << std::endl;
+    std::cout << "    Z[" << Zmin << ", " << Zmax << "]     | zDimension: " << shapeDimensions[2] << std::endl;
 
     return shapeDimensions;
 }

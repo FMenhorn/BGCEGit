@@ -25,30 +25,29 @@ int main(void) {
 	TopoDS_Shape topoDSShape;
 	STEPControl_Reader stepReader;
 
-	IFSelect_ReturnStatus returnStatus = stepReader.ReadFile("./TestFiles/tiefighter/tiefighter.STEP");
+	IFSelect_ReturnStatus returnStatus = stepReader.ReadFile("./TestFiles/Aircraft.stp");
 	switch(returnStatus){
 	case IFSelect_RetDone:
-		std::cout << "File read successful" << std::endl;
+		std::cout << "STEPReader: File read successful" << std::endl;
 		break;
 	default:
-		std::cout << "File read not succesful!" << std::endl;
+		std::cout << "STEPReader: File read not succesful!" << std::endl;
 		exit(-1);
 	}
+
 	Standard_Boolean failsonly = Standard_False;
 	IFSelect_PrintCount mode;
 	stepReader.PrintCheckLoad(failsonly,mode);
-	std::cout << "Mode: " << mode << std::endl;
+	std::cout << "STEPReader: Mode: " << mode << std::endl;
 
 	Standard_Integer ic =  Interface_Static::IVal("read.precision.mode");
-	std::cout << "ic: " << ic << std::endl;
+	std::cout << "STEPReader: ic: " << ic << std::endl;
 
 	Handle_TColStd_HSequenceOfTransient list = stepReader.GiveList();
 	Standard_Integer nbtrans =  stepReader.TransferList(list);
-	std::cout << "Number of translations: " << nbtrans << std::endl;
+	std::cout << "STEPReader: Number of translations: " << nbtrans << std::endl;
 	Standard_Integer nbs =  stepReader.NbShapes();
-	std::cout << "Number of shapes: " << nbs << std::endl;
-	TopoDS_Shape shape = stepReader.OneShape();
-	StlAPI_Writer stlWriter;
-	stlWriter.Write(shape, "./tiefighter.stl");
+	std::cout << "STEPReader: Number of shapes: " << nbs << std::endl;
+
 	return EXIT_SUCCESS;
 }
