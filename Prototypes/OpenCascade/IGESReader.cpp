@@ -33,8 +33,11 @@ int main(void) {
 		std::cout << "File read not succesful!" << std::endl;
 		exit(-1);
 	}
-	std::cout << "Files read: " << returnStatus << std::endl;
-
+	Standard_Boolean failsonly = Standard_False;
+	IFSelect_PrintCount mode;
+	igesReader.PrintCheckLoad(failsonly,mode);
+	std::cout << "Mode: " << mode << std::endl;
+	exit(0);
 	Handle_Standard_Transient entity;
 	entity = igesReader.RootForTransfer();
 	Standard_Integer numberOfValidTransferEntities = igesReader.NbRootsForTransfer();
