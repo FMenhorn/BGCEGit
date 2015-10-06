@@ -18,6 +18,8 @@
 #include <TCollection_ExtendedString.hxx>
 #include <TransferBRep.hxx>
 #include <StlAPI_Writer.hxx>
+#include <Interface_Static.hxx>
+
 
 int main(void) {
 	TopoDS_Shape topoDSShape;
@@ -37,30 +39,33 @@ int main(void) {
 	IFSelect_PrintCount mode;
 	igesReader.PrintCheckLoad(failsonly,mode);
 	std::cout << "Mode: " << mode << std::endl;
-	exit(0);
-	Handle_Standard_Transient entity;
-	entity = igesReader.RootForTransfer();
-	Standard_Integer numberOfValidTransferEntities = igesReader.NbRootsForTransfer();
-	std::cout << "Candidates for transfer to shape: " << numberOfValidTransferEntities << std::endl;
-	Standard_Integer numberOfShapes = igesReader.NbShapes();
-	std::cout << "Number of shapes: " << numberOfShapes << std::endl;
 
-	Standard_Integer transferedRoots = igesReader.TransferRoots();
-	std::cout << "Number of transfered roots: " << transferedRoots << std::endl;
+	Standard_Integer ic =  Interface_Static::IVal("read.iges.bspline.continuity");
+	std::cout << "ic: " << ic << std::endl;
+	//All Entities:
+	//Handle(TColStd_HSequenceOfTransient)  list = igesReader.GiveList();
+	//All faces:
+	Handle_TColStd_HSequenceOfTransient list = igesReader.GiveList("iges-faces");
+	//Translate all entitites in one operation
 
-//	Standard_Boolean isTransfered = igesReader.TransferOne(1);
-//	if(isTransfered){
-//		std::cout << "Shape was produced" << std::endl;
-//	}else{
-//		std::cout << "Shape not produced. Not cool!" << std::endl;
-//		//exit(-1);
+//	for (Standard_Integer i = 1; i  <= 425; i ++) {
+//	    Handle(Standard_Transient) ent = list.;
+//	    Standard_Boolean OK = reader.TransferEntity (ent);
 //	}
-	TopoDS_Shape shape = igesReader.OneShape();
-	//TopoDS_Shape shape2 = TransferBRep::ShapeResult(igesReader.TransientProcess(),ent);
 
-
+	Standard_Integer nbtrans =  igesReader.TransferList(list);
+	std::cout << "Number of translations: " << nbtrans << std::endl;
+	Standard_Integer nbs =  igesReader.NbShapes();
+	std::cout << "Number of shapes: " << nbs << std::endl;
+	TopoDS_Shape shape;
+	for(Standard_Integer i = 1; i <= nbs; i++){
+		std::cout << "i: " << i << " ... ";
+		shape = igesReader.Shape(i);
+		std::cout << "successful!" << std::endl;
+	}
+	TopoDS_Shape shape2 = igesReader.OneShape();
 	StlAPI_Writer stlWriter;
-	stlWriter.Write(shape, "./buoyCircuit.stl");
+	stlWriter.Write(shape2, "./buoyCircuit.stl");
 	return EXIT_SUCCESS;
 }
 
