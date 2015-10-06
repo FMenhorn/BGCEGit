@@ -1,7 +1,0 @@
--lFWOSPlugin -lPTKernel -lTKBinL -lTKBin -lTKBinTObj -lTKBinXCAF -lTKBool -lTKBO -lTKBRep -lTKCAF -lTKCDF\
--lTKDCAF -lTKDraw -lTKernel -lTKFeat -lTKFillet -lTKG2d -lTKG3d -lTKGeomAlgo -lTKGeomBase -lTKHLR -lTKIGES\
--lTKLCAF -lTKMath -lTKMesh -lTKMeshVS -lTKNIS -lTKOffset -lTKOpenGl -lTKPCAF -lTKPLCAF -lTKPrim -lTKPShape\
--lTKQADraw -lTKService -lTKShapeSchema -lTKShHealing -lTKStdLSchema -lTKStdSchema -lTKSTEP209 -lTKSTEPAttr\
--lTKSTEPBase -lTKSTEP -lTKSTL -lTKTObjDRAW -lTKTObj -lTKTopAlgo -lTKTopTest -lTKV3d -lTKViewerTest -lTKVoxel\
--lTKVRML -lTKXCAFSchema -lTKXCAF -lTKXDEDRAW -lTKXDEIGES -lTKXDESTEP -lTKXMesh -lTKXmlL -lTKXml -lTKXmlTObj\
--lTKXmlXCAF -lTKXSBase -lTKXSDRAW
