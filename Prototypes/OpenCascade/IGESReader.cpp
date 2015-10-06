@@ -58,11 +58,11 @@ int main(void) {
 	Standard_Integer nbs =  igesReader.NbShapes();
 	std::cout << "Number of shapes: " << nbs << std::endl;
 	TopoDS_Shape shape;
-	for(Standard_Integer i = 1; i <= nbs; i++){
-		std::cout << "i: " << i << " ... ";
-		shape = igesReader.Shape(i);
-		std::cout << "successful!" << std::endl;
-	}
+//	for(Standard_Integer i = 1; i <= nbs; i++){
+//		std::cout << "i: " << i << " ... ";
+//		shape = igesReader.Shape(i);
+//		std::cout << "successful!" << std::endl;
+//	}
 	TopoDS_Shape shape2 = igesReader.OneShape();
 	StlAPI_Writer stlWriter;
 	stlWriter.Write(shape2, "./buoyCircuit.stl");
