@@ -16,7 +16,7 @@ if(min(x>=0)&&min(x<=1))
 else
     CORNERS=[A,B,C,D,A];
     for i=1:4
-        [dsq(i),Q(:,i)]=distanceSquaredPoint2Segment(P,CORNERS(:,i),CORNERS(:,i+1))
+        [dsq(i),Q(:,i)]=distanceSquaredPoint2Segment(P,CORNERS(:,i),CORNERS(:,i+1));
     end
     [dsq,i]=min(dsq);    
     Q=Q(:,i);  
