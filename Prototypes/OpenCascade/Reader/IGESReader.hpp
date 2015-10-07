@@ -9,10 +9,6 @@
 #define READER_IGESREADER_HPP_
 
 #include <TopoDS_Shape.hxx>
-#include <IGESControl_Reader.hxx>
-#include <TransferBRep.hxx>
-#include <Interface_Static.hxx>
-#include <Standard_CString.hxx>
 
 #include "Reader.hpp"
 #include <string>

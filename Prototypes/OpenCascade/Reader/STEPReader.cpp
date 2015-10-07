@@ -7,6 +7,9 @@
 
 #include "STEPReader.hpp"
 
+#include <STEPControl_Reader.hxx>
+#include <Interface_Static.hxx>
+#include <Standard_CString.hxx>
 #include <iostream>
 
 STEPReader::STEPReader(): Reader() {

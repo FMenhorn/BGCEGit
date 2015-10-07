@@ -7,6 +7,9 @@
 
 #include "IGESReader.hpp"
 
+#include <IGESControl_Reader.hxx>
+#include <Interface_Static.hxx>
+#include <Standard_CString.hxx>
 #include <iostream>
 
 IGESReader::IGESReader():Reader() {
