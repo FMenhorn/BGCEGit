@@ -12,8 +12,6 @@
 #include <iostream>
 
 #include "Reader/Reader.hpp"
-#include "Reader/STEPReader.hpp"
-#include "Reader/IGESReader.hpp"
 #include "Reader/IGESCAFReader.hpp"
 #include "Voxelizer/Voxelizer.hpp"
 #include "Writer/Writer_VTK.hpp"
@@ -30,27 +28,17 @@ int main(void){
 
     /// Read file
     Reader* reader;
-    if(fileName.find(".stp")!=std::string::npos){
-    	reader = new STEPReader();
-    }else if(fileName.find(".igs")!=std::string::npos){
+    if(fileName.find(".igs")!=std::string::npos){
     	reader = new IGESCAFReader();
-    }else if(fileName.find(".igs")!=std::string::npos){
-    	reader = new IGESReader();
     }else{
     	std::cout << "CADToVoxel: Wrong type of input file. Neither .stp nor .igs" << std::endl;
     	return EXIT_FAILURE;
     }
 	TopoDS_Shape shape = reader->read(file);
-
 	ColorHandler colorDetector;
-	if(!colorDetector.addShape(shape)){
-		std::cout << "Adding shape was not successful" << std::endl;
-	}
-	colorDetector.initializeColorTable();
-	colorDetector.setColor();
-	colorDetector.seekColor();
+	reader->transfer(colorDetector.getDoc());
+	colorDetector.initializeMembers();
 	Quantity_Color col = colorDetector.getColor();
-	col = colorDetector.getColorFromShape(shape);
 
     /// Voxelize file
     Voxelizer voxelizer;

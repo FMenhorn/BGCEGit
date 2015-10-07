@@ -77,7 +77,6 @@ int main() {
 	for (TopExp_Explorer ex(shape, TopAbs_FACE); ex.More(); ex.Next()) {
 		Quantity_Color color;
 		const TopoDS_Face &face = TopoDS::Face(ex.Current());
-		myColors->SetColor(face, col2, ctype);
 		if (myColors->IsSet(face, ctype)
 				/*|| myColors->IsSet(face, XCAFDoc_ColorSurf)
 				|| myColors->IsSet(face, XCAFDoc_ColorCurv)*/) {

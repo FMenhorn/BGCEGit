@@ -14,8 +14,6 @@ link_directories(/usr/local/lib)
 # Build application
 add_executable(CADToVoxel
 CADToVoxel.cpp
-Reader/STEPReader.cpp
-Reader/IGESReader.cpp
 Reader/IGESCAFReader.cpp
 Voxelizer/Voxelizer.cpp
 Writer/Writer_ToPy.cpp
@@ -29,8 +27,6 @@ TKernel
 TKMath
 TKVoxel
 TKXSBase
-TKSTEP
-TKIGES
 TKXDEIGES
 TKXCAF
 TKLCAF)

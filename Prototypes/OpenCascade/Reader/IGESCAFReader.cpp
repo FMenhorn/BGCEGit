@@ -7,7 +7,6 @@
 
 #include "IGESCAFReader.hpp"
 
-#include <IGESCAFControl_Reader.hxx>
 #include <Interface_Static.hxx>
 #include <Standard_CString.hxx>
 #include <TDocStd_Document.hxx>
@@ -21,7 +20,6 @@
 #include <XCAFDoc_ColorTool.hxx>
 
 IGESCAFReader::IGESCAFReader(): Reader() {
-	xsReader = new IGESCAFControl_Reader();
 }
 
 IGESCAFReader::~IGESCAFReader() {
@@ -31,7 +29,7 @@ IGESCAFReader::~IGESCAFReader() {
 TopoDS_Shape IGESCAFReader::read(const std::string filename) {
 	TopoDS_Shape topoDSShape;
 
-	IFSelect_ReturnStatus returnStatus = xsReader->ReadFile(filename.c_str());
+	IFSelect_ReturnStatus returnStatus = igesCAFControlReader.ReadFile(filename.c_str());
 	switch(returnStatus){
 	case IFSelect_RetDone:
 		std::cout << "IGESReader: File read successful" << std::endl;
@@ -42,19 +40,27 @@ TopoDS_Shape IGESCAFReader::read(const std::string filename) {
 	}
 	Standard_Boolean failsonly = Standard_False;
 	IFSelect_PrintCount mode;
-	xsReader->PrintCheckLoad(failsonly, mode);
+	igesCAFControlReader.PrintCheckLoad(failsonly, mode);
 	std::cout << "IGESReader: Mode: " << mode << std::endl;
 
 	Standard_Integer ic =  Interface_Static::IVal("read.iges.bspline.continuity");
 	std::cout << "IGESReader: ic: " << ic << std::endl;
 
-	Handle_TColStd_HSequenceOfTransient list = xsReader->GiveList();
-	Standard_Integer nbtrans =  xsReader->TransferList(list);
+	Handle_TColStd_HSequenceOfTransient list = igesCAFControlReader.GiveList();
+	Standard_Integer nbtrans =  igesCAFControlReader.TransferList(list);
 	std::cout << "IGESReader: Number of translations: " << nbtrans << std::endl;
-	Standard_Integer nbs =  xsReader->NbShapes();
+	Standard_Integer nbs =  igesCAFControlReader.NbShapes();
 	std::cout << "IGESReader: Number of shapes: " << nbs << std::endl;
 
-	topoDSShape = xsReader->OneShape();
+	topoDSShape = igesCAFControlReader.OneShape();
 
 	return topoDSShape;
+}
+
+void IGESCAFReader::transfer(Handle_TDocStd_Document& doc) {
+	if(igesCAFControlReader.Transfer(doc)){
+		std::cout << "IGESCAFReader::transfer: Transfer successful" << std::endl;
+	}else{
+		std::cout << "IGESCAFReader::transfer: Transfer failed" << std::endl;
+	}
 }
