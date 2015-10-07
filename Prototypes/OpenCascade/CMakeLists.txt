@@ -32,5 +32,22 @@ TKSTEP
 TKIGES
 TKXDEIGES)
 
+# Build application
+add_executable(ColorDetectionTest
+Testing/TestColorDetection/ColorDetection.cpp
+Reader/STEPReader.cpp
+Reader/IGESReader.cpp)
+
+target_link_libraries(ColorDetectionTest
+TKTopAlgo
+TKBRep
+TKernel
+TKMath
+TKXSBase
+TKSTEP
+TKIGES
+TKXCAF
+TKLCAF)
+
 
 #install(TARGETS CADToVoxel DESTINATION bin)

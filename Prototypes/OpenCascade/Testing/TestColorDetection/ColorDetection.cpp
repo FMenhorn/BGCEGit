@@ -16,11 +16,11 @@
 
 int main() {
     /// Alter the following based on where OCF source-code is located on your system
-    setenv("CSF_PluginDefaults", "/home/saumi/Academica/BGCE/OpenCascade/oce/src/StdResource/", 1);
-    setenv("CSF_XCAFDefaults", "/home/saumi/Academica/BGCE/OpenCascade/oce/src/StdResource/", 1);
+    //setenv("CSF_PluginDefaults", "/home/saumi/Academica/BGCE/OpenCascade/oce/src/StdResource/", 1);
+    //setenv("CSF_XCAFDefaults", "/home/saumi/Academica/BGCE/OpenCascade/oce/src/StdResource/", 1);
 
     ///File:
-	std::string filePath = "../../TestGeometry/circuit-board-pcb-mock-example.snapshot.4/";
+	std::string filePath = "./TestGeometry/circuit-board-pcb-mock-example.snapshot.4/";
 	std::string fileName = "Buoy_Circuitbuoy.igs";
 	std::string file = filePath + fileName;
 
