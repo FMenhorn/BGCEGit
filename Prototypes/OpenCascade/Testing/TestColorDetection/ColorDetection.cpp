@@ -90,6 +90,7 @@ int main() {
 	for (TopExp_Explorer ex(shape, TopAbs_FACE); ex.More(); ex.Next()) {
 		Quantity_Color color;
 		const TopoDS_Face &face = TopoDS::Face(ex.Current());
+
 		if (myColors->IsSet(face, ctype)) {
 			myColors->GetColor(face, XCAFDoc_ColorGen, color);
 			std::cout << "YES Color "<< color.Red()<< " " << color.Green()  << " " << color.Blue() << std::endl;
