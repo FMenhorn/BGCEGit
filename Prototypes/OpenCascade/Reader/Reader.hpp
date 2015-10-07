@@ -9,17 +9,17 @@
 #define READER_READER_HPP_
 
 #include <TopoDS_Shape.hxx>
-#include <XSControl_Reader.hxx>
+#include <Handle_TDocStd_Document.hxx>
 #include <string>
 
 class Reader{
 public:
-	XSControl_Reader* ocReader = nullptr;
+	Reader(){};
+	virtual ~Reader(){};
+	virtual TopoDS_Shape read(const std::string filename) = 0;
+	virtual void transfer(Handle_TDocStd_Document& doc) = 0;
+protected:
 
-	Reader(XSControl_Reader* xsControlReader): ocReader(xsControlReader){};
-	virtual ~Reader(){delete ocReader;};
-	virtual TopoDS_Shape read(std::string filename) = 0;
-private:
 };
 
 
