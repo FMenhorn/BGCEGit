@@ -24,9 +24,11 @@ int main(void){
 	//STEPControl_Reader ocreader;
 	//Reader* reader = new STEPReader(&ocreader);
 	//TopoDS_Shape shape = reader->read("./TestGeometry/circuit-board-pcb-mock-example.snapshot.4/Buoy_Circuitbuoy.stp");
-	IGESControl_Reader ocreader;
-	Reader* reader = new IGESReader(&ocreader);
+	//IGESControl_Reader ocreader;
+	XSControl_Reader* ocReader = new STEPControl_Reader();
+	Reader* reader = new IGESReader(ocReader);
 	TopoDS_Shape shape = reader->read("./TestGeometry/circuit-board-pcb-mock-example.snapshot.4/Buoy_Circuitbuoy.igs");
+
 
     /// Voxelize file
     Voxelizer voxelizer;

@@ -18,7 +18,7 @@ public:
 
 	Reader(XSControl_Reader* xsControlReader): ocReader(xsControlReader){};
 	virtual ~Reader(){delete ocReader;};
-	virtual TopoDS_Shape read(std::string filename) = 0;
+	virtual TopoDS_Shape read(const std::string filename) = 0;
 private:
 };
 

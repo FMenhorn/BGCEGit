@@ -21,10 +21,10 @@
 class STEPReader: public Reader {
 public:
 
-	STEPReader(STEPControl_Reader* stepControlReader);
+	STEPReader(XSControl_Reader* stepControlReader);
 	virtual ~STEPReader();
 
-	TopoDS_Shape read(std::string filename);
+	TopoDS_Shape read(const std::string filename);
 };
 
 #endif /* READER_STEPREADER_HPP_ */

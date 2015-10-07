@@ -9,7 +9,7 @@
 
 #include <iostream>
 
-STEPReader::STEPReader(STEPControl_Reader* stepControlReader): Reader(stepControlReader) {
+STEPReader::STEPReader(XSControl_Reader* stepControlReader): Reader(stepControlReader) {
 
 }
 
@@ -17,7 +17,7 @@ STEPReader::~STEPReader() {
 	this->~Reader();
 }
 
-TopoDS_Shape STEPReader::read(std::string filename) {
+TopoDS_Shape STEPReader::read(const std::string filename) {
 
     TopoDS_Shape topoDSShape;
 	STEPControl_Reader stepReader;

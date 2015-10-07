@@ -1,5 +1,5 @@
 /*
- * STEPReader.cpp
+ * IGESReader.cpp
  *
  *  Created on: Oct 6, 2015
  *      Author: saumitra
@@ -9,7 +9,7 @@
 
 #include <iostream>
 
-IGESReader::IGESReader(IGESControl_Reader* igesControlReader): Reader(igesControlReader) {
+IGESReader::IGESReader(XSControl_Reader* igesControlReader): Reader(igesControlReader) {
 
 }
 
@@ -17,7 +17,7 @@ IGESReader::~IGESReader() {
 	this->~Reader();
 }
 
-TopoDS_Shape IGESReader::read(std::string filename) {
+TopoDS_Shape IGESReader::read(const std::string filename) {
 
     TopoDS_Shape topoDSShape;
 	IGESControl_Reader igesReader;

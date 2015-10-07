@@ -24,10 +24,10 @@ public:
 
     ~Voxelizer() {};
 
-    Voxel_BoolDS voxelize(TopoDS_Shape topoDSShape, int refinementLevel);
+    Voxel_BoolDS voxelize(const TopoDS_Shape topoDSShape,const int refinementLevel);
 
 private:
-    double* getBoundingBox(TopoDS_Shape topoDSShape, double* shapeDimensions);
+    void getBoundingBox(const TopoDS_Shape topoDSShape, double* shapeDimensions);
 };
 
 #endif // _VOXELIZER_
