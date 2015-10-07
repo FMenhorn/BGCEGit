@@ -15,6 +15,9 @@
 #include <Quantity_Color.hxx>
 #include <XCAFDoc_ColorTool.hxx>
 #include <TDF_LabelSequence.hxx>
+#include <TopoDS_Face.hxx>
+
+#include <vector>
 /*
  *
  */
@@ -23,7 +26,7 @@ public:
 	ColorHandler();
 	virtual ~ColorHandler();
 
-	Quantity_Color getColor();
+	void getColoredFaces(std::vector<TopoDS_Face>& faceVector);
 	Handle_TDocStd_Document& getDoc();
 	void initializeMembers();
 

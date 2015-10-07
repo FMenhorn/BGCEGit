@@ -17,7 +17,6 @@
 #include <BRep_Builder.hxx>
 #include <TopExp_Explorer.hxx>
 #include <TopoDS_Shape.hxx>
-#include <TopoDS_Face.hxx>
 #include <TopoDS.hxx>
 
 ColorHandler::ColorHandler() {
@@ -40,7 +39,7 @@ void ColorHandler::initializeMembers() {
 	myAssembly->GetShapes(aLabel);
 }
 
-Quantity_Color ColorHandler::getColor() {
+void ColorHandler::getColoredFaces(std::vector<TopoDS_Face>& faceVector) {
 	TopoDS_Shape shape;
 	if (aLabel.Length() == 1) {
 		TopoDS_Shape result = myAssembly->GetShape(aLabel.Value(1));
@@ -64,12 +63,12 @@ Quantity_Color ColorHandler::getColor() {
 				/*|| myColors->IsSet(face, XCAFDoc_ColorSurf)
 				|| myColors->IsSet(face, XCAFDoc_ColorCurv)*/) {
 			myColors->GetColor(face, XCAFDoc_ColorGen, color);
+			faceVector.push_back(face);
 			std::cout << "YES Color "<< color.Red()<< " " << color.Green()  << " " << color.Blue() << std::endl;
 		}else{
 			std::cout << "No Color" << std::endl;
 		}
 	}
-	return color;
 }
 
 bool ColorHandler::isDocumentValid() {
