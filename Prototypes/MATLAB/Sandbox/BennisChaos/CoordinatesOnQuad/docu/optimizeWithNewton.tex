@@ -1,0 +1,43 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\newcommand{\norm}[1]{\parallel #1 \parallel}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+\begin{document}
+Given a quad with vertices $\vec{A},\vec{B},\vec{C},\vec{D}$ in counter--clockwise ordering every point on the quad $\vec{X}$ can be described via bilinear interpolation:
+\begin{equation*}
+\vec{X}\left(u,v\right)=(1-u)(1-v)\vec{A}+u(1-v)\vec{B}+uv\vec{C}+(1-u)v\vec{D}\text{\ with\ }u,v\in\left[0,1\right]
+\end{equation*}
+For projecting an arbitrary point $\vec{Y}$ onto the quad, we need to solve the following optimization problem:
+\begin{equation*}
+\left(u_0,v_0\right)=\underset{u,v\in\left[0,1\right]}{\argmin}\norm{\vec{Y}-\vec{X}(u,v)}^2
+\end{equation*}
+This gives the projected point $\vec{Y}_\perp=\vec{X}\left(u_0,v_0\right)$.
+For efficiently solving this problem we can use the Newton scheme:
+If one wants to minimize $f\left(x\right)$ one Newton--iteration has the following form:
+\begin{enumerate}
+\item set initial guess $x_0$.
+\item with known $x_k$ solve $H_f\left(x_k\right)v_k=-\nabla f\left(x_k\right)$ for $v_k$.
+\item set $x_{k+1}=x_k+v_k$.
+\end{enumerate} 
+With
+\begin{equation*}
+f\left(x\right)=f\left(u,v\right)=\left\langle \vec{Y}-\vec{X}(u,v),\vec{Y}-\vec{X}(u,v)\right\rangle\end{equation*}
+we get...ugly stuff...see matlab
+\begin{verbatim}
+Y=sym('Y',[3,1],'real');
+x=sym('x',[2,1],'real');
+A=sym('A',[3,1],'real');
+B=sym('B',[3,1],'real');
+C=sym('C',[3,1],'real');
+D=sym('D',[3,1],'real');
+X(x)=(1-x(1))*(1-x(2))*A+x(1)*(1-x(2))*B+x(1)*x(2)*C+(1-x(1))*x(2)*D;
+
+f(x)=simplify((X-Y)'*(X-Y));
+Df(x)=gradient(f);
+Hf(x)=hessian(f);
+\end{verbatim}
+\end{document}
