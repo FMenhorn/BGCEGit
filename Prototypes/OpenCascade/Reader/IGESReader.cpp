@@ -9,8 +9,8 @@
 
 #include <iostream>
 
-IGESReader::IGESReader(XSControl_Reader* igesControlReader): Reader(igesControlReader) {
-
+IGESReader::IGESReader():Reader() {
+	xsReader = new IGESControl_Reader();
 }
 
 IGESReader::~IGESReader() {
@@ -20,9 +20,8 @@ IGESReader::~IGESReader() {
 TopoDS_Shape IGESReader::read(const std::string filename) {
 
     TopoDS_Shape topoDSShape;
-	IGESControl_Reader igesReader;
 
-	IFSelect_ReturnStatus returnStatus = igesReader.ReadFile(filename.c_str());
+	IFSelect_ReturnStatus returnStatus = xsReader->ReadFile(filename.c_str());
 	switch(returnStatus){
 	case IFSelect_RetDone:
 		std::cout << "IGESReader: File read successful" << std::endl;
@@ -33,19 +32,19 @@ TopoDS_Shape IGESReader::read(const std::string filename) {
 	}
 	Standard_Boolean failsonly = Standard_False;
 	IFSelect_PrintCount mode;
-	igesReader.PrintCheckLoad(failsonly, mode);
+	xsReader->PrintCheckLoad(failsonly, mode);
 	std::cout << "IGESReader: Mode: " << mode << std::endl;
 
 	Standard_Integer ic =  Interface_Static::IVal("read.iges.bspline.continuity");
 	std::cout << "IGESReader: ic: " << ic << std::endl;
 
-	Handle_TColStd_HSequenceOfTransient list = igesReader.GiveList();
-	Standard_Integer nbtrans =  igesReader.TransferList(list);
+	Handle_TColStd_HSequenceOfTransient list = xsReader->GiveList();
+	Standard_Integer nbtrans =  xsReader->TransferList(list);
 	std::cout << "IGESReader: Number of translations: " << nbtrans << std::endl;
-	Standard_Integer nbs =  igesReader.NbShapes();
+	Standard_Integer nbs =  xsReader->NbShapes();
 	std::cout << "IGESReader: Number of shapes: " << nbs << std::endl;
 
-	topoDSShape = igesReader.OneShape();
+	topoDSShape = xsReader->OneShape();
 
 	return topoDSShape;
 }

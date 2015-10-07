@@ -9,8 +9,8 @@
 
 #include <iostream>
 
-STEPReader::STEPReader(XSControl_Reader* stepControlReader): Reader(stepControlReader) {
-
+STEPReader::STEPReader(): Reader() {
+    xsReader = new STEPControl_Reader();
 }
 
 STEPReader::~STEPReader() {
@@ -20,9 +20,8 @@ STEPReader::~STEPReader() {
 TopoDS_Shape STEPReader::read(const std::string filename) {
 
     TopoDS_Shape topoDSShape;
-	STEPControl_Reader stepReader;
 
-	IFSelect_ReturnStatus returnStatus = stepReader.ReadFile(filename.c_str());
+	IFSelect_ReturnStatus returnStatus = xsReader->ReadFile(filename.c_str());
 	switch(returnStatus){
 	case IFSelect_RetDone:
 		std::cout << "STEPReader: File read successful" << std::endl;
@@ -33,19 +32,19 @@ TopoDS_Shape STEPReader::read(const std::string filename) {
 	}
 	Standard_Boolean failsonly = Standard_False;
 	IFSelect_PrintCount mode;
-	stepReader.PrintCheckLoad(failsonly, mode);
+	xsReader->PrintCheckLoad(failsonly, mode);
 	std::cout << "STEPReader: Mode: " << mode << std::endl;
 
 	Standard_Integer ic =  Interface_Static::IVal("read.precision.mode");
 	std::cout << "STEPReader: ic: " << ic << std::endl;
 
-	Handle_TColStd_HSequenceOfTransient list = stepReader.GiveList();
-	Standard_Integer nbtrans =  stepReader.TransferList(list);
+	Handle_TColStd_HSequenceOfTransient list = xsReader->GiveList();
+	Standard_Integer nbtrans =  xsReader->TransferList(list);
 	std::cout << "STEPReader: Number of translations: " << nbtrans << std::endl;
-	Standard_Integer nbs =  stepReader.NbShapes();
+	Standard_Integer nbs =  xsReader->NbShapes();
 	std::cout << "STEPReader: Number of shapes: " << nbs << std::endl;
 
-	topoDSShape = stepReader.OneShape();
+	topoDSShape = xsReader->OneShape();
 
 	return topoDSShape;
 }

@@ -8,6 +8,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string>
 #include <iostream>
 
 #include "Reader/Reader.hpp"
@@ -20,14 +21,22 @@
 #include <STEPControl_Reader.hxx>
 
 int main(void){
+	///File:
+	std::string filePath = "./TestGeometry/circuit-board-pcb-mock-example.snapshot.4/";
+	std::string fileName = "Buoy_Circuitbuoy.igs";
+	std::string file = filePath + fileName;
+
     /// Read file
-	//STEPControl_Reader ocreader;
-	//Reader* reader = new STEPReader(&ocreader);
-	//TopoDS_Shape shape = reader->read("./TestGeometry/circuit-board-pcb-mock-example.snapshot.4/Buoy_Circuitbuoy.stp");
-	//IGESControl_Reader ocreader;
-	XSControl_Reader* ocReader = new STEPControl_Reader();
-	Reader* reader = new IGESReader(ocReader);
-	TopoDS_Shape shape = reader->read("./TestGeometry/circuit-board-pcb-mock-example.snapshot.4/Buoy_Circuitbuoy.igs");
+    Reader* reader;
+    if(fileName.find(".stp")!=std::string::npos){
+    	reader = new STEPReader();
+    }else if(fileName.find(".igs")!=std::string::npos){
+    	reader = new IGESReader();
+    }else{
+    	std::cout << "CADToVoxel: Wrong type of input file. Neither .stp nor .igs" << std::endl;
+    	return EXIT_FAILURE;
+    }
+	TopoDS_Shape shape = reader->read(file);
 
 
     /// Voxelize file

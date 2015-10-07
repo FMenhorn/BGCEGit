@@ -22,10 +22,13 @@
 class IGESReader: public Reader {
 public:
 
-	IGESReader(XSControl_Reader* igesControlReader);
+	IGESReader();
 	virtual ~IGESReader();
 
 	TopoDS_Shape read(const std::string filename);
+
+private:
+	//IGESControl_Reader igesReader;
 };
 
 #endif /* READER_IGESREADER_HPP_ */
