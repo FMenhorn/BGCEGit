@@ -37,9 +37,7 @@ TKLCAF)
 
 # Build application
 add_executable(ColorDetectionTest
-Testing/TestColorDetection/ColorDetection.cpp
-Reader/STEPReader.cpp
-Reader/IGESReader.cpp)
+Testing/TestColorDetection/ColorDetection.cpp)
 
 target_link_libraries(ColorDetectionTest
 TKTopAlgo
@@ -49,6 +47,8 @@ TKMath
 TKXSBase
 TKSTEP
 TKIGES
+TKXDEIGES
+TKXDESTEP
 TKXCAF
 TKLCAF)
 
