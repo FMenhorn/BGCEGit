@@ -14,24 +14,25 @@
 #include "Reader/Reader.hpp"
 #include "Reader/STEPReader.hpp"
 #include "Reader/IGESReader.hpp"
+#include "Reader/IGESCAFReader.hpp"
 #include "Voxelizer/Voxelizer.hpp"
 #include "Writer/Writer_VTK.hpp"
-
 #include <Voxel_BoolDS.hxx>
 #include <IGESControl_Reader.hxx>
-#include "Reader/IGESCAFReader.hpp"
+#include <Quantity_Color.hxx>
+#include "ColorHandler/ColorHandler.hpp"
 
 int main(void){
 	///File:
-	std::string filePath = "./TestGeometry/circuit-board-pcb-mock-example.snapshot.4/";
-	std::string fileName = "Buoy_Circuitbuoy.igescaf";
+	std::string filePath = "./Testing/TestFiles/x-wing-fighter-star-wars.snapshot.11/";
+	std::string fileName = "X-Wing-complete.igs";
 	std::string file = filePath + fileName;
 
     /// Read file
     Reader* reader;
     if(fileName.find(".stp")!=std::string::npos){
     	reader = new STEPReader();
-    }else if(fileName.find(".igescaf")!=std::string::npos){
+    }else if(fileName.find(".igs")!=std::string::npos){
     	reader = new IGESCAFReader();
     }else if(fileName.find(".igs")!=std::string::npos){
     	reader = new IGESReader();
@@ -40,6 +41,16 @@ int main(void){
     	return EXIT_FAILURE;
     }
 	TopoDS_Shape shape = reader->read(file);
+
+	ColorHandler colorDetector;
+	if(!colorDetector.addShape(shape)){
+		std::cout << "Adding shape was not successful" << std::endl;
+	}
+	colorDetector.initializeColorTable();
+	colorDetector.setColor();
+	colorDetector.seekColor();
+	Quantity_Color col = colorDetector.getColor();
+	col = colorDetector.getColorFromShape(shape);
 
     /// Voxelize file
     Voxelizer voxelizer;

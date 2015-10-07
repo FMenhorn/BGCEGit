@@ -46,7 +46,7 @@ int main() {
     myShapeTool->SetShape(aLabel, shape);
 
     if (XCAFDoc_DocumentTool::IsXCAFDocument(aDoc)) {
-        std::cout << "... yes ..." << std::cout;
+        std::cout << "... yes ..." << std::endl;
     }
 
     return EXIT_SUCCESS;

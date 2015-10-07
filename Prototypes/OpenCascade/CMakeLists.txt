@@ -19,7 +19,8 @@ Reader/IGESReader.cpp
 Reader/IGESCAFReader.cpp
 Voxelizer/Voxelizer.cpp
 Writer/Writer_ToPy.cpp
-Writer/Writer_VTK.cpp)
+Writer/Writer_VTK.cpp
+ColorHandler/ColorHandler.cpp)
 
 target_link_libraries(CADToVoxel
 TKTopAlgo
@@ -30,7 +31,9 @@ TKVoxel
 TKXSBase
 TKSTEP
 TKIGES
-TKXDEIGES)
+TKXDEIGES
+TKXCAF
+TKLCAF)
 
 # Build application
 add_executable(ColorDetectionTest
