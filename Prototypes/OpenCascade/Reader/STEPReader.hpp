@@ -9,9 +9,6 @@
 #define READER_STEPREADER_HPP_
 
 #include <TopoDS_Shape.hxx>
-#include <STEPControl_Reader.hxx>
-#include <Interface_Static.hxx>
-#include <Standard_CString.hxx>
 
 #include "Reader.hpp"
 #include <string>

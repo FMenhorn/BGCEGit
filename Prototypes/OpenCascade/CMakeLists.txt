@@ -16,6 +16,7 @@ add_executable(CADToVoxel
 CADToVoxel.cpp
 Reader/STEPReader.cpp
 Reader/IGESReader.cpp
+Reader/IGESCAFReader.cpp
 Voxelizer/Voxelizer.cpp
 Writer/Writer_ToPy.cpp
 Writer/Writer_VTK.cpp)
@@ -28,7 +29,8 @@ TKMath
 TKVoxel
 TKXSBase
 TKSTEP
-TKIGES)
+TKIGES
+TKXDEIGES)
 
 
 #install(TARGETS CADToVoxel DESTINATION bin)
