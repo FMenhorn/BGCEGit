@@ -8,19 +8,58 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string>
 #include <iostream>
 
 #include "Reader/Reader.hpp"
 #include "Reader/STEPReader.hpp"
-#include <STEPControl_Reader.hxx>
+#include "Reader/IGESReader.hpp"
+#include "Reader/IGESCAFReader.hpp"
+#include "Voxelizer/Voxelizer.hpp"
+#include "Writer/Writer_VTK.hpp"
+#include <Voxel_BoolDS.hxx>
+#include <IGESControl_Reader.hxx>
+#include <Quantity_Color.hxx>
+#include "ColorHandler/ColorHandler.hpp"
 
 int main(void){
-	STEPControl_Reader ocreader;
-	Reader* reader = new STEPReader(&ocreader);
-	TopoDS_Shape shape = reader->read("some file path");
+	///File:
+	std::string filePath = "./Testing/TestFiles/x-wing-fighter-star-wars.snapshot.11/";
+	std::string fileName = "X-Wing-complete.igs";
+	std::string file = filePath + fileName;
+
+    /// Read file
+    Reader* reader;
+    if(fileName.find(".stp")!=std::string::npos){
+    	reader = new STEPReader();
+    }else if(fileName.find(".igs")!=std::string::npos){
+    	reader = new IGESCAFReader();
+    }else if(fileName.find(".igs")!=std::string::npos){
+    	reader = new IGESReader();
+    }else{
+    	std::cout << "CADToVoxel: Wrong type of input file. Neither .stp nor .igs" << std::endl;
+    	return EXIT_FAILURE;
+    }
+	TopoDS_Shape shape = reader->read(file);
+
+	ColorHandler colorDetector;
+	if(!colorDetector.addShape(shape)){
+		std::cout << "Adding shape was not successful" << std::endl;
+	}
+	colorDetector.initializeColorTable();
+	colorDetector.setColor();
+	colorDetector.seekColor();
+	Quantity_Color col = colorDetector.getColor();
+	col = colorDetector.getColorFromShape(shape);
+
+    /// Voxelize file
+    Voxelizer voxelizer;
+    int refinementLevel = 0;
+    Voxel_BoolDS voxelShape = voxelizer.voxelize(shape, refinementLevel);
+
+    /// Write output
+    Writer_VTK writer_vtk("output");
+    writer_vtk.write(voxelShape);
+
 	return EXIT_SUCCESS;
 }
-
-
-
-

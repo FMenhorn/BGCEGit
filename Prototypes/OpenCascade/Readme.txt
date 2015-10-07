@@ -25,3 +25,5 @@ STL/IGESFiles (needs account):
 	https://grabcad.com/library/most-downloaded?page=1&per_page=100
 
 
+STEP/IGES Color Detection lead:
+	http://dev.opencascade.org/doc/overview/html/occt_user_guides__xde.html

@@ -1,9 +1,15 @@
+/*
+ * STEPReader.hpp
+ *
+ *  Created on: Oct 6, 2015
+ *      Author: saumitra
+ */
+
 #include "Writer_VTK.hpp"
 
-
-bool Writer_VTK::write(Voxel_BoolDS voxelShape){
+bool Writer_VTK::write(Voxel_BoolDS &voxelShape){
     ofstream outfile;
-    std::cout << "Writer: Writing VTK file for " + filename + " ..";
+    std::cout << "Writer: Writing VTK file for " + filename + " .." << std::endl;
     outfile.open(filename + ".vtk", ios::out | ios::trunc);
 
     writeHeader(outfile);
@@ -11,6 +17,8 @@ bool Writer_VTK::write(Voxel_BoolDS voxelShape){
     writeScalars(outfile, voxelShape);
 
     outfile.close();
+
+    std::cout << "Writer: .. done!" << std::endl;
 
     return true;
 }
@@ -22,7 +30,7 @@ void Writer_VTK::writeHeader(std::ofstream &outfile) {
 	outfile << "\n";
 }
 
-void Writer_VTK::writeStructuredGrid(std::ofstream &outfile, Voxel_BoolDS voxelShape){
+void Writer_VTK::writeStructuredGrid(std::ofstream &outfile, Voxel_BoolDS &voxelShape){
 	outfile << "DATASET STRUCTURED_POINTS\n";
 	outfile << "DIMENSIONS  " << (int)voxelShape.GetNbX() << " " << (int)voxelShape.GetNbY() << " " << (int)voxelShape.GetNbZ() << "\n";
 	outfile << "ORIGIN " << 0 << " " << 0 << " " << 0 << "\n";
@@ -31,15 +39,16 @@ void Writer_VTK::writeStructuredGrid(std::ofstream &outfile, Voxel_BoolDS voxelS
 }
 
 
-void Writer_VTK::writeScalars(std::ofstream &outfile, Voxel_BoolDS voxelShape){
+void Writer_VTK::writeScalars(std::ofstream &outfile, Voxel_BoolDS &voxelShape){
 	int totalSize = voxelShape.GetNbX() * voxelShape.GetNbY() * voxelShape.GetNbZ();
+	//std::cout << voxelShape.GetNbX() << " " << voxelShape.GetNbY() << " " << voxelShape.GetNbZ() << std::endl;
 	outfile << "POINT_DATA " << totalSize << " \n";
-	outfile << "SCALARS density float 1 \n";
+	outfile << "SCALARS density int 1 \n";
 	outfile << "LOOKUP_TABLE default \n";
-	for (int i = 0; i < voxelShape.GetNbX(); i++){
+	for (int k = 0; k < voxelShape.GetNbZ(); k++)
         for (int j = 0; j < voxelShape.GetNbY(); j++){
-            for (int k = 0; k < voxelShape.GetNbZ(); k++){
-                outfile << (float)voxelShape.Get(i, j, k) << "\n";
+            for (int i = 0; i < voxelShape.GetNbX(); i++){{
+                outfile << (int)(voxelShape.Get(i, j, k)) << "\n";
             }
         }
 	}

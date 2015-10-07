@@ -1,3 +1,10 @@
+/*
+ * STEPReader.hpp
+ *
+ *  Created on: Oct 6, 2015
+ *      Author: saumitra
+ */
+
 #ifndef _WRITER_TOPY_
 #define _WRITER_TOPY_
 
@@ -14,7 +21,12 @@
 #include <BRepBndLib.hxx>
 
 class Writer_ToPy: public Writer{
-    bool write(Voxel_BoolDS voxelShape);
+public:
+    Writer_ToPy(std::string _filename) : Writer(_filename) {}
+
+    ~Writer_ToPy() {this->~Writer();}
+
+    bool write(Voxel_BoolDS &voxelShape);
 };
 
 #endif // _WRITER_TOPY_
