@@ -28,6 +28,16 @@ def estimate_hermite(data, v0, v1):
     return x0
 
 
+def tworesolution_dual_contour(dataset,resolutions,dims):
+    [dc_verts_fine,dc_edges_fine]=dual_contour(dataset,resolutions['fine'],dims)
+    [dc_verts_coarse,dc_edges_coarse]=dual_contour(dataset,resolutions['coarse'],dims)
+
+    dc_verts={'fine':dc_verts_fine,'coarse':dc_verts_coarse}
+    dc_edges={'fine':dc_edges_fine,'coarse':dc_edges_coarse}
+
+    return dc_verts, dc_edges
+
+
 # Input:
 # data = voxel data
 # res = resolution
@@ -75,7 +85,7 @@ def dual_contour(data,res,dims):
         dc_verts.append(v)
 
     # Construct faces
-    dc_faces = []
+    dc_edges = []
     for x, y in it.product(np.arange(dims['xmin'], dims['xmax'], res), np.arange(dims['ymin'], dims['ymax'], res)):
         if not (x, y) in vindex:
             continue
@@ -85,15 +95,9 @@ def dual_contour(data,res,dims):
         for i in range(2):
             if tuple(o + res*dirs[i]) in vindex:
                 if (data[tuple(o+res*dirs[i]+res*dirs[int(not i)])] > 0) != (data[tuple(o+res*dirs[i])] > 0):
-                    dc_faces.append([vindex[tuple(o)], vindex[tuple(o + np.array(dirs[i])*res)]])
-    return dc_verts, dc_faces
+                    dc_edges.append([vindex[tuple(o)], vindex[tuple(o + np.array(dirs[i])*res)]])
 
-
-center = np.array([4.0, 4.0])
-radius = 2.0
-dimensions = {'xmin':0,'xmax':8,'ymin':0,'ymax':8}
-res_fine = 1.0/8.0
-res_coarse = res_fine / 4.0
+    return dc_verts, dc_edges
 
 
 def export_as_csv(data,name):
@@ -105,7 +109,6 @@ def export_as_csv(data,name):
             csvwriter.writerow(np.array(d))
 
 
-
 def sample_data(f, res, dims):
     data = {}
     for x, y in it.product(np.arange(dims['xmin'], dims['xmax']+res, res), np.arange(dims['ymin'], dims['ymax']+res, res)):
@@ -113,6 +116,7 @@ def sample_data(f, res, dims):
         x_vec = np.array([x, y])
         data[key] = f(x_vec)
     return data
+
 
 def data_to_voxel(_data, res, dims):
     length = (dims['xmax']-dims['xmin'])
@@ -133,25 +137,31 @@ def data_to_voxel(_data, res, dims):
 
 
 def test_f(x):
+    center = np.array([4.0, 4.0])
+    radius = 2.0
     d = x - center
     return np.dot(d, d) - radius ** 2
 
 
-data = sample_data(test_f,res_fine,dimensions)
-[voxels,x_mat,y_mat] = data_to_voxel(data,res_fine,dimensions)
+dimensions = {'xmin':0,'xmax':8,'ymin':0,'ymax':8}
+res_fine = 1.0/8.0
+res_coarse = res_fine * 16.0
+resolutions = {'fine':res_fine,'coarse':res_coarse}
 
-[verts, edges] = dual_contour(data, res_fine, dimensions)
-#[verts_coarse, edges_coarse] = dual_contour(data_coarse, res_coarse, dimensions)
+data = sample_data(test_f,resolutions['fine'],dimensions)
+[voxels_fine,x_mat_fine,y_mat_fine] = data_to_voxel(data,resolutions['fine'],dimensions)
+[voxels_coarse,x_mat_coarse,y_mat_coarse] = data_to_voxel(data,resolutions['coarse'],dimensions)
 
-export_as_csv(verts,'verts')
-export_as_csv(edges,'edges')
-export_as_csv(voxels,'voxels')
-export_as_csv(x_mat,'x_mat')
-export_as_csv(y_mat,'y_mat')
+[verts, edges] = tworesolution_dual_contour(data, resolutions, dimensions)
 
+export_as_csv(verts['fine'],'verts_fine')
+export_as_csv(edges['fine'],'edges_fine')
+export_as_csv(voxels_fine,'voxels_fine')
+export_as_csv(x_mat_fine,'x_mat_fine')
+export_as_csv(y_mat_fine,'y_mat_fine')
 
-# mlab.triangular_mesh(
-#             [ v[0] for v in verts ],
-#             [ v[1] for v in verts ],
-#             [ v[2] for v in verts ],
-#             tris)
+export_as_csv(verts['coarse'],'verts_coarse')
+export_as_csv(edges['coarse'],'edges_coarse')
+export_as_csv(voxels_coarse,'voxels_coarse')
+export_as_csv(x_mat_coarse,'x_mat_coarse')
+export_as_csv(y_mat_coarse,'y_mat_coarse')
