@@ -16,8 +16,19 @@ class Reader{
 public:
 	Reader(){};
 	virtual ~Reader(){};
+
+	/**
+	 * virtual method which has to be implemented by children. reads the file with filename into the corresponding implementation of the reader
+	 * @param filename
+	 */
 	virtual void read(const std::string filename) = 0;
+
+	/**
+	 * virtual method which has to be implemented by children. Transfers the object/model/shape from the reader into the the TDocStd_Document doc
+	 * @param doc
+	 */
 	virtual void transfer(Handle_TDocStd_Document& doc) = 0;
+
 protected:
 
 };

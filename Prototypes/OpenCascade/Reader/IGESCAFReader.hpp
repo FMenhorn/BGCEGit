@@ -21,7 +21,16 @@ public:
 	IGESCAFReader();
 	virtual ~IGESCAFReader();
 
+	/**
+	 * Reads the file with filename into the igesCAFControlReader
+	 * @param filename
+	 */
 	void read(const std::string filename);
+
+	/**
+	 * Transfers the object/model/shape from the reader into the the TDocStd_Document doc
+	 * @param doc
+	 */
 	void transfer(Handle_TDocStd_Document& doc);
 
 private:

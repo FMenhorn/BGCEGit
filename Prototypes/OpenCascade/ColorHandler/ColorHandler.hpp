@@ -23,12 +23,31 @@
  */
 class ColorHandler {
 public:
+	/**
+	 * Initializes the doc
+	 */
 	ColorHandler();
 	virtual ~ColorHandler();
 
-	void getColoredFaces(std::vector<TopoDS_Face>& faceVector, TopoDS_Shape& sewedShape);
+	/**
+	 * Returns the Document aDoc
+	 * @return
+	 */
 	Handle_TDocStd_Document& getDoc();
+
+	/**
+	 * Initializes the other members
+	 */
 	void initializeMembers();
+
+	/**
+	 * Assembles the shape with the help of the XCAFDoc_ShapeTool myAssembly and the TDF_LabelSequence aLabel.
+	 * Steps then through the faces, if they are colored they are added to the std::vector<TopoDS_Face>& faceVector
+	 * and to the TopoDS_Shape& sewedShape
+	 * @param faceVector after the call, holds the colored faces of the object
+	 * @param sewedShape after the call, holds the TopoDS_Shape sewed together out of the colored shapes/faces
+	 */
+	void getColoredFaces(std::vector<TopoDS_Face>& faceVector, TopoDS_Shape& sewedShape);
 
 private:
     Handle_TDocStd_Document aDoc;
