@@ -16,7 +16,7 @@ class Writer{
 public:
     Writer(std::string _filename) : filename(_filename) {}
 
-    ~Writer() {};
+    virtual ~Writer() {};
 
     virtual bool write(Voxel_BoolDS &voxelShape) = 0;
 

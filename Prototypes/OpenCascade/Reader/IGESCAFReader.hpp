@@ -8,9 +8,10 @@
 #ifndef READER_IGESCAFREADER_HPP_
 #define READER_IGESCAFREADER_HPP_
 
-#include <TopoDS_Shape.hxx>
-
 #include "Reader.hpp"
+
+#include <TopoDS_Shape.hxx>
+#include <IGESCAFControl_Reader.hxx>
 #include <string>
 /*
  *
@@ -21,6 +22,10 @@ public:
 	virtual ~IGESCAFReader();
 
 	TopoDS_Shape read(const std::string filename);
+	void transfer(Handle_TDocStd_Document& doc);
+
+private:
+	IGESCAFControl_Reader igesCAFControlReader;
 };
 
 #endif /* READER_IGESCAFREADER_HPP_ */

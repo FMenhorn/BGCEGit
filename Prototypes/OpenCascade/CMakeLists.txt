@@ -14,8 +14,6 @@ link_directories(/usr/local/lib)
 # Build application
 add_executable(CADToVoxel
 CADToVoxel.cpp
-Reader/STEPReader.cpp
-Reader/IGESReader.cpp
 Reader/IGESCAFReader.cpp
 Voxelizer/Voxelizer.cpp
 Writer/Writer_ToPy.cpp
@@ -30,16 +28,13 @@ TKMath
 TKVoxel
 TKXSBase
 TKSTEP
-TKIGES
 TKXDEIGES
 TKXCAF
 TKLCAF)
 
 # Build application
 add_executable(ColorDetectionTest
-Testing/TestColorDetection/ColorDetection.cpp
-Reader/STEPReader.cpp
-Reader/IGESReader.cpp)
+Testing/TestColorDetection/ColorDetection.cpp)
 
 target_link_libraries(ColorDetectionTest
 TKTopAlgo
@@ -49,6 +44,8 @@ TKMath
 TKXSBase
 TKSTEP
 TKIGES
+TKXDEIGES
+TKXDESTEP
 TKXCAF
 TKLCAF)
 

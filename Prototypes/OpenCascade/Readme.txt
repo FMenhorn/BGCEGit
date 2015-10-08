@@ -27,3 +27,4 @@ STL/IGESFiles (needs account):
 
 STEP/IGES Color Detection lead:
 	http://dev.opencascade.org/doc/overview/html/occt_user_guides__xde.html
+	https://www.quora.com/What-is-the-most-popular-file-format-used-for-sharing-CAD-files
