@@ -26,7 +26,7 @@ public:
 	ColorHandler();
 	virtual ~ColorHandler();
 
-	void getColoredFaces(std::vector<TopoDS_Face>& faceVector);
+	void getColoredFaces(std::vector<TopoDS_Face>& faceVector, TopoDS_Shape& sewedShape);
 	Handle_TDocStd_Document& getDoc();
 	void initializeMembers();
 

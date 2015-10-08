@@ -15,6 +15,7 @@
 
 #include <TopoDS_Compound.hxx>
 #include <BRep_Builder.hxx>
+#include <BRepBuilderAPI_Sewing.hxx>
 #include <TopExp_Explorer.hxx>
 #include <TopoDS_Shape.hxx>
 #include <TopoDS.hxx>
@@ -39,7 +40,7 @@ void ColorHandler::initializeMembers() {
 	myAssembly->GetShapes(aLabel);
 }
 
-void ColorHandler::getColoredFaces(std::vector<TopoDS_Face>& faceVector) {
+void ColorHandler::getColoredFaces(std::vector<TopoDS_Face>& faceVector, TopoDS_Shape& sewedShape) {
 	TopoDS_Shape shape;
 	if (aLabel.Length() == 1) {
 		TopoDS_Shape result = myAssembly->GetShape(aLabel.Value(1));
@@ -57,18 +58,22 @@ void ColorHandler::getColoredFaces(std::vector<TopoDS_Face>& faceVector) {
 	XCAFDoc_ColorType ctype = XCAFDoc_ColorGen;
 	Handle_XCAFDoc_ColorTool myColors = XCAFDoc_DocumentTool::ColorTool(aDoc->Main());
 	Quantity_Color color;
+	BRepBuilderAPI_Sewing bRepSewer;
 	for (TopExp_Explorer ex(shape, TopAbs_FACE); ex.More(); ex.Next()) {
 		const TopoDS_Face &face = TopoDS::Face(ex.Current());
 		if (myColors->IsSet(face, ctype)
-				/*|| myColors->IsSet(face, XCAFDoc_ColorSurf)
-				|| myColors->IsSet(face, XCAFDoc_ColorCurv)*/) {
+				|| myColors->IsSet(face, XCAFDoc_ColorSurf)
+				|| myColors->IsSet(face, XCAFDoc_ColorCurv)) {
 			myColors->GetColor(face, XCAFDoc_ColorGen, color);
 			faceVector.push_back(face);
+			bRepSewer.Add(face);
 			std::cout << "YES Color "<< color.Red()<< " " << color.Green()  << " " << color.Blue() << std::endl;
 		}else{
 			std::cout << "No Color" << std::endl;
 		}
 	}
+	bRepSewer.Perform();
+	sewedShape = bRepSewer.SewedShape();
 }
 
 bool ColorHandler::isDocumentValid() {
