@@ -14,13 +14,13 @@
 
 #include <Voxel_BoolDS.hxx>
 #include <IGESControl_Reader.hxx>
-#include <Quantity_Color.hxx>
 #include <TopoDS_Face.hxx>
 #include <STEPControl_StepModelType.hxx>
 #include <STEPControl_Writer.hxx>
 
 #include "Reader/Reader.hpp"
 #include "Reader/IGESCAFReader.hpp"
+#include "Reader/STEPCAFReader.hpp"
 #include "Voxelizer/Voxelizer.hpp"
 #include "Writer/Writer_VTK.hpp"
 #include "ColorHandler/ColorHandler.hpp"
@@ -34,11 +34,13 @@ int main(void){
     Reader* reader;
     if(fileName.find(".igs")!=std::string::npos){
     	reader = new IGESCAFReader();
+    }else if(fileName.find(".stp")!=std::string::npos){
+    	reader = new STEPCAFReader();
     }else{
     	std::cout << "CADToVoxel: Wrong type of input file. Neither .stp nor .igs" << std::endl;
     	return EXIT_FAILURE;
     }
-	TopoDS_Shape shape = reader->read(file);
+	reader->read(file);
 	ColorHandler colorDetector;
 	reader->transfer(colorDetector.getDoc());
 	colorDetector.initializeMembers();

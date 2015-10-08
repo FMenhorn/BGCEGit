@@ -16,7 +16,7 @@ class Reader{
 public:
 	Reader(){};
 	virtual ~Reader(){};
-	virtual TopoDS_Shape read(const std::string filename) = 0;
+	virtual void read(const std::string filename) = 0;
 	virtual void transfer(Handle_TDocStd_Document& doc) = 0;
 protected:
 

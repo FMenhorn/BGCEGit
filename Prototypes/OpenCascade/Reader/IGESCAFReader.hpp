@@ -21,7 +21,7 @@ public:
 	IGESCAFReader();
 	virtual ~IGESCAFReader();
 
-	TopoDS_Shape read(const std::string filename);
+	void read(const std::string filename);
 	void transfer(Handle_TDocStd_Document& doc);
 
 private:
