@@ -144,8 +144,8 @@ def test_f(x):
 
 
 dimensions = {'xmin':0,'xmax':8,'ymin':0,'ymax':8}
-res_fine = 1.0/8.0
-res_coarse = res_fine * 16.0
+res_fine = 1.0/2.0
+res_coarse = res_fine * 4.0
 resolutions = {'fine':res_fine,'coarse':res_coarse}
 
 data = sample_data(test_f,resolutions['fine'],dimensions)
