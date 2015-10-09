@@ -21,9 +21,8 @@
 #include <STEPControl_Writer.hxx>
 #include <STEPControl_Reader.hxx>
 
-#include <BRepOffset_MakeOffset.hxx>
-#include <BRepOffsetAPI_MakeThickSolid.hxx>
-#include <BRepBuilderAPI_MakeSolid.hxx>
+#include <gp_Vec.hxx>
+#include <BRepPrimAPI_MakePrism.hxx>
 
 #include "Reader/Reader.hpp"
 #include "Reader/IGESCAFReader.hpp"
@@ -56,6 +55,10 @@ int main(void){
 
 	TopTools_ListOfShape facesList;
 	colorDetector.getColoredFaces(facesList, sewedShape);
+
+	gp_Vec extrudVec(0,1,0);
+	TopoDS_Shape extrudedFace = BRepPrimAPI_MakePrism(facesList.First(), extrudVec);
+	sewedShape = extrudedFace;
 
 	STEPControl_Writer stepWriter;
 	stepWriter.Transfer(sewedShape, STEPControl_AsIs);
