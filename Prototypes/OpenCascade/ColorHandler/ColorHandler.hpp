@@ -17,6 +17,7 @@
 #include <TDF_LabelSequence.hxx>
 #include <TopoDS_Face.hxx>
 #include <TopTools_ListOfShape.hxx>
+#include <gp_Vec.hxx>
 
 #include <vector>
 /*
@@ -49,6 +50,11 @@ public:
 	 * @param sewedShape after the call, holds the TopoDS_Shape sewed together out of the colored shapes/faces
 	 */
 	void getColoredFaces(TopTools_ListOfShape& faceVector, TopoDS_Shape& sewedShape);
+
+	/**
+	 * Computes normal of the face
+	 */
+    void computeNormal(TopoDS_Face& findNormalTo, gp_Vec& normal);
 
 private:
     Handle_TDocStd_Document aDoc;
