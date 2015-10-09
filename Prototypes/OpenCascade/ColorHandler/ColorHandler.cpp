@@ -40,7 +40,7 @@ void ColorHandler::initializeMembers() {
 	myAssembly->GetShapes(aLabel);
 }
 
-void ColorHandler::getColoredFaces(std::vector<TopoDS_Face>& faceVector, TopoDS_Shape& sewedShape) {
+void ColorHandler::getColoredFaces(TopTools_ListOfShape& faceVector, TopoDS_Shape& sewedShape) {
 	TopoDS_Shape shape;
 	if (aLabel.Length() == 1) {
 		TopoDS_Shape result = myAssembly->GetShape(aLabel.Value(1));
@@ -65,13 +65,17 @@ void ColorHandler::getColoredFaces(std::vector<TopoDS_Face>& faceVector, TopoDS_
 				|| myColors->IsSet(face, XCAFDoc_ColorSurf)
 				|| myColors->IsSet(face, XCAFDoc_ColorCurv)) {
 			myColors->GetColor(face, XCAFDoc_ColorGen, color);
-			faceVector.push_back(face);
-			bRepSewer.Add(face);
-			std::cout << "YES Color "<< color.Red()<< " " << color.Green()  << " " << color.Blue() << std::endl;
+			if( !(color.Red()==0 && color.Green()==0 && color.Blue()==0)){
+				faceVector.Append(face);
+				bRepSewer.Add(face);
+				std::cout << "YES Color "<< color.Red()<< " " << color.Green()  << " " << color.Blue() << std::endl;
+			}
 		}else{
 			std::cout << "No Color" << std::endl;
 		}
 	}
+	//bRepSewer.SetFloatingEdgesMode(true);
+	bRepSewer.SetFaceMode(false);
 	bRepSewer.Perform();
 	sewedShape = bRepSewer.SewedShape();
 }

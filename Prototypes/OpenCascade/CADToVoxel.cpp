@@ -14,9 +14,16 @@
 
 #include <Voxel_BoolDS.hxx>
 #include <IGESControl_Reader.hxx>
+#include <TopoDS.hxx>
 #include <TopoDS_Face.hxx>
+#include <TopoDS_Solid.hxx>
 #include <STEPControl_StepModelType.hxx>
 #include <STEPControl_Writer.hxx>
+#include <STEPControl_Reader.hxx>
+
+#include <BRepOffset_MakeOffset.hxx>
+#include <BRepOffsetAPI_MakeThickSolid.hxx>
+#include <BRepBuilderAPI_MakeSolid.hxx>
 
 #include "Reader/Reader.hpp"
 #include "Reader/IGESCAFReader.hpp"
@@ -27,14 +34,14 @@
 
 int main(void){
 	///File:
-	std::string filePath = "./TestGeometry/circuit-board-pcb-mock-example.snapshot.4/";
-	std::string fileName = "Buoy_Circuitbuoy.igs";
+	std::string filePath = "./TestGeometry/";
+	std::string fileName = "BlackWhiteCube.igs";
 	std::string file = filePath + fileName;
     /// Read file
     Reader* reader;
     if(fileName.find(".igs")!=std::string::npos){
     	reader = new IGESCAFReader();
-    }else if(fileName.find(".stp")!=std::string::npos){
+    }else if(fileName.find(".stp")!=std::string::npos || fileName.find(".step")!=std::string::npos){
     	reader = new STEPCAFReader();
     }else{
     	std::cout << "CADToVoxel: Wrong type of input file. Neither .stp nor .igs" << std::endl;
@@ -46,7 +53,9 @@ int main(void){
 	colorDetector.initializeMembers();
 	std::vector<TopoDS_Face> facesVector;
 	TopoDS_Shape sewedShape;
-	colorDetector.getColoredFaces(facesVector, sewedShape);
+
+	TopTools_ListOfShape facesList;
+	colorDetector.getColoredFaces(facesList, sewedShape);
 
 	STEPControl_Writer stepWriter;
 	stepWriter.Transfer(sewedShape, STEPControl_AsIs);
@@ -58,12 +67,5 @@ int main(void){
     Voxel_BoolDS voxelShape = voxelizer.voxelize(sewedShape, refinementLevel);
     Writer_VTK writer_vtk("outputSewed");
 	writer_vtk.write(voxelShape);
-    /*for(size_t i = 0; i < facesVector.size(); ++i){
-		voxelShape = voxelizer.voxelize(facesVector[i], refinementLevel);
-
-		/// Write output
-		Writer_VTK writer_vtk("output"+ std::to_string(i));
-		writer_vtk.write(voxelShape);
-    }*/
 	return EXIT_SUCCESS;
 }

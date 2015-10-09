@@ -16,6 +16,7 @@
 #include <XCAFDoc_ColorTool.hxx>
 #include <TDF_LabelSequence.hxx>
 #include <TopoDS_Face.hxx>
+#include <TopTools_ListOfShape.hxx>
 
 #include <vector>
 /*
@@ -47,7 +48,7 @@ public:
 	 * @param faceVector after the call, holds the colored faces of the object
 	 * @param sewedShape after the call, holds the TopoDS_Shape sewed together out of the colored shapes/faces
 	 */
-	void getColoredFaces(std::vector<TopoDS_Face>& faceVector, TopoDS_Shape& sewedShape);
+	void getColoredFaces(TopTools_ListOfShape& faceVector, TopoDS_Shape& sewedShape);
 
 private:
     Handle_TDocStd_Document aDoc;

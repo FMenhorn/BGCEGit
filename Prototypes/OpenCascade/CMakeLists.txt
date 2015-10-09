@@ -33,7 +33,8 @@ TKIGES
 TKXDEIGES
 TKXDESTEP
 TKXCAF
-TKLCAF)
+TKLCAF
+TKOffset)
 
 # Build application
 add_executable(ColorDetectionTest
