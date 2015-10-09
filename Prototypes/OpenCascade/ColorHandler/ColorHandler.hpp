@@ -43,24 +43,42 @@ public:
 	void initializeMembers();
 
 	/**
-	 * Assembles the shape with the help of the XCAFDoc_ShapeTool myAssembly and the TDF_LabelSequence aLabel.
-	 * Steps then through the faces, if they are colored they are added to the std::vector<TopoDS_Face>& faceVector
-	 * and to the TopoDS_Shape& sewedShape
-	 * @param faceVector after the call, holds the colored faces of the object
-	 * @param sewedShape after the call, holds the TopoDS_Shape sewed together out of the colored shapes/faces
+	 * Calls getColoredFaces with color red
+	 * @param listOfShapes holds all shapes with the color red
 	 */
-	void getColoredFaces(TopTools_ListOfShape& faceVector, TopoDS_Shape& sewedShape);
+	void getFixtureShapes(TopTools_ListOfShape& listOfShapes);
 
 	/**
-	 * Computes normal of the face
+	 * Calls getColoredFaces with color blue
+	 * @param listOfShapes holds all shapes with the color blue
 	 */
-    void computeNormal(TopoDS_Face& findNormalTo, gp_Vec& normal);
+	void getPassiveShapes(TopTools_ListOfShape& listOfShapes);
+
+	/**
+	 * Calls getColoredFaces with color green
+	 * @param listOfShapes holds all shapes with the color green
+	 */
+	void getLoadShapes(TopTools_ListOfShape& listOfShapes);
 
 private:
     Handle_TDocStd_Document aDoc;
     Handle_XCAFDoc_ShapeTool myAssembly;
     TDF_LabelSequence aLabel;
     Handle_XCAFDoc_ColorTool myColors;
+
+	/**
+	 * Assembles the shape with the help of the XCAFDoc_ShapeTool myAssembly and the TDF_LabelSequence aLabel.
+	 * Steps then through the faces, if they are colored with wantedColor they are added to the
+	 * TopTools_ListOfShape& listOfShapes after being build from the faces.
+	 * @param listOfShapes holds all shapes with the color wanted color
+	 * @param wantedColor the color for which we are looking on the faces
+	 */
+	void getColoredFaces(TopTools_ListOfShape& listOfShapes,const Quantity_Color wantedColor);
+
+	/**
+	 * Computes normal of the face
+	 */
+    void computeNormal(const TopoDS_Face& findNormalTo, gp_Vec& normal);
 
 	bool isDocumentValid();
 };

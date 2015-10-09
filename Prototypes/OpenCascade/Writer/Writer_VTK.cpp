@@ -7,7 +7,7 @@
 
 #include "Writer_VTK.hpp"
 
-bool Writer_VTK::write(Voxel_BoolDS &voxelShape){
+bool Writer_VTK::write(std::string filename, Voxel_BoolDS &voxelShape){
     ofstream outfile;
     std::cout << "Writer: Writing VTK file for " + filename + " .." << std::endl;
     outfile.open(filename + ".vtk", ios::out | ios::trunc);

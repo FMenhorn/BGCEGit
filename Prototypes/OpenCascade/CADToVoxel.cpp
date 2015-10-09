@@ -17,16 +17,11 @@
 #include <TopoDS.hxx>
 #include <TopoDS_Face.hxx>
 #include <TopoDS_Solid.hxx>
+#include <TopTools_ListIteratorOfListOfShape.hxx>
 #include <STEPControl_StepModelType.hxx>
 #include <STEPControl_Writer.hxx>
 #include <STEPControl_Reader.hxx>
 #include <BRepTools.hxx>
-
-#include <gp_Vec.hxx>
-#include <gp_Dir.hxx>
-#include <BRepPrimAPI_MakePrism.hxx>
-#include <Handle_Geom_Surface.hxx>
-#include <GeomLProp_SLProps.hxx>
 
 #include "Reader/Reader.hpp"
 #include "Reader/IGESCAFReader.hpp"
@@ -59,22 +54,20 @@ int main(void){
 	TopoDS_Shape sewedShape;
 
 	TopTools_ListOfShape facesList;
-	colorDetector.getColoredFaces(facesList, sewedShape);
+	colorDetector.getFixtureShapes(facesList);
 
-    TopoDS_Face findNormalTo = TopoDS::Face(facesList.First());
+    /*TopoDS_Face findNormalTo = TopoDS::Face(facesList.First());
 
     Standard_Real umin, umax, vmin, vmax;
     BRepTools::UVBounds(findNormalTo, umin, umax, vmin, vmax);	// create surface
     Handle_Geom_Surface surf = BRep_Tool::Surface(findNormalTo);	// get surface properties
     GeomLProp_SLProps props(surf, umin, vmin, 1, 0.01);	// get surface normal
     gp_Dir norm = props.Normal();	// check orientation
-    if(findNormalTo.Orientation() == TopAbs_REVERSED) norm.Reverse();
+    if(findNormalTo.Orientation() == TopAbs_REVERSED) norm.Reverse();*/
 
     //gp_Dir normal
 
-	gp_Vec extrudVec = norm;
-	TopoDS_Shape extrudedFace = BRepPrimAPI_MakePrism(facesList.First(), extrudVec);
-	sewedShape = extrudedFace;
+	sewedShape = facesList.First();
 
 	STEPControl_Writer stepWriter;
 	stepWriter.Transfer(sewedShape, STEPControl_AsIs);
@@ -83,8 +76,13 @@ int main(void){
     /// Voxelize file
     Voxelizer voxelizer;
     int refinementLevel = 0;
-    Voxel_BoolDS voxelShape = voxelizer.voxelize(sewedShape, refinementLevel);
-    Writer_VTK writer_vtk("outputSewed");
-	writer_vtk.write(voxelShape);
+    Writer_VTK writer_vtk;
+    TopTools_ListIteratorOfListOfShape shapeIterator;
+    int i = 1;
+    for(shapeIterator.Initialize(facesList); shapeIterator.More(); shapeIterator.Next() ){
+    	Voxel_BoolDS voxelShape = voxelizer.voxelize(shapeIterator.Value(), refinementLevel);
+		writer_vtk.write("output" + std::to_string(i), voxelShape);
+		i++;
+    }
 	return EXIT_SUCCESS;
 }

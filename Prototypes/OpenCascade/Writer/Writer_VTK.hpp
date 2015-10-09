@@ -22,11 +22,11 @@
 
 class Writer_VTK: public Writer{
 public:
-    Writer_VTK(std::string _filename) : Writer(_filename) {}
+    Writer_VTK() : Writer() {}
 
-    ~Writer_VTK() {};
+    ~Writer_VTK() {this->~Writer();};
 
-    bool write(Voxel_BoolDS &voxelShape);
+    bool write(std::string _filename, Voxel_BoolDS &voxelShape);
 
 private:
     void writeHeader(std::ofstream &outfile);

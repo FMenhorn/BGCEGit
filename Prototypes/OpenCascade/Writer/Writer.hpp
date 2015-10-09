@@ -14,14 +14,13 @@
 
 class Writer{
 public:
-    Writer(std::string _filename) : filename(_filename) {}
+    Writer() {};
 
     virtual ~Writer() {};
 
-    virtual bool write(Voxel_BoolDS &voxelShape) = 0;
+    virtual bool write(std::string _filename, Voxel_BoolDS &voxelShape) = 0;
 
 protected:
-    std::string filename;
 };
 
 #endif // _WRITER_
