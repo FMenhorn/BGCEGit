@@ -7,6 +7,8 @@
 
 #include "ColorHandler.hpp"
 
+#include "../Helper/Helper.hpp"
+
 #include <IGESCAFControl_Reader.hxx>
 #include <XCAFApp_Application.hxx>
 #include <Handle_XCAFApp_Application.hxx>
@@ -24,6 +26,10 @@
 #include <BRep_Builder.hxx>
 #include <BRepBuilderAPI_Sewing.hxx>
 #include <TopExp_Explorer.hxx>
+#include <BRepBuilderAPI_MakeFace.hxx>
+#include <TopAbs_Orientation.hxx>
+#include <BRepOffsetAPI_MakeOffsetShape.hxx>
+#include <BRepPrimAPI_MakeBox.hxx>
 
 #include <TopoDS.hxx>
 #include <TopoDS_Face.hxx>
@@ -96,10 +102,10 @@ void ColorHandler::getColoredFaces(TopTools_ListOfShape& listOfShapes,const Quan
 			myColors->GetColor(face, XCAFDoc_ColorGen, color);
 			//if( (color.Red()==wantedColor.Red() && color.Green()==wantedColor.Green() && color.Blue()==wantedColor.Blue())){
 				//bRepSewer.Add(face);
-			if(i%2!=0){
+			//if(i%2!=0){
 				tmpVector.push_back(face);
 				std::cout << "YES Color found "<< color.Red()<< " " << color.Green()  << " " << color.Blue() << std::endl;
-			}
+			//}
 			//}
 		}else{
 			std::cout << "No Color" << std::endl;
@@ -113,6 +119,7 @@ void ColorHandler::getColoredFaces(TopTools_ListOfShape& listOfShapes,const Quan
 	**/
 
     Standard_Real umin, umax, vmin, vmax;
+	double Xmin, Ymin, Zmin, Xmax, Ymax, Zmax; // Bounding box bounds
 	for(size_t i = 0; i < tmpVector.size(); ++i){
 		std::cout << "i: " << i << std::endl;
 		gp_Vec extrudVec;
@@ -121,11 +128,38 @@ void ColorHandler::getColoredFaces(TopTools_ListOfShape& listOfShapes,const Quan
 		//	extrudVec.SetX(-1);
 		//}
 	    std::cout << "NormalVec: [" << extrudVec.X()<< "," << extrudVec.Y() << ","<< extrudVec.Z() << "]" << std::endl;
-		const TopoDS_Shape &extrudedFace = BRepPrimAPI_MakePrism(tmpVector[i], extrudVec);
-	    Bnd_Box B; // Bounding box
-		double Xmin, Ymin, Zmin, Xmax, Ymax, Zmax; // Bounding box bounds
-	    BRepBndLib::Add(extrudedFace, B);
+	    const TopoDS_Face tmpFace = tmpVector[i];
+	    BRepBuilderAPI_Sewing bRepSewer;
+	    bRepSewer.Add(tmpFace);
+	    bRepSewer.SetFaceMode(false);
+		bRepSewer.Perform();
+		shape = bRepSewer.SewedShape();
+		Bnd_Box B; // Bounding box
+	    BRepBndLib::Add(shape, B);
 	    B.Get(Xmin, Ymin, Zmin, Xmax, Ymax, Zmax);
+	    bool xEq = absolut(Xmin-Xmax) < 0.000001;
+	    bool yEq = absolut(Ymin-Ymax) < 0.000001;
+	    bool zEq = absolut(Zmin-Zmax) < 0.000001;
+	    std::cout << "    X[" << Xmin << ", " << Xmax << "]     " << "Equality: " << xEq << std::endl;
+	    std::cout << "    Y[" << Ymin << ", " << Ymax << "]     " << "Equality: " << yEq << std::endl;
+	    std::cout << "    Z[" << Zmin << ", " << Zmax << "]     " << "Equality: " << zEq << std::endl;
+	    gp_Pnt boxOrig(Xmin,Ymin,Zmin);
+	    double dx,dy,dz;
+	    dx = xEq ? 1 : Xmax-Xmin;
+	    dy = yEq ? 1 : Ymax-Ymin;
+	    dz = zEq ? 1 : Zmax-Zmin;
+	    BRepPrimAPI_MakeBox madeBox(boxOrig,dx,dy,dz);
+	    madeBox.Build();
+	    const TopoDS_Shape &extrudedFace = madeBox.Shape();
+
+	    /*BRepPrimAPI_MakePrism mkPrism(tmpFace, extrudVec);
+	    mkPrism.Build();
+		const TopoDS_Shape &extrudedFace = mkPrism.Shape();*/
+	    //Bnd_Box B; // Bounding box
+		double Xmin, Ymin, Zmin, Xmax, Ymax, Zmax; // Bounding box bounds
+		Bnd_Box B2; // Bounding box
+	    BRepBndLib::Add(extrudedFace, B2);
+	    B2.Get(Xmin, Ymin, Zmin, Xmax, Ymax, Zmax);
 	    std::cout << "    X[" << Xmin << ", " << Xmax << "]     "<< std::endl;
 	    std::cout << "    Y[" << Ymin << ", " << Ymax << "]     "<< std::endl;
 	    std::cout << "    Z[" << Zmin << ", " << Zmax << "]     "<< std::endl;

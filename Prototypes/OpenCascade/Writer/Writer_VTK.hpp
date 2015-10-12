@@ -12,10 +12,9 @@
 
 #include <stdlib.h>
 #include <iostream>
-#include <math.h>
 
+#include "../Voxelizer/VoxelShape.hpp"
 #include <TopoDS_Shape.hxx>
-#include <Voxel_BoolDS.hxx>
 #include <Voxel_FastConverter.hxx>
 #include <Bnd_Box.hxx>
 #include <BRepBndLib.hxx>
@@ -26,14 +25,14 @@ public:
 
     ~Writer_VTK() {this->~Writer();};
 
-    bool write(std::string _filename, Voxel_BoolDS &voxelShape);
+    bool write(std::string _filename, VoxelShape &voxelShape);
 
 private:
     void writeHeader(std::ofstream &outfile);
 
-	void writeStructuredGrid(std::ofstream &outfile, Voxel_BoolDS &voxelShape);
+	void writeStructuredGrid(std::ofstream &outfile, VoxelShape &voxelShape);
 
-	void writeScalars(std::ofstream &outfile, Voxel_BoolDS &voxelShape);
+	void writeScalars(std::ofstream &outfile, VoxelShape &voxelShape);
 };
 
 #endif // _WRITER_VTK_
