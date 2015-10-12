@@ -1,28 +1,28 @@
 /*
  * STEPCAFReader.hpp
  *
- *  Created on: Oct 7, 2015
+ *  Created on: Oct 8, 2015
  *      Author: friedrich
  */
 
-#ifndef READER_IGESCAFREADER_HPP_
-#define READER_IGESCAFREADER_HPP_
+#ifndef READER_STEPCAFREADER_HPP_
+#define READER_STEPCAFREADER_HPP_
 
 #include "Reader.hpp"
 
 #include <TopoDS_Shape.hxx>
-#include <IGESCAFControl_Reader.hxx>
+#include <STEPCAFControl_Reader.hxx>
 #include <string>
 /*
  *
  */
-class IGESCAFReader:public Reader {
+class STEPCAFReader: public Reader {
 public:
-	IGESCAFReader();
-	virtual ~IGESCAFReader();
+	STEPCAFReader();
+	virtual ~STEPCAFReader();
 
 	/**
-	 * Reads the file with filename into the igesCAFControlReader
+	 * Reads the file with filename into the stepCAFControlReader
 	 * @param filename
 	 */
 	void read(const std::string filename);
@@ -34,7 +34,7 @@ public:
 	void transfer(Handle_TDocStd_Document& doc);
 
 private:
-	IGESCAFControl_Reader igesCAFControlReader;
+	STEPCAFControl_Reader stepCAFControlReader;
 };
 
-#endif /* READER_IGESCAFREADER_HPP_ */
+#endif /* READER_STEPCAFREADER_HPP_ */

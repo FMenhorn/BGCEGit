@@ -22,11 +22,11 @@
 
 class Writer_ToPy: public Writer{
 public:
-    Writer_ToPy(std::string _filename) : Writer(_filename) {}
+    Writer_ToPy() : Writer() {}
 
     ~Writer_ToPy() {this->~Writer();}
 
-    bool write(Voxel_BoolDS &voxelShape);
+    bool write(std::string _filename, Voxel_BoolDS &voxelShape);
 };
 
 #endif // _WRITER_TOPY_

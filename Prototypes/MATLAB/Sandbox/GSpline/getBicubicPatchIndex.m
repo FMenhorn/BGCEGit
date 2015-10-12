@@ -20,27 +20,26 @@ h_one_gen = @(i,m_number, a_coef) ((1-2*a_coef)*Bs(:,2,i) + (1-2*a_coef)*Bs(:,1,
 h_one_gen_rev = @(i,m_number, a_coef) ((1-2*a_coef)*Bs(:,1,i) + (1-2*a_coef)*Bs(:,2,mod_index(i-1,m_number)) + ...
     (5+2*a_coef)*Cs(:,i) + (5+2*a_coef)*Cs(:,mod_index(i-1,m_number)))/12;
 h_one = @(i) h_one_gen(i,m,a);
-h_one_rev = @(i) h_one_gen_rev(i,m,a);
+%h_one_rev = @(i) h_one_gen_rev(i,m,a);
+h_one_rev = @(i) h_one(mod_index(i-1,m));
 
-h_two_gen_part = @(i,l,m_number, a_coef, c_coef) Cs(:,l) + (2/3*a_coef/c_coef)*cos(2*pi*ones(3,1)*reshape(l,1,length(l))/m_number).*...
+% h_two_gen_part = @(i,l,m_number, a_coef, c_coef) Cs(:,l) + (2/3)*(a_coef/c_coef)*cos(2*pi*ones(3,1)*reshape(l,1,length(l))/m_number).*...
+%     (Cs(:,mod_index(i+l,m_number)) + Cs(:,mod_index(i+l+1,m_number)));
+h_two_gen_part = @(i,l,m_number, a_coef, c_coef,alpha) Cs(:,l) + (alpha)*cos(2*pi*ones(3,1)*reshape(l,1,length(l))/m_number).*...
     (Cs(:,mod_index(i+l,m_number)) + Cs(:,mod_index(i+l+1,m_number)));
 h_two_gen_rev_part = @(i,l,m_number, a_coef, c_coef) Cs(:,l) + (2/3*a_coef/c_coef)*cos(2*pi*ones(3,1)*reshape(l,1,length(l))/m_number).*...
     (Cs(:,mod_index(i+l,m_number)) + Cs(:,mod_index(i+l-1,m_number)));
-h_two_gen = @(i,m_number, a_coef, c_coef) h_two_gen_part(i,1:m_number,m_number,a_coef,c_coef)*ones(m_number,1)/m_number;
+h_two_gen = @(i,m_number, a_coef, c_coef,alpha) h_two_gen_part(i,1:m_number,m_number,a_coef,c_coef,alpha)*ones(m_number,1)/m_number;
 h_two_gen_rev = @(i,m_number, a_coef, c_coef) h_two_gen_rev_part(i,1:m_number,m_number,a_coef,c_coef)*ones(m_number,1)/m_number;
-% h_two_gen_part = @(i,l,m_number, a_coef, c_coef) Cs(:,l) + (4/3*a_coef/c_coef)*cos(2*pi*ones(3,1)*reshape(l,1,length(l))/m_number).*...
-%     (h_one(l));
-% h_two_gen_rev_part = @(i,l,m_number, a_coef, c_coef) Cs(:,l) + (4/3*a_coef/c_coef)*cos(2*pi*ones(3,1)*reshape(l,1,length(l))/m_number).*...
-%     (h_one_rev(l));
-% h_two_gen = @(i,m_number, a_coef, c_coef) h_two_gen_part(i,1:m_number,m_number,a_coef,c_coef)*ones(m_number,1)/m_number;
-% h_two_gen_rev = @(i,m_number, a_coef, c_coef) h_two_gen_rev_part(i,1:m_number,m_number,a_coef,c_coef)*ones(m_number,1)/m_number;
-h_two = @(i) h_two_gen(i,m,a,c);
-h_two_rev = @(i) h_two_gen_rev(i,m,a,c);
+h_two = @(i) h_two_gen(i,m,a,c,2*a/(3*c));
+%h_two_rev = @(i) h_two_gen_rev(i,m,a,c);
+h_two_rev = @(i) h_two(mod_index(i-1,m));
 
 h_three_gen = @(i,m_number,a_coef,c_coef) (1-2*c_coef/3)*h_two_gen(i,m_number,a_coef,c_coef) + ...
     h_one_gen(i,m_number,a_coef)*2*c_coef/3;
 h_three = @(i) (1-2*c/3)*h_two(i) + h_one(i)*2*c/3;
-h_three_rev = @(i) (1-2*c/3)*h_two_rev(i) + h_one_rev(i)*2*c/3;
+%h_three_rev = @(i) (1-2*c/3)*h_two_rev(i) + h_one_rev(i)*2*c/3;
+h_three_rev = @(i) h_three(mod_index(i-1,m));
 % h_three = @(i) (1-c)*h_two(i) + h_one(i)*2*c/3;
 % h_three_rev = @(i) (1-c)*h_two_rev(i) + h_one_rev(i)*c;
 
@@ -76,12 +75,12 @@ bezierPoints(:,3,4) = h_two_rev(ind);
 if(mod(m,2) == 1 )
     for i = 1:m
         bezierPoints(:,3,3) = bezierPoints(:,3,3) ...
-            - ((-1)^i) * h_three(mod_index(i+ind,m));
+            - ((-1)^i) * h_three(mod_index(i+ind-1,m));
     end
 else
     for i = 1:m
         bezierPoints(:,3,3) = bezierPoints(:,3,3) ...
-            - ((-1)^i) * (m-i) * h_three(mod_index(i+ind,m));
+            - ((-1)^i) * (m-i) * h_three(mod_index(i+ind-1,m));
     end 
     bezierPoints(:,3,3) = bezierPoints(:,3,3) * 2/m;
 end
