@@ -14,11 +14,16 @@
 #include <Quantity_Color.hxx>
 #include <XCAFDoc_ColorTool.hxx>
 #include <TDF_LabelSequence.hxx>
+#include <BRepBuilderAPI_Sewing.hxx>
+#include <STEPControl_Writer.hxx>
+#include <STEPControl_StepModelType.hxx>
+#include <BRepBuilderAPI_MakeSolid.hxx>
 
 #include <TopoDS_Compound.hxx>
 #include <BRep_Builder.hxx>
 #include <TopExp_Explorer.hxx>
 #include <TopoDS_Shape.hxx>
+#include <TopoDS_Shell.hxx>
 #include <TopoDS_Face.hxx>
 #include <TopoDS.hxx>
 
@@ -29,35 +34,39 @@ int main() {
 
 	///File:
 	std::string filePath =
-			"./Testing/TestFiles/x-wing-fighter-star-wars.snapshot.11/";
-	std::string fileName = "X-Wing-complete.igs";
+			"./Testing/TestFiles/circuit-board-pcb-mock-example.snapshot.4/";
+	std::string fileName = "Buoy_Circuitbuoy.igs";
 	std::string file = filePath + fileName;
 
-	/// Read file
+	/// Read file using IGESACFControl_Reader
 	IGESCAFControl_Reader igesCAFReader;
-
-	Handle_TDocStd_Document aDoc;
-	Handle_XCAFApp_Application anApp = XCAFApp_Application::GetApplication();
-	anApp->NewDocument("MDTV-XCAF", aDoc);
 	IFSelect_ReturnStatus returnStatus = igesCAFReader.ReadFile(file.c_str());
 	switch (returnStatus) {
 	case IFSelect_RetDone:
-		std::cout << "IGESReader: File read successful" << std::endl;
+		std::cout << "COLORDETECTION: File read successful" << std::endl;
 		break;
 	default:
-		std::cout << "IGESReader: File read not succesful!" << std::endl;
+		std::cout << "COLORDETECTION: File read not succesful!" << std::endl;
 		exit(-1);
 	}
+
+    /// Transfer the file to a Document
+    Handle_TDocStd_Document aDoc;
+	Handle_XCAFApp_Application anApp = XCAFApp_Application::GetApplication();
+	anApp->NewDocument("MDTV-XCAF", aDoc);
 	if (igesCAFReader.Transfer(aDoc)) {
 		std::cout << "COLORDETECTION: Transfer succeded!" << std::endl;
 	} else {
 		std::cout << "COLORDETECTION: Transfer failed!" << std::endl;
 		exit(-1);
 	}
+
+    /// ShapeTool for holding and handling STEP/IGES assembly
 	Handle_XCAFDoc_ShapeTool myAssembly = XCAFDoc_DocumentTool::ShapeTool(aDoc->Main());
 	TDF_LabelSequence aLabel;
-	myAssembly->GetShapes(aLabel);
+	myAssembly->GetShapes(aLabel); // aLabel holds sequence of shapes held in the assembly
 
+    /// If only one label, assign it. If multiple, assign a compound.
 	TopoDS_Shape shape;
 	if (aLabel.Length() == 1) {
 		TopoDS_Shape result = myAssembly->GetShape(aLabel.Value(1));
@@ -72,21 +81,37 @@ int main() {
 		}
 		shape = C;
 	}
+
+    BRepBuilderAPI_Sewing shellMaker(0.001);
+
+    /// Create an explorer object to go through the shape. Explore each face, look for color, print it.
 	XCAFDoc_ColorType ctype = XCAFDoc_ColorGen;
 	Handle_XCAFDoc_ColorTool myColors = XCAFDoc_DocumentTool::ColorTool(aDoc->Main());
 	for (TopExp_Explorer ex(shape, TopAbs_FACE); ex.More(); ex.Next()) {
 		Quantity_Color color;
 		const TopoDS_Face &face = TopoDS::Face(ex.Current());
-		if (myColors->IsSet(face, ctype)
-				/*|| myColors->IsSet(face, XCAFDoc_ColorSurf)
-				|| myColors->IsSet(face, XCAFDoc_ColorCurv)*/) {
+
+		if (myColors->IsSet(face, ctype)) {
 			myColors->GetColor(face, XCAFDoc_ColorGen, color);
 			std::cout << "YES Color "<< color.Red()<< " " << color.Green()  << " " << color.Blue() << std::endl;
-		}else{
+			shellMaker.Add(face);
+		} else {
 			std::cout << "No Color" << std::endl;
 		}
 	}
 
+    shellMaker.Perform();
+    TopoDS_Shape temp = shellMaker.SewedShape();
+
+    STEPControl_Writer writer;
+    STEPControl_StepModelType mode = STEPControl_AsIs;
+    IFSelect_ReturnStatus stat = writer.Transfer(temp, mode);
+
+    std::cout << std::endl << stat << std::endl;
+
+    stat = writer.Write("checkOuterFaces.stp");
+
+    std::cout << std::endl << stat << std::endl;
 
 	return EXIT_SUCCESS;
 }

@@ -26,9 +26,7 @@ IGESCAFReader::~IGESCAFReader() {
 	this->~Reader();
 }
 
-TopoDS_Shape IGESCAFReader::read(const std::string filename) {
-	TopoDS_Shape topoDSShape;
-
+void IGESCAFReader::read(const std::string filename) {
 	IFSelect_ReturnStatus returnStatus = igesCAFControlReader.ReadFile(filename.c_str());
 	switch(returnStatus){
 	case IFSelect_RetDone:
@@ -38,23 +36,8 @@ TopoDS_Shape IGESCAFReader::read(const std::string filename) {
 		std::cout << "IGESReader: File read not succesful!" << std::endl;
 		exit(-1);
 	}
-	Standard_Boolean failsonly = Standard_False;
-	IFSelect_PrintCount mode;
-	igesCAFControlReader.PrintCheckLoad(failsonly, mode);
-	std::cout << "IGESReader: Mode: " << mode << std::endl;
-
-	Standard_Integer ic =  Interface_Static::IVal("read.iges.bspline.continuity");
-	std::cout << "IGESReader: ic: " << ic << std::endl;
-
-	Handle_TColStd_HSequenceOfTransient list = igesCAFControlReader.GiveList();
-	Standard_Integer nbtrans =  igesCAFControlReader.TransferList(list);
-	std::cout << "IGESReader: Number of translations: " << nbtrans << std::endl;
-	Standard_Integer nbs =  igesCAFControlReader.NbShapes();
-	std::cout << "IGESReader: Number of shapes: " << nbs << std::endl;
-
-	topoDSShape = igesCAFControlReader.OneShape();
-
-	return topoDSShape;
+	Standard_Integer nbr =  igesCAFControlReader.NbRootsForTransfer();
+	std::cout << "IGESCAFReader: Number of roots for transfer: " << nbr << std::endl;
 }
 
 void IGESCAFReader::transfer(Handle_TDocStd_Document& doc) {

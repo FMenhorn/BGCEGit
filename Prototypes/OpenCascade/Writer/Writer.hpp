@@ -10,18 +10,17 @@
 
 #include <string>
 
-#include <Voxel_BoolDS.hxx>
+#include "../Voxelizer/VoxelShape.hpp"
 
 class Writer{
 public:
-    Writer(std::string _filename) : filename(_filename) {}
+    Writer() {};
 
-    ~Writer() {};
+    virtual ~Writer() {};
 
-    virtual bool write(Voxel_BoolDS &voxelShape) = 0;
+    virtual bool write(std::string _filename, VoxelShape &voxelShape) = 0;
 
 protected:
-    std::string filename;
 };
 
 #endif // _WRITER_

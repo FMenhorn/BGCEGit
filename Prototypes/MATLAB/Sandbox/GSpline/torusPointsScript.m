@@ -4,16 +4,22 @@ numPoints = 200;
 polParams = rand(numPoints,1);
 torParams = rand(numPoints,1);
 
-minorRads = rand(numPoints,1) + 2;
-majorRadi = 9;
+minorRads = (rand(numPoints,1) + 2) .*(1+0.4.*cos(5.*torParams));
+majorRadis = 9.*(1+0.3.*sin(3.*torParams));
 
-torusPointY = @(majorRad,minorRad,torAngle,polAngle) sin(torAngle).*(majorRad.*(1+0.3.*sin(3.*torAngle)) + cos(polAngle).*minorRad.*(1+0.4.*cos(5.*torAngle)));
-torusPointX = @(majorRad,minorRad,torAngle,polAngle) cos(torAngle).*(majorRad.*(1+0.3.*sin(3.*torAngle)) + cos(polAngle).*minorRad.*(1+0.4.*cos(5.*torAngle)));
-torusPointZ = @(majorRad,minorRad,torAngle,polAngle) sin(polAngle).*minorRad.*(1+0.4.*cos(5.*torAngle));
+torusPointY = @(majorRad,minorRad,torAngle,polAngle) sin(torAngle).*(majorRad + cos(polAngle).*minorRad);
+torusPointX = @(majorRad,minorRad,torAngle,polAngle) cos(torAngle).*(majorRad + cos(polAngle).*minorRad);
+torusPointZ = @(majorRad,minorRad,torAngle,polAngle) sin(polAngle).*minorRad;
 
-pointsX = torusPointX(majorRadi, minorRads, torParams*2*pi, polParams*2*pi);
-pointsY = torusPointY(majorRadi, minorRads, torParams*2*pi, polParams*2*pi);
-pointsZ = torusPointZ(majorRadi, minorRads, torParams*2*pi, polParams*2*pi);
+torPerturbations = 1 + 0.1.*sin(torParams*2*pi);
+polPerturbations = 1 + 0.1.*sin(polParams*2*pi);
+
+torParamsPerturbed = torParams .* torPerturbations;
+polParamsPerturbed = polParams .* polPerturbations;
+
+pointsX = torusPointX(majorRadis, minorRads, torParamsPerturbed*2*pi, polParamsPerturbed*2*pi);
+pointsY = torusPointY(majorRadis, minorRads, torParamsPerturbed*2*pi, polParamsPerturbed*2*pi);
+pointsZ = torusPointZ(majorRadis, minorRads, torParamsPerturbed*2*pi, polParamsPerturbed*2*pi);
 
 figure;
 scatter3(pointsX,pointsY,pointsZ);

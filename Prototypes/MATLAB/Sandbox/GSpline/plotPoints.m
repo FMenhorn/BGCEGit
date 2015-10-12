@@ -15,7 +15,7 @@ tempMatrixIndex = @(i,j, width) (i-1)*width + j;
 
 for j = 1:n
     for i  = 1:m
-        tempMatrix(:,tempMatrixIndex(i,j,m)) = points(:,i,j);
+        tempMatrix(:,tempMatrixIndex(i,j,n)) = points(:,i,j);
     end
 end
 
