@@ -4,6 +4,8 @@ function [vertices_refined, faces_refined, colours] = DooSabin(vertices, faces, 
 %determine the number of vertices of our faces
 n = size(faces,2);
 
+temp = 0;
+weird_edges = [];
 %Determine the number of points
 N = size(vertices, 1);
 
@@ -83,8 +85,12 @@ for j=1:size(faces,1)
         else
             current_edge_id = ind1(find(edges(ind1, 2) == current_edge(2)));
         end
-        ind = 1;
         
+        ind = 1;
+%         if (current_edge_id == 376)
+%             temp = temp + 1
+%             weird_edges = [weird_edges j]
+%         end
         while (edges_children(current_edge_id, ind) ~= 0 )
             ind = ind+1;
         end
@@ -162,7 +168,7 @@ end
 %loop through old edges
 counter = size(faces_refined, 1);
 for i=1:size(edges, 1)
-    new_face = edges_children(i, :);
+    new_face = edges_children(i, 1:length(find(edges_children(i,:))));
     if (length(find(new_face)) == 4)
         
         vec1 = vertices_refined(new_face(2),:)-vertices_refined(new_face(1),:);
@@ -179,6 +185,11 @@ for i=1:size(edges, 1)
          counter = counter + 1;
     
         faces_refined(counter,1:4) = new_face;
+        colours(counter) = 3;
+    end
+     if (length(find(new_face)) == 3)
+    
+        faces_refined(counter,1:3) = new_face;
         colours(counter) = 3;
     end
 end

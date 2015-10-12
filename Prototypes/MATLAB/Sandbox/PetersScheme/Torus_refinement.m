@@ -5,17 +5,23 @@ a=5;
 c=10;
 [u,v]=meshgrid(0:10:370);
 % %torus equations
-% size_v = size(v);
-% x=(c+a*cosd(v)).*cosd(u);
-% y=(c+a*cosd(v)).*sind(u);
-% z=a*sind(v);
-% S = surfl(x,y,z);
-% hold off
-% %convert our surface to patch
-% [faces, verts, facevertexdata] = surf2patch(S);
-[X, Y, Z] = sphere
-s = surf(X, Y, Z);
-[faces, verts, facevertexdata] = surf2patch(s);
+size_v = size(v);
+x=(c+a*cosd(v)).*cosd(u);
+y=(c+a*cosd(v)).*sind(u);
+z=a*sind(v);
+S = surfl(x,y,z);
+hold off
+%convert our surface to patch
+[faces, verts, facevertexdata] = surf2patch(S);
+% [X, Y, Z] = sphere
+% s = surf(X, Y, Z);
+% [faces, verts, facevertexdata] = surf2patch(s);
+% faces = dlmread('quads_Anna.csv',';')+1;
+% verts = dlmread('verts_Anna.csv',';');
+% 
+% patch('Faces', faces, 'Vertices', verts)
+% fv=struct('faces',faces,'vertices',verts);
+
 
 %set up an averaging parameter alpha
 alpha = 0.5;
