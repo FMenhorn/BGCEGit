@@ -12,7 +12,6 @@
 #include <iostream>
 #include <vector>
 
-#include <Voxel_BoolDS.hxx>
 #include <IGESControl_Reader.hxx>
 #include <TopoDS.hxx>
 #include <TopoDS_Face.hxx>
@@ -27,6 +26,7 @@
 #include "Reader/IGESCAFReader.hpp"
 #include "Reader/STEPCAFReader.hpp"
 #include "Voxelizer/Voxelizer.hpp"
+#include "Voxelizer/VoxelShape.hpp"
 #include "Writer/Writer_VTK.hpp"
 #include "ColorHandler/ColorHandler.hpp"
 
@@ -56,22 +56,13 @@ int main(void){
 	TopTools_ListOfShape facesList;
 	colorDetector.getFixtureShapes(facesList);
 
-    /*TopoDS_Face findNormalTo = TopoDS::Face(facesList.First());
-
-    Standard_Real umin, umax, vmin, vmax;
-    BRepTools::UVBounds(findNormalTo, umin, umax, vmin, vmax);	// create surface
-    Handle_Geom_Surface surf = BRep_Tool::Surface(findNormalTo);	// get surface properties
-    GeomLProp_SLProps props(surf, umin, vmin, 1, 0.01);	// get surface normal
-    gp_Dir norm = props.Normal();	// check orientation
-    if(findNormalTo.Orientation() == TopAbs_REVERSED) norm.Reverse();*/
-
-    //gp_Dir normal
-
+	/**Not used right now
 	sewedShape = facesList.First();
 
 	STEPControl_Writer stepWriter;
 	stepWriter.Transfer(sewedShape, STEPControl_AsIs);
 	stepWriter.Write("sewed.stp");
+	**/
 
     /// Voxelize file
     Voxelizer voxelizer;
@@ -79,8 +70,10 @@ int main(void){
     Writer_VTK writer_vtk;
     TopTools_ListIteratorOfListOfShape shapeIterator;
     int i = 1;
+	VoxelShape voxelShape;
     for(shapeIterator.Initialize(facesList); shapeIterator.More(); shapeIterator.Next() ){
-    	Voxel_BoolDS voxelShape = voxelizer.voxelize(shapeIterator.Value(), refinementLevel);
+    	std::cout << "I: " << i << std::endl;
+    	voxelizer.voxelize(shapeIterator.Value(), refinementLevel, voxelShape);
 		writer_vtk.write("output" + std::to_string(i), voxelShape);
 		i++;
     }

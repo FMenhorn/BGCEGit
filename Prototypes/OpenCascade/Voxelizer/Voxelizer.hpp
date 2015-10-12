@@ -9,14 +9,10 @@
 #define _VOXELIZER_
 
 #include <stdlib.h>
-#include <iostream>
-#include <math.h>
 
 #include <TopoDS_Shape.hxx>
-#include <Voxel_BoolDS.hxx>
-#include <Voxel_FastConverter.hxx>
-#include <Bnd_Box.hxx>
-#include <BRepBndLib.hxx>
+
+#include "VoxelShape.hpp"
 
 class Voxelizer {
 public:
@@ -24,10 +20,10 @@ public:
 
     ~Voxelizer() {};
 
-    Voxel_BoolDS voxelize(const TopoDS_Shape topoDSShape,const int refinementLevel);
+    void voxelize(const TopoDS_Shape topoDSShape,const int refinementLevel, VoxelShape& voxelShape);
 
 private:
-    void getBoundingBox(const TopoDS_Shape topoDSShape, double* shapeDimensions);
+    void getBoundingBox(const TopoDS_Shape topoDSShape, std::vector<double>& origin, std::vector<double>& shapeDimensions);
 };
 
 #endif // _VOXELIZER_
