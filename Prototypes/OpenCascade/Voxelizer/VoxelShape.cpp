@@ -1,0 +1,45 @@
+/*
+ * VoxelShape.cpp
+ *
+ *  Created on: Oct 12, 2015
+ *      Author: friedrich
+ */
+
+#include "VoxelShape.hpp"
+
+
+VoxelShape::VoxelShape(){};
+
+VoxelShape::VoxelShape(Voxel_BoolDS voxelShape,
+		std::vector<double> origin): _voxelShape(voxelShape), _origin(origin) {
+
+}
+
+VoxelShape::~VoxelShape() {
+	// TODO Auto-generated destructor stub
+	//_voxelShape.Destroy();
+}
+
+double VoxelShape::getOriginX() {
+	return _origin[0];
+}
+
+double VoxelShape::getOriginY() {
+	return _origin[1];
+}
+
+double VoxelShape::getOriginZ() {
+	return _origin[2];
+}
+
+Voxel_BoolDS& VoxelShape::getVoxelShape() {
+	return _voxelShape;
+}
+
+void VoxelShape::setOrigin(const std::vector<double> origin) {
+	_origin = origin;
+}
+
+void VoxelShape::setVoxelShape(const Voxel_BoolDS voxelShape) {
+	_voxelShape = voxelShape;
+}
