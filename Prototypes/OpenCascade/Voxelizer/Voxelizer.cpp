@@ -40,6 +40,7 @@ void Voxelizer::voxelize(const TopoDS_Shape topoDSShape,const int refinementLeve
     std::cout << "Voxelizer: .. done!" << std::endl;
     //voxelShape.setVoxelShape(*voxelShapeOCE);
     voxelShape.setOrigin(origin);
+    voxelShape.setDimension(shapeDimensions);
 }
 
 void Voxelizer::getBoundingBox(const TopoDS_Shape topoDSShape, std::vector<double>& origin, std::vector<double>& shapeDimensions){
@@ -97,20 +98,6 @@ void Voxelizer::fillVolume(VoxelShape& voxelShape){
                     } else {
                     }
                 }
-
-				/*if(voxelShape.getVoxelShape().Get(x, y, z) && !inside){ // true and false
-					inside = true;
-				}else if(voxelShape.getVoxelShape().Get(x, y, z) && inside){ //true and true
-					inside = !inside;
-				}else if(!voxelShape.getVoxelShape().Get(x, y, z) && !inside){ //false and false
-					inside = false;
-				}else{	//false and true
-					inside = !inside;
-				}
-				if(!voxelShape.getVoxelShape().Get(x, y, z) && inside){
-					voxelShape.getVoxelShape().Set(x,y,z,Standard_True);
-					std::cout << "Voxelizer::fillVolume: [" << x << ", " << y << ", " << z << "] = " << voxelShape.getVoxelShape().Get(x,y,z) << std::endl;
-				}*/
 			}
 		}
 	}

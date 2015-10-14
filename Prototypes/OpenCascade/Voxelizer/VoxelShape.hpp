@@ -27,9 +27,13 @@ public:
 	Voxel_BoolDS& getVoxelShape();
 	void setVoxelShape(const Voxel_BoolDS voxelShape);
 	void setOrigin(const std::vector<double> origin);
+	const std::vector<double>& getDimension() const;
+	void setDimension(const std::vector<double> dimension);
+	const std::vector<double>& getOrigin() const;
 
 private:
 	Voxel_BoolDS _voxelShape;
+	std::vector<double> _dimension;
 	std::vector<double> _origin;
 };
 

@@ -69,16 +69,18 @@ public:
 	/**
      * Returns the faces of the geometry as a TopoDS_Shape.
      */
-	void getAllShapes(TopoDS_Shape& TopoDSShape);
+	void getCompleteShape(TopoDS_Shape& TopoDSShape);
 
 private:
     Handle_TDocStd_Document aDocStep;
-    Handle_XCAFDoc_ShapeTool myAssemblyStep;
-    TDF_LabelSequence aLabelStep;
     Handle_TDocStd_Document aDocIges;
-    Handle_XCAFDoc_ShapeTool myAssemblyIges;
-    TDF_LabelSequence aLabelIges;
     Handle_XCAFDoc_ColorTool myColors;
+    TopoDS_Shape shapeStep;
+    TopoDS_Shape shapeIges;
+
+	void buildShapesFromDocs();
+
+    void buildShapeFromDoc(const Handle_TDocStd_Document& doc, TopoDS_Shape& shape);
 
 	/**
 	 * Assembles the shape with the help of the XCAFDoc_ShapeTool myAssembly and the TDF_LabelSequence aLabel.
@@ -95,6 +97,8 @@ private:
     void computeInvertedNormal(const TopoDS_Face& findNormalTo, gp_Vec& normal);
 
 	bool areDocumentsValid();
+	void findColoredFaces(const Quantity_Color& wantedColor, std::vector<TopoDS_Face>& coloredFacesVector);
+	void buildColoredFaces(const std::vector<TopoDS_Face>& coloredFacesVector, TopTools_ListOfShape& listOfShapes);
 };
 
 #endif /* COLORHANDLER_COLORHANDLER_HPP_ */

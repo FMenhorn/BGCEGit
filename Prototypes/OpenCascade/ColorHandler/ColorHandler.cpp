@@ -51,6 +51,11 @@ ColorHandler::ColorHandler() {
     Handle_XCAFApp_Application anApp = XCAFApp_Application::GetApplication();
     anApp->NewDocument("MDTV-XCAF", aDocStep);
     anApp->NewDocument("MDTV-XCAF", aDocIges);
+
+    if(!areDocumentsValid()){
+    	std::cout << "ColorHandler::ColorHandler: Documents not valid!!" << std::endl;
+    	exit(-1);
+    }
 }
 
 ColorHandler::~ColorHandler() {
@@ -67,12 +72,35 @@ Handle_TDocStd_Document& ColorHandler::getDocIges(){
 }
 
 void ColorHandler::initializeMembers() {
-	// Create label and add our shape
-	myAssemblyStep = XCAFDoc_DocumentTool::ShapeTool(aDocStep->Main());
-	myAssemblyStep->GetShapes(aLabelStep);
+	buildShapesFromDocs();
+}
 
-	myAssemblyIges = XCAFDoc_DocumentTool::ShapeTool(aDocIges->Main());
-	myAssemblyIges->GetShapes(aLabelIges);
+void ColorHandler::buildShapesFromDocs(){
+	buildShapeFromDoc(aDocStep, shapeStep);
+	buildShapeFromDoc(aDocIges, shapeIges);
+}
+
+void ColorHandler::buildShapeFromDoc(const Handle_TDocStd_Document& doc, TopoDS_Shape& shape) {
+	TDF_LabelSequence aLabel;
+	Handle_XCAFDoc_ShapeTool myAssembly = XCAFDoc_DocumentTool::ShapeTool(doc->Main());
+	myAssembly->GetShapes(aLabel);
+	if (aLabel.Length() == 1) {
+		TopoDS_Shape result = myAssembly->GetShape(aLabel.Value(1));
+		shape = result;
+	} else {
+		TopoDS_Compound C;
+		BRep_Builder B;
+		B.MakeCompound(C);
+		for (Standard_Integer i = 1; i < aLabel.Length(); ++i) {
+			TopoDS_Shape S = myAssembly->GetShape(aLabel.Value(i));
+			B.Add(C, S);
+		}
+		shape = C;
+	}
+}
+
+void ColorHandler::getCompleteShape(TopoDS_Shape& topoDSShape) {
+	topoDSShape = shapeStep;
 }
 
 void ColorHandler::getFixtureShapes(TopTools_ListOfShape& listOfShapes) {
@@ -91,162 +119,45 @@ void ColorHandler::getLoadShapes(TopTools_ListOfShape& listOfShapes) {
 }
 
 void ColorHandler::getColoredFaces(TopTools_ListOfShape& listOfShapes,const Quantity_Color wantedColor) {
-	TopoDS_Shape shapeStep;
-	if (aLabelStep.Length() == 1) {
-		TopoDS_Shape result = myAssemblyStep->GetShape(aLabelStep.Value(1));
-		shapeStep = result;
-	} else {
-		TopoDS_Compound C;
-		BRep_Builder B;
-		B.MakeCompound(C);
-		for (Standard_Integer i = 1; i < aLabelStep.Length(); ++i) {
-			TopoDS_Shape S = myAssemblyStep->GetShape(aLabelStep.Value(i));
-			B.Add(C, S);
-		}
-		shapeStep = C;
-	}
-	TopoDS_Shape shapeIges;
-	if (aLabelIges.Length() == 1) {
-		TopoDS_Shape result = myAssemblyStep->GetShape(aLabelIges.Value(1));
-		shapeIges = result;
-	} else {
-		TopoDS_Compound C;
-		BRep_Builder B;
-		B.MakeCompound(C);
-		for (Standard_Integer i = 1; i < aLabelIges.Length(); ++i) {
-			TopoDS_Shape S = myAssemblyIges->GetShape(aLabelIges.Value(i));
-			B.Add(C, S);
-		}
-		shapeIges = C;
-	}
+	std::vector<TopoDS_Face> coloredFacesVector;
+	findColoredFaces(wantedColor, coloredFacesVector);
+	buildColoredFaces(coloredFacesVector, listOfShapes);
+}
+
+void ColorHandler::findColoredFaces(const Quantity_Color& wantedColor, std::vector<TopoDS_Face>& coloredFacesVector) {
 	XCAFDoc_ColorType ctype = XCAFDoc_ColorGen;
 	Handle_XCAFDoc_ColorTool myColors = XCAFDoc_DocumentTool::ColorTool(aDocIges->Main());
 	Quantity_Color color;
-	TDF_LabelSequence colorSeq;
-	Handle_TDF_Attribute TDFHandle;
-	std::vector<TopoDS_Face> coloredFacesVector;
-	std::vector<TopoDS_Face> allFacesVector;
-	//BRepBuilderAPI_Sewing bRepSewer;
-	int i = 0;
 	TopExp_Explorer exStep(shapeStep, TopAbs_FACE);
 	TopExp_Explorer exIges(shapeIges, TopAbs_FACE);
 	for (; exStep.More(); exStep.Next()) {
-		const TopoDS_Face &faceStep = TopoDS::Face(exStep.Current());
-		const TopoDS_Face &faceIges = TopoDS::Face(exIges.Current());
+		const TopoDS_Face& faceStep = TopoDS::Face(exStep.Current());
+		const TopoDS_Face& faceIges = TopoDS::Face(exIges.Current());
 		if (myColors->IsSet(faceIges, ctype)
 				|| myColors->IsSet(faceIges, XCAFDoc_ColorSurf)
 				|| myColors->IsSet(faceIges, XCAFDoc_ColorCurv)) {
 			myColors->GetColor(faceIges, XCAFDoc_ColorGen, color);
-			if( (color.Red()==wantedColor.Red() && color.Green()==wantedColor.Green() && color.Blue()==wantedColor.Blue())){
-				//bRepSewer.Add(face);
+			if ((color.Red() == wantedColor.Red()
+					&& color.Green() == wantedColor.Green()
+					&& color.Blue() == wantedColor.Blue())) {
 				coloredFacesVector.push_back(faceStep);
-				std::cout << "YES Color found "<< color.Red()<< " " << color.Green()  << " " << color.Blue() << std::endl;
+				std::cout << "ColorHandler::findColoredFaces: YES Color found " << color.Red() << " "
+						<< color.Green() << " " << color.Blue() << std::endl;
 			}
-		}else{
-			std::cout << "No Color" << std::endl;
+		} else {
+			std::cout << "ColorHandler::findColoredFaces: No Color" << std::endl;
 		}
 		exIges.Next();
-		i++;
-	}
-	/**If we want to sew the faces together
-		bRepSewer.SetFaceMode(false);
-		bRepSewer.Perform();
-		sewedShape = bRepSewer.SewedShape();
-	**/
-
-	for(size_t i = 0; i < coloredFacesVector.size(); ++i){
-		std::cout << "i: " << i << std::endl;
-		gp_Vec extrudVec;
-		computeInvertedNormal(coloredFacesVector[i], extrudVec);
-
-	    TopoDS_Face tmpFace = coloredFacesVector[i];//coloredFacesVector[i];
-
-	    /**For output of bounding box**/
-	    /*BRepBuilderAPI_Sewing bRepSewer;
-	    bRepSewer.Add(tmpFace);
-	    bRepSewer.SetFaceMode(false);
-		bRepSewer.Perform();
-		shape = bRepSewer.SewedShape();
-		Bnd_Box B1; // Bounding box
-	    BRepBndLib::Add(shape, B1);
-	    B1.Get(Xmin, Ymin, Zmin, Xmax, Ymax, Zmax);
-	    bool xEq = absolut(Xmin-Xmax) < 0.000001;
-	    bool yEq = absolut(Ymin-Ymax) < 0.000001;
-	    bool zEq = absolut(Zmin-Zmax) < 0.000001;
-	    std::cout << "    X[" << Xmin << ", " << Xmax << "]     " << "Equality: " << xEq << std::endl;
-	    std::cout << "    Y[" << Ymin << ", " << Ymax << "]     " << "Equality: " << yEq << std::endl;
-	    std::cout << "    Z[" << Zmin << ", " << Zmax << "]     " << "Equality: " << zEq << std::endl;*/
-
-	    /**First Solution**/
-	    //TopLoc_Location location = tmpFace.Location();
-	    //Handle_TopLoc_Datum3D defaultDatum;
-	    //TopLoc_Location defaultLocation(defaultDatum);
-	    //tmpFace.Move(defaultLocation);
-	    BRepPrimAPI_MakePrism mkPrism(tmpFace, extrudVec, Standard_False, Standard_True);
-		const TopoDS_Shape &extrudedFace = mkPrism.Shape();
-
-		/**Second Solution**/
-	    /*BRepBuilderAPI_Sewing bRepSewer;
-	    bRepSewer.Add(tmpFace);
-	    bRepSewer.SetFaceMode(false);
-		bRepSewer.Perform();
-		shape = bRepSewer.SewedShape();
-		Bnd_Box B1; // Bounding box
-	    BRepBndLib::Add(shape, B1);
-	    B1.Get(Xmin, Ymin, Zmin, Xmax, Ymax, Zmax);
-	    bool xEq = absolut(Xmin-Xmax) < 0.000001;
-	    bool yEq = absolut(Ymin-Ymax) < 0.000001;
-	    bool zEq = absolut(Zmin-Zmax) < 0.000001;
-	    std::cout << "    X[" << Xmin << ", " << Xmax << "]     " << "Equality: " << xEq << std::endl;
-	    std::cout << "    Y[" << Ymin << ", " << Ymax << "]     " << "Equality: " << yEq << std::endl;
-	    std::cout << "    Z[" << Zmin << ", " << Zmax << "]     " << "Equality: " << zEq << std::endl;
-	    gp_Pnt boxOrig(Xmin,Ymin,Zmin);
-	    double dx,dy,dz;
-	    dx = xEq ? 1 : Xmax-Xmin;
-	    dy = yEq ? 1 : Ymax-Ymin;
-	    dz = zEq ? 1 : Zmax-Zmin;
-	    BRepPrimAPI_MakeBox madeBox(boxOrig,dx,dy,dz);
-	    madeBox.Build();
-	    const TopoDS_Shape &extrudedFace = madeBox.Shape();
-	    */
-
-	    /**Third solution**/
-    	/*TopTools_ListOfShape removeFaces;
-	    for(size_t j = 0; j < allFacesVector.size(); ++j){
-	    	if(allFacesVector[j].IsNotEqual(tmpFace)){
-	    		removeFaces.Append(allFacesVector[j]);
-	    	}
-	    }
-	    BRepOffsetAPI_MakeThickSolid bRepMakeThickSolid(shape, removeFaces, -1, 1.0e-3);
-	    bRepMakeThickSolid.Build();
-        const TopoDS_Shape &extrudedFace = bRepMakeThickSolid.Shape();
-        removeFaces.Clear();*/
-
-		/**For output of bounding box**/
-		/*double Xmin, Ymin, Zmin, Xmax, Ymax, Zmax; // Bounding box bounds
-		Bnd_Box B2; // Bounding box
-	    BRepBndLib::Add(extrudedFace, B2);
-	    B2.Get(Xmin, Ymin, Zmin, Xmax, Ymax, Zmax);
-	    std::cout << "    X[" << Xmin << ", " << Xmax << "]     "<< std::endl;
-	    std::cout << "    Y[" << Ymin << ", " << Ymax << "]     "<< std::endl;
-	    std::cout << "    Z[" << Zmin << ", " << Zmax << "]     "<< std::endl;*/
-		listOfShapes.Append(extrudedFace);
 	}
 }
 
-void ColorHandler::getAllShapes(TopoDS_Shape& TopoDSShape) {
-	if (aLabelStep.Length() == 1) {
-		TopoDS_Shape result = myAssemblyStep->GetShape(aLabelStep.Value(1));
-		TopoDSShape = result;
-	} else {
-		TopoDS_Compound C;
-		BRep_Builder B;
-		B.MakeCompound(C);
-		for (Standard_Integer i = 1; i < aLabelStep.Length(); ++i) {
-			TopoDS_Shape S = myAssemblyStep->GetShape(aLabelStep.Value(i));
-			B.Add(C, S);
-		}
-		TopoDSShape = C;
+void ColorHandler::buildColoredFaces( const std::vector<TopoDS_Face>& coloredFacesVector, TopTools_ListOfShape& listOfShapes) {
+	gp_Vec extrudVec;
+	for (size_t i = 0; i < coloredFacesVector.size(); ++i) {
+		computeInvertedNormal(coloredFacesVector[i], extrudVec);
+		BRepPrimAPI_MakePrism mkPrism(coloredFacesVector[i], extrudVec, Standard_False, Standard_True);
+		const TopoDS_Shape &extrudedFace = mkPrism.Shape();
+		listOfShapes.Append(extrudedFace);
 	}
 }
 
@@ -268,3 +179,4 @@ void ColorHandler::computeInvertedNormal(const TopoDS_Face& findNormalTo, gp_Vec
 bool ColorHandler::areDocumentsValid() {
 	return XCAFDoc_DocumentTool::IsXCAFDocument(aDocStep) && XCAFDoc_DocumentTool::IsXCAFDocument(aDocIges) ;
 }
+

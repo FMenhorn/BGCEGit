@@ -52,8 +52,6 @@ void Writer_VTK::writeScalars(std::ofstream &outfile, VoxelShape &voxelShape){
 	for (int k = 0; k < voxelBoolShape.GetNbZ(); k++){
         for (int j = 0; j < voxelBoolShape.GetNbY(); j++){
             for (int i = 0; i < voxelBoolShape.GetNbX(); i++){
-            	std::cout << "Writer_VTK::writeScalars: [" << i << "," << j << "," << k << "]="<<
-            								voxelShape.getVoxelShape().Get(i,j,k) << std::endl;
                 outfile << (int)(voxelBoolShape.Get(i, j, k)) << "\n";
             }
         }
