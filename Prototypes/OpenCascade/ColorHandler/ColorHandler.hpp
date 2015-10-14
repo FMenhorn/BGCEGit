@@ -78,7 +78,7 @@ private:
 	/**
 	 * Computes normal of the face
 	 */
-    void computeNormal(const TopoDS_Face& findNormalTo, gp_Vec& normal);
+    void computeInvertedNormal(const TopoDS_Face& findNormalTo, gp_Vec& normal);
 
 	bool isDocumentValid();
 };

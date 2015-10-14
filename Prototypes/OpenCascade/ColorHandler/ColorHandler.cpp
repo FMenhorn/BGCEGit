@@ -34,9 +34,14 @@
 #include <TopoDS.hxx>
 #include <TopoDS_Face.hxx>
 #include <TopoDS_Shape.hxx>
+#include <TopoDS_Shell.hxx>
+#include <TopLoc_Location.hxx>
+#include <TopLoc_Datum3D.hxx>
 
 #include <Bnd_Box.hxx>
 #include <BRepBndLib.hxx>
+#include <BRepBuilderAPI_Transform.hxx>
+#include <BRepOffsetAPI_MakeThickSolid.hxx>
 
 ColorHandler::ColorHandler() {
     Handle_XCAFApp_Application anApp = XCAFApp_Application::GetApplication();
@@ -59,7 +64,7 @@ void ColorHandler::initializeMembers() {
 }
 
 void ColorHandler::getFixtureShapes(TopTools_ListOfShape& listOfShapes) {
-	Quantity_Color red(1,1,1,Quantity_TOC_RGB);
+	Quantity_Color red(1,0,0,Quantity_TOC_RGB);
 	getColoredFaces(listOfShapes, red);
 }
 
@@ -91,7 +96,8 @@ void ColorHandler::getColoredFaces(TopTools_ListOfShape& listOfShapes,const Quan
 	XCAFDoc_ColorType ctype = XCAFDoc_ColorGen;
 	Handle_XCAFDoc_ColorTool myColors = XCAFDoc_DocumentTool::ColorTool(aDoc->Main());
 	Quantity_Color color;
-	std::vector<TopoDS_Face> tmpVector;
+	std::vector<TopoDS_Face> coloredFacesVector;
+	std::vector<TopoDS_Face> allFacesVector;
 	//BRepBuilderAPI_Sewing bRepSewer;
 	int i = 0;
 	for (TopExp_Explorer ex(shape, TopAbs_FACE); ex.More(); ex.Next()) {
@@ -100,16 +106,15 @@ void ColorHandler::getColoredFaces(TopTools_ListOfShape& listOfShapes,const Quan
 				|| myColors->IsSet(face, XCAFDoc_ColorSurf)
 				|| myColors->IsSet(face, XCAFDoc_ColorCurv)) {
 			myColors->GetColor(face, XCAFDoc_ColorGen, color);
-			//if( (color.Red()==wantedColor.Red() && color.Green()==wantedColor.Green() && color.Blue()==wantedColor.Blue())){
+			if( (color.Red()==wantedColor.Red() && color.Green()==wantedColor.Green() && color.Blue()==wantedColor.Blue())){
 				//bRepSewer.Add(face);
-			//if(i%2!=0){
-				tmpVector.push_back(face);
+				coloredFacesVector.push_back(face);
 				std::cout << "YES Color found "<< color.Red()<< " " << color.Green()  << " " << color.Blue() << std::endl;
-			//}
-			//}
+			}
 		}else{
 			std::cout << "No Color" << std::endl;
 		}
+		allFacesVector.push_back(face);
 		i++;
 	}
 	/**If we want to sew the faces together
@@ -118,25 +123,46 @@ void ColorHandler::getColoredFaces(TopTools_ListOfShape& listOfShapes,const Quan
 		sewedShape = bRepSewer.SewedShape();
 	**/
 
-    Standard_Real umin, umax, vmin, vmax;
-	double Xmin, Ymin, Zmin, Xmax, Ymax, Zmax; // Bounding box bounds
-	for(size_t i = 0; i < tmpVector.size(); ++i){
+	for(size_t i = 0; i < coloredFacesVector.size(); ++i){
 		std::cout << "i: " << i << std::endl;
 		gp_Vec extrudVec;
-		computeNormal(tmpVector[i], extrudVec);
-		//if(i == 1){
-		//	extrudVec.SetX(-1);
-		//}
-	    std::cout << "NormalVec: [" << extrudVec.X()<< "," << extrudVec.Y() << ","<< extrudVec.Z() << "]" << std::endl;
-	    const TopoDS_Face tmpFace = tmpVector[i];
-	    BRepBuilderAPI_Sewing bRepSewer;
+		computeInvertedNormal(coloredFacesVector[i], extrudVec);
+
+	    TopoDS_Face tmpFace = coloredFacesVector[i];
+
+	    /**For output of bounding box**/
+	    /*BRepBuilderAPI_Sewing bRepSewer;
 	    bRepSewer.Add(tmpFace);
 	    bRepSewer.SetFaceMode(false);
 		bRepSewer.Perform();
 		shape = bRepSewer.SewedShape();
-		Bnd_Box B; // Bounding box
-	    BRepBndLib::Add(shape, B);
-	    B.Get(Xmin, Ymin, Zmin, Xmax, Ymax, Zmax);
+		Bnd_Box B1; // Bounding box
+	    BRepBndLib::Add(shape, B1);
+	    B1.Get(Xmin, Ymin, Zmin, Xmax, Ymax, Zmax);
+	    bool xEq = absolut(Xmin-Xmax) < 0.000001;
+	    bool yEq = absolut(Ymin-Ymax) < 0.000001;
+	    bool zEq = absolut(Zmin-Zmax) < 0.000001;
+	    std::cout << "    X[" << Xmin << ", " << Xmax << "]     " << "Equality: " << xEq << std::endl;
+	    std::cout << "    Y[" << Ymin << ", " << Ymax << "]     " << "Equality: " << yEq << std::endl;
+	    std::cout << "    Z[" << Zmin << ", " << Zmax << "]     " << "Equality: " << zEq << std::endl;*/
+
+	    /**First Solution**/
+	    //TopLoc_Location location = tmpFace.Location();
+	    //Handle_TopLoc_Datum3D defaultDatum;
+	    //TopLoc_Location defaultLocation(defaultDatum);
+	    //tmpFace.Move(defaultLocation);
+	    BRepPrimAPI_MakePrism mkPrism(tmpFace, extrudVec, Standard_False, Standard_True);
+		const TopoDS_Shape &extrudedFace = mkPrism.Shape();
+
+		/**Second Solution**/
+	    /*BRepBuilderAPI_Sewing bRepSewer;
+	    bRepSewer.Add(tmpFace);
+	    bRepSewer.SetFaceMode(false);
+		bRepSewer.Perform();
+		shape = bRepSewer.SewedShape();
+		Bnd_Box B1; // Bounding box
+	    BRepBndLib::Add(shape, B1);
+	    B1.Get(Xmin, Ymin, Zmin, Xmax, Ymax, Zmax);
 	    bool xEq = absolut(Xmin-Xmax) < 0.000001;
 	    bool yEq = absolut(Ymin-Ymax) < 0.000001;
 	    bool zEq = absolut(Zmin-Zmax) < 0.000001;
@@ -151,31 +177,45 @@ void ColorHandler::getColoredFaces(TopTools_ListOfShape& listOfShapes,const Quan
 	    BRepPrimAPI_MakeBox madeBox(boxOrig,dx,dy,dz);
 	    madeBox.Build();
 	    const TopoDS_Shape &extrudedFace = madeBox.Shape();
+	    */
 
-	    /*BRepPrimAPI_MakePrism mkPrism(tmpFace, extrudVec);
-	    mkPrism.Build();
-		const TopoDS_Shape &extrudedFace = mkPrism.Shape();*/
-	    //Bnd_Box B; // Bounding box
-		double Xmin, Ymin, Zmin, Xmax, Ymax, Zmax; // Bounding box bounds
+	    /**Third solution**/
+    	/*TopTools_ListOfShape removeFaces;
+	    for(size_t j = 0; j < allFacesVector.size(); ++j){
+	    	if(allFacesVector[j].IsNotEqual(tmpFace)){
+	    		removeFaces.Append(allFacesVector[j]);
+	    	}
+	    }
+	    BRepOffsetAPI_MakeThickSolid bRepMakeThickSolid(shape, removeFaces, -1, 1.0e-3);
+	    bRepMakeThickSolid.Build();
+        const TopoDS_Shape &extrudedFace = bRepMakeThickSolid.Shape();
+        removeFaces.Clear();*/
+
+		/**For output of bounding box**/
+		/*double Xmin, Ymin, Zmin, Xmax, Ymax, Zmax; // Bounding box bounds
 		Bnd_Box B2; // Bounding box
 	    BRepBndLib::Add(extrudedFace, B2);
 	    B2.Get(Xmin, Ymin, Zmin, Xmax, Ymax, Zmax);
 	    std::cout << "    X[" << Xmin << ", " << Xmax << "]     "<< std::endl;
 	    std::cout << "    Y[" << Ymin << ", " << Ymax << "]     "<< std::endl;
-	    std::cout << "    Z[" << Zmin << ", " << Zmax << "]     "<< std::endl;
+	    std::cout << "    Z[" << Zmin << ", " << Zmax << "]     "<< std::endl;*/
 		listOfShapes.Append(extrudedFace);
 	}
 }
 
-void ColorHandler::computeNormal(const TopoDS_Face& findNormalTo, gp_Vec& normal) {
+void ColorHandler::computeInvertedNormal(const TopoDS_Face& findNormalTo, gp_Vec& normal) {
     Standard_Real umin, umax, vmin, vmax;
     BRepTools::UVBounds(findNormalTo, umin, umax, vmin, vmax);
-    std::cout << "Umin: " << umin << "Umax: " << umax << "Vmin " << vmin << "Vmax " << vmax << std::endl;
+    std::cout << "ColorHandler::computeInvertedNormal: Umin: " << umin << "Umax: " << umax << "Vmin " << vmin << "Vmax " << vmax << std::endl;
     Handle_Geom_Surface surf = BRep_Tool::Surface(findNormalTo); // create surface
     GeomLProp_SLProps props(surf, umin, vmin, 1, 0.01); // get surface properties
     normal = props.Normal(); // get surface normal
-    if(findNormalTo.Orientation() == TopAbs_REVERSED) normal.Reverse(); // check orientation
-    std::cout << "NormalVec: [" << normal.X()<< "," << normal.Y() << ","<< normal.Z() << "]" << std::endl;
+    if(findNormalTo.Orientation() == TopAbs_REVERSED){
+    	std::cout << "ColorHandler::computeInvertedNormal: Reversing Normal vector" << std::endl;
+    	normal.Reverse(); // check orientation
+    }
+    normal.Multiply(-1);
+    std::cout << "ColorHandler::computeInvertedNormal: InvertedNormalVec: [" << normal.X()<< "," << normal.Y() << ","<< normal.Z() << "]" << std::endl;
 }
 
 bool ColorHandler::isDocumentValid() {

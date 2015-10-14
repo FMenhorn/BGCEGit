@@ -33,7 +33,7 @@
 int main(void){
 	///File:
 	std::string filePath = "./TestGeometry/";
-	std::string fileName = "BlackWhiteCube.igs";
+	std::string fileName = "BlackWhiteCube.step";
 	std::string file = filePath + fileName;
     /// Read file
     Reader* reader;
@@ -53,8 +53,12 @@ int main(void){
 	std::vector<TopoDS_Face> facesVector;
 	TopoDS_Shape sewedShape;
 
-	TopTools_ListOfShape facesList;
-	colorDetector.getFixtureShapes(facesList);
+	TopTools_ListOfShape fixtureFacesList;
+	colorDetector.getFixtureShapes(fixtureFacesList);
+	TopTools_ListOfShape loadFacesList;
+	colorDetector.getLoadShapes(loadFacesList);
+	TopTools_ListOfShape passiveFacesList;
+	colorDetector.getPassiveShapes(passiveFacesList);
 
 	/**Not used right now
 	sewedShape = facesList.First();
@@ -71,10 +75,24 @@ int main(void){
     TopTools_ListIteratorOfListOfShape shapeIterator;
     int i = 1;
 	VoxelShape voxelShape;
-    for(shapeIterator.Initialize(facesList); shapeIterator.More(); shapeIterator.Next() ){
-    	std::cout << "I: " << i << std::endl;
+    for(shapeIterator.Initialize(fixtureFacesList); shapeIterator.More(); shapeIterator.Next() ){
+    	std::cout << "Fixture I: " << i << std::endl;
     	voxelizer.voxelize(shapeIterator.Value(), refinementLevel, voxelShape);
-		writer_vtk.write("output" + std::to_string(i), voxelShape);
+		writer_vtk.write("outputFixtures" + std::to_string(i), voxelShape);
+		i++;
+    }
+    i = 1;
+    for(shapeIterator.Initialize(loadFacesList); shapeIterator.More(); shapeIterator.Next() ){
+    	std::cout << "Load I: " << i << std::endl;
+    	voxelizer.voxelize(shapeIterator.Value(), refinementLevel, voxelShape);
+		writer_vtk.write("outputLoad" + std::to_string(i), voxelShape);
+		i++;
+    }
+    i = 1;
+    for(shapeIterator.Initialize(passiveFacesList); shapeIterator.More(); shapeIterator.Next() ){
+    	std::cout << "Passive I: " << i << std::endl;
+    	voxelizer.voxelize(shapeIterator.Value(), refinementLevel, voxelShape);
+		writer_vtk.write("outputPassive" + std::to_string(i), voxelShape);
 		i++;
     }
 	return EXIT_SUCCESS;
