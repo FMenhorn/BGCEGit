@@ -33,10 +33,13 @@
 int main(void){
 	///File:
 	std::string filePath = "./TestGeometry/";
-	std::string fileName = "BlackWhiteCube.step";
-	std::string file = filePath + fileName;
+	std::string fileName = "RedGreenBlueCube";
+	std::string fileNameStep = fileName + ".stp";
+	std::string fileNameIges = fileName + ".igs";
+	std::string fileStep = filePath + fileNameStep;
+	std::string fileIges = filePath + fileNameIges;
     /// Read file
-    Reader* reader;
+    /*Reader* reader;
     if(fileName.find(".igs")!=std::string::npos){
     	reader = new IGESCAFReader();
     }else if(fileName.find(".stp")!=std::string::npos || fileName.find(".step")!=std::string::npos){
@@ -44,14 +47,19 @@ int main(void){
     }else{
     	std::cout << "CADToVoxel: Wrong type of input file. Neither .stp nor .igs" << std::endl;
     	return EXIT_FAILURE;
-    }
+    }*/
+    STEPCAFReader readerStep;
+    IGESCAFReader readerIges;
 
-	reader->read(file);
-	ColorHandler colorDetector;
-	reader->transfer(colorDetector.getDoc());
-	colorDetector.initializeMembers();
+    readerStep.read(fileStep);
+    readerIges.read(fileIges);
+
+    ColorHandler colorDetector;
+    readerStep.transfer(colorDetector.getDocStep());
+    readerIges.transfer(colorDetector.getDocIges());
+    colorDetector.initializeMembers();
 	std::vector<TopoDS_Face> facesVector;
-	TopoDS_Shape sewedShape;
+	TopoDS_Shape fullBody;
 
 	TopTools_ListOfShape fixtureFacesList;
 	colorDetector.getFixtureShapes(fixtureFacesList);

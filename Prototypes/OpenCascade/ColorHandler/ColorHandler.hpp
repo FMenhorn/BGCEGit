@@ -32,10 +32,16 @@ public:
 	virtual ~ColorHandler();
 
 	/**
-	 * Returns the Document aDoc
+	 * Returns the Document aDocStep
 	 * @return
 	 */
-	Handle_TDocStd_Document& getDoc();
+	Handle_TDocStd_Document& getDocStep();
+
+	/**
+	 * Returns the Document aDocIges
+	 * @return
+	 */
+	Handle_TDocStd_Document& getDocIges();
 
 	/**
 	 * Initializes the other members
@@ -61,9 +67,12 @@ public:
 	void getLoadShapes(TopTools_ListOfShape& listOfShapes);
 
 private:
-    Handle_TDocStd_Document aDoc;
-    Handle_XCAFDoc_ShapeTool myAssembly;
-    TDF_LabelSequence aLabel;
+    Handle_TDocStd_Document aDocStep;
+    Handle_XCAFDoc_ShapeTool myAssemblyStep;
+    TDF_LabelSequence aLabelStep;
+    Handle_TDocStd_Document aDocIges;
+    Handle_XCAFDoc_ShapeTool myAssemblyIges;
+    TDF_LabelSequence aLabelIges;
     Handle_XCAFDoc_ColorTool myColors;
 
 	/**
@@ -80,7 +89,7 @@ private:
 	 */
     void computeInvertedNormal(const TopoDS_Face& findNormalTo, gp_Vec& normal);
 
-	bool isDocumentValid();
+	bool areDocumentsValid();
 };
 
 #endif /* COLORHANDLER_COLORHANDLER_HPP_ */
