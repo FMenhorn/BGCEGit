@@ -14,6 +14,7 @@ class VerteX:
 
         self.id = _id
         self.belongsTo= self.quad_belongs(quads_o)
+        self.coordinates=_vertexlist[_id]
 
 
     def quad_belongs(self, quads):
@@ -22,8 +23,8 @@ class VerteX:
         owners = np.array([])
 
         for q in quads:
-             if self.id in q.vertices:
-                owners= np.append(owners, q.id)
+             if self.id in q.vertex_ids:
+                owners= np.append(owners, q.quad_id)
 
         return owners.astype(int)
 
