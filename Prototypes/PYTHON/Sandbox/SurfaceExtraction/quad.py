@@ -122,9 +122,8 @@ class Quad:
 
         return point
 
-
     def projection_onto_quad(self, _point):
-        from scipy.linalg import  solve_triangular
+        from scipy.linalg import solve_triangular
         import numpy as np
 
         # first assume that _point is below diagonal BD
@@ -132,9 +131,9 @@ class Quad:
         vector_vertexA_point = _point - vertexA
         # we want to transform _point to the BASIS=[normal,AB,AC] and use QR decomposition of BASIS = Q*R
         # BASIS * coords = _point -> R * coords = Q' * _point
-        R = np.dot(self.ortho_basis_AB.transpose(),self.basis_BAD)
+        R_BAD = np.dot(self.ortho_basis_AB.transpose(),self.basis_BAD)
         b = np.dot(self.ortho_basis_AB.transpose(),vector_vertexA_point)
-        x = solve_triangular(R,b)
+        x = solve_triangular(R_BAD,b)
         distance = x[0]
         projected_point = _point - distance * self.normal
         u = x[1]
@@ -144,9 +143,9 @@ class Quad:
         if u+v > 1:
             vertexC = self.vertices_plane[2,:]
             vector_vertexC_point = _point - vertexC
-            R = np.dot(self.ortho_basis_CB.transpose(),self.basis_BCD)
+            R_BCD = np.dot(self.ortho_basis_CB.transpose(),self.basis_BCD)
             b = np.dot(self.ortho_basis_CB.transpose(),vector_vertexC_point)
-            x = solve_triangular(R,b)
+            x = solve_triangular(R_BCD,b)
             distance = x[0]
             projected_point = _point - distance * self.normal
             u = 1-x[1]
