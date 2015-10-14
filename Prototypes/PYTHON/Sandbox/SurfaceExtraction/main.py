@@ -1,6 +1,3 @@
-from numba.utils import finalize
-from scipy.integrate.quadpack import quad
-
 __author__ = 'benjamin'
 
 from dc3D import tworesolution_dual_contour
@@ -11,9 +8,9 @@ import numpy as np
 
 
 def find_closest_quads(_point, _quadlist, _n_closest):
-    d_sq_list = [None] * _quadlist.__len__()
-    for i in range(_quadlist.__len__()):
-        d_sq = _quadlist[i].measure_centroid_distance_squared(_point)
+    d_sq_list = [None] * _quadlist.__len__() # empty list for distances point to all quads
+    for i in range(_quadlist.__len__()): # iterate over all quads
+        d_sq = _quadlist[i].measure_centroid_distance_squared(_point) # distance to centroid
         d_sq_list[i] = d_sq
 
     idx_list = sorted(range(len(d_sq_list)), key=lambda k: d_sq_list[k])
@@ -23,17 +20,20 @@ def find_closest_quads(_point, _quadlist, _n_closest):
 
 
 dimensions = {'xmin': 0.0, 'xmax': 8.0, 'ymin': 0.0, 'ymax': 8.0, 'zmin': 0.0, 'zmax': 8.0}
-res_fine = .25
-res_coarse = res_fine * 8.0
+res_fine = 1
+res_coarse = res_fine * 4.0
 resolutions = {'fine': res_fine,'coarse': res_coarse}
 
-fine_data = sample_data(torus_f, resolutions['fine'], dimensions)
+fine_data = sample_data(sphere_f, resolutions['fine'], dimensions)
 [verts_out_dc, quads_out_dc] = tworesolution_dual_contour(fine_data, resolutions, dimensions)
 
-quads = {'coarse': [None] * quads_out_dc['coarse'].shape[0], 'fine': []}
-verts = {'coarse': verts_out_dc['coarse'], 'fine': verts_out_dc['fine']}
+N_quads = {'coarse': quads_out_dc['coarse'].shape[0], 'fine': quads_out_dc['fine'].shape[0]}
+N_verts = {'coarse': verts_out_dc['coarse'].shape[0], 'fine': verts_out_dc['fine'].shape[0]}
 
-for i in range(quads['coarse'].__len__()):
+quads = {'coarse': [None] * N_quads['coarse'], 'fine': [None] * N_quads['fine']}
+verts = {'coarse': verts_out_dc['coarse'], 'fine': verts_out_dc['fine']} # todo substitute with vertex objects
+
+for i in range(N_quads['coarse']):
     quads['coarse'][i]=Quad(i,quads_out_dc['coarse'],verts_out_dc['coarse'])
 
 import matplotlib.pyplot as plt
@@ -61,7 +61,7 @@ for q in quads['coarse']:
     poly=Poly3DCollection(vtx)
     poly.set_color('b')
     poly.set_edgecolor('k')
-    poly.set_alpha(.25)
+    #poly.set_alpha(.25)
     ax.add_collection3d(poly)
 
 for q in quads_out_dc['fine']:
@@ -76,20 +76,24 @@ for q in quads_out_dc['fine']:
     poly.set_alpha(.25)
     ax.add_collection3d(poly)
 
+# do projection of fine verts on coarse quads
+N_closest_candidates = 6 # compute list of N_closest_candidates closest quads
 for vertex in verts['fine']:
-    closest_idx = find_closest_quads(vertex, quads['coarse'], 6)
-    d_min = np.inf
+    closest_idx_candidates = find_closest_quads(vertex, quads['coarse'], N_closest_candidates) # find N closest quads with fast criterion: distance to centroid
 
-    for idx in closest_idx:
-        start, d, u, v = quads['coarse'][idx].projection_onto_quad(vertex)
-        if abs(d) < d_min:
-            start_min = start
-            d_min = abs(d)
+    distance_min = np.inf
+    for candidate_idx in closest_idx_candidates: # iterate over all candidates from coarse criterion
+        projected_point, distance, u, v = \
+            quads['coarse'][candidate_idx].projection_onto_quad(vertex) # find closest quad with fine criterion: projection onto quad
 
-    start = start_min
+        if abs(distance) < distance_min:
+            projected_point_min = projected_point
+            distance_min = abs(distance)
+
+    #only plotting information
+    start = projected_point_min
     end = vertex
     ax.plot([start[0],end[0]],[start[1],end[1]],[start[2],end[2]],'k',linewidth=2.0)
-    ax.plot([end[0]],[end[1]],[end[2]],'o')
 
 ax.set_xlim3d(2, 6)
 ax.set_ylim3d(2, 6)
