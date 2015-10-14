@@ -1,5 +1,5 @@
 /*
- * STEPReader.hpp
+ * Voxelizer.cpp
  *
  *  Created on: Oct 6, 2015
  *      Author: saumitra
@@ -79,14 +79,26 @@ void Voxelizer::fillVolume(VoxelShape& voxelShape){
 	Standard_Real zStep = zLen/nbZ;
 
 	bool inside = false;
+	bool prev   = false;
 	//Voxel_BoolDS filledVoxelShapeDS = hollowVoxelShapeDS;
 	for (Standard_Integer x = 0; x < nbX; x++) {
 		for (Standard_Integer y = 0; y < nbY; y++) {
 			for (Standard_Integer z = 0; z < nbZ; z++) {
-				//std::cout << "Voxelizer::fillVolume: [" << x << "," << y << "," << z << "]="<<
-				//		voxelShape.getVoxelShape().Get(x,y,z) << std::endl;
 
-				if(voxelShape.getVoxelShape().Get(x, y, z) && !inside){ // true and false
+                if (voxelShape.getVoxelShape().Get(x, y, z)) {
+                    if (prev) {
+                        inside = true;
+                    } else {
+                        inside = !inside;
+                    }
+                } else {
+                    if (inside) {
+                        voxelShape.getVoxelShape().Set(x,y,z,Standard_True);
+                    } else {
+                    }
+                }
+
+				/*if(voxelShape.getVoxelShape().Get(x, y, z) && !inside){ // true and false
 					inside = true;
 				}else if(voxelShape.getVoxelShape().Get(x, y, z) && inside){ //true and true
 					inside = !inside;
@@ -97,11 +109,9 @@ void Voxelizer::fillVolume(VoxelShape& voxelShape){
 				}
 				if(!voxelShape.getVoxelShape().Get(x, y, z) && inside){
 					voxelShape.getVoxelShape().Set(x,y,z,Standard_True);
-					std::cout << "Voxelizer::fillVolume: [" << x << "," << y << "," << z << "]="<<
-							voxelShape.getVoxelShape().Get(x,y,z) << std::endl;
-				}
+					std::cout << "Voxelizer::fillVolume: [" << x << ", " << y << ", " << z << "] = " << voxelShape.getVoxelShape().Get(x,y,z) << std::endl;
+				}*/
 			}
 		}
 	}
-	//voxelShape.setVoxelShape(hollowVoxelShapeDS);
 }
