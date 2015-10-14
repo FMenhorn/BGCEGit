@@ -39,15 +39,6 @@ int main(void){
 	std::string fileStep = filePath + fileNameStep;
 	std::string fileIges = filePath + fileNameIges;
     /// Read file
-    /*Reader* reader;
-    if(fileName.find(".igs")!=std::string::npos){
-    	reader = new IGESCAFReader();
-    }else if(fileName.find(".stp")!=std::string::npos || fileName.find(".step")!=std::string::npos){
-    	reader = new STEPCAFReader();
-    }else{
-    	std::cout << "CADToVoxel: Wrong type of input file. Neither .stp nor .igs" << std::endl;
-    	return EXIT_FAILURE;
-    }*/
     STEPCAFReader readerStep;
     IGESCAFReader readerIges;
 
@@ -83,6 +74,7 @@ int main(void){
     TopTools_ListIteratorOfListOfShape shapeIterator;
     int i = 1;
 	VoxelShape voxelShape;
+	std::cout << "FixtureListEmpty?: " << fixtureFacesList.IsEmpty() << std::endl;
     for(shapeIterator.Initialize(fixtureFacesList); shapeIterator.More(); shapeIterator.Next() ){
     	std::cout << "Fixture I: " << i << std::endl;
     	voxelizer.voxelize(shapeIterator.Value(), refinementLevel, voxelShape);
@@ -90,6 +82,8 @@ int main(void){
 		i++;
     }
     i = 1;
+
+	std::cout << "LoadListEmpty?: " << loadFacesList.IsEmpty() << std::endl;
     for(shapeIterator.Initialize(loadFacesList); shapeIterator.More(); shapeIterator.Next() ){
     	std::cout << "Load I: " << i << std::endl;
     	voxelizer.voxelize(shapeIterator.Value(), refinementLevel, voxelShape);
@@ -97,11 +91,28 @@ int main(void){
 		i++;
     }
     i = 1;
+
+	std::cout << "PassiveListEmpty?: " << passiveFacesList.IsEmpty() << std::endl;
     for(shapeIterator.Initialize(passiveFacesList); shapeIterator.More(); shapeIterator.Next() ){
     	std::cout << "Passive I: " << i << std::endl;
     	voxelizer.voxelize(shapeIterator.Value(), refinementLevel, voxelShape);
 		writer_vtk.write("outputPassive" + std::to_string(i), voxelShape);
 		i++;
     }
+
+    TopoDS_Shape fullShape;
+    colorDetector.getAllShapes(fullShape);
+    voxelizer.voxelize(fullShape, refinementLevel, voxelShape);
+    voxelizer.fillVolume(voxelShape);
+	for (int k = 0; k < voxelShape.getVoxelShape().GetNbZ(); k++){
+        for (int j = 0; j < voxelShape.getVoxelShape().GetNbY(); j++){
+            for (int i = 0; i < voxelShape.getVoxelShape().GetNbX(); i++){
+            	std::cout << "CADToVoxel::writeScalars: [" << i << "," << j << "," << k << "]="<<
+            								voxelShape.getVoxelShape().Get(i,j,k) << std::endl;
+            }
+        }
+	}
+    writer_vtk.write("outputFullBody", voxelShape);
+
 	return EXIT_SUCCESS;
 }

@@ -66,6 +66,11 @@ public:
 	 */
 	void getLoadShapes(TopTools_ListOfShape& listOfShapes);
 
+	/**
+     * Returns the faces of the geometry as a TopoDS_Shape.
+     */
+	void getAllShapes(TopoDS_Shape& TopoDSShape);
+
 private:
     Handle_TDocStd_Document aDocStep;
     Handle_XCAFDoc_ShapeTool myAssemblyStep;
