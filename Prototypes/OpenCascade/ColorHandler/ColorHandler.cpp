@@ -31,6 +31,10 @@
 #include <BRepOffsetAPI_MakeOffsetShape.hxx>
 #include <BRepPrimAPI_MakeBox.hxx>
 
+#include <TDF_LabelSequence.hxx>
+#include <Handle_TDF_Attribute.hxx>
+#include <NCollection_Sequence.hxx>
+
 #include <TopoDS.hxx>
 #include <TopoDS_Face.hxx>
 #include <TopoDS_Shape.hxx>
@@ -78,7 +82,7 @@ void ColorHandler::getLoadShapes(TopTools_ListOfShape& listOfShapes) {
 	getColoredFaces(listOfShapes, blue);
 }
 
-void ColorHandler::getColoredFaces(TopTools_ListOfShape& listOfShapes,const Quantity_Color wantedColor) {
+void ColorHandler::getColoredFaces(TopTools_ListOfShape& listOfShapes, const Quantity_Color wantedColor) {
 	TopoDS_Shape shape;
 	if (aLabel.Length() == 1) {
 		TopoDS_Shape result = myAssembly->GetShape(aLabel.Value(1));
@@ -96,6 +100,9 @@ void ColorHandler::getColoredFaces(TopTools_ListOfShape& listOfShapes,const Quan
 	XCAFDoc_ColorType ctype = XCAFDoc_ColorGen;
 	Handle_XCAFDoc_ColorTool myColors = XCAFDoc_DocumentTool::ColorTool(aDoc->Main());
 	Quantity_Color color;
+	TDF_LabelSequence colorSeq;
+	Standard_GUID id = efd212f0-6dfd-11d4-b9c8-0060b0ee281b;
+	Handle_TDF_Attribute TDFHandle;
 	std::vector<TopoDS_Face> coloredFacesVector;
 	std::vector<TopoDS_Face> allFacesVector;
 	//BRepBuilderAPI_Sewing bRepSewer;
@@ -105,6 +112,10 @@ void ColorHandler::getColoredFaces(TopTools_ListOfShape& listOfShapes,const Quan
 		if (myColors->IsSet(face, ctype)
 				|| myColors->IsSet(face, XCAFDoc_ColorSurf)
 				|| myColors->IsSet(face, XCAFDoc_ColorCurv)) {
+            myColors->GetColors(colorSeq);
+            for (int i = 1; i < colorSeq.Length(); i++){
+                std::cout << "Color" << i << ": " << colorSeq.Value(i).FindAttribute(id, );
+            }
 			myColors->GetColor(face, XCAFDoc_ColorGen, color);
 			if( (color.Red()==wantedColor.Red() && color.Green()==wantedColor.Green() && color.Blue()==wantedColor.Blue())){
 				//bRepSewer.Add(face);
@@ -123,12 +134,12 @@ void ColorHandler::getColoredFaces(TopTools_ListOfShape& listOfShapes,const Quan
 		sewedShape = bRepSewer.SewedShape();
 	**/
 
-	for(size_t i = 0; i < coloredFacesVector.size(); ++i){
+	for(size_t i = 0; i < allFacesVector.size(); ++i){
 		std::cout << "i: " << i << std::endl;
 		gp_Vec extrudVec;
-		computeInvertedNormal(coloredFacesVector[i], extrudVec);
+		computeInvertedNormal(allFacesVector[i], extrudVec);
 
-	    TopoDS_Face tmpFace = coloredFacesVector[i];
+	    TopoDS_Face tmpFace = allFacesVector[i];//coloredFacesVector[i];
 
 	    /**For output of bounding box**/
 	    /*BRepBuilderAPI_Sewing bRepSewer;
@@ -200,6 +211,22 @@ void ColorHandler::getColoredFaces(TopTools_ListOfShape& listOfShapes,const Quan
 	    std::cout << "    Y[" << Ymin << ", " << Ymax << "]     "<< std::endl;
 	    std::cout << "    Z[" << Zmin << ", " << Zmax << "]     "<< std::endl;*/
 		listOfShapes.Append(extrudedFace);
+	}
+}
+
+void ColorHandler::getAllShapes(TopoDS_Shape& TopoDSShape) {
+	if (aLabel.Length() == 1) {
+		TopoDS_Shape result = myAssembly->GetShape(aLabel.Value(1));
+		TopoDSShape = result;
+	} else {
+		TopoDS_Compound C;
+		BRep_Builder B;
+		B.MakeCompound(C);
+		for (Standard_Integer i = 1; i < aLabel.Length(); ++i) {
+			TopoDS_Shape S = myAssembly->GetShape(aLabel.Value(i));
+			B.Add(C, S);
+		}
+		TopoDSShape = C;
 	}
 }
 

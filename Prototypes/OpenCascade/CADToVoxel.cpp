@@ -37,7 +37,7 @@ int main(void){
 	std::string file = filePath + fileName;
     /// Read file
     Reader* reader;
-    if(fileName.find(".igs")!=std::string::npos){
+    if(fileName.find(".igs")!=std::string::npos || fileName.find(".iges")!=std::string::npos){
     	reader = new IGESCAFReader();
     }else if(fileName.find(".stp")!=std::string::npos || fileName.find(".step")!=std::string::npos){
     	reader = new STEPCAFReader();
@@ -81,7 +81,7 @@ int main(void){
 		writer_vtk.write("outputFixtures" + std::to_string(i), voxelShape);
 		i++;
     }
-    i = 1;
+    /*i = 1;
     for(shapeIterator.Initialize(loadFacesList); shapeIterator.More(); shapeIterator.Next() ){
     	std::cout << "Load I: " << i << std::endl;
     	voxelizer.voxelize(shapeIterator.Value(), refinementLevel, voxelShape);
@@ -94,6 +94,12 @@ int main(void){
     	voxelizer.voxelize(shapeIterator.Value(), refinementLevel, voxelShape);
 		writer_vtk.write("outputPassive" + std::to_string(i), voxelShape);
 		i++;
-    }
+    }*/
+
+    TopoDS_Shape fullShape;
+    colorDetector.getAllShapes(fullShape);
+    voxelizer.voxelize(fullShape, refinementLevel, voxelShape);
+    writer_vtk.write("outputFullBody", voxelShape);
+
 	return EXIT_SUCCESS;
 }
