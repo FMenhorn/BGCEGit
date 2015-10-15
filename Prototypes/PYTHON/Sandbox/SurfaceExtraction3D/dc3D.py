@@ -104,4 +104,4 @@ def dual_contour(data, res, dims):
                     if (data[tuple(o+res*dirs[i]+res*dirs[j])] > 0) != (data[tuple(o+res*dirs[i]+res*dirs[j]+res*dirs[k])] > 0): # dir[i]+dir[j]+dir[k] = [1,1,1] for all!
                         dc_quads.append([vindex[tuple(o)], vindex[tuple(o+res*dirs[i])], vindex[tuple(o+res*dirs[i]+res*dirs[j])], vindex[tuple(o+res*dirs[j])]])
 
-    return dc_verts, dc_quads
+    return np.array(dc_verts), np.array(dc_quads)
