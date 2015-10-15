@@ -22,6 +22,7 @@ public:
 
     void voxelize(const TopoDS_Shape topoDSShape,const int refinementLevel, VoxelShape& voxelShape);
 
+    void fillVolume(VoxelShape& voxelShape);
 private:
     void getBoundingBox(const TopoDS_Shape topoDSShape, std::vector<double>& origin, std::vector<double>& shapeDimensions);
 };

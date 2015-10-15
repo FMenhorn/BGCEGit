@@ -32,10 +32,16 @@ public:
 	virtual ~ColorHandler();
 
 	/**
-	 * Returns the Document aDoc
+	 * Returns the Document aDocStep
 	 * @return
 	 */
-	Handle_TDocStd_Document& getDoc();
+	Handle_TDocStd_Document& getDocStep();
+
+	/**
+	 * Returns the Document aDocIges
+	 * @return
+	 */
+	Handle_TDocStd_Document& getDocIges();
 
 	/**
 	 * Initializes the other members
@@ -60,11 +66,21 @@ public:
 	 */
 	void getLoadShapes(TopTools_ListOfShape& listOfShapes);
 
+	/**
+     * Returns the faces of the geometry as a TopoDS_Shape.
+     */
+	void getCompleteShape(TopoDS_Shape& TopoDSShape);
+
 private:
-    Handle_TDocStd_Document aDoc;
-    Handle_XCAFDoc_ShapeTool myAssembly;
-    TDF_LabelSequence aLabel;
+    Handle_TDocStd_Document aDocStep;
+    Handle_TDocStd_Document aDocIges;
     Handle_XCAFDoc_ColorTool myColors;
+    TopoDS_Shape shapeStep;
+    TopoDS_Shape shapeIges;
+
+	void buildShapesFromDocs();
+
+    void buildShapeFromDoc(const Handle_TDocStd_Document& doc, TopoDS_Shape& shape);
 
 	/**
 	 * Assembles the shape with the help of the XCAFDoc_ShapeTool myAssembly and the TDF_LabelSequence aLabel.
@@ -78,9 +94,11 @@ private:
 	/**
 	 * Computes normal of the face
 	 */
-    void computeNormal(const TopoDS_Face& findNormalTo, gp_Vec& normal);
+    void computeInvertedNormal(const TopoDS_Face& findNormalTo, gp_Vec& normal);
 
-	bool isDocumentValid();
+	bool areDocumentsValid();
+	void findColoredFaces(const Quantity_Color& wantedColor, std::vector<TopoDS_Face>& coloredFacesVector);
+	void buildColoredFaces(const std::vector<TopoDS_Face>& coloredFacesVector, TopTools_ListOfShape& listOfShapes);
 };
 
 #endif /* COLORHANDLER_COLORHANDLER_HPP_ */

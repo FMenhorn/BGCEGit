@@ -24,22 +24,22 @@ for i=1:N-1
     faces(i, 4) = stride +i;
 end
 
-faces_ids = [];
-for i=1:size(faces,1)
-    for j = 1:size(faces,2)
-        clear row column
-        [row, column] = find(faces_ids==faces(i, j));
-        for k = 1:length(row)
-            if (faces_ids(k, mod(column(k),2)+1) == faces(i, mod(j, n)+1))
-            end
-        end
-%         if (any(abs(faces_ids(:, 1) - faces(i, j))<10e-10) && any(abs(faces_ids(:, 2) - faces(i, mod(j, n)+1))<10e-10) )
-%             
+% faces_ids = [];
+% for i=1:size(faces,1)
+%     for j = 1:size(faces,2)
+%         clear row column
+%         [row, column] = find(faces_ids==faces(i, j));
+%         for k = 1:length(row)
+%             if (faces_ids(k, mod(column(k),2)+1) == faces(i, mod(j, n)+1))
+%             end
 %         end
-        faces_ids = [faces_ids; [faces(i, j) faces(i, mod(j, n)+1)]];
-    end
-end
-verts_new = zeros(4*N-4,2);
+% %         if (any(abs(faces_ids(:, 1) - faces(i, j))<10e-10) && any(abs(faces_ids(:, 2) - faces(i, mod(j, n)+1))<10e-10) )
+% %             
+% %         end
+%         faces_ids = [faces_ids; [faces(i, j) faces(i, mod(j, n)+1)]];
+%     end
+% end
+verts_new = zeros(4*N-4,3);
 faces_new =  zeros(size(X1, 2)-1, 4);
 for j=1:size(faces,1)
     X = verts(faces(j, :),1);
@@ -52,7 +52,6 @@ for j=1:size(faces,1)
         verts_new(4*j - 3:4*j, 3) = (1 - alpha).*Z + alpha.*F(3).*ones(1, length(X))';
     end
     faces_new(j, :) = 4*j-3:4*j;
-   % faces_new = [faces_new; 4*j-3:4*j];
 end
 patch('Faces', faces_new, 'Vertices', verts_new, 'FaceColor', 'b');
 % X_new = [];
