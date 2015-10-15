@@ -7,6 +7,8 @@
 
 #include "ColorHandler.hpp"
 
+#include "../Helper/Helper.hpp"
+
 #include <IGESCAFControl_Reader.hxx>
 #include <XCAFApp_Application.hxx>
 #include <Handle_XCAFApp_Application.hxx>
@@ -24,17 +26,36 @@
 #include <BRep_Builder.hxx>
 #include <BRepBuilderAPI_Sewing.hxx>
 #include <TopExp_Explorer.hxx>
+#include <BRepBuilderAPI_MakeFace.hxx>
+#include <TopAbs_Orientation.hxx>
+#include <BRepOffsetAPI_MakeOffsetShape.hxx>
+#include <BRepPrimAPI_MakeBox.hxx>
+
+#include <TDF_LabelSequence.hxx>
+#include <Handle_TDF_Attribute.hxx>
+#include <NCollection_Sequence.hxx>
 
 #include <TopoDS.hxx>
 #include <TopoDS_Face.hxx>
 #include <TopoDS_Shape.hxx>
+#include <TopoDS_Shell.hxx>
+#include <TopLoc_Location.hxx>
+#include <TopLoc_Datum3D.hxx>
 
 #include <Bnd_Box.hxx>
 #include <BRepBndLib.hxx>
+#include <BRepBuilderAPI_Transform.hxx>
+#include <BRepOffsetAPI_MakeThickSolid.hxx>
 
 ColorHandler::ColorHandler() {
     Handle_XCAFApp_Application anApp = XCAFApp_Application::GetApplication();
-    anApp->NewDocument("MDTV-XCAF", aDoc);
+    anApp->NewDocument("MDTV-XCAF", aDocStep);
+    anApp->NewDocument("MDTV-XCAF", aDocIges);
+
+    if(!areDocumentsValid()){
+    	std::cout << "ColorHandler::ColorHandler: Documents not valid!!" << std::endl;
+    	exit(-1);
+    }
 }
 
 ColorHandler::~ColorHandler() {
@@ -42,18 +63,48 @@ ColorHandler::~ColorHandler() {
 }
 
 
-Handle_TDocStd_Document& ColorHandler::getDoc(){
-	return aDoc;
+Handle_TDocStd_Document& ColorHandler::getDocStep(){
+	return aDocStep;
+}
+
+Handle_TDocStd_Document& ColorHandler::getDocIges(){
+	return aDocIges;
 }
 
 void ColorHandler::initializeMembers() {
-	// Create label and add our shape
-	myAssembly = XCAFDoc_DocumentTool::ShapeTool(aDoc->Main());
+	buildShapesFromDocs();
+}
+
+void ColorHandler::buildShapesFromDocs(){
+	buildShapeFromDoc(aDocStep, shapeStep);
+	buildShapeFromDoc(aDocIges, shapeIges);
+}
+
+void ColorHandler::buildShapeFromDoc(const Handle_TDocStd_Document& doc, TopoDS_Shape& shape) {
+	TDF_LabelSequence aLabel;
+	Handle_XCAFDoc_ShapeTool myAssembly = XCAFDoc_DocumentTool::ShapeTool(doc->Main());
 	myAssembly->GetShapes(aLabel);
+	if (aLabel.Length() == 1) {
+		TopoDS_Shape result = myAssembly->GetShape(aLabel.Value(1));
+		shape = result;
+	} else {
+		TopoDS_Compound C;
+		BRep_Builder B;
+		B.MakeCompound(C);
+		for (Standard_Integer i = 1; i < aLabel.Length(); ++i) {
+			TopoDS_Shape S = myAssembly->GetShape(aLabel.Value(i));
+			B.Add(C, S);
+		}
+		shape = C;
+	}
+}
+
+void ColorHandler::getCompleteShape(TopoDS_Shape& topoDSShape) {
+	topoDSShape = shapeStep;
 }
 
 void ColorHandler::getFixtureShapes(TopTools_ListOfShape& listOfShapes) {
-	Quantity_Color red(1,1,1,Quantity_TOC_RGB);
+	Quantity_Color red(1,0,0,Quantity_TOC_RGB);
 	getColoredFaces(listOfShapes, red);
 }
 
@@ -68,82 +119,64 @@ void ColorHandler::getLoadShapes(TopTools_ListOfShape& listOfShapes) {
 }
 
 void ColorHandler::getColoredFaces(TopTools_ListOfShape& listOfShapes,const Quantity_Color wantedColor) {
-	TopoDS_Shape shape;
-	if (aLabel.Length() == 1) {
-		TopoDS_Shape result = myAssembly->GetShape(aLabel.Value(1));
-		shape = result;
-	} else {
-		TopoDS_Compound C;
-		BRep_Builder B;
-		B.MakeCompound(C);
-		for (Standard_Integer i = 1; i < aLabel.Length(); ++i) {
-			TopoDS_Shape S = myAssembly->GetShape(aLabel.Value(i));
-			B.Add(C, S);
-		}
-		shape = C;
-	}
-	XCAFDoc_ColorType ctype = XCAFDoc_ColorGen;
-	Handle_XCAFDoc_ColorTool myColors = XCAFDoc_DocumentTool::ColorTool(aDoc->Main());
-	Quantity_Color color;
-	std::vector<TopoDS_Face> tmpVector;
-	//BRepBuilderAPI_Sewing bRepSewer;
-	int i = 0;
-	for (TopExp_Explorer ex(shape, TopAbs_FACE); ex.More(); ex.Next()) {
-		const TopoDS_Face &face = TopoDS::Face(ex.Current());
-		if (myColors->IsSet(face, ctype)
-				|| myColors->IsSet(face, XCAFDoc_ColorSurf)
-				|| myColors->IsSet(face, XCAFDoc_ColorCurv)) {
-			myColors->GetColor(face, XCAFDoc_ColorGen, color);
-			//if( (color.Red()==wantedColor.Red() && color.Green()==wantedColor.Green() && color.Blue()==wantedColor.Blue())){
-				//bRepSewer.Add(face);
-			if(i%2!=0){
-				tmpVector.push_back(face);
-				std::cout << "YES Color found "<< color.Red()<< " " << color.Green()  << " " << color.Blue() << std::endl;
-			}
-			//}
-		}else{
-			std::cout << "No Color" << std::endl;
-		}
-		i++;
-	}
-	/**If we want to sew the faces together
-		bRepSewer.SetFaceMode(false);
-		bRepSewer.Perform();
-		sewedShape = bRepSewer.SewedShape();
-	**/
+	std::vector<TopoDS_Face> coloredFacesVector;
+	findColoredFaces(wantedColor, coloredFacesVector);
+	buildColoredFaces(coloredFacesVector, listOfShapes);
+}
 
-    Standard_Real umin, umax, vmin, vmax;
-	for(size_t i = 0; i < tmpVector.size(); ++i){
-		std::cout << "i: " << i << std::endl;
-		gp_Vec extrudVec;
-		computeNormal(tmpVector[i], extrudVec);
-		//if(i == 1){
-		//	extrudVec.SetX(-1);
-		//}
-	    std::cout << "NormalVec: [" << extrudVec.X()<< "," << extrudVec.Y() << ","<< extrudVec.Z() << "]" << std::endl;
-		const TopoDS_Shape &extrudedFace = BRepPrimAPI_MakePrism(tmpVector[i], extrudVec);
-	    Bnd_Box B; // Bounding box
-		double Xmin, Ymin, Zmin, Xmax, Ymax, Zmax; // Bounding box bounds
-	    BRepBndLib::Add(extrudedFace, B);
-	    B.Get(Xmin, Ymin, Zmin, Xmax, Ymax, Zmax);
-	    std::cout << "    X[" << Xmin << ", " << Xmax << "]     "<< std::endl;
-	    std::cout << "    Y[" << Ymin << ", " << Ymax << "]     "<< std::endl;
-	    std::cout << "    Z[" << Zmin << ", " << Zmax << "]     "<< std::endl;
+void ColorHandler::findColoredFaces(const Quantity_Color& wantedColor, std::vector<TopoDS_Face>& coloredFacesVector) {
+	XCAFDoc_ColorType ctype = XCAFDoc_ColorGen;
+	Handle_XCAFDoc_ColorTool myColors = XCAFDoc_DocumentTool::ColorTool(aDocIges->Main());
+	Quantity_Color color;
+	TopExp_Explorer exStep(shapeStep, TopAbs_FACE);
+	TopExp_Explorer exIges(shapeIges, TopAbs_FACE);
+	for (; exStep.More(); exStep.Next()) {
+		const TopoDS_Face& faceStep = TopoDS::Face(exStep.Current());
+		const TopoDS_Face& faceIges = TopoDS::Face(exIges.Current());
+		if (myColors->IsSet(faceIges, ctype)
+				|| myColors->IsSet(faceIges, XCAFDoc_ColorSurf)
+				|| myColors->IsSet(faceIges, XCAFDoc_ColorCurv)) {
+			myColors->GetColor(faceIges, XCAFDoc_ColorGen, color);
+			if ((color.Red() == wantedColor.Red()
+					&& color.Green() == wantedColor.Green()
+					&& color.Blue() == wantedColor.Blue())) {
+				coloredFacesVector.push_back(faceStep);
+				std::cout << "ColorHandler::findColoredFaces: YES Color found " << color.Red() << " "
+						<< color.Green() << " " << color.Blue() << std::endl;
+			}
+		} else {
+			std::cout << "ColorHandler::findColoredFaces: No Color" << std::endl;
+		}
+		exIges.Next();
+	}
+}
+
+void ColorHandler::buildColoredFaces( const std::vector<TopoDS_Face>& coloredFacesVector, TopTools_ListOfShape& listOfShapes) {
+	gp_Vec extrudVec;
+	for (size_t i = 0; i < coloredFacesVector.size(); ++i) {
+		computeInvertedNormal(coloredFacesVector[i], extrudVec);
+		BRepPrimAPI_MakePrism mkPrism(coloredFacesVector[i], extrudVec, Standard_False, Standard_True);
+		const TopoDS_Shape &extrudedFace = mkPrism.Shape();
 		listOfShapes.Append(extrudedFace);
 	}
 }
 
-void ColorHandler::computeNormal(const TopoDS_Face& findNormalTo, gp_Vec& normal) {
+void ColorHandler::computeInvertedNormal(const TopoDS_Face& findNormalTo, gp_Vec& normal) {
     Standard_Real umin, umax, vmin, vmax;
     BRepTools::UVBounds(findNormalTo, umin, umax, vmin, vmax);
-    std::cout << "Umin: " << umin << "Umax: " << umax << "Vmin " << vmin << "Vmax " << vmax << std::endl;
+    std::cout << "ColorHandler::computeInvertedNormal: Umin: " << umin << "Umax: " << umax << "Vmin " << vmin << "Vmax " << vmax << std::endl;
     Handle_Geom_Surface surf = BRep_Tool::Surface(findNormalTo); // create surface
     GeomLProp_SLProps props(surf, umin, vmin, 1, 0.01); // get surface properties
     normal = props.Normal(); // get surface normal
-    if(findNormalTo.Orientation() == TopAbs_REVERSED) normal.Reverse(); // check orientation
-    std::cout << "NormalVec: [" << normal.X()<< "," << normal.Y() << ","<< normal.Z() << "]" << std::endl;
+    if(findNormalTo.Orientation() == TopAbs_REVERSED){
+    	std::cout << "ColorHandler::computeInvertedNormal: Reversing Normal vector" << std::endl;
+    	normal.Reverse(); // check orientation
+    }
+    normal.Multiply(-1);
+    std::cout << "ColorHandler::computeInvertedNormal: InvertedNormalVec: [" << normal.X()<< "," << normal.Y() << ","<< normal.Z() << "]" << std::endl;
 }
 
-bool ColorHandler::isDocumentValid() {
-	return XCAFDoc_DocumentTool::IsXCAFDocument(aDoc);
+bool ColorHandler::areDocumentsValid() {
+	return XCAFDoc_DocumentTool::IsXCAFDocument(aDocStep) && XCAFDoc_DocumentTool::IsXCAFDocument(aDocIges) ;
 }
+

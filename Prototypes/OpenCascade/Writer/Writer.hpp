@@ -12,6 +12,10 @@
 #include <vector>
 #include <Voxel_BoolDS.hxx>
 
+
+#include "../Voxelizer/VoxelShape.hpp"
+
+
 class Writer{
 public:
     Writer() {};
@@ -19,6 +23,8 @@ public:
     virtual ~Writer() {};
 
     virtual bool write(std::string _filename, std::vector<Voxel_BoolDS> &voxelShape) = 0;
+
+
 
 protected:
 };

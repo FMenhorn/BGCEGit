@@ -1,4 +1,4 @@
-# B-Splines
+# Dual Contouring
 Benni & Juan Carlos , 8.10.15
 
 ## Short description
@@ -17,5 +17,7 @@ We use a dictionary for storing the voxel data. This dictionary can be accessed 
 - This [paper](http://www.frankpetterson.com/publications/dualcontour/dualcontour.pdf) explains the theory of DC.
 
 ## Possible Improvements
+- For certain patterns we get not reasonably surfaces. Those manifolds should be avoided by appropriate exception handling (already implemented in 2D for checkerboard pattern, missing in 3D).
 - Our datastructure for the voxel data is very comfortable for supporting different resolutions, still there is no interpolation or something else applied. This could be improved by applying a sufficient coarsening scheme.
 - The hermite data approximaiton is a very simple scheme: We just approximate the midpoint of an edge as the root. This is the best guess we can get on the finest resolution. But for coarse resolutions one could also incorporate information from finer levels for finding the root.
+

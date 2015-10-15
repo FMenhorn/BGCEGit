@@ -7,7 +7,9 @@
 
 #include "Writer_VTK.hpp"
 
-bool Writer_VTK::write(std::string filename, Voxel_BoolDS &voxelShape){
+#include <Voxel_BoolDS.hxx>
+
+bool Writer_VTK::write(std::string filename, VoxelShape &voxelShape){
     ofstream outfile;
     std::cout << "Writer: Writing VTK file for " + filename + " .." << std::endl;
     outfile.open(filename + ".vtk", ios::out | ios::trunc);
@@ -30,25 +32,27 @@ void Writer_VTK::writeHeader(std::ofstream &outfile) {
 	outfile << "\n";
 }
 
-void Writer_VTK::writeStructuredGrid(std::ofstream &outfile, Voxel_BoolDS &voxelShape){
+void Writer_VTK::writeStructuredGrid(std::ofstream &outfile, VoxelShape &voxelShape){
+	const Voxel_BoolDS& voxelBoolShape = voxelShape.getVoxelShape();
 	outfile << "DATASET STRUCTURED_POINTS\n";
-	outfile << "DIMENSIONS  " << (int)voxelShape.GetNbX() << " " << (int)voxelShape.GetNbY() << " " << (int)voxelShape.GetNbZ() << "\n";
-	outfile << "ORIGIN " << 0 << " " << 0 << " " << 0 << "\n";
-	outfile << "SPACING " << voxelShape.GetXLen() / voxelShape.GetNbX() << " " << voxelShape.GetYLen() / voxelShape.GetNbY() << " " << voxelShape.GetZLen() / voxelShape.GetNbZ() << "\n";
+	outfile << "DIMENSIONS  " << (int)voxelBoolShape.GetNbX() << " " << (int)voxelBoolShape.GetNbY() << " " << (int)voxelBoolShape.GetNbZ() << "\n";
+	outfile << "ORIGIN " << voxelShape.getOriginX() << " " << voxelShape.getOriginY() << " " << voxelShape.getOriginZ() << "\n";
+	outfile << "SPACING " << voxelBoolShape.GetXLen() / voxelBoolShape.GetNbX() << " " << voxelBoolShape.GetYLen() / voxelBoolShape.GetNbY() << " " << voxelBoolShape.GetZLen() / voxelBoolShape.GetNbZ() << "\n";
 	outfile << "\n";
 }
 
 
-void Writer_VTK::writeScalars(std::ofstream &outfile, Voxel_BoolDS &voxelShape){
-	int totalSize = voxelShape.GetNbX() * voxelShape.GetNbY() * voxelShape.GetNbZ();
+void Writer_VTK::writeScalars(std::ofstream &outfile, VoxelShape &voxelShape){
+	const Voxel_BoolDS& voxelBoolShape = voxelShape.getVoxelShape();
+	int totalSize = voxelBoolShape.GetNbX() * voxelBoolShape.GetNbY() * voxelBoolShape.GetNbZ();
 	//std::cout << voxelShape.GetNbX() << " " << voxelShape.GetNbY() << " " << voxelShape.GetNbZ() << std::endl;
 	outfile << "POINT_DATA " << totalSize << " \n";
 	outfile << "SCALARS density int 1 \n";
 	outfile << "LOOKUP_TABLE default \n";
-	for (int k = 0; k < voxelShape.GetNbZ(); k++)
-        for (int j = 0; j < voxelShape.GetNbY(); j++){
-            for (int i = 0; i < voxelShape.GetNbX(); i++){{
-                outfile << (int)(voxelShape.Get(i, j, k)) << "\n";
+	for (int k = 0; k < voxelBoolShape.GetNbZ(); k++){
+        for (int j = 0; j < voxelBoolShape.GetNbY(); j++){
+            for (int i = 0; i < voxelBoolShape.GetNbX(); i++){
+                outfile << (int)(voxelBoolShape.Get(i, j, k)) << "\n";
             }
         }
 	}

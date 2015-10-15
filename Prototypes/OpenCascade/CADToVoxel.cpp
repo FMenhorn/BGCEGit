@@ -12,7 +12,6 @@
 #include <iostream>
 #include <vector>
 
-#include <Voxel_BoolDS.hxx>
 #include <IGESControl_Reader.hxx>
 #include <TopoDS.hxx>
 #include <TopoDS_Face.hxx>
@@ -27,62 +26,90 @@
 #include "Reader/IGESCAFReader.hpp"
 #include "Reader/STEPCAFReader.hpp"
 #include "Voxelizer/Voxelizer.hpp"
+#include "Voxelizer/VoxelShape.hpp"
 #include "Writer/Writer_VTK.hpp"
 #include "ColorHandler/ColorHandler.hpp"
 
 int main(void){
 	///File:
 	std::string filePath = "./TestGeometry/";
-	std::string fileName = "BlackWhiteCube.igs";
-	std::string file = filePath + fileName;
-    /// Read file
-    Reader* reader;
-    if(fileName.find(".igs")!=std::string::npos){
-    	reader = new IGESCAFReader();
-    }else if(fileName.find(".stp")!=std::string::npos || fileName.find(".step")!=std::string::npos){
-    	reader = new STEPCAFReader();
-    }else{
-    	std::cout << "CADToVoxel: Wrong type of input file. Neither .stp nor .igs" << std::endl;
-    	return EXIT_FAILURE;
-    }
+	std::string fileName = "RedGreenBlueCube";
+	std::string fileNameStep = fileName + ".stp";
+	std::string fileNameIges = fileName + ".igs";
+	std::string fileStep = filePath + fileNameStep;
+	std::string fileIges = filePath + fileNameIges;
 
-	reader->read(file);
-	ColorHandler colorDetector;
-	reader->transfer(colorDetector.getDoc());
-	colorDetector.initializeMembers();
+	/**
+	 *  INPUT
+	 */
+    STEPCAFReader readerStep;
+    IGESCAFReader readerIges;
+
+    readerStep.read(fileStep);
+    readerIges.read(fileIges);
+
+    /**
+     * FACE DETECTION
+     */
+    ColorHandler colorDetector;
+    readerStep.transfer(colorDetector.getDocStep());
+    readerIges.transfer(colorDetector.getDocIges());
+    colorDetector.initializeMembers();
 	std::vector<TopoDS_Face> facesVector;
-	TopoDS_Shape sewedShape;
 
-	TopTools_ListOfShape facesList;
-	colorDetector.getFixtureShapes(facesList);
+    TopoDS_Shape fullShape;
+    colorDetector.getCompleteShape(fullShape);
+	TopTools_ListOfShape fixtureFacesList;
+	colorDetector.getFixtureShapes(fixtureFacesList);
+	TopTools_ListOfShape loadFacesList;
+	colorDetector.getLoadShapes(loadFacesList);
+	TopTools_ListOfShape passiveFacesList;
+	colorDetector.getPassiveShapes(passiveFacesList);
 
-    /*TopoDS_Face findNormalTo = TopoDS::Face(facesList.First());
-
-    Standard_Real umin, umax, vmin, vmax;
-    BRepTools::UVBounds(findNormalTo, umin, umax, vmin, vmax);	// create surface
-    Handle_Geom_Surface surf = BRep_Tool::Surface(findNormalTo);	// get surface properties
-    GeomLProp_SLProps props(surf, umin, vmin, 1, 0.01);	// get surface normal
-    gp_Dir norm = props.Normal();	// check orientation
-    if(findNormalTo.Orientation() == TopAbs_REVERSED) norm.Reverse();*/
-
-    //gp_Dir normal
-
-	sewedShape = facesList.First();
-
-	STEPControl_Writer stepWriter;
-	stepWriter.Transfer(sewedShape, STEPControl_AsIs);
-	stepWriter.Write("sewed.stp");
-
-    /// Voxelize file
-    Voxelizer voxelizer;
+    /**
+     * VOXELIZE AND OUTPUT
+     */
     int refinementLevel = 0;
+    int i;
+    Voxelizer voxelizer;
     Writer_VTK writer_vtk;
     TopTools_ListIteratorOfListOfShape shapeIterator;
-    int i = 1;
-    for(shapeIterator.Initialize(facesList); shapeIterator.More(); shapeIterator.Next() ){
-    	Voxel_BoolDS voxelShape = voxelizer.voxelize(shapeIterator.Value(), refinementLevel);
-		writer_vtk.write("output" + std::to_string(i), voxelShape);
+	VoxelShape voxelShape;
+
+	/**Fixture Treatment**/
+    i = 1;
+	std::cout << "FixtureListEmpty?: " << fixtureFacesList.IsEmpty() << std::endl;
+    for(shapeIterator.Initialize(fixtureFacesList); shapeIterator.More(); shapeIterator.Next() ){
+    	std::cout << "Fixture I: " << i << std::endl;
+    	voxelizer.voxelize(shapeIterator.Value(), refinementLevel, voxelShape);
+		writer_vtk.write("outputFixtures" + std::to_string(i), voxelShape);
 		i++;
     }
+
+    /**Load Treatment**/
+    i = 1;
+	std::cout << "LoadListEmpty?: " << loadFacesList.IsEmpty() << std::endl;
+    for(shapeIterator.Initialize(loadFacesList); shapeIterator.More(); shapeIterator.Next() ){
+    	std::cout << "Load I: " << i << std::endl;
+    	voxelizer.voxelize(shapeIterator.Value(), refinementLevel, voxelShape);
+		writer_vtk.write("outputLoad" + std::to_string(i), voxelShape);
+		i++;
+    }
+
+    /**Passive Treatment**/
+    i = 1;
+	std::cout << "PassiveListEmpty?: " << passiveFacesList.IsEmpty() << std::endl;
+    for(shapeIterator.Initialize(passiveFacesList); shapeIterator.More(); shapeIterator.Next() ){
+    	std::cout << "Passive I: " << i << std::endl;
+    	voxelizer.voxelize(shapeIterator.Value(), refinementLevel, voxelShape);
+		writer_vtk.write("outputPassive" + std::to_string(i), voxelShape);
+		i++;
+    }
+
+    /**Full Body Treatment**/
+    voxelizer.voxelize(fullShape, refinementLevel, voxelShape);
+    voxelizer.fillVolume(voxelShape);
+    writer_vtk.write("outputFullBody", voxelShape);
+
 	return EXIT_SUCCESS;
 }

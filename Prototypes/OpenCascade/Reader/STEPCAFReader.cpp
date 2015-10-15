@@ -33,7 +33,7 @@ void STEPCAFReader::read(const std::string filename) {
 		std::cout << "STEPCAFReader::read: File read successful" << std::endl;
 		break;
 	default:
-		std::cout << "STEPCAFReader::read: File read not succesful!" << std::endl;
+		std::cout << "STEPCAFReader::read: File read not successful!" << std::endl;
 		exit(-1);
 	}
 	Standard_Integer nbr =  stepCAFControlReader.NbRootsForTransfer();

@@ -28,3 +28,13 @@ STL/IGESFiles (needs account):
 STEP/IGES Color Detection lead:
 	http://dev.opencascade.org/doc/overview/html/occt_user_guides__xde.html
 	https://www.quora.com/What-is-the-most-popular-file-format-used-for-sharing-CAD-files
+	
+Voxel_BoolDS functions:
+        Voxel_BoolDS::GetCenter(x, y, z, cX, cY, cZ)
+                Returns the value of the center of the voxel (Standard_Real) located at indices x, y, z in cX, cY, cZ.
+        Voxel_BoolDS::GetNbX/Y/Z()
+                Returns the number of voxels (Standard_Integer) in X/Y/Z direction.
+        Voxel_BoolDS::GetX/Y/ZLen()
+                Returns the actual dimension (Standard_Real) in the X/Y/Z direction
+        Voxel_BoolDS::GetX/Y/Z()
+                Returns the X/Y/Z direction width of each voxel in the grid
