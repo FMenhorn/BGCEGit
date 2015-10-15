@@ -49,9 +49,9 @@ void Writer_VTK::writeScalars(std::ofstream &outfile, VoxelShape &voxelShape){
 	outfile << "POINT_DATA " << totalSize << " \n";
 	outfile << "SCALARS density int 1 \n";
 	outfile << "LOOKUP_TABLE default \n";
-	for (int k = 0; k < voxelBoolShape.GetNbZ(); k++)
+	for (int k = 0; k < voxelBoolShape.GetNbZ(); k++){
         for (int j = 0; j < voxelBoolShape.GetNbY(); j++){
-            for (int i = 0; i < voxelBoolShape.GetNbX(); i++){{
+            for (int i = 0; i < voxelBoolShape.GetNbX(); i++){
                 outfile << (int)(voxelBoolShape.Get(i, j, k)) << "\n";
             }
         }
