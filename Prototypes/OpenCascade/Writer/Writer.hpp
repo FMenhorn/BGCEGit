@@ -9,7 +9,7 @@
 #define _WRITER_
 
 #include <string>
-
+#include <vector>
 #include <Voxel_BoolDS.hxx>
 
 class Writer{
@@ -18,7 +18,7 @@ public:
 
     virtual ~Writer() {};
 
-    virtual bool write(std::string _filename, Voxel_BoolDS &voxelShape) = 0;
+    virtual bool write(std::string _filename, std::vector<Voxel_BoolDS> &voxelShape) = 0;
 
 protected:
 };
