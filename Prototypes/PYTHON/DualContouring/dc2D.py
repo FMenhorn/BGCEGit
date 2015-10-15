@@ -13,17 +13,17 @@ class PseudoNode:
         self.res = _resolution
         self.x = _voxel_coord[0] + .5*self.res
         self.y = _voxel_coord[1] + .5*self.res
-        value_key = tuple(self.voxel_coord + .5*_resolution * np.array([1.0, 1.0]))
+        value_key = tuple(np.array([self.x, self.y]))
         self.middle_sign = _dataset[value_key] > 0
         self.quad_signs = _quad_signs
         self.connects = self.calculate_connection()
 
     def calculate_connection(self):
         connects = []
-        neighbor_keys = [tuple(self.voxel_coord + self.res * np.array([1.0,0.0])),
-                         tuple(self.voxel_coord + self.res * np.array([0.0,1.0])),
-                         tuple(self.voxel_coord + self.res * np.array([-1.0,0.0])),
-                         tuple(self.voxel_coord + self.res * np.array([0.0,-1.0]))]
+        neighbor_keys = [tuple(self.voxel_coord + self.res * np.array([-1.0,0.0])),
+                         tuple(self.voxel_coord + self.res * np.array([0.0,-1.0])),
+                         tuple(self.voxel_coord + self.res * np.array([1.0,0.0])),
+                         tuple(self.voxel_coord + self.res * np.array([0.0,1.0]))]
         n = self.quad_signs.__len__()
         for i in range(n):
             if self.middle_sign != self.quad_signs[i]:
@@ -142,12 +142,9 @@ def dual_contour(data, res, dims, coarse_level):
                     if (data[tuple(o+res*dirs[i]+res*dirs[int(not i)])] > 0) != (data[tuple(o+res*dirs[i])] > 0):
                         dc_edges.append([vindex[tuple(o)], vindex[tuple(o + np.array(dirs[i])*res)]])
         elif (x, y) in pseudo_index and coarse_level:
-            #print pseudo_index
-            #print "found pseudo!"
             o = np.array([float(x), float(y)])
             key = tuple(o)
             i = pseudo_index[key]
-            print "pseudo node at "+str(o)+":"
             for c in dc_pseudo_verts[i].connects:
                 dc_edges.append([vindex[c[0]], vindex[c[1]]])
         else:
