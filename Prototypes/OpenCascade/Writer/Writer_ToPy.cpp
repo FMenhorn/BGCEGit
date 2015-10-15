@@ -8,24 +8,31 @@
 #include "Writer_ToPy.hpp"
 
 
-bool Writer_ToPy::write(std::string _filename,std::vector<Voxel_BoolDS> &voxelShape){
+bool Writer_ToPy::write(std::string _filename, std::vector<std::vector<VoxelShape>> &voxelShape){
     std::vector<int> dimensions(3);
-    dimensions[0]=voxelShape[0].GetNbX();
-    dimensions[1]=voxelShape[0].GetNbY();
-    dimensions[2]=voxelShape[0].GetNbZ();
+    dimensions[0]=voxelShape[0][0].getVoxelShape().GetNbX();
+    dimensions[1]=voxelShape[0][0].getVoxelShape().GetNbY();
+    dimensions[2]=voxelShape[0][0].getVoxelShape().GetNbZ();
     ofstream outfile;
     std::cout << "Writer: Writing Tpd file for " + _filename + " .." << std::endl;
+    std::cout << "Writer: with dimensions: " << dimensions[0] << "," << dimensions[1] << "," << dimensions[2] << std::endl;
     outfile.open(_filename + ".tpd", ios::out | ios::trunc);
 
     writeHeader(outfile, _filename);
     writeDimensions(outfile, dimensions);
     writeGreyScaleFilters(outfile);
-//Write active nodes
-//    writeNodes("ACTV_ELEM", outfile,voxelShape[0],dimensions);
-//use different voxel shape vector and do the same for the others
-// writeNodes("PASV_ELEM",outfile,voxelShape[1],dimensions);
-//writeNodes("FXTR_NODE_X",outfile,voxelShape[2],dimensions);
+	//Write active nodes
+	writeNodes("ACTV_ELEM", outfile,voxelShape[0],dimensions);
+	//use different voxel shape vector and do the same for the others
+	writeNodes("PASV_ELEM",outfile,voxelShape[3],dimensions);
+	writeNodes("FXTR_NODE_X",outfile,voxelShape[1],dimensions);
+	writeNodes("FXTR_NODE_Y",outfile,voxelShape[1],dimensions);
+	writeNodes("FXTR_NODE_Z",outfile,voxelShape[1],dimensions);
+	writeNodes("LOAD__NODE_X",outfile,voxelShape[2],dimensions);
+	writeNodes("LOAD__NODE_Y",outfile,voxelShape[2],dimensions);
+	writeNodes("LOAD__NODE_Z",outfile,voxelShape[2],dimensions);
 
+	outfile << "LOAD_VALU_Y: " << "-1" << "\n";
     outfile.close();
 
     std::cout << "Writer: .. done!" << std::endl;
@@ -70,27 +77,29 @@ void Writer_ToPy::writeGreyScaleFilters(std::ofstream &outfile){
 	outfile << "Q_MAX      : 5\n";
 }
 
-
- void Writer_ToPy::writeNodes(std::string name, std::ofstream &outfile, Voxel_BoolDS &voxelShape, std::vector<int> dimensions){
+ void Writer_ToPy::writeNodes(std::string name, std::ofstream &outfile, std::vector<VoxelShape> &voxelShape, std::vector<int> dimensions){
 	outfile<< name << ": ";
-	float hx=voxelShape.GetX();
-	float hy=voxelShape.GetY();
-	float hz=voxelShape.GetZ();
-        for (int k = 0; k < voxelShape.GetNbZ(); k++){
-        for (int i = 0; i < voxelShape.GetNbX(); i++){
-            for (int j = 0; j < voxelShape.GetNbY(); j++){
-	        if (voxelShape.Get(i,j,k)==Standard_True){
-//change to list.append
-//		std::cout<<"X: "<< i*hx<<" Y:  "<<j*hy<<" Z: "<<k*hz << " Index: "<<(j+(voxelShape.GetNbY())*(i+k*(voxelShape.GetNbZ()))) << std::endl;
-  	        outfile << (j+(voxelShape.GetNbY())*(i+k*(voxelShape.GetNbZ()))) <<"; ";
-                }
-            }
-        }
-        }
+	for(size_t h = 0; h < voxelShape.size(); ++h){
+		float hx=voxelShape[h].getVoxelShape().GetX();
+		float hy=voxelShape[h].getVoxelShape().GetY();
+		float hz=voxelShape[h].getVoxelShape().GetZ();
+		for (int k = 0; k < voxelShape[h].getVoxelShape().GetNbZ(); k++){
+			for (int i = 0; i < voxelShape[h].getVoxelShape().GetNbX(); i++){
+				for (int j = 0; j < voxelShape[h].getVoxelShape().GetNbY(); j++){
+					std::cout << "Current Step: " << name << ":" << h << "," << k << "," << i << "," << j << std::endl;
+				if (voxelShape[h].getVoxelShape().Get(i,j,k)==Standard_True){
+	//change to list.append
+					//std::cout<<"X: "<< i*hx<<" Y:  "<<j*hy<<" Z: "<<k*hz << " Index: "<<(j+(voxelShape[h].getVoxelShape().GetNbY())*(i+k*(voxelShape[h].getVoxelShape().GetNbZ()))) << std::endl;
+					outfile << (j+(voxelShape[h].getVoxelShape().GetNbY())*(i+k*(voxelShape[h].getVoxelShape().GetNbZ()))) <<"; ";
+					}
+				}
+			}
+		}
+	}
+	outfile << "\n";
 }
 int Writer_ToPy::getIndex(int x, int y, int z, std::vector<int> dimensions){
 
 return y + (dimensions[1]+1)*(x + (dimensions[0]+1) * z);
 
 }
-

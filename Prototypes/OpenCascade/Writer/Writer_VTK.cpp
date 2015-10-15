@@ -9,8 +9,8 @@
 
 #include <Voxel_BoolDS.hxx>
 
-bool Writer_VTK::write(std::string filename, VoxelShape &voxelShape){
-    ofstream outfile;
+bool Writer_VTK::write(std::string filename,  std::vector<std::vector<VoxelShape>> &voxelShape){
+    /*ofstream outfile;
     std::cout << "Writer: Writing VTK file for " + filename + " .." << std::endl;
     outfile.open(filename + ".vtk", ios::out | ios::trunc);
 
@@ -21,7 +21,7 @@ bool Writer_VTK::write(std::string filename, VoxelShape &voxelShape){
     outfile.close();
 
     std::cout << "Writer: .. done!" << std::endl;
-
+	*/
     return true;
 }
 

@@ -28,6 +28,7 @@
 #include "Voxelizer/Voxelizer.hpp"
 #include "Voxelizer/VoxelShape.hpp"
 #include "Writer/Writer_VTK.hpp"
+#include "Writer/Writer_ToPy.hpp"
 #include "ColorHandler/ColorHandler.hpp"
 
 int main(void){
@@ -76,40 +77,59 @@ int main(void){
     TopTools_ListIteratorOfListOfShape shapeIterator;
 	VoxelShape voxelShape;
 
-	/**Fixture Treatment**/
-    i = 1;
-	std::cout << "FixtureListEmpty?: " << fixtureFacesList.IsEmpty() << std::endl;
-    for(shapeIterator.Initialize(fixtureFacesList); shapeIterator.More(); shapeIterator.Next() ){
-    	std::cout << "Fixture I: " << i << std::endl;
-    	voxelizer.voxelize(shapeIterator.Value(), refinementLevel, voxelShape);
-		writer_vtk.write("outputFixtures" + std::to_string(i), voxelShape);
-		i++;
-    }
+	std::vector<std::vector<VoxelShape>> topyOutput;
 
-    /**Load Treatment**/
-    i = 1;
-	std::cout << "LoadListEmpty?: " << loadFacesList.IsEmpty() << std::endl;
-    for(shapeIterator.Initialize(loadFacesList); shapeIterator.More(); shapeIterator.Next() ){
-    	std::cout << "Load I: " << i << std::endl;
-    	voxelizer.voxelize(shapeIterator.Value(), refinementLevel, voxelShape);
-		writer_vtk.write("outputLoad" + std::to_string(i), voxelShape);
-		i++;
-    }
-
-    /**Passive Treatment**/
-    i = 1;
-	std::cout << "PassiveListEmpty?: " << passiveFacesList.IsEmpty() << std::endl;
-    for(shapeIterator.Initialize(passiveFacesList); shapeIterator.More(); shapeIterator.Next() ){
-    	std::cout << "Passive I: " << i << std::endl;
-    	voxelizer.voxelize(shapeIterator.Value(), refinementLevel, voxelShape);
-		writer_vtk.write("outputPassive" + std::to_string(i), voxelShape);
-		i++;
-    }
 
     /**Full Body Treatment**/
     voxelizer.voxelize(fullShape, refinementLevel, voxelShape);
     voxelizer.fillVolume(voxelShape);
-    writer_vtk.write("outputFullBody", voxelShape);
+
+	std::vector<VoxelShape> bodyVector;
+	bodyVector.push_back(voxelShape);
+    topyOutput.push_back(bodyVector);
+    //writer_vtk.write("outputFullBody", voxelShape);
+
+	/**Fixture Treatment**/
+    i = 0;
+	std::cout << "FixtureListEmpty?: " << fixtureFacesList.IsEmpty() << std::endl;
+	std::vector<VoxelShape> fixtureVector(1);
+    for(shapeIterator.Initialize(fixtureFacesList); shapeIterator.More(); shapeIterator.Next() ){
+    	std::cout << "Fixture I: " << i << std::endl;
+    	voxelizer.voxelize(shapeIterator.Value(), refinementLevel, fixtureVector[0]);
+		//writer_vtk.write("outputFixtures" + std::to_string(i), voxelShape);
+		i++;
+    }
+    topyOutput.push_back(fixtureVector);
+
+    /**Load Treatment**/
+    i = 0;
+	std::cout << "LoadListEmpty?: " << loadFacesList.IsEmpty() << std::endl;
+	std::vector<VoxelShape> loadVector(1);
+    for(shapeIterator.Initialize(loadFacesList); shapeIterator.More(); shapeIterator.Next() ){
+    	std::cout << "Load I: " << i << std::endl;
+    	voxelizer.voxelize(shapeIterator.Value(), refinementLevel, loadVector[0]);
+		//writer_vtk.write("outputLoad" + std::to_string(i), loadVector[0]);
+		//loadVector[i] = voxelShape;
+		i++;
+    }
+    topyOutput.push_back(loadVector);
+
+    /**Passive Treatment**/
+    i = 0;
+	std::cout << "PassiveListEmpty?: " << passiveFacesList.IsEmpty() << std::endl;
+	std::vector<VoxelShape> passiveVector(1);
+    for(shapeIterator.Initialize(passiveFacesList); shapeIterator.More(); shapeIterator.Next() ){
+    	std::cout << "Passive I: " << i << std::endl;
+    	voxelizer.voxelize(shapeIterator.Value(), refinementLevel, passiveVector[0]);
+		//writer_vtk.write("outputPassive" + std::to_string(i), voxelShape);
+		//passiveVector[i] = voxelShape;
+		i++;
+    }
+    topyOutput.push_back(passiveVector);
+
+
+    Writer_ToPy writerToPy;
+    writerToPy.write("test", topyOutput);
 
 	return EXIT_SUCCESS;
 }

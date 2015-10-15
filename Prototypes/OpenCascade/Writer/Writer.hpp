@@ -10,8 +10,6 @@
 
 #include <string>
 #include <vector>
-#include <Voxel_BoolDS.hxx>
-
 
 #include "../Voxelizer/VoxelShape.hpp"
 
@@ -22,7 +20,7 @@ public:
 
     virtual ~Writer() {};
 
-    virtual bool write(std::string _filename, std::vector<Voxel_BoolDS> &voxelShape) = 0;
+    virtual bool write(std::string _filename, std::vector<std::vector<VoxelShape>> &voxelShape) = 0;
 
 
 
