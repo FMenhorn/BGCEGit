@@ -31,6 +31,8 @@ public:
 	void setDimension(const std::vector<double> dimension);
 	const std::vector<double>& getOrigin() const;
 
+	VoxelShape& operator=( const VoxelShape& other );
+
 private:
 	Voxel_BoolDS _voxelShape;
 	std::vector<double> _dimension;

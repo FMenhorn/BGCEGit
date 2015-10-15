@@ -9,8 +9,10 @@
 #define _WRITER_
 
 #include <string>
+#include <vector>
 
 #include "../Voxelizer/VoxelShape.hpp"
+
 
 class Writer{
 public:
@@ -18,7 +20,9 @@ public:
 
     virtual ~Writer() {};
 
-    virtual bool write(std::string _filename, VoxelShape &voxelShape) = 0;
+    virtual bool write(std::string _filename, std::vector<std::vector<VoxelShape>> &voxelShape) = 0;
+
+
 
 protected:
 };

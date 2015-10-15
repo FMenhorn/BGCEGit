@@ -54,3 +54,10 @@ const std::vector<double>& VoxelShape::getDimension() const {
 void VoxelShape::setDimension(const std::vector<double> dimension) {
 	_dimension = dimension;
 }
+
+VoxelShape& VoxelShape::operator=( const VoxelShape& other ) {
+	      this->_voxelShape = other._voxelShape;
+	      this->_dimension = other._dimension;
+	      this->_origin = other._origin;
+	      return *this;
+}
