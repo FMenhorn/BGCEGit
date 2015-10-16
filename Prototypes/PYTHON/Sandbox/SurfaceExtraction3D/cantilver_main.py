@@ -64,6 +64,7 @@ ax.set_aspect('equal')
 plane_oo = [False] * quads['coarse'].__len__()
 for q in quads['coarse']:
     vtx = q.vertices_plane
+    print(vtx)
     M = vtx[1:4,:]-vtx[0,:]
     plane_oo[q.quad_id] = abs(np.linalg.det(M))<10**-10
     vtx_orig = verts_out_dc['coarse'][q.vertex_ids]
