@@ -43,7 +43,7 @@ for i = 1:size(faces,1)
         end
     end
 end
-n
+size(edges, 1)
 verts_children = zeros(N, 7);%[]; %zeros(N, 4);
 verts_children_faces = zeros(N, 7);
 edges_children = zeros(size(edges,1), 4);

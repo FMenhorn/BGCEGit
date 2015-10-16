@@ -1,33 +1,31 @@
 __author__ = 'benjamin'
-
+import numpy as np
 
 class Quad:
     # _quadlist and _vertexlist have to be of type np.array!
     def __init__(self, _id, _vertices, _vertexlist):
-        import numpy as np
-        if not (type(_quadlist) is np.ndarray and type(_vertexlist) is np.ndarray):
-            print "WRONG TYPE! exiting..."
-            quit()
 
         self.quad_id = _id
         self.vertices = _vertices
+#        self.vertex_ids = _quadlist[_id]
         self.vertex_ids = np.array([self.vertices[i].getId() for i in range(len(self.vertices))])
         self.centroid = self.compute_centroid(_vertexlist)
-        self.is_plane = self.compute_plane(_vertexlist)
-        self.normal = self.compute_normal(_vertexlist)
-        self.vertices_plane = self.compute_plane_corner_points(_vertexlist)
-        self.ortho_basis_AB, \
-        self.basis_BAD, \
-        self.ortho_basis_CB, \
-        self.basis_BCD = \
-            self.compute_basis(_vertexlist)# [edge_AB;edge_orthogonal;normal]
+       # self.is_plane = self.compute_plane(_vertexlist)
+       # self.normal = self.compute_normal(_vertexlist)
+       # self.vertices_plane = self.compute_plane_corner_points(_vertexlist)
+       # self.ortho_basis_AB, \
+       # self.basis_BAD, \
+       # self.ortho_basis_CB, \
+       # self.basis_BCD = \
+       #     self.compute_basis(_vertexlist)# [edge_AB;edge_orthogonal;normal]
 
-        self.neighbors = self.find_neighbors(_quadlist)
+       # self.neighbors = self.find_neighbors(_quadlist)
         #self.basis, self.basis_inv = self.get_basis()
 
     def compute_centroid(self, _vertexlist):
-        import numpy as np
-        return np.mean(_vertexlist[self.vertex_ids],0)
+       # import numpy as np
+      #  return np.mean(_vertexlist[self.vertex_ids],0) #CHANGED!!!!
+        return np.mean([self.vertices[i].coordinates for i in range(len(self.vertices))], 0)
 
     def compute_plane(self, _vertexlist):
         import numpy as np
@@ -193,21 +191,48 @@ class Quad:
 
             return projected_vertices
 
-    def find_neighbors(self,_quadlist):
-        import numpy as np
+    def getEdges(self):
 
-        neighbors = np.array([])
+        edges = []
+        n = len(self.vertices)
 
-        edges = [self.vertex_ids[[0,1]],
-                 self.vertex_ids[[1,2]],
-                 self.vertex_ids[[2,3]],
-                 self.vertex_ids[[3,0]]]
+        for i in range(n):
+            edges.append([self.vertices[i], self.vertices[(i+1)%n]])
 
-        for e in edges:
-            has_vertex1 = np.where(_quadlist == e[0])[0]
-            has_vertex2 = np.where(_quadlist == e[1])[0]
-            same_edge = np.intersect1d(has_vertex1, has_vertex2)
-            neighbor = same_edge[same_edge != self.quad_id]
-            neighbors = np.append(neighbors, neighbor)
+        return edges
 
-        return neighbors.astype(int)
+    def isAdjacent(self, face):
+        face_edges = face.getEdges();
+        flag = 0
+
+        for edge in self.getEdges():
+            if (edge in face_edges) or ([edge[1], edge[0]] in face_edges):
+                flag = 1
+
+        return flag;
+
+    def adjacentEdges(self, vert):
+        adjacent_edges = []
+        for edge in self.getEdges():
+            if vert in edge:
+                adjacent_edges.append(edge)
+        return adjacent_edges
+
+
+   # def find_neighbors(self, facelist):
+#
+ #       neighbors = []
+#
+ #       edges = self.getEdges()
+
+#        for face in facelist:
+#
+ #           if face.quad_id != self.quad_id:
+
+  #              face_edges = face.getEdges()
+
+   #             for edge in face_edges:
+    #                if (edge in edges):
+     #                   neighbors.append(face)
+
+#        return neighbors

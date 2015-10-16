@@ -23,22 +23,18 @@ class Face:
 
     def find_neighbors(self, facelist):
 
-        neighbors = np.array([])
+        neighbors = []
 
         edges = self.getEdges()
 
         for face in facelist:
-            face_edges_ids = face.getEdges()
 
+            if face.id <> self.quad_id:
 
-        for e in edges:
-            has_vertex1 = np.where([quadlist[i].vertex_ids for i in range(len(quadlist))] == e[0])[0]
-            has_vertex2 = np.where([quadlist[i].vertex_ids for i in range(len(quadlist))] == e[1])[0]
-            same_edge = np.intersect1d(has_vertex1, has_vertex2)
-            neighbor = same_edge[same_edge != self.quad_id]
-            neighbors = np.append(neighbors, neighbor)
+                face_edges = face.getEdges()
 
-        return neighbors.astype(int)
+                for edge in face_edges:
+                    if (edge in edges):
+                        neighbors.append(face)
 
-    def listOfFacesContainingTheEdge(self, quadlist, edge):
-        return
+        return neighbors
