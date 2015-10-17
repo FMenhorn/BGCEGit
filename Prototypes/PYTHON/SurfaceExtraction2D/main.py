@@ -20,8 +20,8 @@ def find_closest_edges(_point, _edgelist, _n_closest):
 
 
 dimensions = {'xmin': 0.0, 'xmax': 6.0, 'ymin': 2.0, 'ymax': 6.0}
-res_fine = 1.0/16.0
-res_coarse = res_fine * 8.0
+res_fine = 1.0/32.0
+res_coarse = res_fine * 16.0
 resolutions = {'fine': res_fine,'coarse': res_coarse}
 
 fine_data = sample_data(doubletorus_f, resolutions['fine'], dimensions)
@@ -44,8 +44,8 @@ for q in edges_out_dc['fine']:
     vtx = verts_out_dc['fine'][q]
     x = vtx[:,0]
     y = vtx[:,1]
-    #plt.plot(x, y, 'b')
-    #plt.plot(x, y, 'bo')
+    plt.plot(x, y, 'b')
+    plt.plot(x, y, 'bo')
 
 for q in edges_out_dc['coarse']:
     vtx = verts_out_dc['coarse'][q]
@@ -82,11 +82,13 @@ for vertex in verts['fine']:
         if abs(distance) < distance_min:
             projected_point_min = projected_point
             distance_min = abs(distance)
+            t_min = t
 
     #only plotting information
     start = projected_point_min
     end = vertex
-    #plt.plot([start[0],end[0]],[start[1],end[1]],'k',linewidth=2.0)
+    print t_min
+    plt.plot([start[0],end[0]],[start[1],end[1]],'k',linewidth=2.0)
 
 
 plt.xlim(xmin = -1, xmax = 7)

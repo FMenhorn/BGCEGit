@@ -38,7 +38,7 @@ for q in quads_out_dc['coarse']:
     poly=Poly3DCollection(vtx)
     poly.set_color('b')
     poly.set_edgecolor('k')
-    poly.set_alpha(.25)
+    poly.set_alpha(1)
     ax.add_collection3d(poly)
 
 for q in quads_out_dc['fine']:
@@ -50,7 +50,7 @@ for q in quads_out_dc['fine']:
     poly=Poly3DCollection(vtx)
     poly.set_color('r')
     poly.set_edgecolor('k')
-    poly.set_alpha(.25)
+    poly.set_alpha(1)
 #    ax.add_collection3d(poly)
 
 ax.set_xlim3d(dimensions['xmin'], dimensions['xmax'])
