@@ -10,18 +10,38 @@
 #include <Voxel_BoolDS.hxx>
 
 bool Writer_VTK::write(std::string filename,  std::vector<std::vector<VoxelShape>> &voxelShape){
-    /*ofstream outfile;
-    std::cout << "Writer: Writing VTK file for " + filename + " .." << std::endl;
-    outfile.open(filename + ".vtk", ios::out | ios::trunc);
+	std::string outputFilename;
+	for(size_t i = 0; i < voxelShape.size(); ++i){
+		switch(i){
+		case 0:
+			outputFilename = filename + "_body";
+			break;
+		case 1:
+			outputFilename = filename + "_fixture";
+			break;
+		case 2:
+			outputFilename = filename + "_load";
+			break;
+		case 3:
+			outputFilename = filename + "_passive";
+			break;
+		}
+		for(size_t j = 0; j < voxelShape[i].size(); ++j){
+		    ofstream outfile;
+		    VoxelShape tmpVoxelShape = voxelShape[i][j];
+		    std::cout << "Writer_VTK: Writing VTK file for " + outputFilename << j << " .." << std::endl;
+		    outfile.open(outputFilename + std::to_string(j) + ".vtk", ios::out | ios::trunc);
 
-    writeHeader(outfile);
-    writeStructuredGrid(outfile, voxelShape);
-    writeScalars(outfile, voxelShape);
+		    writeHeader(outfile);
+		    writeStructuredGrid(outfile, tmpVoxelShape);
+		    writeScalars(outfile, tmpVoxelShape);
 
-    outfile.close();
+		    outfile.close();
+		}
+	}
 
-    std::cout << "Writer: .. done!" << std::endl;
-	*/
+    std::cout << "Writer_VTK: .. done!" << std::endl;
+
     return true;
 }
 

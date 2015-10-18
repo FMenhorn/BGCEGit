@@ -14,8 +14,8 @@ bool Writer_ToPy::write(std::string _filename, std::vector<std::vector<VoxelShap
     dimensions[1]=voxelShape[0][0].getVoxelShape().GetNbY();
     dimensions[2]=voxelShape[0][0].getVoxelShape().GetNbZ();
     ofstream outfile;
-    std::cout << "Writer: Writing Tpd file for " + _filename + " .." << std::endl;
-    std::cout << "Writer: with dimensions: " << dimensions[0] << "," << dimensions[1] << "," << dimensions[2] << std::endl;
+    std::cout << "Writer_ToPy: Writing Tpd file for " + _filename + " .." << std::endl;
+    std::cout << "Writer_ToPy: with dimensions: " << dimensions[0] << "," << dimensions[1] << "," << dimensions[2] << std::endl;
     outfile.open(_filename + ".tpd", ios::out | ios::trunc);
 
     writeHeader(outfile, _filename);
@@ -35,7 +35,7 @@ bool Writer_ToPy::write(std::string _filename, std::vector<std::vector<VoxelShap
 	outfile << "LOAD_VALU_Y: " << "-1" << "\n";
     outfile.close();
 
-    std::cout << "Writer: .. done!" << std::endl;
+    std::cout << "Writer_ToPy: .. done!" << std::endl;
 
     return true;
 
@@ -86,7 +86,7 @@ void Writer_ToPy::writeGreyScaleFilters(std::ofstream &outfile){
 		for (int k = 0; k < voxelShape[h].getVoxelShape().GetNbZ(); k++){
 			for (int i = 0; i < voxelShape[h].getVoxelShape().GetNbX(); i++){
 				for (int j = 0; j < voxelShape[h].getVoxelShape().GetNbY(); j++){
-					std::cout << "Current Step: " << name << ":" << h << "," << k << "," << i << "," << j << std::endl;
+					//std::cout << "Current Step: " << name << ":" << h << "," << k << "," << i << "," << j << std::endl;
 				if (voxelShape[h].getVoxelShape().Get(i,j,k)==Standard_True){
 	//change to list.append
 					//std::cout<<"X: "<< i*hx<<" Y:  "<<j*hy<<" Z: "<<k*hz << " Index: "<<(j+(voxelShape[h].getVoxelShape().GetNbY())*(i+k*(voxelShape[h].getVoxelShape().GetNbZ()))) << std::endl;
