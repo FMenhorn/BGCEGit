@@ -33,7 +33,7 @@ private:
     void writeHeader(std::ofstream &outfile, std::string _filename);
     void writeGreyScaleFilters(std::ofstream &outfile);
     void writeDimensions(std::ofstream &outfile,std::vector<int> dimensions);
-    void writeNodes(std::string name, std::ofstream &outfile, std::vector<VoxelShape> &voxelShape, std::vector<int> dimensions); //later change to vector of shapes
+    int writeNodes(std::string name, std::ofstream &outfile, std::vector<VoxelShape> &voxelShape, std::vector<int> dimensions); //later change to vector of shapes
     int getIndex(int x, int y, int z, std::vector<int> dimensions);
 };
 #endif // _WRITER_TOPY_

@@ -28,11 +28,11 @@ bool Writer_ToPy::write(std::string _filename, std::vector<std::vector<VoxelShap
 	writeNodes("FXTR_NODE_X",outfile,voxelShape[1],dimensions);
 	writeNodes("FXTR_NODE_Y",outfile,voxelShape[1],dimensions);
 	writeNodes("FXTR_NODE_Z",outfile,voxelShape[1],dimensions);
-	writeNodes("LOAD__NODE_X",outfile,voxelShape[2],dimensions);
-	writeNodes("LOAD__NODE_Y",outfile,voxelShape[2],dimensions);
-	writeNodes("LOAD__NODE_Z",outfile,voxelShape[2],dimensions);
+	//writeNodes("LOAD_NODE_X",outfile,voxelShape[2],dimensions);
+	int noLoadVoxelsY = writeNodes("LOAD_NODE_Y",outfile,voxelShape[2],dimensions);
+	//writeNodes("LOAD_NODE_Z",outfile,voxelShape[2],dimensions);
 
-	outfile << "LOAD_VALU_Y: " << "-1" << "\n";
+	outfile << "LOAD_VALU_Y: " << "-1@" << noLoadVoxelsY << "\n";
     outfile.close();
 
     std::cout << "Writer_ToPy: .. done!" << std::endl;
@@ -77,7 +77,8 @@ void Writer_ToPy::writeGreyScaleFilters(std::ofstream &outfile){
 	outfile << "Q_MAX      : 5\n";
 }
 
- void Writer_ToPy::writeNodes(std::string name, std::ofstream &outfile, std::vector<VoxelShape> &voxelShape, std::vector<int> dimensions){
+ int Writer_ToPy::writeNodes(std::string name, std::ofstream &outfile, std::vector<VoxelShape> &voxelShape, std::vector<int> dimensions){
+	int size = 0;
 	outfile<< name << ": ";
 	for(size_t h = 0; h < voxelShape.size(); ++h){
 		float hx=voxelShape[h].getVoxelShape().GetX();
@@ -91,12 +92,14 @@ void Writer_ToPy::writeGreyScaleFilters(std::ofstream &outfile){
 	//change to list.append
 					//std::cout<<"X: "<< i*hx<<" Y:  "<<j*hy<<" Z: "<<k*hz << " Index: "<<(j+(voxelShape[h].getVoxelShape().GetNbY())*(i+k*(voxelShape[h].getVoxelShape().GetNbZ()))) << std::endl;
 					outfile << (j+(voxelShape[h].getVoxelShape().GetNbY())*(i+k*(voxelShape[h].getVoxelShape().GetNbZ()))) <<"; ";
+					size++;
 					}
 				}
 			}
 		}
 	}
 	outfile << "\n";
+	return size;
 }
 int Writer_ToPy::getIndex(int x, int y, int z, std::vector<int> dimensions){
 
