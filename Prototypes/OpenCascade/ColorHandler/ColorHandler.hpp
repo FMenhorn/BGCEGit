@@ -16,10 +16,11 @@
 #include <XCAFDoc_ColorTool.hxx>
 #include <TDF_LabelSequence.hxx>
 #include <TopoDS_Face.hxx>
-#include <TopTools_ListOfShape.hxx>
 #include <gp_Vec.hxx>
 
 #include <vector>
+
+#include "../DataWrappers/ListOfShape.hpp"
 /*
  *
  */
@@ -52,19 +53,19 @@ public:
 	 * Calls getColoredFaces with color red
 	 * @param listOfShapes holds all shapes with the color red
 	 */
-	void getFixtureShapes(TopTools_ListOfShape& listOfShapes);
+	void getFixtureShapes(ListOfShape& listOfShapes);
 
 	/**
 	 * Calls getColoredFaces with color blue
 	 * @param listOfShapes holds all shapes with the color blue
 	 */
-	void getPassiveShapes(TopTools_ListOfShape& listOfShapes);
+	void getPassiveShapes(ListOfShape& listOfShapes);
 
 	/**
 	 * Calls getColoredFaces with color green
 	 * @param listOfShapes holds all shapes with the color green
 	 */
-	void getLoadShapes(TopTools_ListOfShape& listOfShapes);
+	void getLoadShapes(ListOfShape& listOfShapes);
 
 	/**
      * Returns the faces of the geometry as a TopoDS_Shape.
@@ -89,7 +90,7 @@ private:
 	 * @param listOfShapes holds all shapes with the color wanted color
 	 * @param wantedColor the color for which we are looking on the faces
 	 */
-	void getColoredFaces(TopTools_ListOfShape& listOfShapes,const Quantity_Color wantedColor);
+	void getColoredFaces(ListOfShape& listOfShapes,const Quantity_Color wantedColor);
 
 	/**
 	 * Computes normal of the face
@@ -98,7 +99,7 @@ private:
 
 	bool areDocumentsValid();
 	void findColoredFaces(const Quantity_Color& wantedColor, std::vector<TopoDS_Face>& coloredFacesVector);
-	void buildColoredFaces(const std::vector<TopoDS_Face>& coloredFacesVector, TopTools_ListOfShape& listOfShapes);
+	void buildColoredFaces(const std::vector<TopoDS_Face>& coloredFacesVector, ListOfShape& listOfShapes);
 };
 
 #endif /* COLORHANDLER_COLORHANDLER_HPP_ */

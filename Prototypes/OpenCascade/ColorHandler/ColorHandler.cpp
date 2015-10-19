@@ -103,22 +103,22 @@ void ColorHandler::getCompleteShape(TopoDS_Shape& topoDSShape) {
 	topoDSShape = shapeStep;
 }
 
-void ColorHandler::getFixtureShapes(TopTools_ListOfShape& listOfShapes) {
+void ColorHandler::getFixtureShapes(ListOfShape& listOfShapes) {
 	Quantity_Color red(1,0,0,Quantity_TOC_RGB);
 	getColoredFaces(listOfShapes, red);
 }
 
-void ColorHandler::getPassiveShapes(TopTools_ListOfShape& listOfShapes) {
+void ColorHandler::getPassiveShapes(ListOfShape& listOfShapes) {
 	Quantity_Color green(0,1,0,Quantity_TOC_RGB);
 	getColoredFaces(listOfShapes, green);
 }
 
-void ColorHandler::getLoadShapes(TopTools_ListOfShape& listOfShapes) {
+void ColorHandler::getLoadShapes(ListOfShape& listOfShapes) {
 	Quantity_Color blue(0,0,1,Quantity_TOC_RGB);
 	getColoredFaces(listOfShapes, blue);
 }
 
-void ColorHandler::getColoredFaces(TopTools_ListOfShape& listOfShapes,const Quantity_Color wantedColor) {
+void ColorHandler::getColoredFaces(ListOfShape& listOfShapes,const Quantity_Color wantedColor) {
 	std::vector<TopoDS_Face> coloredFacesVector;
 	findColoredFaces(wantedColor, coloredFacesVector);
 	buildColoredFaces(coloredFacesVector, listOfShapes);
@@ -151,14 +151,15 @@ void ColorHandler::findColoredFaces(const Quantity_Color& wantedColor, std::vect
 	}
 }
 
-void ColorHandler::buildColoredFaces( const std::vector<TopoDS_Face>& coloredFacesVector, TopTools_ListOfShape& listOfShapes) {
+void ColorHandler::buildColoredFaces( const std::vector<TopoDS_Face>& coloredFacesVector, ListOfShape& listOfShapes) {
 	gp_Vec extrudVec;
 	for (size_t i = 0; i < coloredFacesVector.size(); ++i) {
 		computeInvertedNormal(coloredFacesVector[i], extrudVec);
 		BRepPrimAPI_MakePrism mkPrism(coloredFacesVector[i], extrudVec, Standard_False, Standard_True);
 		const TopoDS_Shape &extrudedFace = mkPrism.Shape();
-		listOfShapes.Append(extrudedFace);
+		listOfShapes.append(extrudedFace);
 	}
+	listOfShapes.setSize(coloredFacesVector.size());
 }
 
 void ColorHandler::computeInvertedNormal(const TopoDS_Face& findNormalTo, gp_Vec& normal) {

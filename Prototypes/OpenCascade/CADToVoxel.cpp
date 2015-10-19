@@ -30,6 +30,7 @@
 #include "Writer/Writer_VTK.hpp"
 #include "Writer/Writer_ToPy.hpp"
 #include "ColorHandler/ColorHandler.hpp"
+#include "DataWrappers/ListOfShape.hpp"
 
 int main(void){
 	///File:
@@ -60,11 +61,11 @@ int main(void){
 
     TopoDS_Shape fullShape;
     colorDetector.getCompleteShape(fullShape);
-	TopTools_ListOfShape fixtureFacesList;
+	ListOfShape fixtureFacesList;
 	colorDetector.getFixtureShapes(fixtureFacesList);
-	TopTools_ListOfShape loadFacesList;
+	ListOfShape loadFacesList;
 	colorDetector.getLoadShapes(loadFacesList);
-	TopTools_ListOfShape passiveFacesList;
+	ListOfShape passiveFacesList;
 	colorDetector.getPassiveShapes(passiveFacesList);
 
     /**
@@ -87,25 +88,40 @@ int main(void){
     outputVoxelVector.push_back(bodyVector);
 
     /**TODO: wrap size variable**/
+    int counter = 0;
 	/**Fixture Treatment**/
-	std::vector<VoxelShape> fixtureVector(1);
-    for(shapeIterator.Initialize(fixtureFacesList); shapeIterator.More(); shapeIterator.Next() ){
-    	voxelizer.voxelize(shapeIterator.Value(), refinementLevel, fixtureVector[0]);
-    }
+	std::vector<VoxelShape> fixtureVector;
+	if(fixtureFacesList.getSize() > 0){
+		fixtureVector.resize(fixtureFacesList.getSize());
+		for(shapeIterator.Initialize(fixtureFacesList.getListOfShape()); shapeIterator.More(); shapeIterator.Next() ){
+			voxelizer.voxelize(shapeIterator.Value(), refinementLevel, fixtureVector[counter]);
+			counter++;
+		}
+	}
     outputVoxelVector.push_back(fixtureVector);
 
+    counter = 0;
     /**Load Treatment**/
-	std::vector<VoxelShape> loadVector(1);
-    for(shapeIterator.Initialize(loadFacesList); shapeIterator.More(); shapeIterator.Next() ){
-    	voxelizer.voxelize(shapeIterator.Value(), refinementLevel, loadVector[0]);
-    }
+	std::vector<VoxelShape> loadVector;
+	if(loadFacesList.getSize() > 0){
+		loadVector.resize(loadFacesList.getSize());
+		for(shapeIterator.Initialize(loadFacesList.getListOfShape()); shapeIterator.More(); shapeIterator.Next() ){
+			voxelizer.voxelize(shapeIterator.Value(), refinementLevel, loadVector[counter]);
+			counter++;
+		}
+	}
     outputVoxelVector.push_back(loadVector);
 
+    counter = 0;
     /**Passive Treatment**/
-	std::vector<VoxelShape> passiveVector(1);
-    for(shapeIterator.Initialize(passiveFacesList); shapeIterator.More(); shapeIterator.Next() ){
-    	voxelizer.voxelize(shapeIterator.Value(), refinementLevel, passiveVector[0]);
-    }
+	std::vector<VoxelShape> passiveVector;
+	if(passiveFacesList.getSize()>0){
+		passiveVector.resize(passiveFacesList.getSize());
+		for(shapeIterator.Initialize(passiveFacesList.getListOfShape()); shapeIterator.More(); shapeIterator.Next() ){
+			voxelizer.voxelize(shapeIterator.Value(), refinementLevel, passiveVector[counter]);
+			counter++;
+		}
+	}
     outputVoxelVector.push_back(passiveVector);
 
 

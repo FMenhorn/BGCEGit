@@ -20,7 +20,8 @@ Voxelizer/Voxelizer.cpp
 Voxelizer/VoxelShape.cpp
 Writer/Writer_ToPy.cpp
 Writer/Writer_VTK.cpp
-ColorHandler/ColorHandler.cpp)
+ColorHandler/ColorHandler.cpp
+DataWrappers/ListOfShape.cpp)
 
 target_link_libraries(CADToVoxel
 TKTopAlgo
