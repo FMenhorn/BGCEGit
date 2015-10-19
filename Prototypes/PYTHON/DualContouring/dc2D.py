@@ -6,30 +6,8 @@ import numpy.linalg as la
 import scipy.optimize as opt
 import itertools as it
 
-
-class PseudoNode:
-    def __init__(self, _voxel_coord, _quad_signs, _dataset, _resolution):
-        self.voxel_coord = _voxel_coord
-        self.res = _resolution
-        self.x = _voxel_coord[0] + .5*self.res
-        self.y = _voxel_coord[1] + .5*self.res
-        value_key = tuple(np.array([self.x, self.y]))
-        self.middle_sign = _dataset[value_key] > 0
-        self.quad_signs = _quad_signs
-        self.connects = self.calculate_connection()
-
-    def calculate_connection(self):
-        connects = []
-        neighbor_keys = [tuple(self.voxel_coord + self.res * np.array([-1.0,0.0])),
-                         tuple(self.voxel_coord + self.res * np.array([0.0,-1.0])),
-                         tuple(self.voxel_coord + self.res * np.array([1.0,0.0])),
-                         tuple(self.voxel_coord + self.res * np.array([0.0,1.0]))]
-        n = self.quad_signs.__len__()
-        for i in range(n):
-            if self.middle_sign != self.quad_signs[i]:
-                connects.append((neighbor_keys[i],neighbor_keys[(i+1)%n]))
-
-        return connects
+from ManifoldNode import ManifoldNode
+from dcHelpers import update_mesh_2d, generate_vertex_usage_dict
 
 # Cardinal directions
 dirs = [np.array([1.0, 0.0]), np.array([0.0, 1.0])]
@@ -80,32 +58,37 @@ def dual_contour(data, res, dims, coarse_level):
     # Compute vertices
     dc_verts = []
     vindex = {}
-    dc_pseudo_verts = []
-    pseudo_index = {}
+    dc_manifold_verts = []
+    manifold_index = {}
 
     for x, y in it.product(np.arange(dims['xmin'], dims['xmax'], res), np.arange(dims['ymin'], dims['ymax'], res)):
         o = np.array([float(x), float(y)])
 
         quad_signs=[]
+        quad_sign_keys=[]
         # Get signs for cube
         for v in quad_verts:
             position = (o + v*res)
-            key = tuple(position)
-            quad_signs.append(data[key] > 0)
+            quad_sign_keys.append(tuple(position))
+
+        for key in quad_sign_keys:
+            c = True
+            if key in data:
+                c = data[key] > 0
+            quad_signs.append(c)
 
         #print "voxel at "+str(o)+": "+str(quad_signs)
 
         if all(quad_signs) or not any(quad_signs):
             continue
 
-        #this checks for certain problematic cases and introduces pseudo nodes, if necessary
+        #this checks for certain problematic cases and introduces manifold nodes, if necessary
         if coarse_level:
             if quad_signs == [False, True, False, True] or quad_signs == [True, False, True, False]:
                 #print quad_signs
                 key = tuple(o)
-                pseudo_index[key] = len(dc_pseudo_verts)
-                dc_pseudo_verts.append(PseudoNode(o, quad_signs, data, res))
-                continue
+                manifold_index[key] = len(dc_manifold_verts)
+                dc_manifold_verts.append(ManifoldNode(o, quad_sign_keys, data, res))
 
         # Estimate hermite data
         h_data = []
@@ -141,13 +124,32 @@ def dual_contour(data, res, dims, coarse_level):
                 if tuple(o + res*dirs[i]) in vindex:
                     if (data[tuple(o+res*dirs[i]+res*dirs[int(not i)])] > 0) != (data[tuple(o+res*dirs[i])] > 0):
                         dc_edges.append([vindex[tuple(o)], vindex[tuple(o + np.array(dirs[i])*res)]])
-        elif (x, y) in pseudo_index and coarse_level:
-            o = np.array([float(x), float(y)])
-            key = tuple(o)
-            i = pseudo_index[key]
-            for c in dc_pseudo_verts[i].connects:
-                dc_edges.append([vindex[c[0]], vindex[c[1]]])
         else:
             continue
 
-    return np.array(dc_verts), np.array(dc_edges), np.array(dc_pseudo_verts)
+    if coarse_level:
+        vertex_usage_dict = generate_vertex_usage_dict(dc_edges)
+
+        new_edges_list = []
+        new_nodes_list = []
+        delete_edges_list = []
+
+        o_idx_nodes =  dc_verts.__len__()
+        for x, y in it.product(np.arange(dims['xmin'], dims['xmax'], res), np.arange(dims['ymin'], dims['ymax'], res)):
+            # Emit one edge per each edge that crosses
+            if (x, y) in manifold_index:
+                i = manifold_index[(x, y)]
+                global_idx = vindex[(x, y)]
+
+                [new_edges, new_nodes, delete_edges] = dc_manifold_verts[i].resolve(o_idx_nodes,
+                                                                                    global_idx,
+                                                                                    vindex,
+                                                                                    vertex_usage_dict)
+                new_edges_list += new_edges
+                new_nodes_list += new_nodes
+                delete_edges_list += delete_edges
+                o_idx_nodes += new_nodes.__len__()
+
+        [dc_verts, dc_edges] = update_mesh_2d(dc_verts, dc_edges, new_edges_list, new_nodes_list, delete_edges_list)
+
+    return np.array(dc_verts), np.array(dc_edges), np.array(dc_manifold_verts)

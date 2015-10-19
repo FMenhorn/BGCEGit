@@ -6,8 +6,8 @@ from dcSample import sample_data, sphere_f, doubletorus_f, torus_f
 import numpy as np
 
 dimensions = {'xmin': 0.0, 'xmax': 6.0, 'ymin': 2.0, 'ymax': 6.0}
-res_fine = 1.0/4.0
-res_coarse = res_fine * 2.0
+res_fine = 1.0/16.0
+res_coarse = res_fine * 8.0
 resolutions = {'fine': res_fine,'coarse': res_coarse}
 
 fine_data = sample_data(doubletorus_f, resolutions['fine'], dimensions)

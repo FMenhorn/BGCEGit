@@ -11,10 +11,11 @@ class ManifoldEdge:
     def __init__(self, _manifold_edge_key, _manifold_edge_quads, _manifold_edge_vertex_quads, _dc_vindex, _dataset, _resolution):
         self.resolution = _resolution
         self.v_key = [None] * 2
+        self.v_idx = _manifold_edge_key
         for i in range(2):
-            self.v_key[i] = search_vertex_key_from_index(_dc_vindex, _manifold_edge_key[i])
+            self.v_key[i] = search_vertex_key_from_index(_dc_vindex, self.v_idx[i])
 
-        self.edge_dir, self.edge_dim = self.calculate_edge_dir(_manifold_edge_key, _dc_vindex)
+        self.edge_dir, self.edge_dim = self.calculate_edge_dir()
         self.neighbour_keys, self.neighbour_directions = self.calculate_neighbour_keys()
         self.middle_value_key, self.middle_plane_index = self.calculate_middle_value_key()
         self.middle_sign = self.calculate_middle_sign(_dataset)   #CHANGED
@@ -22,14 +23,13 @@ class ManifoldEdge:
         self.manifold_edge_vertex_quads = _manifold_edge_vertex_quads
 
     def calculate_middle_sign(self,_dataset):
-         key=self.middle_value_key    #middle_value _key is a tuple
+         key=self.middle_value_key    #middle_value_key is a tuple
          if key in _dataset:
                 return True
          else:
              return False
 
-
-    def calculate_edge_dir(self, _manifold_edge_key, _dc_vindex):
+    def calculate_edge_dir(self):
         import numpy as np
         v_o = [None] * 2
         #v_o describes the origin of the respective voxel
@@ -143,19 +143,20 @@ def estimate_hermite(data, v0, v1):
 
 
 def tworesolution_dual_contour(dataset, resolutions, dims):
-    [dc_verts_fine,dc_quads_fine]=dual_contour(dataset,
+    [dc_verts_fine,dc_quads_fine, dc_manifold_edges_fine]=dual_contour(dataset,
                                                resolutions['fine'],
                                                dims,
                                                coarse_level = False)
-    [dc_verts_coarse,dc_quads_coarse]=dual_contour(dataset,
+    [dc_verts_coarse,dc_quads_coarse, dc_manifold_edges_coarse]=dual_contour(dataset,
                                                    resolutions['coarse'],
                                                    dims,
-                                                   coarse_level = True)
+                                                   coarse_level = False)
 
     dc_verts={'fine': dc_verts_fine,'coarse': dc_verts_coarse}
     dc_quads={'fine': dc_quads_fine,'coarse': dc_quads_coarse}
+    dc_manifold_edges={'fine': dc_manifold_edges_fine, 'coarse': dc_manifold_edges_coarse}
 
-    return dc_verts, dc_quads
+    return dc_verts, dc_quads, dc_manifold_edges
 
 
 # Input:
@@ -228,10 +229,11 @@ def dual_contour(data, res, dims, coarse_level):
                         dc_quads.append([vindex[tuple(o)], vindex[tuple(o+res*dirs[i])], vindex[tuple(o+res*dirs[i]+res*dirs[j])], vindex[tuple(o+res*dirs[j])]])
 
     if coarse_level:
-        dc_quads = resolve_manifold_edges(dc_verts, vindex, dc_quads, data, res)
+        dc_quads, manifold_edges = resolve_manifold_edges(dc_verts, vindex, dc_quads, data, res)
+    else:
+        manifold_edges = create_manifold_edges(dc_quads, vindex, data, res)
 
-
-    return np.array(dc_verts), np.array(dc_quads)
+    return np.array(dc_verts), np.array(dc_quads), manifold_edges
 
 
 def create_manifold_edges(_dc_quads, _dc_vindex, _dataset, _resolution):
@@ -285,7 +287,7 @@ def resolve_manifold_edges(_dc_verts, _dc_vindex, _dc_quads, _data, _resolution)
 
     _dc_quads = update_quad_list(_dc_quads, new_quads_list, delete_quads_list)
 
-    return _dc_quads
+    return _dc_quads, manifold_edges
 
 
 def search_vertex_key_from_index(_dc_vindex, idx):
