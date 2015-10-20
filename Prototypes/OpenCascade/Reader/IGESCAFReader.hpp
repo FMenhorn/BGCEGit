@@ -8,15 +8,15 @@
 #ifndef READER_IGESCAFREADER_HPP_
 #define READER_IGESCAFREADER_HPP_
 
-#include "Reader.hpp"
-
 #include <TopoDS_Shape.hxx>
 #include <IGESCAFControl_Reader.hxx>
 #include <string>
+
+#include "CAFReader.hpp"
 /*
  *
  */
-class IGESCAFReader:public Reader {
+class IGESCAFReader:public CAFReader {
 public:
 	IGESCAFReader();
 	virtual ~IGESCAFReader();
