@@ -27,7 +27,7 @@
 #include "Writer/Writer_VTK.hpp"
 #include "Writer/Writer_ToPy.hpp"
 #include "ColorHandler/ColorHandler.hpp"
-#include "Reader/Reader.h"
+#include "Reader/Reader.hpp"
 #include "Reader/CAFReader.hpp"
 #include "Reader/IGESCAFReader.hpp"
 #include "Reader/STEPCAFReader.hpp"
