@@ -1,21 +1,30 @@
+import numpy as np
+from quadHelpers import quad_has_edge
+
 __author__ = 'benjamin'
 
 
-import numpy as np
-
 class ManifoldEdge:
-    def __init__(self, _manifold_edge_key, _manifold_edge_quads, _manifold_vertex_quads, _dc_vindex, _dataset,
+    def __init__(self, _manifold_edge_key, _manifold_edge_quad_ids, _manifold_vertex_quad_ids_dict, _dc_vindex, _dataset,
                  _resolution, _manifold_edge_set):
-
         # resolution of the grid
         self.resolution = _resolution
 
         # key corresponding to the vertices of the edge
         self.v_key = [None] * 2
         # indices corresponding to the vertices of the edge
+        # access pattern v_idx[local_manifold_vertex_id] = global_vertex_id
         self.v_idx = _manifold_edge_key
         for i in range(2):
             self.v_key[i] = search_vertex_key_from_index(_dc_vindex, self.v_idx[i])
+
+        # stores the indices of the child vertices of each manifold vertex after the edge is resolved
+        # access pattern: v_children_idx[local_manifold_vertex_id][split_id] = global_vertex_id
+        self.v_children_idx = [2 * [None] for _ in range(2)]
+
+        # stores the edge keys of edges connected to the respective children after the edge is resolved
+        # access pattern: v_children_edge_keys[local_manifold_vertex_id][split_id] = list of connected vertices
+        self.v_children_connection_idx = [[ set() for _ in range(2)] for _ in range (2)]
 
         # direction vector of the edge (direction vertex0 -> vertex1) and corresponding dimensions
         self.edge_dir01, self.edge_dim = self.calculate_edge_dir01()
@@ -29,9 +38,12 @@ class ManifoldEdge:
         # datavalue at middle_value_key
         self.middle_sign = self.calculate_middle_sign(_dataset)
         # quad indices of quads connected to this edge with an edge
-        self.manifold_edge_quads = _manifold_edge_quads
+        self.manifold_edge_quads_ids = _manifold_edge_quad_ids
         # quad indices of quads connected to this edge with a vertex
-        self.manifold_vertex_quads = _manifold_vertex_quads
+        self.manifold_vertex_quad_ids = 2 * [None]
+        self.manifold_vertex_quad_ids[0] = _manifold_vertex_quad_ids_dict[self.v_idx[0]]
+        self.manifold_vertex_quad_ids[1] = _manifold_vertex_quad_ids_dict[self.v_idx[1]]
+
         # kind of the vertex. A vertex is either connected to the outside of the volume or to the inside (hybrid configurations and connections to other manifold edges are also possible!)
         self.v_kind = [None] * 2
         for local_v_idx in range(2):
@@ -122,7 +134,6 @@ class ManifoldEdge:
             return tuple(np.array(self.v_key[1]) + displacement), middle_plane_idx
 
     def calculate_neighbour_keys(self):
-        import numpy as np
 
         neighbor_directions = []
 
@@ -140,16 +151,18 @@ class ManifoldEdge:
 
         return neighbor_keys, neighbor_directions
 
-    def resolve(self, _dataset, _vindex, _dc_quads):
-        new_quads = []
-        delete_quads = self.manifold_edge_quads  # the quads connected to the manifold edge are deleted in any case!
+    def resolve(self, _dataset, _vindex, _dc_quads, _dc_verts, o_idx_nodes):
+        new_quads_list = [] # new quads contributed by this edge are stored here
+        new_nodes = [] # new nodes introduced by manifold edge splitting are stored here
+        delete_quads = self.manifold_edge_quads_ids  # the old quads connected to the manifold edge are deleted in any case!
+        child_id = 0 # this will be incremented, after we have added an edge
 
-        i = self.middle_plane_index
         # we need to resolve the ambiguous cases: break or join surface with the new quads? Therefore we traverse all
         # the nodes in the same plane as the middle value
-        for n1, n2 in [(0, 2), (0, 3), (1, 2), (1, 3)]:  # create new quads and remove manifold quads
+        for neighbour_pair_key in [(0, 2), (0, 3), (1, 2), (1, 3)]:  # create new quads and remove manifold quads
             # direction of the current node
-            sign_direction = np.array(self.neighbour_directions[n1]) + np.array(self.neighbour_directions[n2])
+            sign_direction = np.array(self.neighbour_directions[neighbour_pair_key[0]]) \
+                             + np.array(self.neighbour_directions[neighbour_pair_key[1]])
             # key of the node
             sign_key = tuple(np.array(self.middle_value_key) + self.resolution * .5 * sign_direction)
             # value of the node
@@ -157,32 +170,59 @@ class ManifoldEdge:
             if sign_key in _dataset:
                 sign = _dataset[sign_key] > 0
 
-            # resolves ambiguous case: if sign is equal to middle sign, we don't want to create a quad inbetween, which
-            # separates the two nodes. If the signs are not equal, we want to separate them with a new quad
-
+            # resolves ambiguous case: if sign is equal to middle sign, we don't want to create a quad in between, which
+            # separates the two nodes. If the signs are not equal, we want to separate them with two new quads
             if sign != self.middle_sign:
-                new_quad = [None] * 4  # init quad
-                new_quad[0] = _vindex[tuple(np.array(self.v_key[0]) + self.resolution * self.neighbour_directions[n1])]
-                new_quad[1] = _vindex[tuple(np.array(self.v_key[1]) + self.resolution * self.neighbour_directions[n1])]
-                new_quad[2] = _vindex[tuple(np.array(self.v_key[1]) + self.resolution * self.neighbour_directions[n2])]
-                new_quad[3] = _vindex[tuple(np.array(self.v_key[0]) + self.resolution * self.neighbour_directions[n2])]
-                new_quads.append(new_quad)  # append new quad to new_quad list
+                new_quads = 2 * [None]  # init two quads
+
+                # initialize new edge, the quads will be connected to instead of manifold edge
+                normal_direction = sign_direction * self.resolution * 1.0/4.0  # the normal is in the direction of the sign
+                for m_v_id in range(2):  # we will have to copy the manifold edge and shift it
+                    new_nodes.append(_dc_verts[self.v_idx[m_v_id]]+normal_direction)  # shift new nodes into normal direction
+                    self.v_children_idx[m_v_id][child_id] = o_idx_nodes+m_v_id # store global index of this node in object
+
+                # each edge is parallel to the manifold edge, but shifted in the direction of one of the two neighbours
+                for edge_id in range(2):
+                    v_ids = 2 * [None] # find global neighbour vertex indices
+                    for v_id in range(2):  # calculate ids of both vertices of the neighbouring edge
+                        v_key = tuple(np.array(self.v_key[v_id])
+                                           + self.resolution * self.neighbour_directions[neighbour_pair_key[edge_id]])
+                        v_ids[v_id] = _vindex[v_key]
+
+                    # calculate corresponding edge key
+                    manifold_edge_key = tuple(sorted(tuple(v_ids)))
+
+                    # find quad which contains this edge
+                    for local_q_id in range(4):
+                        quad = _dc_quads[self.manifold_edge_quads_ids[local_q_id]]
+
+                        if quad_has_edge(quad, manifold_edge_key):
+                            new_quads[edge_id] = list(quad) # copy quad
+
+                            # swap both references to manifold edge with reference to newly created node
+                            for m_v_id in range(2):
+                                tmp = new_quads[edge_id].index(self.v_idx[m_v_id]) # find reference to node of manifold edge
+                                new_quads[edge_id][tmp] = self.v_children_idx[m_v_id][child_id] # replace with reference to new node
+                                for shift in [-1,+1]:
+                                    neighbour_idx = quad[(tmp+shift)%4]
+                                    if neighbour_idx != self.v_idx[int(not(m_v_id))]:
+                                        self.v_children_connection_idx[m_v_id][child_id].add(neighbour_idx)
+
+                            # only one quad out of self.manifold_edge_quads is connected to this neighbouring edge
+                            continue
+
+                o_idx_nodes += 2  # two new nodes have been introduces for the new edge, increment origin
+                new_quads_list += new_quads  # append 2 new quads to new_quads_list
+                child_id += 1  # incrementing child id
 
 
-                new_tri = 2*[None]
-                for i in range(new_tri.__len__()):
-                    new_tri[i] = 3*[None]
-                new_tri[0][0] = _vindex[self.v_key[0]]
-                new_tri[0][1] = new_quad[0]
-                new_tri[0][2] = new_quad[3]
-                new_tri[1][0] = _vindex[self.v_key[1]]
-                new_tri[1][1] = new_quad[1]
-                new_tri[1][2] = new_quad[2]
+                #############################################
+                # child of original manifold edge processes #
+                #############################################
 
-                for local_vtx_idx in range(2):
-                    if self.v_kind[local_vtx_idx] == "outside":
-                        new_quads.append(new_tri[local_vtx_idx])
-
+        ##########################
+        # all children processed #
+        ##########################
 
         # change remaining references to removed edge -> treat vertices!
         # this depends on the self.v_kind of the vertex!
@@ -190,28 +230,11 @@ class ManifoldEdge:
         #       - If an inside vertex is removed, we will introduce two triangle faces
         # todo changing those non-quad shapes into quads again is a postprocessing step!
 
-        for local_vtx_idx in range(2):  # traverse all vertices of the edge
-            if self.v_kind[local_vtx_idx] == "outside":
-                v_new_quads = []
-                v_delete_quads = []
-                #[v_new_quads, v_delete_quads] = self.resolve_outside_vertex(local_vtx_idx, _dc_quads)
-            elif self.v_kind[local_vtx_idx] == "inside":
-                [v_new_quads, v_delete_quads] = self.resolve_inside_vertex(local_vtx_idx, _dc_quads)
-            elif self.v_kind[local_vtx_idx] == "manifold":
-                v_new_quads = []
-                v_delete_quads = []
-                #[v_new_quads, v_delete_quads] = self.resolve_manifold_vertex(local_vtx_idx, _dc_quads)
-            else:
-                print "ERROR!"
-
-            new_quads += v_new_quads  # append to global list
-            delete_quads += v_delete_quads  # append to global list
-
-        return new_quads, delete_quads
+        return new_quads_list, new_nodes, delete_quads, o_idx_nodes
 
     def resolve_outside_vertex(self, _local_v_id, _dc_quads):
         # all quads connected to the vertex will be removed anyhow
-        delete_quads = self.manifold_vertex_quads[self.v_idx[_local_v_id]]
+        delete_quads = self.manifold_vertex_quad_ids[self.v_idx[_local_v_id]]
         new_quad = []
         # create a hexagon for outside vertices
         for q_idx in delete_quads:
@@ -232,7 +255,7 @@ class ManifoldEdge:
 
     def resolve_inside_vertex(self, _local_v_id, _dc_quads):
         # all quads connected to the vertex will be removed anyhow
-        delete_quads = list(self.manifold_vertex_quads[self.v_idx[_local_v_id]])
+        delete_quads = list(self.manifold_vertex_quad_ids[self.v_idx[_local_v_id]])
         new_quad = []
 
         # do any of the quads connected to the vertex have a common edge?
@@ -329,7 +352,7 @@ class ManifoldEdge:
 
     def resolve_manifold_vertex(self, _local_v_id, _dc_quads):
         # all quads connected to the vertex will be removed anyhow
-        delete_quads = list(self.manifold_vertex_quads[self.v_idx[_local_v_id]])
+        delete_quads = list(self.manifold_vertex_quad_ids[self.v_idx[_local_v_id]])
         # no new quads are generated!
         new_quad = []
 

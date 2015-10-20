@@ -43,20 +43,22 @@ class ManifoldNode:
 
         return connects, normals
 
-    def resolve(self, o_idx_nodes, global_idx, vindex, vertex_usage_list):
-        new_nodes = [] # is list of vertices which will be appended
-        new_edges = [] # is list of edges (two node ids) which will be appended
+    def resolve(self, o_idx_nodes, global_idx, vindex, node_usage_list):
+        new_nodes = []  # is list of vertices which will be appended
+        new_edges = []  # is list of edges (two node ids) which will be appended
 
         for i in range(2): # loop over all resolved manifold nodes
-            new_node = (np.array([self.x,self.y])+self.normal[i]).tolist() # new resolved manifold node i
-            new_nodes.append(new_node) # at position o_idx_nodes + i
+            new_node = (np.array([self.x,self.y])+self.normal[i]).tolist()  # new resolved manifold node i
+            new_nodes.append(new_node)  # at position o_idx_nodes
 
             new_edge = 2*[None]
-            for j in range(2): # loop over all neighbours of resolved manifold node
-                new_edge[j] = [o_idx_nodes+i, vindex[self.connects[i][j]]] # connect j-th neighbour of resolved manifold node i with this node
+            for j in range(2):  # loop over all neighbours of resolved manifold node
+                # connect j-th neighbour of resolved manifold node i with this node
+                new_edge[j] = [o_idx_nodes, vindex[self.connects[i][j]]]
 
-            new_edges += new_edge # add new edges
+            o_idx_nodes += 1
+            new_edges += new_edge  # add new edges
 
-        delete_edges = vertex_usage_list[global_idx] # is list of edge vertices which will be deleted
+        delete_edges = node_usage_list[global_idx]  # is list of edges, using this node, which will be deleted
 
-        return new_edges, new_nodes, delete_edges
+        return new_edges, new_nodes, delete_edges, o_idx_nodes

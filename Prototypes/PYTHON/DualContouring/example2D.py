@@ -11,7 +11,7 @@ res_coarse = res_fine * 8.0
 resolutions = {'fine': res_fine,'coarse': res_coarse}
 
 fine_data = sample_data(doubletorus_f, resolutions['fine'], dimensions)
-[verts_out_dc, quads_out_dc, pseudo_out_dc] = tworesolution_dual_contour(fine_data, resolutions, dimensions)
+[verts_out_dc, quads_out_dc, manifold_verts_out_dc] = tworesolution_dual_contour(fine_data, resolutions, dimensions)
 
 
 import matplotlib.pyplot as plt
@@ -32,7 +32,7 @@ for q in quads_out_dc['coarse']:
     plt.plot(x, y, 'k')
     plt.plot(x, y,'ko')
 
-for v in pseudo_out_dc['coarse']:
+for v in manifold_verts_out_dc['coarse']:
     x = v.x
     y = v.y
     plt.plot(x, y,'kx')

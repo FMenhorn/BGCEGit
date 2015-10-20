@@ -61,7 +61,7 @@ for q in quads_out_dc[plot_scale]:
         poly.set_color('k')
 
     poly.set_edgecolor('k')
-    poly.set_alpha(.25)
+    #poly.set_alpha(.25)
     ax.add_collection3d(poly)
 
 for m_e_key, m_edge in manifold_edges_dc[plot_scale].items():
