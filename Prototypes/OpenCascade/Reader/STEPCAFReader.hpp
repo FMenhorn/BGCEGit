@@ -8,15 +8,15 @@
 #ifndef READER_STEPCAFREADER_HPP_
 #define READER_STEPCAFREADER_HPP_
 
-#include "Reader.hpp"
-
 #include <TopoDS_Shape.hxx>
 #include <STEPCAFControl_Reader.hxx>
 #include <string>
+
+#include "CAFReader.hpp"
 /*
  *
  */
-class STEPCAFReader: public Reader {
+class STEPCAFReader: public CAFReader {
 public:
 	STEPCAFReader();
 	virtual ~STEPCAFReader();

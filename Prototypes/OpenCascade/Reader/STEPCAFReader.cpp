@@ -19,11 +19,11 @@
 #include <Quantity_Color.hxx>
 #include <XCAFDoc_ColorTool.hxx>
 
-STEPCAFReader::STEPCAFReader(): Reader() {
+STEPCAFReader::STEPCAFReader(): CAFReader() {
 }
 
 STEPCAFReader::~STEPCAFReader() {
-	this->~Reader();
+	this->~CAFReader();
 }
 
 void STEPCAFReader::read(const std::string filename) {

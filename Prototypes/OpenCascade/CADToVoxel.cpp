@@ -22,39 +22,32 @@
 #include <STEPControl_Reader.hxx>
 #include <BRepTools.hxx>
 
-#include "Reader/Reader.hpp"
-#include "Reader/IGESCAFReader.hpp"
-#include "Reader/STEPCAFReader.hpp"
 #include "Voxelizer/Voxelizer.hpp"
 #include "Voxelizer/VoxelShape.hpp"
 #include "Writer/Writer_VTK.hpp"
 #include "Writer/Writer_ToPy.hpp"
 #include "ColorHandler/ColorHandler.hpp"
+#include "Reader/Reader.h"
+#include "Reader/CAFReader.hpp"
+#include "Reader/IGESCAFReader.hpp"
+#include "Reader/STEPCAFReader.hpp"
 
 int main(void){
 	///File:
 	std::string filePath = "./TestGeometry/";
 	std::string fileName = "RedGreenBlueCube";
-	std::string fileNameStep = fileName + ".stp";
-	std::string fileNameIges = fileName + ".igs";
-	std::string fileStep = filePath + fileNameStep;
-	std::string fileIges = filePath + fileNameIges;
 
 	/**
 	 *  INPUT
 	 */
-    STEPCAFReader readerStep;
-    IGESCAFReader readerIges;
-
-    readerStep.read(fileStep);
-    readerIges.read(fileIges);
+	Reader reader(filePath, fileName);
+	reader.read();
 
     /**
      * FACE DETECTION
      */
     ColorHandler colorDetector;
-    readerStep.transfer(colorDetector.getDocStep());
-    readerIges.transfer(colorDetector.getDocIges());
+    reader.transfer(colorDetector);
     colorDetector.initializeMembers();
 	std::vector<TopoDS_Face> facesVector;
 
