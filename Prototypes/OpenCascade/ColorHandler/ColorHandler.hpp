@@ -65,7 +65,7 @@ public:
 	 * Calls getColoredFaces with color green
 	 * @param listOfShapes holds all shapes with the color green
 	 */
-	void getLoadShapes(ListOfShape& listOfShapes);
+	void getLoadShapes(ListOfShape& listOfShapes, std::vector<std::vector<double>>& listOfLoads);
 
 	/**
      * Returns the faces of the geometry as a TopoDS_Shape.
@@ -81,7 +81,10 @@ private:
 
 	void buildShapesFromDocs();
 
-    void buildShapeFromDoc(const Handle_TDocStd_Document& doc, TopoDS_Shape& shape);
+    void buildShapeFromDoc(
+    		const Handle_TDocStd_Document& 	doc,
+    			  TopoDS_Shape& 			shape
+			);
 
 	/**
 	 * Assembles the shape with the help of the XCAFDoc_ShapeTool myAssembly and the TDF_LabelSequence aLabel.
@@ -90,16 +93,34 @@ private:
 	 * @param listOfShapes holds all shapes with the color wanted color
 	 * @param wantedColor the color for which we are looking on the faces
 	 */
-	void getColoredFaces(ListOfShape& listOfShapes,const Quantity_Color wantedColor);
+	void getColoredFaces(
+				  ListOfShape& 						listOfShapes,
+				  std::vector<std::vector<double>>& listOfLoads,
+			const Quantity_Color					wantedColor,
+			const bool								isLoadSeeked
+			);
 
 	/**
 	 * Computes normal of the face
 	 */
-    void computeInvertedNormal(const TopoDS_Face& findNormalTo, gp_Vec& normal);
+    void computeInvertedNormal(
+    		const TopoDS_Face& 	findNormalTo,
+    			  gp_Vec& 		normal
+			);
 
 	bool areDocumentsValid();
-	void findColoredFaces(const Quantity_Color& wantedColor, std::vector<TopoDS_Face>& coloredFacesVector);
-	void buildColoredFaces(const std::vector<TopoDS_Face>& coloredFacesVector, ListOfShape& listOfShapes);
+
+	void findColoredFaces(
+			const Quantity_Color& 					wantedColor,
+				  std::vector<TopoDS_Face>& 		coloredFacesVector,
+				  std::vector<std::vector<double>>& colorVector,
+			const bool 								isLoadSeeked
+			);
+
+	void buildColoredFaces(
+			const std::vector<TopoDS_Face>& coloredFacesVector,
+				  ListOfShape& 				listOfShapes
+			);
 };
 
 #endif /* COLORHANDLER_COLORHANDLER_HPP_ */

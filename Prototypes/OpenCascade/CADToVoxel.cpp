@@ -36,7 +36,7 @@
 
 int main(void){
 	///File:
-	std::string filePath = "./TestGeometry/";
+	std::string filePath = "./TestGeometry/RedGreenBlueCube/";
 	std::string fileName = "RedGreenBlueCube";
 
 	/**
@@ -55,10 +55,14 @@ int main(void){
 
     TopoDS_Shape fullShape;
     colorDetector.getCompleteShape(fullShape);
+
 	ListOfShape fixtureFacesList;
 	colorDetector.getFixtureShapes(fixtureFacesList);
+
 	ListOfShape loadFacesList;
-	colorDetector.getLoadShapes(loadFacesList);
+	std::vector<std::vector<double>> loadList;
+	colorDetector.getLoadShapes(loadFacesList, loadList);
+
 	ListOfShape passiveFacesList;
 	colorDetector.getPassiveShapes(passiveFacesList);
 
