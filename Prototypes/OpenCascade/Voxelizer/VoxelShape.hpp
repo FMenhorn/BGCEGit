@@ -32,9 +32,12 @@ public:
 	const std::vector<double>& getOrigin() const;
 
 	VoxelShape& operator=( const VoxelShape& other );
+	const std::vector<int>& getIndices() const;
+	void setIndices(const std::vector<int> indices);
 
 private:
 	Voxel_BoolDS _voxelShape;
+	std::vector<int> _indices;
 	std::vector<double> _dimension;
 	std::vector<double> _origin;
 };

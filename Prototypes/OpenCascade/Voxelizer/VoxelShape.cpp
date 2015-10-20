@@ -61,3 +61,11 @@ VoxelShape& VoxelShape::operator=( const VoxelShape& other ) {
 	      this->_origin = other._origin;
 	      return *this;
 }
+
+const std::vector<int>& VoxelShape::getIndices() const {
+	return _indices;
+}
+
+void VoxelShape::setIndices(const std::vector<int> indices) {
+	_indices = indices;
+}

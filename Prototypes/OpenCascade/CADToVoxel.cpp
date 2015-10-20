@@ -24,6 +24,7 @@
 
 #include "Voxelizer/Voxelizer.hpp"
 #include "Voxelizer/VoxelShape.hpp"
+#include "Voxelizer/VoxelIndexCalculator.hpp"
 #include "Writer/Writer_VTK.hpp"
 #include "Writer/Writer_ToPy.hpp"
 #include "ColorHandler/ColorHandler.hpp"
@@ -117,6 +118,9 @@ int main(void){
 	}
     outputVoxelVector.push_back(passiveVector);
 
+    VoxelIndexCalculator voxelIndexCalculator;
+    voxelIndexCalculator.calculateIndexForVoxels(outputVoxelVector);
+    voxelIndexCalculator.removeDoubleIndices(outputVoxelVector);
 
     Writer_ToPy writerToPy;
     writerToPy.write("topy", outputVoxelVector);
