@@ -116,7 +116,10 @@ void Writer_ToPy::writeGreyScaleFilters(std::ofstream &outfile){
 		//			}
 		//		}
 		//	}
-			outfile << voxelIndices[k] <<"; ";
+			if(k < voxelIndices.size()-1)
+				outfile << voxelIndices[k]+1 <<"; ";
+			else
+				outfile << voxelIndices[k]+1;
 		}
 		size += voxelIndices.size();
 	}
