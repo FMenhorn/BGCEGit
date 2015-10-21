@@ -24,7 +24,7 @@ class ManifoldEdge:
 
         # stores the edge keys of edges connected to the respective children after the edge is resolved
         # access pattern: v_children_edge_keys[local_manifold_vertex_id][split_id] = list of connected vertices
-        self.v_children_connection_idx = [[ set() for _ in range(2)] for _ in range (2)]
+        self.v_children_connection_idx = [[ [] for _ in range(2)] for _ in range (2)]
 
         # direction vector of the edge (direction vertex0 -> vertex1) and corresponding dimensions
         self.edge_dir01, self.edge_dim = self.calculate_edge_dir01()
@@ -54,8 +54,6 @@ class ManifoldEdge:
         # 1.    is the vertex connected to another manifold edge?
         #       check references by other manifold edges!
         other_manifold_edges = list(sorted(_manifold_edge_set))
-        print other_manifold_edges
-        print tuple(sorted(self.v_idx))
         other_manifold_edges.remove(tuple(sorted(self.v_idx)))
         other_manifold_edges = np.array(other_manifold_edges)
 
@@ -151,10 +149,10 @@ class ManifoldEdge:
 
         return neighbor_keys, neighbor_directions
 
-    def resolve(self, _dataset, _vindex, _dc_quads, _dc_verts, o_idx_nodes):
+    def resolve(self, _dataset, _vindex, _dc_quads, _dc_verts, o_idx_nodes, vindex_mapping):
         new_quads_list = [] # new quads contributed by this edge are stored here
-        new_nodes = [] # new nodes introduced by manifold edge splitting are stored here
-        delete_quads = self.manifold_edge_quads_ids  # the old quads connected to the manifold edge are deleted in any case!
+        new_nodes_list = [] # new nodes introduced by manifold edge splitting are stored here
+        delete_quads_list = self.manifold_edge_quads_ids  # the old quads connected to the manifold edge are deleted in any case!
         child_id = 0 # this will be incremented, after we have added an edge
 
         # we need to resolve the ambiguous cases: break or join surface with the new quads? Therefore we traverse all
@@ -178,8 +176,14 @@ class ManifoldEdge:
                 # initialize new edge, the quads will be connected to instead of manifold edge
                 normal_direction = sign_direction * self.resolution * 1.0/4.0  # the normal is in the direction of the sign
                 for m_v_id in range(2):  # we will have to copy the manifold edge and shift it
-                    new_nodes.append(_dc_verts[self.v_idx[m_v_id]]+normal_direction)  # shift new nodes into normal direction
-                    self.v_children_idx[m_v_id][child_id] = o_idx_nodes+m_v_id # store global index of this node in object
+                    if (self.v_idx[m_v_id], child_id) in vindex_mapping:
+                        node_idx = vindex_mapping[(self.v_idx[m_v_id], child_id)]
+                    else:
+                        new_nodes_list.append(_dc_verts[self.v_idx[m_v_id]]+normal_direction)  # shift new nodes into normal direction
+                        node_idx = o_idx_nodes
+                        o_idx_nodes += 1
+                        vindex_mapping[(self.v_idx[m_v_id],child_id)] = node_idx
+                    self.v_children_idx[m_v_id][child_id] = node_idx # store global index of this node in object
 
                 # each edge is parallel to the manifold edge, but shifted in the direction of one of the two neighbours
                 for edge_id in range(2):
@@ -206,12 +210,11 @@ class ManifoldEdge:
                                 for shift in [-1,+1]:
                                     neighbour_idx = quad[(tmp+shift)%4]
                                     if neighbour_idx != self.v_idx[int(not(m_v_id))]:
-                                        self.v_children_connection_idx[m_v_id][child_id].add(neighbour_idx)
+                                        self.v_children_connection_idx[m_v_id][child_id].append(neighbour_idx)
 
                             # only one quad out of self.manifold_edge_quads is connected to this neighbouring edge
-                            continue
+                            break
 
-                o_idx_nodes += 2  # two new nodes have been introduces for the new edge, increment origin
                 new_quads_list += new_quads  # append 2 new quads to new_quads_list
                 child_id += 1  # incrementing child id
 
@@ -226,129 +229,134 @@ class ManifoldEdge:
 
         # change remaining references to removed edge -> treat vertices!
         # this depends on the self.v_kind of the vertex!
-        #       - If an outside vertex is removed, we will introduce a hexaedral face
-        #       - If an inside vertex is removed, we will introduce two triangle faces
-        # todo changing those non-quad shapes into quads again is a postprocessing step!
 
-        return new_quads_list, new_nodes, delete_quads, o_idx_nodes
-
-    def resolve_outside_vertex(self, _local_v_id, _dc_quads):
-        # all quads connected to the vertex will be removed anyhow
-        delete_quads = self.manifold_vertex_quad_ids[self.v_idx[_local_v_id]]
-        new_quad = []
-        # create a hexagon for outside vertices
-        for q_idx in delete_quads:
-            quad = _dc_quads[q_idx]
-            end_idx = np.where(np.array(quad) == self.v_idx[_local_v_id])[0][0]
-            start_idx = (end_idx + 1) % 4
-
-            if end_idx == 0:
-                new_quad_part = quad[start_idx:]
-            elif start_idx > end_idx:
-                new_quad_part = np.concatenate([quad[start_idx:], quad[:end_idx]], 0)
+        for i in range(2):
+            kind = self.v_kind[i]
+            if kind == "outside":
+                new_quads, new_nodes, delete_quads, o_idx_nodes = self.resolve_outside_vertex(i, _dc_quads, _dc_verts, o_idx_nodes)
+            elif kind == "inside":
+                new_quads, delete_quads = self.resolve_inside_vertex(i, _dc_quads)
+                new_nodes = []
+            elif kind == "manifold":  # manifold vertices do not have to be treaten separately!
+                new_quads = []
+                new_nodes = []
+                delete_quads = []
             else:
-                new_quad_part = quad[start_idx:end_idx]
+                print "unknown type! aborting..."
+                quit()
 
-            new_quad = np.concatenate([new_quad, new_quad_part], 0)
+            new_nodes_list += new_nodes
+            new_quads_list += new_quads
+            delete_quads_list += delete_quads
 
-        return [new_quad.tolist()], delete_quads
+        return new_quads_list, new_nodes_list, delete_quads_list, o_idx_nodes, vindex_mapping
+
+    def resolve_outside_vertex(self, _local_v_id, _dc_quads, _dc_verts, o_idx_nodes):
+        new_quads_list = []
+        new_nodes_list = []
+        neighbour_quads = self.manifold_vertex_quad_ids[_local_v_id]
+
+        midpoint_idx = self.v_idx[_local_v_id]
+
+        if neighbour_quads.__len__() == 2: # flat outside
+            for i in range(2):
+                # all quads connected to the vertex will be deleted
+                delete_quads_list = neighbour_quads
+                quad = _dc_quads[neighbour_quads[i]]
+                tmp = quad.index(midpoint_idx)
+                for shift in [-1,+1]:
+                    pivot = quad[(tmp+shift)%4]
+                    opposite = quad[(tmp+2)%4]
+
+                    new_quad = [midpoint_idx]
+
+                    if pivot in self.v_children_connection_idx[_local_v_id][0]:
+                        new_quad.append(self.v_children_idx[_local_v_id][0])
+                    elif pivot in self.v_children_connection_idx[_local_v_id][1]:
+                        new_quad.append(self.v_children_idx[_local_v_id][1])
+                    else:
+                        print "resolve_outside_vertex: unexpected case!"
+                        quit()
+
+                    new_quad += [pivot, opposite]
+                    new_quads_list.append(new_quad)
+
+        elif neighbour_quads.__len__() == 3: # L-shape
+            # find neighbouring quad lying in the plane
+            for q_id in neighbour_quads:
+                quad = _dc_quads[q_id]
+
+                checker = 2 * [None]
+                connection_chooser = 2 * [None]
+
+                for child_id in range(2):
+                    for conn_id in range(2):
+                        if self.v_children_connection_idx[_local_v_id][child_id][conn_id] in quad:
+                            checker[child_id] = True
+                            connection_chooser[child_id] = conn_id
+                            break
+
+                if all(checker):
+                    quad_plane_id = q_id
+                    quad_plane = quad
+                    break
+
+            # add four new quads and one new point
+            centroid = np.zeros([3])
+            for v_idx in quad_plane:
+                centroid += _dc_verts[v_idx]
+            centroid /= 4.0
+            new_node = centroid
+
+            midpoint_idx = self.v_idx[_local_v_id]
+            opposite_idx = quad_plane[(quad_plane.index(midpoint_idx) + 2)%4]
+
+            for child_id in range(2):
+                child_ids = self.v_children_idx[_local_v_id]
+                child_connections = self.v_children_connection_idx[_local_v_id][child_id]
+                new_quad = [midpoint_idx,
+                            child_connections[connection_chooser[int(not(child_id))]],
+                            child_ids[child_id],
+                            o_idx_nodes]
+                new_quads_list.append(new_quad)
+
+                new_quad = [child_ids[child_id],
+                            child_connections[connection_chooser[child_id]],
+                            opposite_idx,
+                            o_idx_nodes]
+                new_quads_list.append(new_quad)
+
+            # one quads will be deleted
+            delete_quads_list = [quad_plane_id]
+            o_idx_nodes += 1
+            new_nodes_list = [new_node]
+
+        else: # unknown shape!
+            print "not treated properly!"
+            delete_quads_list = []
+
+        return new_quads_list, new_nodes_list, delete_quads_list, o_idx_nodes
 
     def resolve_inside_vertex(self, _local_v_id, _dc_quads):
         # all quads connected to the vertex will be removed anyhow
-        delete_quads = list(self.manifold_vertex_quad_ids[self.v_idx[_local_v_id]])
-        new_quad = []
+        delete_quads_list = self.manifold_vertex_quad_ids[_local_v_id]
+        new_quads_list = []
 
-        # do any of the quads connected to the vertex have a common edge?
+        # change all references to old manifold vertex to references to the right child vertex
 
-        # build edge usage list
-        edge_usage_list = {}
-        for local_q_id in range(delete_quads.__len__()):
-            global_q_id = delete_quads[local_q_id]
-            q = _dc_quads[global_q_id]
-            edges = [(q[0], q[1]),  # edges of this quad
-                     (q[1], q[2]),
-                     (q[2], q[3]),
-                     (q[3], q[0])]
+        for q_id in delete_quads_list:
+            quad = _dc_quads[q_id]
+            tmp = quad.index(self.v_idx[_local_v_id])
+            new_quad = list(quad)
 
-            edge_keys = []  # keys of the edges
-            for e in edges:  # traverse all edges of the quad
-                key = tuple(sorted(e))  # calculate corresponding edge key.
-                # Keys are made up of the vertex indices belonging to the edge (ascending order!)
-                edge_keys.append(key)  # add to key list
+            for child_id in range(2):
+                if np.intersect1d(quad,self.v_children_connection_idx[_local_v_id][child_id]).__len__() != 0:
+                    new_quad[tmp] = self.v_children_idx[_local_v_id][child_id]
+                    break
 
-            for e in edge_keys:  # traverse all keys of this quad
-                if e in edge_usage_list:  # if the key is already in global list
-                    edge_usage_list[e].append(local_q_id)  # append current quad id, since quad is using this edge
-                else:
-                    edge_usage_list[e] = [local_q_id]  # add key to list and save quad id, since quad is using this edge
+            new_quads_list.append(new_quad)
 
-        # common and not common edge quads are saved here with respect to their local id in the delete_quads list.
-        common_edge_list = {}
-        no_common_edge_list = range(delete_quads.__len__())
-
-        #searching common edges
-        for edge, q_edge in edge_usage_list.items():
-            if q_edge.__len__() > 1: # this is a common edge!
-                common_edge_list[tuple(q_edge)] = list(edge)
-                for local_q_id in q_edge:
-                    no_common_edge_list.remove(local_q_id)
-
-        # #generating pentagons
-        # for q_local_idx_pair, common_edge in common_edge_list.items():  # if common edge: remove manifold vertex from both and combine them into a pentagon
-        #     pent = []
-        #
-        #     q_idx = 2 * [None]
-        #     q = 2 * [None]
-        #     start_q = 2 * [None]
-        #     end_q = 2 * [None]
-        #
-        #     v_global_idx = self.v_idx[_local_v_id]
-        #     for i in range(2):
-        #         q_idx[i] = delete_quads[q_local_idx_pair[i]]
-        #         q[i] = _dc_quads[q_idx[i]]
-        #         start_q[i] = (q[i].index(v_global_idx) + 1) % 4
-        #         end_q[i] = q[i].index(v_global_idx)
-        #         if start_q[i] < end_q[i]:
-        #             pent += q[i][start_q[i]:end_q[i]]
-        #         else:
-        #             pent += q[i][start_q[i]:] + q[i][:end_q[i]]
-        #
-        #     not_v_edge_index = int(not(common_edge.index(v_global_idx)))
-        #     pent.remove(common_edge[not_v_edge_index])
-        #     new_quad.append(pent)
-        #
-        #     new_quad.append(q[0])
-        #     new_quad.append(q[1])
-
-        # generating triangles for common edges
-        for q_local_idx_pair, common_edge in common_edge_list.items():
-            v_global_idx = self.v_idx[_local_v_id]
-            tri = [v_global_idx]
-
-            q_idx = 2 * [None]
-            q = 2 * [None]
-
-            for i in range(2):
-                q_idx[i] = delete_quads[q_local_idx_pair[i]]
-                q[i] = _dc_quads[q_idx[i]]
-                v_quad_idx = q[i].index(v_global_idx)
-                if q[i][(v_quad_idx + 1)%4] in common_edge:
-                    tri.append(q[i][(v_quad_idx - 1)%4])
-                else:
-                    tri.append(q[i][(v_quad_idx + 1)%4])
-
-                new_quad.append(q[i])
-
-            new_quad.append(tri)
-
-        # generating triangles for non common edges
-        for q_local_idx in no_common_edge_list:  # if no common edge: just remove the manifold vertex and create a triangle
-            q = delete_quads[q_local_idx]
-            tri = _dc_quads[q]
-            tri.remove(self.v_idx[_local_v_id])
-            new_quad.append(tri)
-
-        return new_quad, delete_quads
+        return new_quads_list, delete_quads_list
 
     def resolve_manifold_vertex(self, _local_v_id, _dc_quads):
         # all quads connected to the vertex will be removed anyhow

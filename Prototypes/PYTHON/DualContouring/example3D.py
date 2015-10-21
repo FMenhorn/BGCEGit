@@ -12,7 +12,7 @@ resolutions = {'fine': res_fine,'coarse': res_coarse}
 fine_data = sample_data(doubletorus_f, resolutions['fine'], dimensions)
 [verts_out_dc, quads_out_dc, manifold_edges_dc] = tworesolution_dual_contour(fine_data, resolutions, dimensions)
 
-dcHelpers.export_as_stl(quads_out_dc, verts_out_dc, plot_scale = 'coarse', filename = 'doubletorus.stl')
+#dcHelpers.export_as_stl(quads_out_dc, verts_out_dc, plot_scale = 'coarse', filename = 'doubletorus.stl')
 
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D

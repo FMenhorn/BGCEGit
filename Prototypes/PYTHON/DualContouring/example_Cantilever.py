@@ -14,11 +14,11 @@ def transform_dict(cellsDict):
     return dataset
 
 
-wfFile = open('Cells', 'rb')
+wfFile = open('Cantilever/Cells_01', 'rb')
 cellsDict = cPickle.load(wfFile)
 wfFile.close()
 
-wfFile = open('Dimensions', 'rb')
+wfFile = open('Cantilever/Dimensions_01', 'rb')
 dimensions = cPickle.load(wfFile)
 wfFile.close()
 
@@ -28,7 +28,7 @@ resolutions = {'fine': res_fine,'coarse': res_coarse}
 
 data = transform_dict(cellsDict)
 
-[verts_out_dc, quads_out_dc, manifold_edges_dc] = tworesolution_dual_contour(data, resolutions, dimensions)
+[verts_out_dc, quads_out_dc, manifold_edges_dc, dc_not_consistent_edges] = tworesolution_dual_contour(data, resolutions, dimensions)
 
 dcHelpers.export_as_stl(quads_out_dc, verts_out_dc, plot_scale = 'coarse', filename = 'canti.stl')
 
@@ -49,19 +49,9 @@ for q in quads_out_dc[plot_scale]:
     z = vtx[:,2].tolist()
     vtx = [zip(x,y,z)]
     poly=Poly3DCollection(vtx)
-    if q.__len__() == 3:
-        poly.set_color('g')
-    elif q.__len__() == 4:
-        poly.set_color('b')
-    elif q.__len__() == 5:
-        poly.set_color('w')
-    elif q.__len__() == 6:
-        poly.set_color('y')
-    else:
-        poly.set_color('k')
-
+    poly.set_color('r')
     poly.set_edgecolor('k')
-    #poly.set_alpha(.25)
+    poly.set_alpha(.25)
     ax.add_collection3d(poly)
 
 for m_e_key, m_edge in manifold_edges_dc[plot_scale].items():
@@ -105,14 +95,27 @@ for m_e_key, m_edge in manifold_edges_dc[plot_scale].items():
         else:
             no_u += 1
 
-
+plot_scale = 'fine'
+for q in quads_out_dc[plot_scale]:
+    print q
+    vtx = verts_out_dc[plot_scale][q]
+    x = vtx[:,0].tolist()
+    y = vtx[:,1].tolist()
+    z = vtx[:,2].tolist()
+    vtx = [zip(x,y,z)]
+    poly=Poly3DCollection(vtx)
+    poly.set_color('b')
+    poly.set_edgecolor('k')
+    poly.set_alpha(.25)
+    ax.add_collection3d(poly)
+'''
 print "number of faces: "+str(quads_out_dc[plot_scale].__len__())
 print "number of tri: "+str(no_t)
 print "number of quads: "+str(no_q)
 print "number of pents: "+str(no_p)
 print "number of hex: "+str(no_h)
 print "number of unex:"+str(no_u)
-
+'''
 ax.set_xlim3d(dimensions['xmin'], dimensions['xmax'])
 ax.set_ylim3d(dimensions['ymin'], dimensions['ymax'])
 ax.set_zlim3d(dimensions['zmin'], dimensions['zmax'])

@@ -210,16 +210,16 @@ def resolve_manifold_edges(_dc_verts, _dc_vindex, _dc_quads, _data, _resolution)
     # origin index of the vertex list
     o_idx_nodes = _dc_verts.__len__()
 
+    # in this dict we will save the mapping from old indices of removed manifold vertices to their children
+    vindex_mapping = {}
+
     for manifold_edge_key, manifold_edge in manifold_edges.items():
-        new_quads, new_nodes, delete_quads, o_idx_nodes = manifold_edge.resolve(_data,
-                                                                                _dc_vindex,
-                                                                                _dc_quads,
-                                                                                _dc_verts,
-                                                                                o_idx_nodes)
-        print "manifold edge found and resolved:"
-        print "new nodes:\t"+str(new_nodes.__len__())
-        print "new quads:\t"+str(new_quads.__len__())
-        print "deleted quads:\t"+str(delete_quads.__len__())
+        new_quads, new_nodes, delete_quads, o_idx_nodes, vindex_mapping = manifold_edge.resolve(_data,
+                                                                                                _dc_vindex,
+                                                                                                _dc_quads,
+                                                                                                _dc_verts,
+                                                                                                o_idx_nodes,
+                                                                                                vindex_mapping)
         new_nodes_list += new_nodes
         new_quads_list += new_quads
         delete_quads_list += delete_quads
@@ -230,7 +230,87 @@ def resolve_manifold_edges(_dc_verts, _dc_vindex, _dc_quads, _data, _resolution)
                                           new_nodes_list,
                                           delete_quads_list)
 
-    return _dc_quads, manifold_edges
+    print vindex_mapping
+
+    edge_usage_dict = generate_edge_usage_dict(_dc_quads)  # here we save the quads using a certain edge
+
+    not_consistent_edges = {}
+    for edge, used in edge_usage_dict.items():
+        if used.__len__() != 2:
+            not_consistent_edges[edge] = used
+            print "NOT CONSISTENT!"
+            print edge
+            print used
+
+    _dc_verts, _dc_quads = resolve_not_consistent(_dc_verts, _dc_quads, not_consistent_edges)
+
+    return _dc_verts, _dc_quads, manifold_edges, not_consistent_edges
+
+
+def resolve_not_consistent(_dc_verts, _dc_quads, _not_consistent_edges):
+
+    not_consistent_quad_clusters = []
+    for edge, used in _not_consistent_edges.items():
+        print edge
+        print used
+        if used.__len__() == 4:
+            not_consistent_quad_clusters.append(used)
+
+    for cluster in not_consistent_quad_clusters:
+        o_idx_nodes = _dc_verts.__len__()
+        new_quads, new_nodes, delete_quads, o_idx_nodes = resolve_quad_cluster(_dc_quads, _dc_verts, cluster, o_idx_nodes)
+        print "new node id:"+str(o_idx_nodes-1)
+
+        print "delete:"
+        for q_id in delete_quads:
+            print _dc_quads[q_id]
+
+        print "new:"
+        for q in new_quads:
+            print q
+
+        print "len before:"+str(_dc_quads.__len__())
+        _dc_verts, _dc_quads = update_mesh_3d(_dc_verts, _dc_quads, new_quads, new_nodes, delete_quads)
+        print "len after:"+str(_dc_quads.__len__())
+
+    return _dc_verts, _dc_quads
+
+
+def resolve_quad_cluster(_dc_quads, _dc_verts, _cluster, o_idx_nodes):
+    new_quads = []
+    new_nodes = []
+    delete_quads = list(_cluster) # all old quads will be removed
+    print delete_quads
+
+    quads = 4 * [None]  # quad with all vertex ids
+
+    for i in range(4):
+        c = _cluster[i]
+        quads[i] = list(_dc_quads[c])
+
+    all_nodes = np.array(quads).reshape(16).tolist()
+
+    new_node = np.zeros([3])
+    for v_id in np.unique(quads):
+        vtx = _dc_verts[v_id]
+        new_node += vtx
+
+    new_node /= 8.0
+
+    new_nodes = [new_node]
+
+    for q in quads:
+        for i in range(4):
+            if all_nodes.count(q[i])==1:
+                unique_node = q[i]  # node only occouring in this quad (out of the four involved quads
+                break
+        tmp = q.index(unique_node)
+        q[(tmp+2)%4] = o_idx_nodes
+        new_quads.append(q)
+
+    o_idx_nodes +=1
+
+    return new_quads, new_nodes, delete_quads, o_idx_nodes
 
 
 def update_mesh_3d(_dc_verts, _dc_quads, _new_quads_list, _new_nodes_list, _delete_quads_list):
