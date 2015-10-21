@@ -6,12 +6,12 @@ from dcSample import sample_data, sphere_f, doubletorus_f, torus_f
 import numpy as np
 
 dimensions = {'xmin': 0.0, 'xmax': 6.0, 'ymin': 2.0, 'ymax': 6.0}
-res_fine = 1.0/4.0
-res_coarse = res_fine * 2.0
+res_fine = 1.0/16.0
+res_coarse = res_fine * 8.0
 resolutions = {'fine': res_fine,'coarse': res_coarse}
 
 fine_data = sample_data(doubletorus_f, resolutions['fine'], dimensions)
-[verts_out_dc, quads_out_dc, pseudo_out_dc] = tworesolution_dual_contour(fine_data, resolutions, dimensions)
+[verts_out_dc, quads_out_dc] = tworesolution_dual_contour(fine_data, resolutions, dimensions)
 
 
 import matplotlib.pyplot as plt
@@ -31,12 +31,12 @@ for q in quads_out_dc['coarse']:
     y = vtx[:,1]
     plt.plot(x, y, 'k')
     plt.plot(x, y,'ko')
-
-for v in pseudo_out_dc['coarse']:
+''' # useful for debugging
+for v in manifold_verts_out_dc['coarse']:
     x = v.x
     y = v.y
     plt.plot(x, y,'kx')
-
+'''
 for key in fine_data:
     if (key[0] % res_coarse == 0) and (key[1] % res_coarse == 0):
         if fine_data[key] > 0: # outer point
