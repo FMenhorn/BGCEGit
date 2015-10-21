@@ -11,7 +11,7 @@ res_coarse = res_fine * 8.0
 resolutions = {'fine': res_fine,'coarse': res_coarse}
 
 fine_data = sample_data(doubletorus_f, resolutions['fine'], dimensions)
-[verts_out_dc, quads_out_dc, manifold_verts_out_dc] = tworesolution_dual_contour(fine_data, resolutions, dimensions)
+[verts_out_dc, quads_out_dc] = tworesolution_dual_contour(fine_data, resolutions, dimensions)
 
 
 import matplotlib.pyplot as plt
@@ -31,12 +31,12 @@ for q in quads_out_dc['coarse']:
     y = vtx[:,1]
     plt.plot(x, y, 'k')
     plt.plot(x, y,'ko')
-
+''' # useful for debugging
 for v in manifold_verts_out_dc['coarse']:
     x = v.x
     y = v.y
     plt.plot(x, y,'kx')
-
+'''
 for key in fine_data:
     if (key[0] % res_coarse == 0) and (key[1] % res_coarse == 0):
         if fine_data[key] > 0: # outer point
