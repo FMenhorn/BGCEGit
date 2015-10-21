@@ -27,14 +27,15 @@ def estimate_hermite(data, v0, v1):
 
 
 def tworesolution_dual_contour(dataset, resolutions,dims):
-    [dc_verts_fine, dc_edges_fine, dc_manifold_verts_fine]=dual_contour(dataset,
-                                                                        resolutions['fine'],
-                                                                        dims,
-                                                                        coarse_level = False)
-    [dc_verts_coarse, dc_edges_coarse,dc_manifold_verts_coarse]=dual_contour(dataset,
-                                                                             resolutions['coarse'],
-                                                                             dims,
-                                                                             coarse_level = True)
+    [dc_verts_fine, dc_edges_fine]=dual_contour(dataset,
+                                                resolutions['fine'],
+                                                dims,
+                                                coarse_level = False)
+
+    [dc_verts_coarse, dc_edges_coarse]=dual_contour(dataset,
+                                                    resolutions['coarse'],
+                                                    dims,
+                                                    coarse_level = True)
 
     dc_verts={'fine':dc_verts_fine,
               'coarse':dc_verts_coarse}
@@ -42,10 +43,7 @@ def tworesolution_dual_contour(dataset, resolutions,dims):
     dc_edges={'fine':dc_edges_fine,
               'coarse':dc_edges_coarse}
 
-    dc_manifold_verts={'fine':dc_manifold_verts_fine,
-                       'coarse':dc_manifold_verts_coarse}
-
-    return dc_verts, dc_edges, dc_manifold_verts
+    return dc_verts, dc_edges
 
 
 # Input:
@@ -122,17 +120,7 @@ def dual_contour(data, res, dims, coarse_level):
         else:
             continue
 
-    print dc_verts
-    print dc_edges
-    print "resolve manifolds:"
-
     if coarse_level: # if we are working on coarse scale we want to resolve non manifold vertices
-        print "coarse"
         dc_verts, dc_edges = resolve_manifold_nodes(dc_edges, dc_verts, vindex, dc_manifold_nodes, manifold_index, res, dims)
-    else:
-        print "fine"
 
-    print dc_verts
-    print dc_edges
-
-    return np.array(dc_verts), np.array(dc_edges), np.array(dc_manifold_nodes)
+    return np.array(dc_verts), np.array(dc_edges)

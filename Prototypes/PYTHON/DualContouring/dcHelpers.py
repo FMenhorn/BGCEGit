@@ -108,7 +108,6 @@ def generate_vertex_usage_dict(dc_edges):
 def export_as_stl(quads_out_dc, verts_out_dc, plot_scale, filename):
     faces = []
     for q in quads_out_dc[plot_scale]:
-        print q
         vtx = verts_out_dc[plot_scale][q]
         face = []
         for v in vtx:
@@ -230,48 +229,29 @@ def resolve_manifold_edges(_dc_verts, _dc_vindex, _dc_quads, _data, _resolution)
                                           new_nodes_list,
                                           delete_quads_list)
 
-    print vindex_mapping
-
     edge_usage_dict = generate_edge_usage_dict(_dc_quads)  # here we save the quads using a certain edge
 
     not_consistent_edges = {}
     for edge, used in edge_usage_dict.items():
         if used.__len__() != 2:
             not_consistent_edges[edge] = used
-            print "NOT CONSISTENT!"
-            print edge
-            print used
 
     _dc_verts, _dc_quads = resolve_not_consistent(_dc_verts, _dc_quads, not_consistent_edges)
 
-    return _dc_verts, _dc_quads, manifold_edges, not_consistent_edges
+    return _dc_verts, _dc_quads
 
 
 def resolve_not_consistent(_dc_verts, _dc_quads, _not_consistent_edges):
 
     not_consistent_quad_clusters = []
     for edge, used in _not_consistent_edges.items():
-        print edge
-        print used
         if used.__len__() == 4:
             not_consistent_quad_clusters.append(used)
 
     for cluster in not_consistent_quad_clusters:
         o_idx_nodes = _dc_verts.__len__()
         new_quads, new_nodes, delete_quads, o_idx_nodes = resolve_quad_cluster(_dc_quads, _dc_verts, cluster, o_idx_nodes)
-        print "new node id:"+str(o_idx_nodes-1)
-
-        print "delete:"
-        for q_id in delete_quads:
-            print _dc_quads[q_id]
-
-        print "new:"
-        for q in new_quads:
-            print q
-
-        print "len before:"+str(_dc_quads.__len__())
         _dc_verts, _dc_quads = update_mesh_3d(_dc_verts, _dc_quads, new_quads, new_nodes, delete_quads)
-        print "len after:"+str(_dc_quads.__len__())
 
     return _dc_verts, _dc_quads
 
@@ -280,7 +260,6 @@ def resolve_quad_cluster(_dc_quads, _dc_verts, _cluster, o_idx_nodes):
     new_quads = []
     new_nodes = []
     delete_quads = list(_cluster) # all old quads will be removed
-    print delete_quads
 
     quads = 4 * [None]  # quad with all vertex ids
 

@@ -28,7 +28,7 @@ resolutions = {'fine': res_fine,'coarse': res_coarse}
 
 data = transform_dict(cellsDict)
 
-[verts_out_dc, quads_out_dc, manifold_edges_dc, dc_not_consistent_edges] = tworesolution_dual_contour(data, resolutions, dimensions)
+[verts_out_dc, quads_out_dc] = tworesolution_dual_contour(data, resolutions, dimensions)
 
 dcHelpers.export_as_stl(quads_out_dc, verts_out_dc, plot_scale = 'coarse', filename = 'canti.stl')
 
@@ -42,7 +42,6 @@ ax.set_aspect('equal')
 
 plot_scale = 'coarse'
 for q in quads_out_dc[plot_scale]:
-    print q
     vtx = verts_out_dc[plot_scale][q]
     x = vtx[:,0].tolist()
     y = vtx[:,1].tolist()
@@ -54,6 +53,7 @@ for q in quads_out_dc[plot_scale]:
     poly.set_alpha(.25)
     ax.add_collection3d(poly)
 
+''' # useful for debugging
 for m_e_key, m_edge in manifold_edges_dc[plot_scale].items():
     vtx = verts_out_dc[plot_scale][[m_e_key[0],m_e_key[1]]]
     x = vtx[:, 0]
@@ -76,28 +76,10 @@ for m_e_key, m_edge in manifold_edges_dc[plot_scale].items():
             print "ERROR!"
         vtx = verts_out_dc[plot_scale][m_e_key[local_idx]]
         ax.plot([vtx[0]],[vtx[1]],[vtx[2]],plotcolor)
-
-    no_t = 0 # number of triangles
-    no_q = 0 # number of quads
-    no_p = 0 # number of pentagons
-    no_h = 0 # number of hexagons
-    no_u = 0 # unexpected shape
-    for q in quads_out_dc[plot_scale]:
-        q_no = q.__len__()
-        if q_no == 3:
-            no_t += 1
-        elif q_no == 4:
-            no_q += 1
-        elif q_no == 5:
-            no_p += 1
-        elif q_no == 6:
-            no_h += 1
-        else:
-            no_u += 1
+'''
 
 plot_scale = 'fine'
 for q in quads_out_dc[plot_scale]:
-    print q
     vtx = verts_out_dc[plot_scale][q]
     x = vtx[:,0].tolist()
     y = vtx[:,1].tolist()
