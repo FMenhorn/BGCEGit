@@ -1,18 +1,36 @@
 from dc3D import tworesolution_dual_contour
-from dcSample import sample_data, sphere_f, doubletorus_f, doubletorus_f_x, doubletorus_f_y, doubletorus_f_z, torus_f
 
 import numpy as np
 import dcHelpers
 
-dimensions = {'xmin': 0.0, 'xmax': 7.0, 'ymin': 0.0, 'ymax': 7.0, 'zmin': 0.0, 'zmax': 7.0}
-res_fine = 1.0/4.0
+import cPickle
+
+
+def transform_dict(cellsDict):
+    dataset = {}
+    for key in cellsDict:
+        dataset[key] = -1
+
+    return dataset
+
+
+wfFile = open('Cells', 'rb')
+cellsDict = cPickle.load(wfFile)
+wfFile.close()
+
+wfFile = open('Dimensions', 'rb')
+dimensions = cPickle.load(wfFile)
+wfFile.close()
+
+res_fine = 1
 res_coarse = res_fine * 2.0
 resolutions = {'fine': res_fine,'coarse': res_coarse}
 
-fine_data = sample_data(doubletorus_f, resolutions['fine'], dimensions)
-[verts_out_dc, quads_out_dc, manifold_edges_dc] = tworesolution_dual_contour(fine_data, resolutions, dimensions)
+data = transform_dict(cellsDict)
 
-dcHelpers.export_as_stl(quads_out_dc, verts_out_dc, plot_scale = 'coarse', filename = 'doubletorus.stl')
+[verts_out_dc, quads_out_dc, manifold_edges_dc] = tworesolution_dual_contour(data, resolutions, dimensions)
+
+dcHelpers.export_as_stl(quads_out_dc, verts_out_dc, plot_scale = 'coarse', filename = 'canti.stl')
 
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
@@ -99,4 +117,5 @@ ax.set_xlim3d(dimensions['xmin'], dimensions['xmax'])
 ax.set_ylim3d(dimensions['ymin'], dimensions['ymax'])
 ax.set_zlim3d(dimensions['zmin'], dimensions['zmax'])
 plt.show()
+
 

@@ -1,47 +1,20 @@
-# from __future__ import division
-from operator import pos
-
 import numpy as np
 import numpy.linalg as la
-import scipy.optimize as opt
 import itertools as it
 
-
-class PseudoNode:
-    def __init__(self, _voxel_coord, _quad_signs, _dataset, _resolution):
-        self.voxel_coord = _voxel_coord
-        self.res = _resolution
-        self.x = _voxel_coord[0] + .5*self.res
-        self.y = _voxel_coord[1] + .5*self.res
-        value_key = tuple(np.array([self.x, self.y]))
-        self.middle_sign = _dataset[value_key] > 0
-        self.quad_signs = _quad_signs
-        self.connects = self.calculate_connection()
-
-    def calculate_connection(self):
-        connects = []
-        neighbor_keys = [tuple(self.voxel_coord + self.res * np.array([-1.0,0.0])),
-                         tuple(self.voxel_coord + self.res * np.array([0.0,-1.0])),
-                         tuple(self.voxel_coord + self.res * np.array([1.0,0.0])),
-                         tuple(self.voxel_coord + self.res * np.array([0.0,1.0]))]
-        n = self.quad_signs.__len__()
-        for i in range(n):
-            if self.middle_sign != self.quad_signs[i]:
-                connects.append((neighbor_keys[i],neighbor_keys[(i+1)%n]))
-
-        return connects
+from ManifoldNode import ManifoldNode
+from dcHelpers import resolve_manifold_nodes
 
 # Cardinal directions
 dirs = [np.array([1.0, 0.0]), np.array([0.0, 1.0])]
 
 # Vertices of quad
-#quad_verts = [np.array([x, y])
-#                   for x in np.arange(0.0,2,1.0)
-#                   for y in np.arange(0.0,2,1.0)]
-quad_verts = [np.array([0.0, 0.0]), np.array([1.0, 0.0]), np.array([1.0, 1.0]), np.array([0.0, 1.0])] # traverse verts in CCW manner
+quad_verts = [np.array([0.0, 0.0]),
+              np.array([1.0, 0.0]),
+              np.array([1.0, 1.0]),
+              np.array([0.0, 1.0])] # traverse verts in CCW manner
 
 # Edges of quad
-#quad_edges = [[0,1],[0,2],[1,3],[2,3]]
 quad_edges = [[0,1],[1,2],[2,3],[3,0]] # traverse edges in CCW manner
 
 # Use non-linear root finding to compute intersection point
@@ -53,23 +26,26 @@ def estimate_hermite(data, v0, v1):
     return x0
 
 
-def tworesolution_dual_contour(dataset,resolutions,dims):
-    print "DC FINE"
-    [dc_verts_fine, dc_edges_fine, dc_verts_pseudo_fine]=dual_contour(dataset,
-                                                                      resolutions['fine'],
-                                                                      dims,
-                                                                      coarse_level = False)
-    print "DC COARSE"
-    [dc_verts_coarse, dc_edges_coarse,dc_verts_pseudo_coarse]=dual_contour(dataset,
-                                                                           resolutions['coarse'],
-                                                                           dims,
-                                                                           coarse_level = True)
+def tworesolution_dual_contour(dataset, resolutions,dims):
+    [dc_verts_fine, dc_edges_fine, dc_manifold_verts_fine]=dual_contour(dataset,
+                                                                        resolutions['fine'],
+                                                                        dims,
+                                                                        coarse_level = False)
+    [dc_verts_coarse, dc_edges_coarse,dc_manifold_verts_coarse]=dual_contour(dataset,
+                                                                             resolutions['coarse'],
+                                                                             dims,
+                                                                             coarse_level = True)
 
-    dc_verts={'fine':dc_verts_fine, 'coarse':dc_verts_coarse}
-    dc_edges={'fine':dc_edges_fine, 'coarse':dc_edges_coarse}
-    dc_verts_pseudo={'fine':dc_verts_pseudo_fine, 'coarse':dc_verts_pseudo_coarse}
+    dc_verts={'fine':dc_verts_fine,
+              'coarse':dc_verts_coarse}
 
-    return dc_verts, dc_edges, dc_verts_pseudo
+    dc_edges={'fine':dc_edges_fine,
+              'coarse':dc_edges_coarse}
+
+    dc_manifold_verts={'fine':dc_manifold_verts_fine,
+                       'coarse':dc_manifold_verts_coarse}
+
+    return dc_verts, dc_edges, dc_manifold_verts
 
 
 # Input:
@@ -80,32 +56,34 @@ def dual_contour(data, res, dims, coarse_level):
     # Compute vertices
     dc_verts = []
     vindex = {}
-    dc_pseudo_verts = []
-    pseudo_index = {}
+    dc_manifold_nodes = []
+    manifold_index = {}
 
     for x, y in it.product(np.arange(dims['xmin'], dims['xmax'], res), np.arange(dims['ymin'], dims['ymax'], res)):
         o = np.array([float(x), float(y)])
 
         quad_signs=[]
+        quad_sign_keys=[]
         # Get signs for cube
         for v in quad_verts:
             position = (o + v*res)
-            key = tuple(position)
-            quad_signs.append(data[key] > 0)
+            quad_sign_keys.append(tuple(position))
 
-        #print "voxel at "+str(o)+": "+str(quad_signs)
+        for key in quad_sign_keys:
+            c = True
+            if key in data:
+                c = data[key] > 0
+            quad_signs.append(c)
 
         if all(quad_signs) or not any(quad_signs):
             continue
 
-        #this checks for certain problematic cases and introduces pseudo nodes, if necessary
+        #this checks for certain problematic cases and introduces manifold nodes, if necessary
         if coarse_level:
             if quad_signs == [False, True, False, True] or quad_signs == [True, False, True, False]:
-                #print quad_signs
                 key = tuple(o)
-                pseudo_index[key] = len(dc_pseudo_verts)
-                dc_pseudo_verts.append(PseudoNode(o, quad_signs, data, res))
-                continue
+                manifold_index[key] = len(dc_manifold_nodes)
+                dc_manifold_nodes.append(ManifoldNode(o, quad_sign_keys, data, res))
 
         # Estimate hermite data
         h_data = []
@@ -141,13 +119,20 @@ def dual_contour(data, res, dims, coarse_level):
                 if tuple(o + res*dirs[i]) in vindex:
                     if (data[tuple(o+res*dirs[i]+res*dirs[int(not i)])] > 0) != (data[tuple(o+res*dirs[i])] > 0):
                         dc_edges.append([vindex[tuple(o)], vindex[tuple(o + np.array(dirs[i])*res)]])
-        elif (x, y) in pseudo_index and coarse_level:
-            o = np.array([float(x), float(y)])
-            key = tuple(o)
-            i = pseudo_index[key]
-            for c in dc_pseudo_verts[i].connects:
-                dc_edges.append([vindex[c[0]], vindex[c[1]]])
         else:
             continue
 
-    return np.array(dc_verts), np.array(dc_edges), np.array(dc_pseudo_verts)
+    print dc_verts
+    print dc_edges
+    print "resolve manifolds:"
+
+    if coarse_level: # if we are working on coarse scale we want to resolve non manifold vertices
+        print "coarse"
+        dc_verts, dc_edges = resolve_manifold_nodes(dc_edges, dc_verts, vindex, dc_manifold_nodes, manifold_index, res, dims)
+    else:
+        print "fine"
+
+    print dc_verts
+    print dc_edges
+
+    return np.array(dc_verts), np.array(dc_edges), np.array(dc_manifold_nodes)
