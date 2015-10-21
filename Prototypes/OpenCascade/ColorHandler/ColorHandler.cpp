@@ -109,7 +109,7 @@ void ColorHandler::getFixtureShapes(ListOfShape& listOfShapes) {
 	getColoredFaces(listOfShapes, unusedVec, red, false);
 }
 
-void ColorHandler::getPassiveShapes(ListOfShape& listOfShapes) {
+void ColorHandler::getActiveShapes(ListOfShape& listOfShapes) {
 	Quantity_Color green(0,1,0,Quantity_TOC_RGB);
 	std::vector<std::vector<double>> unusedVec;
 	getColoredFaces(listOfShapes, unusedVec, green, false);
@@ -117,7 +117,7 @@ void ColorHandler::getPassiveShapes(ListOfShape& listOfShapes) {
 
 void ColorHandler::getLoadShapes(ListOfShape& listOfShapes, std::vector<std::vector<double>>& listOfLoads) {
 	Quantity_Color blue(0,0,1,Quantity_TOC_RGB);
-	getColoredFaces(listOfShapes, listOfLoads, blue, true);
+	getColoredFaces(listOfShapes, listOfLoads, blue, false);
 }
 
 void ColorHandler::getColoredFaces(ListOfShape& listOfShapes, std::vector<std::vector<double>>& listOfLoads, const Quantity_Color wantedColor, const bool isLoadSeeked) {

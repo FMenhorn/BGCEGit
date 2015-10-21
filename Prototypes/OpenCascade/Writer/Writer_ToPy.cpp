@@ -22,9 +22,9 @@ bool Writer_ToPy::write(std::string _filename, std::vector<std::vector<VoxelShap
     writeDimensions(outfile, dimensions);
     writeGreyScaleFilters(outfile);
 	//Write active nodes
-	writeNodes("ACTV_ELEM", outfile,voxelShape[0],dimensions);
+	writeNodes("ACTV_ELEM", outfile,voxelShape[3],dimensions);
 	//use different voxel shape vector and do the same for the others
-	writeNodes("PASV_ELEM",outfile,voxelShape[3],dimensions);
+	writeNodes("PASV_ELEM",outfile,voxelShape[4],dimensions);
 	writeNodes("FXTR_NODE_X",outfile,voxelShape[1],dimensions);
 	writeNodes("FXTR_NODE_Y",outfile,voxelShape[1],dimensions);
 	writeNodes("FXTR_NODE_Z",outfile,voxelShape[1],dimensions);

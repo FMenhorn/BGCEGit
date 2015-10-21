@@ -69,3 +69,15 @@ const std::vector<int>& VoxelShape::getIndices() const {
 void VoxelShape::setIndices(const std::vector<int> indices) {
 	_indices = indices;
 }
+
+Voxel_BoolDS VoxelShape::copyVoxelShape() {
+	return _voxelShape;
+}
+
+const std::vector<int> VoxelShape::getVoxelDimension() const {
+	return _voxelDimension;
+}
+
+void VoxelShape::setVoxelDimension(const std::vector<int> voxelDimension) {
+	_voxelDimension = voxelDimension;
+}

@@ -17,8 +17,14 @@ public:
 	VoxelIndexCalculator();
 	virtual ~VoxelIndexCalculator();
 
-	void calculateIndexForVoxels(std::vector<std::vector<VoxelShape>>& matrixVoxelShapes);
+	void calculateIndexForVoxelShape(VoxelShape& voxelShape);
+	void calculatePassiveIndexFromBody(VoxelShape& bodyVoxelShape, VoxelShape& passiveVoxelShape);
 	void removeDoubleIndices(std::vector<std::vector<VoxelShape>>& matrixVoxelShapes);
+	void setDimensions(const std::vector<int> dimensions);
+
+private:
+	std::vector<int> dimensions;
+	void calculateIndexForAllVoxels(std::vector<std::vector<VoxelShape>>& matrixVoxelShapes);
 };
 
 #endif /* VOXELIZER_VOXELINDEXCALCULATOR_HPP_ */

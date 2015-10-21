@@ -64,7 +64,7 @@ int main(void){
 	colorDetector.getLoadShapes(loadFacesList, loadList);
 
 	ListOfShape passiveFacesList;
-	colorDetector.getPassiveShapes(passiveFacesList);
+	colorDetector.getActiveShapes(passiveFacesList);
 
     /**
      * VOXELIZE AND OUTPUT
@@ -73,13 +73,14 @@ int main(void){
     Voxelizer voxelizer;
     TopTools_ListIteratorOfListOfShape shapeIterator;
 	VoxelShape voxelShape;
-
 	std::vector<std::vector<VoxelShape>> outputVoxelVector;
-
+    VoxelIndexCalculator voxelIndexCalculator;
 
     /**Full Body Treatment**/
     voxelizer.voxelize(fullShape, refinementLevel, voxelShape);
+    voxelIndexCalculator.setDimensions(voxelShape.getVoxelDimension());
     voxelizer.fillVolume(voxelShape);
+    voxelIndexCalculator.calculateIndexForVoxelShape(voxelShape);
 
 	std::vector<VoxelShape> bodyVector;
 	bodyVector.push_back(voxelShape);
@@ -93,6 +94,8 @@ int main(void){
 		fixtureVector.resize(fixtureFacesList.getSize());
 		for(shapeIterator.Initialize(fixtureFacesList.getListOfShape()); shapeIterator.More(); shapeIterator.Next() ){
 			voxelizer.voxelize(shapeIterator.Value(), refinementLevel, fixtureVector[counter]);
+			std::cout << "FixtureIndices: " << std::endl;
+		    voxelIndexCalculator.calculateIndexForVoxelShape(fixtureVector[counter]);
 			counter++;
 		}
 	}
@@ -105,32 +108,40 @@ int main(void){
 		loadVector.resize(loadFacesList.getSize());
 		for(shapeIterator.Initialize(loadFacesList.getListOfShape()); shapeIterator.More(); shapeIterator.Next() ){
 			voxelizer.voxelize(shapeIterator.Value(), refinementLevel, loadVector[counter]);
+			std::cout << "LoadIndices: " << std::endl;
+			voxelIndexCalculator.calculateIndexForVoxelShape(loadVector[counter]);
 			counter++;
 		}
 	}
     outputVoxelVector.push_back(loadVector);
 
     counter = 0;
-    /**Passive Treatment**/
-	std::vector<VoxelShape> passiveVector;
+    /**Active Treatment**/
+	std::vector<VoxelShape> activeVector;
 	if(passiveFacesList.getSize()>0){
-		passiveVector.resize(passiveFacesList.getSize());
+		activeVector.resize(passiveFacesList.getSize());
 		for(shapeIterator.Initialize(passiveFacesList.getListOfShape()); shapeIterator.More(); shapeIterator.Next() ){
-			voxelizer.voxelize(shapeIterator.Value(), refinementLevel, passiveVector[counter]);
+			voxelizer.voxelize(shapeIterator.Value(), refinementLevel, activeVector[counter]);
+			std::cout << "ActiveIndices: " << std::endl;
+			voxelIndexCalculator.calculateIndexForVoxelShape(activeVector[counter]);
 			counter++;
 		}
 	}
+    outputVoxelVector.push_back(activeVector);
+
+    VoxelShape passiveShape;
+    voxelIndexCalculator.calculatePassiveIndexFromBody(bodyVector[0], passiveShape);
+    std::vector<VoxelShape> passiveVector;
+    passiveVector.push_back(passiveShape);
     outputVoxelVector.push_back(passiveVector);
 
-    VoxelIndexCalculator voxelIndexCalculator;
-    voxelIndexCalculator.calculateIndexForVoxels(outputVoxelVector);
     voxelIndexCalculator.removeDoubleIndices(outputVoxelVector);
 
     Writer_ToPy writerToPy;
-    writerToPy.write("topy", outputVoxelVector);
+    writerToPy.write("topy_"+fileName, outputVoxelVector);
 
     Writer_VTK writerVTK;
-    writerVTK.write("vtk", outputVoxelVector);
+    writerVTK.write("vtk_"+fileName, outputVoxelVector);
 
 	return EXIT_SUCCESS;
 }

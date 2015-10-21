@@ -59,7 +59,7 @@ public:
 	 * Calls getColoredFaces with color blue
 	 * @param listOfShapes holds all shapes with the color blue
 	 */
-	void getPassiveShapes(ListOfShape& listOfShapes);
+	void getActiveShapes(ListOfShape& listOfShapes);
 
 	/**
 	 * Calls getColoredFaces with color green
