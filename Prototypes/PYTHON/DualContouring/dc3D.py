@@ -36,19 +36,20 @@ def estimate_hermite(data, v0, v1):
 
 
 def tworesolution_dual_contour(dataset, resolutions, dims):
-    [dc_verts_fine, dc_quads_fine, dc_manifold_edges_fine] = dual_contour(dataset,
-                                                                          resolutions['fine'],
-                                                                          dims,
-                                                                          coarse_level=False)
-    [dc_verts_coarse, dc_quads_coarse, dc_manifold_edges_coarse] = dual_contour(dataset,
-                                                                                resolutions['coarse'],
-                                                                                dims,
-                                                                                coarse_level=True)
+    [dc_verts_fine, dc_quads_fine] = dual_contour(dataset,
+                                                  resolutions['fine'],
+                                                  dims,
+                                                  coarse_level=False)
+    
+    [dc_verts_coarse, dc_quads_coarse] = dual_contour(dataset,
+                                                      resolutions['coarse'],
+                                                      dims,
+                                                      coarse_level=True)
+
     dc_verts = {'fine': dc_verts_fine, 'coarse': dc_verts_coarse}
     dc_quads = {'fine': dc_quads_fine, 'coarse': dc_quads_coarse}
-    dc_manifold_edges = {'fine': dc_manifold_edges_fine, 'coarse': dc_manifold_edges_coarse}
 
-    return dc_verts, dc_quads, dc_manifold_edges
+    return dc_verts, dc_quads
 
 
 # Input:
@@ -127,8 +128,6 @@ def dual_contour(data, res, dims, coarse_level):
                                          vindex[tuple(o + res * dirs[j])]])
 
     if coarse_level:
-        dc_quads, manifold_edges = resolve_manifold_edges(dc_verts, vindex, dc_quads, data, res)
-    else:
-        manifold_edges = create_manifold_edges(dc_quads, vindex, data, res)
+        dc_verts, dc_quads = resolve_manifold_edges(dc_verts, vindex, dc_quads, data, res)
 
-    return np.array(dc_verts), dc_quads, manifold_edges
+    return np.array(dc_verts), dc_quads

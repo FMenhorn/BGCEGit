@@ -5,14 +5,14 @@ import numpy as np
 import dcHelpers
 
 dimensions = {'xmin': 0.0, 'xmax': 7.0, 'ymin': 0.0, 'ymax': 7.0, 'zmin': 0.0, 'zmax': 7.0}
-res_fine = 1.0/4.0
-res_coarse = res_fine * 2.0
+res_fine = 1.0/8.0
+res_coarse = res_fine * 4.0
 resolutions = {'fine': res_fine,'coarse': res_coarse}
 
 fine_data = sample_data(doubletorus_f, resolutions['fine'], dimensions)
-[verts_out_dc, quads_out_dc, manifold_edges_dc] = tworesolution_dual_contour(fine_data, resolutions, dimensions)
+[verts_out_dc, quads_out_dc] = tworesolution_dual_contour(fine_data, resolutions, dimensions)
 
-dcHelpers.export_as_stl(quads_out_dc, verts_out_dc, plot_scale = 'coarse', filename = 'doubletorus.stl')
+#dcHelpers.export_as_stl(quads_out_dc, verts_out_dc, plot_scale = 'coarse', filename = 'doubletorus.stl')
 
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
@@ -24,28 +24,31 @@ ax.set_aspect('equal')
 
 plot_scale = 'coarse'
 for q in quads_out_dc[plot_scale]:
-    print q
     vtx = verts_out_dc[plot_scale][q]
     x = vtx[:,0].tolist()
     y = vtx[:,1].tolist()
     z = vtx[:,2].tolist()
     vtx = [zip(x,y,z)]
     poly=Poly3DCollection(vtx)
-    if q.__len__() == 3:
-        poly.set_color('g')
-    elif q.__len__() == 4:
-        poly.set_color('b')
-    elif q.__len__() == 5:
-        poly.set_color('w')
-    elif q.__len__() == 6:
-        poly.set_color('y')
-    else:
-        poly.set_color('k')
-
+    poly.set_color('r')
     poly.set_edgecolor('k')
-    #poly.set_alpha(.25)
+    poly.set_alpha(.25)
     ax.add_collection3d(poly)
 
+plot_scale = 'fine'
+for q in quads_out_dc[plot_scale]:
+    vtx = verts_out_dc[plot_scale][q]
+    x = vtx[:,0].tolist()
+    y = vtx[:,1].tolist()
+    z = vtx[:,2].tolist()
+    vtx = [zip(x,y,z)]
+    poly=Poly3DCollection(vtx)
+    poly.set_color('b')
+    poly.set_edgecolor('k')
+    poly.set_alpha(.25)
+    ax.add_collection3d(poly)
+
+''' # useful for debugging
 for m_e_key, m_edge in manifold_edges_dc[plot_scale].items():
     vtx = verts_out_dc[plot_scale][[m_e_key[0],m_e_key[1]]]
     x = vtx[:, 0]
@@ -94,7 +97,7 @@ print "number of quads: "+str(no_q)
 print "number of pents: "+str(no_p)
 print "number of hex: "+str(no_h)
 print "number of unex:"+str(no_u)
-
+'''
 ax.set_xlim3d(dimensions['xmin'], dimensions['xmax'])
 ax.set_ylim3d(dimensions['ymin'], dimensions['ymax'])
 ax.set_zlim3d(dimensions['zmin'], dimensions['zmax'])
