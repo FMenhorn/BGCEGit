@@ -1,8 +1,9 @@
-
+from dc3D import tworesolution_dual_contour
 
 __author__ = 'benjamin + JC'
 
-import dc3D_real
+import dcHelpers
+import dc3D
 
 from quad import Quad
 
@@ -11,15 +12,6 @@ from vertX import VerteX
 import numpy as np
 
 import cPickle
-
-wfFile = open('Cells', 'rb')
-cellsDict= cPickle.load(wfFile)
-wfFile.close()
-
-wfFile = open('Dimensions', 'rb')
-dimensions= cPickle.load(wfFile)
-wfFile.close()
-
 
 def find_closest_quads(_point, _quadlist, _n_closest):
     d_sq_list = [None] * _quadlist.__len__()
@@ -32,21 +24,34 @@ def find_closest_quads(_point, _quadlist, _n_closest):
 
     return n_closest_idx
 
+def transform_dict(cellsDict):
+    dataset = {}
+    for key in cellsDict:
+        dataset[key] = -1
+
+    return dataset
+
+wfFile = open('Cantilever/Cells_01', 'rb')
+cellsDict = cPickle.load(wfFile)
+wfFile.close()
+
+wfFile = open('Cantilever/Dimensions_01', 'rb')
+dimensions = cPickle.load(wfFile)
+wfFile.close()
 
 res_fine = 1
 res_coarse = res_fine * 2.0
 resolutions = {'fine': res_fine,'coarse': res_coarse}
 
+data = transform_dict(cellsDict)
 
-[verts_out_dc, quads_out_dc] = dc3D_real.tworesolution_dual_contour(cellsDict, resolutions, dimensions)
-
+[verts_out_dc, quads_out_dc] = tworesolution_dual_contour(data, resolutions, dimensions)
 
 N_quads = {'coarse': quads_out_dc['coarse'].shape[0], 'fine': quads_out_dc['fine'].shape[0]}
 N_verts = {'coarse': verts_out_dc['coarse'].shape[0], 'fine': verts_out_dc['fine'].shape[0]}
 
 quads = {'coarse': [None] * N_quads['coarse'], 'fine': [None] * N_quads['fine']}
-verts = {'coarse': [None]*N_verts['coarse'], 'fine': [None]*N_verts['fine']}
-
+verts = {'coarse': [None] * N_verts['coarse'], 'fine': [None] * N_verts['fine']}
 
 for i in range(quads['coarse'].__len__()):
     quads['coarse'][i]=Quad(i,quads_out_dc['coarse'],verts_out_dc['coarse'])
@@ -56,7 +61,7 @@ for i in range(verts['coarse'].__len__()):
 
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
-from mpl_toolkits.mplot3d.art3d import Poly3DCollection
+from mpl_toolkits.mplot3d.art3d import Poly3DCollection, Line3DCollection
 
 fig = plt.figure()
 ax = Axes3D(fig)
@@ -79,7 +84,7 @@ for q in quads['coarse']:
     poly=Poly3DCollection(vtx)
     poly.set_color('b')
     poly.set_edgecolor('k')
-    #poly.set_alpha(.25)
+    poly.set_alpha(.25)
     ax.add_collection3d(poly)
 
 for q in quads_out_dc['fine']:
@@ -111,7 +116,12 @@ for vertex in verts_out_dc['fine']:
     #only plotting information
     start = projected_point_min
     end = vertex
-    ax.plot([start[0],end[0]],[start[1],end[1]],[start[2],end[2]],'k',linewidth=2.0)
+    x = [start[0],end[0]]
+    y = [start[1],end[1]]
+    z = [start[2],end[2]]
+    vtx = [zip(x,y,z)]
+    line = Line3DCollection(vtx,color='k',linewidth=2.0)
+    ax.add_collection3d(line)
 
 
 ax.set_xlim3d(dimensions['xmin']-5,dimensions['xmax']+5 )
