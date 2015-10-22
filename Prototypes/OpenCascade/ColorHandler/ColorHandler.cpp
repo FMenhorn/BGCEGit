@@ -105,26 +105,28 @@ void ColorHandler::getCompleteShape(TopoDS_Shape& topoDSShape) {
 
 void ColorHandler::getFixtureShapes(ListOfShape& listOfShapes) {
 	Quantity_Color red(1,0,0,Quantity_TOC_RGB);
-	getColoredFaces(listOfShapes, red);
+	std::vector<std::vector<double>> unusedVec;
+	getColoredFaces(listOfShapes, unusedVec, red, false);
 }
 
-void ColorHandler::getPassiveShapes(ListOfShape& listOfShapes) {
+void ColorHandler::getActiveShapes(ListOfShape& listOfShapes) {
 	Quantity_Color green(0,1,0,Quantity_TOC_RGB);
-	getColoredFaces(listOfShapes, green);
+	std::vector<std::vector<double>> unusedVec;
+	getColoredFaces(listOfShapes, unusedVec, green, false);
 }
 
-void ColorHandler::getLoadShapes(ListOfShape& listOfShapes) {
+void ColorHandler::getLoadShapes(ListOfShape& listOfShapes, std::vector<std::vector<double>>& listOfLoads) {
 	Quantity_Color blue(0,0,1,Quantity_TOC_RGB);
-	getColoredFaces(listOfShapes, blue);
+	getColoredFaces(listOfShapes, listOfLoads, blue, false);
 }
 
-void ColorHandler::getColoredFaces(ListOfShape& listOfShapes,const Quantity_Color wantedColor) {
+void ColorHandler::getColoredFaces(ListOfShape& listOfShapes, std::vector<std::vector<double>>& listOfLoads, const Quantity_Color wantedColor, const bool isLoadSeeked) {
 	std::vector<TopoDS_Face> coloredFacesVector;
-	findColoredFaces(wantedColor, coloredFacesVector);
+	findColoredFaces(wantedColor, coloredFacesVector, listOfLoads, isLoadSeeked);
 	buildColoredFaces(coloredFacesVector, listOfShapes);
 }
 
-void ColorHandler::findColoredFaces(const Quantity_Color& wantedColor, std::vector<TopoDS_Face>& coloredFacesVector) {
+void ColorHandler::findColoredFaces(const Quantity_Color& wantedColor, std::vector<TopoDS_Face>& coloredFacesVector, std::vector<std::vector<double>>& colorVector, const bool isLoadSeeked) {
 	XCAFDoc_ColorType ctype = XCAFDoc_ColorGen;
 	Handle_XCAFDoc_ColorTool myColors = XCAFDoc_DocumentTool::ColorTool(aDocIges->Main());
 	Quantity_Color color;
@@ -135,16 +137,37 @@ void ColorHandler::findColoredFaces(const Quantity_Color& wantedColor, std::vect
 		const TopoDS_Face& faceIges = TopoDS::Face(exIges.Current());
 		if (myColors->IsSet(faceIges, ctype)
 				|| myColors->IsSet(faceIges, XCAFDoc_ColorSurf)
-				|| myColors->IsSet(faceIges, XCAFDoc_ColorCurv)) {
+				|| myColors->IsSet(faceIges, XCAFDoc_ColorCurv))
+		{
 			myColors->GetColor(faceIges, XCAFDoc_ColorGen, color);
-			if ((color.Red() == wantedColor.Red()
-					&& color.Green() == wantedColor.Green()
-					&& color.Blue() == wantedColor.Blue())) {
-				coloredFacesVector.push_back(faceStep);
-				std::cout << "ColorHandler::findColoredFaces: YES Color found " << color.Red() << " "
-						<< color.Green() << " " << color.Blue() << std::endl;
+			if (!isLoadSeeked){
+				if (color.Red() == wantedColor.Red()
+						&& color.Green() == wantedColor.Green()
+						&& color.Blue()  == wantedColor.Blue())
+				{
+					coloredFacesVector.push_back(faceStep);
+					std::cout << "ColorHandler::findColoredFaces: YES Color found " << color.Red() << " " << color.Green() << " " << color.Blue() << std::endl;
+				}
 			}
-		} else {
+			else
+			{
+				if (color.Red() < 0.999
+						&& color.Green() < 0.999
+						&& color.Blue()  < 0.999)
+				{
+					std::vector<double> tempColorVec;
+						tempColorVec.push_back(color.Red());
+						tempColorVec.push_back(color.Green());
+						tempColorVec.push_back(color.Blue());
+
+					colorVector.push_back(tempColorVec);
+
+					coloredFacesVector.push_back(faceStep);
+				}
+			}
+		}
+		else
+		{
 			std::cout << "ColorHandler::findColoredFaces: No Color" << std::endl;
 		}
 		exIges.Next();

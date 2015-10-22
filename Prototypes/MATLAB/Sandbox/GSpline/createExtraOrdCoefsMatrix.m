@@ -1,27 +1,39 @@
 function coefsMatrix = createExtraOrdCoefsMatrix(parameterCoordinates,coefs_raw)
 
-
 domainM = 4;
 domainN = 4;
+
+% takes parameterCoordinates[Nx2](on a patch that spans over [0,1] with 4x4
+% local bezier patches) and computes the coefficient matrix for each of
+% these as a Nx6x6 matrix (where the first and last columns/rows are the
+% neighbouring points)
+
+% The coefficients for the extraordinary case are created from
+% the coefficients between each A,B and C vertex point and the
+% corresponding bicubic Bezier patch point, which is multiplied by the 
+% weight the related bezier polynomial. This is obtained by mapping the
+% quad parameters to that of the local patch by an translation and scaling,
+% plus a rotation to orient the parameters in orientation to the
+% extraordinary corner. 
+
 
 mod_index = @(i,modul) mod(i-1,modul) + 1;
 % rot = @(angle)[cos(angle),-sin(angle),0;sin(angle),cos(angle),0;0,0,1];
 
 shifted_indices = @(ind,modul) mod_index((0:(modul-1)) + ind,modul);
+
+% Cyclic arays with the indices of the extraordinary vertex points.
 AInds = [[5;5],   [2;5],    [2;2],    [5;2]];
 B1Inds = [[5;4],   [3;5],   [ 2;3],   [ 4;2]];
 B2Inds = [[4;5],   [2;4],   [ 3;2],   [ 5;3]];
 CInds = [[4;4],   [3;4],   [ 3;3],   [ 4;3]];
 
 
-
+% Indexing around the extraordinary corner for deciding on how to rotate
+% the parameters
 whichQuadrant = [[3;4] , [2;1]];
 
 
-% takes parameterCoordinates[Nx2](on a patch that spans over [0,1] with 4x4
-% local bezier patches) and computes the coefficient matrix for each of
-% these as a Nx6x6 matrix (where the first and last columns/rows are the
-% neighbouring points)
 N = size(parameterCoordinates,1);
 coefsMatrix = zeros(N,domainM+2,domainN+2);
 

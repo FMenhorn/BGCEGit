@@ -23,13 +23,14 @@
 
 class Writer_ToPy: public Writer{
 public:
-    Writer_ToPy() : Writer() {};
+    Writer_ToPy() : Writer(){};
 
     ~Writer_ToPy() {this->~Writer();};
 
     bool write(std::string _filename, std::vector<std::vector<VoxelShape>> &voxelShape);
 
 private:
+
     void writeHeader(std::ofstream &outfile, std::string _filename);
     void writeGreyScaleFilters(std::ofstream &outfile);
     void writeDimensions(std::ofstream &outfile,std::vector<int> dimensions);

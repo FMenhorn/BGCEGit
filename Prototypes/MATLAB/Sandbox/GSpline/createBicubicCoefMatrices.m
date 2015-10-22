@@ -3,13 +3,16 @@
 function [Acoefs, B1coefs, B2coefs, Ccoefs] = createBicubicCoefMatrices(num_of_quads)
 
 % returns a matrix with the biquadractic point coefficients of its
-% neighbour vertices for each control point (i,j) on the bicubic patch,
+% neighbour vertices for each control point (i,j) = 1..4 on the bicubic patch,
 % in the form of four vectors of neighbouring vertex point coefs
 
 % nomenclature following that of paper of Eck, Hoppe (Automatic
 % Reconstruction of B-Spline Surfaces of Arbitrary Topological Type), from
 % which the formulae are also collected. (except that indices of the
 % control points are, following matlab custom, shifted one higher ;-)  )
+
+% code is reverse-engineered from that of getBicubicPatch, hence the
+% commented-out code describing the original peter's scheme.
 
 Acoefs = zeros(num_of_quads,4,4);
 B1coefs = zeros(num_of_quads,4,4);

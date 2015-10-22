@@ -1,5 +1,5 @@
 
-numPoints = 400;
+numPoints = 600;
 
 polParams = rand(numPoints,1);
 torParams = rand(numPoints,1);

@@ -19,6 +19,7 @@ Reader/IGESCAFReader.cpp
 Reader/STEPCAFReader.cpp
 Voxelizer/Voxelizer.cpp
 Voxelizer/VoxelShape.cpp
+Voxelizer/VoxelIndexCalculator.cpp
 Writer/Writer_ToPy.cpp
 Writer/Writer_VTK.cpp
 ColorHandler/ColorHandler.cpp

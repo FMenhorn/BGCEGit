@@ -11,7 +11,7 @@
 
 bool Writer_VTK::write(std::string filename,  std::vector<std::vector<VoxelShape>> &voxelShape){
 	std::string outputFilename;
-	for(size_t i = 0; i < voxelShape.size(); ++i){
+	for(size_t i = 0; i < voxelShape.size()-1; ++i){
 		switch(i){
 		case 0:
 			outputFilename = filename + "_body";
@@ -23,8 +23,10 @@ bool Writer_VTK::write(std::string filename,  std::vector<std::vector<VoxelShape
 			outputFilename = filename + "_load";
 			break;
 		case 3:
-			outputFilename = filename + "_passive";
+			outputFilename = filename + "_active";
 			break;
+		case 4:
+			outputFilename = filename + "_passive";
 		}
 		for(size_t j = 0; j < voxelShape[i].size(); ++j){
 		    ofstream outfile;

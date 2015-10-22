@@ -1,5 +1,6 @@
 __author__ = 'benjamin'
 
+import numpy as np
 
 # exports a np.ndarray to a csv file
 def export_as_csv(data,name):
@@ -36,3 +37,34 @@ def data_to_voxel(_data, res, dims):
                 z_mat[i, j, k] = thisZ
 
     return voxels_mat,x_mat,y_mat,z_mat
+
+
+def update_mesh_2d(dc_verts, dc_edges, new_edges_list, new_nodes_list, delete_edges_list):
+    dc_verts += new_nodes_list # append new nodes
+    dc_edges += new_edges_list # append new edges
+
+    for edge_idx in delete_edges_list: # delete edges not needed anymore
+        dc_edges[edge_idx] = None
+    for i in delete_edges_list:
+        dc_edges[i] = None
+    while None in dc_edges:
+        dc_edges.remove(None)
+
+    return dc_verts, dc_edges
+
+
+def generate_vertex_usage_dict(dc_edges):
+    vertex_usage_dict = {}  # here we save the edges using a certain node
+
+    for i in range(dc_edges.__len__()):  # traverse all edges
+        nodes = dc_edges[i]  # choose one edge
+
+        for n in nodes:  # traverse all nodes of this edge
+            if n in vertex_usage_dict:  # if the key is already in global list
+                vertex_usage_dict[n].append(i)  # append current edge id, since edge is using this node
+            else:
+                vertex_usage_dict[n] = [i]  # add key to list and save edge id, since edge is using this node
+
+    return vertex_usage_dict
+
+
