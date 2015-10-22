@@ -19,11 +19,11 @@
 #include <Quantity_Color.hxx>
 #include <XCAFDoc_ColorTool.hxx>
 
-IGESCAFReader::IGESCAFReader(): Reader() {
+IGESCAFReader::IGESCAFReader(): CAFReader() {
 }
 
 IGESCAFReader::~IGESCAFReader() {
-	this->~Reader();
+	this->~CAFReader();
 }
 
 void IGESCAFReader::read(const std::string filename) {

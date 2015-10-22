@@ -14,13 +14,16 @@ link_directories(/usr/local/lib)
 # Build application
 add_executable(CADToVoxel
 CADToVoxel.cpp
+Reader/Reader.cpp
 Reader/IGESCAFReader.cpp
 Reader/STEPCAFReader.cpp
 Voxelizer/Voxelizer.cpp
 Voxelizer/VoxelShape.cpp
+Voxelizer/VoxelIndexCalculator.cpp
 Writer/Writer_ToPy.cpp
 Writer/Writer_VTK.cpp
-ColorHandler/ColorHandler.cpp)
+ColorHandler/ColorHandler.cpp
+DataWrappers/ListOfShape.cpp)
 
 target_link_libraries(CADToVoxel
 TKTopAlgo
@@ -37,7 +40,8 @@ TKXCAF
 TKLCAF
 TKOffset
 TKG3d
-TKPrim)
+TKPrim
+TKTopAlgo)
 
 # Build application
 add_executable(ColorDetectionTest

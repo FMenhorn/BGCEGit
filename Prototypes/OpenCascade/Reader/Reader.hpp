@@ -1,39 +1,37 @@
 /*
  * Reader.hpp
  *
- *  Created on: Oct 6, 2015
- *      Author: friedrich
+ *  Created on: Oct 20, 2015
+ *      Author: Saumitra Joshi
  */
 
 #ifndef READER_READER_HPP_
 #define READER_READER_HPP_
 
-#include <TopoDS_Shape.hxx>
-#include <Handle_TDocStd_Document.hxx>
-#include <string>
+#include "IGESCAFReader.hpp"
+#include "STEPCAFReader.hpp"
+#include "../ColorHandler/ColorHandler.hpp"
 
-class Reader{
+class Reader {
+private:
+	std::string sourceFilePath;
+	std::string sourceFileName;
+	IGESCAFReader readerIges;
+	STEPCAFReader readerStep;
+
 public:
-	Reader(){};
-	virtual ~Reader(){};
+	Reader(std::string _sourceFilePath, std::string _sourceFileName):
+		sourceFilePath(_sourceFilePath),
+		sourceFileName(_sourceFileName) {
 
-	/**
-	 * virtual method which has to be implemented by children. reads the file with filename into the corresponding implementation of the reader
-	 * @param filename
-	 */
-	virtual void read(const std::string filename) = 0;
+	}
 
-	/**
-	 * virtual method which has to be implemented by children. Transfers the object/model/shape from the reader into the the TDocStd_Document doc
-	 * @param doc
-	 */
-	virtual void transfer(Handle_TDocStd_Document& doc) = 0;
+	virtual ~Reader();
 
-protected:
+	void read();
 
+	void transfer(ColorHandler& colorHandler);
 };
-
-
 
 
 #endif /* READER_READER_HPP_ */

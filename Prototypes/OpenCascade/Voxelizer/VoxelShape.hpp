@@ -25,6 +25,7 @@ public:
 	double getOriginY();
 	double getOriginZ();
 	Voxel_BoolDS& getVoxelShape();
+	Voxel_BoolDS copyVoxelShape();
 	void setVoxelShape(const Voxel_BoolDS voxelShape);
 	void setOrigin(const std::vector<double> origin);
 	const std::vector<double>& getDimension() const;
@@ -32,11 +33,17 @@ public:
 	const std::vector<double>& getOrigin() const;
 
 	VoxelShape& operator=( const VoxelShape& other );
+	const std::vector<int>& getIndices() const;
+	void setIndices(const std::vector<int> indices);
+	const std::vector<int> getVoxelDimension() const;
+	void setVoxelDimension(const std::vector<int> voxelDimension);
 
 private:
 	Voxel_BoolDS _voxelShape;
+	std::vector<int> _indices;
 	std::vector<double> _dimension;
 	std::vector<double> _origin;
+	std::vector<int> _voxelDimension;
 };
 
 #endif /* VOXELIZER_VOXELSHAPE_HPP_ */

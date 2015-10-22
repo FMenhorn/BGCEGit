@@ -86,3 +86,18 @@ def doubletorus_f(x):
         return (x[0]*(x[0]-1)**2*(x[0]-2)+x[1]**2)**2-0.01
     else:
         return (x[0]*(x[0]-1)**2*(x[0]-2)+x[1]**2)**2-0.01+x[2]**2
+
+
+def doubletorus_f_z(x):
+    import numpy as np
+    return doubletorus_f(np.array([x[0]-.5,x[1],x[2]-1]))
+
+
+def doubletorus_f_y(x):
+    import numpy as np
+    return doubletorus_f(np.array([x[2]-.5,x[0]-1.5,x[1]]))
+
+
+def doubletorus_f_x(x):
+    import numpy as np
+    return doubletorus_f(np.array([x[1],x[2]+2.5,x[0]-1.5]))

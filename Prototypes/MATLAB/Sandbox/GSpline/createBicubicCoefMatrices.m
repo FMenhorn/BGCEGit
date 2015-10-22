@@ -1,9 +1,9 @@
 %% createBicubicCoefMatrices
 
-function [Acoef, B1coefs, B2coefs, Ccoefs] = createBicubicCoefMatrices(num_of_quads)
+function [Acoefs, B1coefs, B2coefs, Ccoefs] = createBicubicCoefMatrices(num_of_quads)
 
 % returns a matrix with the biquadractic point coefficients of its
-% neighbour vertices for each control point (i,j) on the bicubic patch,
+% neighbour vertices for each control point (i,j) = 1..4 on the bicubic patch,
 % in the form of four vectors of neighbouring vertex point coefs
 
 % nomenclature following that of paper of Eck, Hoppe (Automatic
@@ -11,7 +11,10 @@ function [Acoef, B1coefs, B2coefs, Ccoefs] = createBicubicCoefMatrices(num_of_qu
 % which the formulae are also collected. (except that indices of the
 % control points are, following matlab custom, shifted one higher ;-)  )
 
-Acoef = zeros(4,4);
+% code is reverse-engineered from that of getBicubicPatch, hence the
+% commented-out code describing the original peter's scheme.
+
+Acoefs = zeros(num_of_quads,4,4);
 B1coefs = zeros(num_of_quads,4,4);
 B2coefs = zeros(num_of_quads,4,4);
 Ccoefs = zeros(num_of_quads,4,4);
@@ -57,7 +60,7 @@ mod_index = @(i,modul) mod(i-1,modul) + 1;
 B1coefs(1,1,1) = 0.25;
 B2coefs(1,1,1) = 0.25;
 Ccoefs(1,1,1) = 0.25;
-Acoef(1,1) = 0.25;
+Acoefs(1,1,1) = 0.25;
 
 % i,j = 1,2 or 2,1
 % bezierPoints(:,2,1) = (5*Bs(:,2,ind) + Bs (:,1,ind) + 5*Cs(:,ind) + As(:,ind) )/12;
@@ -65,7 +68,7 @@ Acoef(1,1) = 0.25;
 B1coefs(1,2,1) = 1/12;
 B2coefs(1,2,1) = 5/12;
 Ccoefs(1,2,1) = 5/12;
-Acoef(2,1) = 1/12;
+Acoefs(1,2,1) = 1/12;
 
 %i,j = 3,1
 % bezierPoints(:,3,1) = (5*Bs(:,2,ind) + Bs (:,1,mod_index(ind+1,num_of_quads)) + 5*Cs(:,ind) + Cs(:,mod_index(ind+1,num_of_quads)) )/12;
@@ -91,7 +94,7 @@ Ccoefs(2,4,1) = 0.25;
 B2coefs(1,2,2) = 5/36;
 B1coefs(1,2,2) = 5/36;
 Ccoefs(1,2,2) = (25 + 4*a)/36;
-Acoef(2,2) = (1 - 4*a)/36;
+Acoefs(1,2,2) = (1 - 4*a)/36;
 
 %i,j = 3,2
 % bezierPoints(:,3,2) = ((5-10*a)*Bs(:,2,ind) + (1+2*a)*Bs (:,1,mod_index(ind+1,num_of_quads))...
@@ -126,7 +129,26 @@ Ccoefs(2,4,2) = (5+2*a)/12;
 % h_two = @(i) h_two_gen(i,num_of_quads,a,c,2*a/(3*c));
 Ccoefs(:,4,3) = Ccoefs(:,4,3) + 1/num_of_quads;
 for l = 1:num_of_quads
-    Ccoefs(l,4,3) = Ccoefs(l,4,3) + (2*a/(3*c)) * (cos(2*pi*l/num_of_quads) + cos(2*pi*mod_index(l-1,num_of_quads)/num_of_quads) );
+    Ccoefs(l,4,3) = Ccoefs(l,4,3) + (2*a/(3*c*num_of_quads)) * (cos(2*pi*(l-2)/num_of_quads) + cos(2*pi*mod_index(l-1,num_of_quads)/num_of_quads) );
+end
+
+
+% create all the symmetric coefficients from symmetry
+
+reversedIndices = num_of_quads:1;
+shiftReverse = @(ind,modul) mod_index(ind-(0:(modul-1)),modul);
+
+for j = 1:3
+    for i = (j+1):4
+        i_symm = j;
+        j_symm = i;
+        
+        Acoefs(1:num_of_quads,i_symm,j_symm) = Acoefs(shiftReverse(1,num_of_quads),i,j);
+        B1coefs(1:num_of_quads,i_symm,j_symm) = B2coefs(shiftReverse(1,num_of_quads),i,j);
+        B2coefs(1:num_of_quads,i_symm,j_symm) = B1coefs(shiftReverse(1,num_of_quads),i,j);
+        Ccoefs(1:num_of_quads,i_symm,j_symm) = Ccoefs(shiftReverse(1,num_of_quads),i,j);
+        
+    end 
 end
 
 
@@ -144,42 +166,24 @@ if(mod(num_of_quads,2) == 1 )
 %         bezierPoints(:,3,3) = bezierPoints(:,3,3) ...
 %             - ((-1)^i) * h_three(mod_index(i+ind-1,num_of_quads));
         Ccoefs(:,3,3) = Ccoefs(:,3,3) ...
-            - ((-1)^i) * h_three_coefs(i,Ccoefs);
+            - ((-1)^i) * h_three_coefs(i+1,Ccoefs);
         B1coefs(:,3,3) = B1coefs(:,3,3) ...
-            - ((-1)^i) * h_three_coefs(i,B1coefs);
+            - ((-1)^i) * h_three_coefs(i+1,B1coefs);
         B2coefs(:,3,3) = B2coefs(:,3,3) ...
-            - ((-1)^i) * h_three_coefs(i,B2coefs);
+            - ((-1)^i) * h_three_coefs(i+1,B2coefs);
     end
 else
     for i = 1:num_of_quads
 %         bezierPoints(:,3,3) = bezierPoints(:,3,3) ...
 %             - ((-1)^i) * (num_of_quads-i) * h_three(mod_index(i+ind-1,num_of_quads));
         Ccoefs(:,3,3) = Ccoefs(:,3,3) ...
-            - ((-1)^i) * (num_of_quads-i) * h_three_coefs(i,Ccoefs)* 2/num_of_quads;
+            - ((-1)^i) * (num_of_quads-i) * h_three_coefs(i+1,Ccoefs)* 2/num_of_quads;
         B1coefs(:,3,3) = B1coefs(:,3,3) ...
-            - ((-1)^i) * (num_of_quads-i) * h_three_coefs(i,B1coefs)* 2/num_of_quads;
+            - ((-1)^i) * (num_of_quads-i) * h_three_coefs(i+1,B1coefs)* 2/num_of_quads;
         B2coefs(:,3,3) = B2coefs(:,3,3) ...
-            - ((-1)^i) * (num_of_quads-i) * h_three_coefs(i,B2coefs)* 2/num_of_quads;
+            - ((-1)^i) * (num_of_quads-i) * h_three_coefs(i+1,B2coefs)* 2/num_of_quads;
     end 
 %     bezierPoints(:,3,3) = bezierPoints(:,3,3) * 2/num_of_quads;
-end
-
-% create all the symmetric coefficients from symmetry
-
-reversedIndices = num_of_quads:1;
-shiftReverse = @(ind,modul) mod_index(ind-(0:(modul-1)),modul);
-
-for j = 1:3
-    for i = j+1:4
-        i_symm = j;
-        j_symm = i;
-        
-        Acoef(i_symm,j_symm) = Acoef(i,j);
-        B1coefs(1:num_of_quads,i_symm,j_symm) = B2coefs(shiftReverse(1,num_of_quads),i,j);
-        B2coefs(1:num_of_quads,i_symm,j_symm) = B1coefs(shiftReverse(1,num_of_quads),i,j);
-        Ccoefs(1:num_of_quads,i_symm,j_symm) = Ccoefs(shiftReverse(1,num_of_quads),i,j);
-        
-    end 
 end
 
 

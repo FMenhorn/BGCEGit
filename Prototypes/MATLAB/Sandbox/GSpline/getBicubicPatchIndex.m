@@ -7,6 +7,7 @@ function bezierPoints = getBicubicPatchIndex(ind, As, Bs, Cs)
 % bicubic patch bezier points, where the first dimension is the
 % coordinates.
 
+
 bezierPoints = zeros(3,4,4);
 
 m = length(Cs);

@@ -14,28 +14,28 @@ bool Writer_ToPy::write(std::string _filename, std::vector<std::vector<VoxelShap
     dimensions[1]=voxelShape[0][0].getVoxelShape().GetNbY();
     dimensions[2]=voxelShape[0][0].getVoxelShape().GetNbZ();
     ofstream outfile;
-    std::cout << "Writer: Writing Tpd file for " + _filename + " .." << std::endl;
-    std::cout << "Writer: with dimensions: " << dimensions[0] << "," << dimensions[1] << "," << dimensions[2] << std::endl;
+    std::cout << "Writer_ToPy: Writing Tpd file for " + _filename + " .." << std::endl;
+    std::cout << "Writer_ToPy: with dimensions: " << dimensions[0] << "," << dimensions[1] << "," << dimensions[2] << std::endl;
     outfile.open(_filename + ".tpd", ios::out | ios::trunc);
 
     writeHeader(outfile, _filename);
     writeDimensions(outfile, dimensions);
     writeGreyScaleFilters(outfile);
 	//Write active nodes
-	writeNodes("ACTV_ELEM", outfile,voxelShape[0],dimensions);
+	writeNodes("ACTV_ELEM", outfile,voxelShape[3],dimensions);
 	//use different voxel shape vector and do the same for the others
-	writeNodes("PASV_ELEM",outfile,voxelShape[3],dimensions);
+	writeNodes("PASV_ELEM",outfile,voxelShape[4],dimensions);
 	writeNodes("FXTR_NODE_X",outfile,voxelShape[1],dimensions);
 	writeNodes("FXTR_NODE_Y",outfile,voxelShape[1],dimensions);
 	writeNodes("FXTR_NODE_Z",outfile,voxelShape[1],dimensions);
-	writeNodes("LOAD__NODE_X",outfile,voxelShape[2],dimensions);
-	writeNodes("LOAD__NODE_Y",outfile,voxelShape[2],dimensions);
-	writeNodes("LOAD__NODE_Z",outfile,voxelShape[2],dimensions);
+	//writeNodes("LOAD_NODE_X",outfile,voxelShape[2],dimensions);
+	int noLoadVoxelsY = writeNodes("LOAD_NODE_Y",outfile,voxelShape[2],dimensions);
+	//writeNodes("LOAD_NODE_Z",outfile,voxelShape[2],dimensions);
 
-	outfile << "LOAD_VALU_Y: " << "-1" << "\n";
+	outfile << "LOAD_VALU_Y: " << "-1@" << noLoadVoxelsY << "\n";
     outfile.close();
 
-    std::cout << "Writer: .. done!" << std::endl;
+    std::cout << "Writer_ToPy: .. done!" << std::endl;
 
     return true;
 
@@ -77,26 +77,54 @@ void Writer_ToPy::writeGreyScaleFilters(std::ofstream &outfile){
 	outfile << "Q_MAX      : 5\n";
 }
 
- void Writer_ToPy::writeNodes(std::string name, std::ofstream &outfile, std::vector<VoxelShape> &voxelShape, std::vector<int> dimensions){
+ int Writer_ToPy::writeNodes(std::string name, std::ofstream &outfile, std::vector<VoxelShape> &voxelShape, std::vector<int> dimensions){
+	int size = 0;
+	int originVoxelX = 0;
+	int originVoxelY = 0;
+	int originVoxelZ = 0;
+	double originX = 0;
+	double originY = 0;
+	double originZ = 0;
+	double voxelSizeX = 0;
+	double voxelSizeY = 0;
+	double voxelSizeZ = 0;
 	outfile<< name << ": ";
 	for(size_t h = 0; h < voxelShape.size(); ++h){
-		float hx=voxelShape[h].getVoxelShape().GetX();
-		float hy=voxelShape[h].getVoxelShape().GetY();
-		float hz=voxelShape[h].getVoxelShape().GetZ();
-		for (int k = 0; k < voxelShape[h].getVoxelShape().GetNbZ(); k++){
-			for (int i = 0; i < voxelShape[h].getVoxelShape().GetNbX(); i++){
-				for (int j = 0; j < voxelShape[h].getVoxelShape().GetNbY(); j++){
-					std::cout << "Current Step: " << name << ":" << h << "," << k << "," << i << "," << j << std::endl;
-				if (voxelShape[h].getVoxelShape().Get(i,j,k)==Standard_True){
+		originX =voxelShape[h].getVoxelShape().GetX();
+		originY =voxelShape[h].getVoxelShape().GetY();
+		originZ =voxelShape[h].getVoxelShape().GetZ();
+		voxelSizeX = voxelShape[h].getVoxelShape().GetXLen()/voxelShape[h].getVoxelShape().GetNbX();
+		voxelSizeY = voxelShape[h].getVoxelShape().GetYLen()/voxelShape[h].getVoxelShape().GetNbY();
+		voxelSizeZ = voxelShape[h].getVoxelShape().GetZLen()/voxelShape[h].getVoxelShape().GetNbZ();
+		originVoxelX = originX * voxelSizeX;
+		originVoxelY = originY * voxelSizeY;
+		originVoxelZ = originZ * voxelSizeZ;
+		std::cout << "Name: " << name << ": \n"
+					 "Origin: "<< "[" << originX << "," << originY << "," << originZ << "] " <<
+					 "VoxelOrigin: " << "[" << originVoxelX << "," << originVoxelY <<"," << originVoxelZ<< "] "
+					 "VoxelSizes: "<<"[" << voxelSizeX << "," << voxelSizeY <<"," << voxelSizeZ<< "]" << std::endl;
+		const std::vector<int>& voxelIndices = voxelShape[h].getIndices();
+		for (int k = 0; k < voxelIndices.size(); k++){
+		//	for (int i = 0; i < voxelShape[h].getVoxelShape().GetNbX(); i++){
+		//		for (int j = 0; j < voxelShape[h].getVoxelShape().GetNbY(); j++){
+					//std::cout << "Current Step: " << name << ":" << h << "," << k << "," << i << "," << j << std::endl;
+		//		if (voxelShape[h].getVoxelShape().Get(i,j,k)==Standard_True){
 	//change to list.append
 					//std::cout<<"X: "<< i*hx<<" Y:  "<<j*hy<<" Z: "<<k*hz << " Index: "<<(j+(voxelShape[h].getVoxelShape().GetNbY())*(i+k*(voxelShape[h].getVoxelShape().GetNbZ()))) << std::endl;
-					outfile << (j+(voxelShape[h].getVoxelShape().GetNbY())*(i+k*(voxelShape[h].getVoxelShape().GetNbZ()))) <<"; ";
-					}
-				}
-			}
+		//			outfile << (originVoxelY + j+(voxelShape[h].getVoxelShape().GetNbY())*(originVoxelX + i+(originVoxelZ + k)*(voxelShape[h].getVoxelShape().GetNbZ()))) <<"; ";
+		//			size++;
+		//			}
+		//		}
+		//	}
+			if(k < voxelIndices.size()-1)
+				outfile << voxelIndices[k]+1 <<"; ";
+			else
+				outfile << voxelIndices[k]+1;
 		}
+		size += voxelIndices.size();
 	}
 	outfile << "\n";
+	return size;
 }
 int Writer_ToPy::getIndex(int x, int y, int z, std::vector<int> dimensions){
 

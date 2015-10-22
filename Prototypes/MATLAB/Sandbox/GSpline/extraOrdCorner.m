@@ -7,10 +7,10 @@ Bs = zeros(3,2,m);
 threeDPoint = @(rho,phi,z) [rho.*cos(phi), rho.*sin(phi), z];
 
 for i = 1:m
-    Cs(:,i) = threeDPoint(1,(i-1)/m*2*pi,1);
+    Cs(:,i) = threeDPoint(1,(i-1)/m*2*pi,0.75);
     As(:,i) = threeDPoint(3,(i-1)/m*2*pi,0);
-    Bs(:,1,i) = threeDPoint(2,(2*(i-1.25))*pi/m,0.5);
-    Bs(:,2,i) = threeDPoint(2,(2*(i-1.25) + 1)*pi/m,0.5);
+    Bs(:,1,i) = threeDPoint(sqrt(2),(2*(i-1.25))*pi/m,0.5);
+    Bs(:,2,i) = threeDPoint(sqrt(2),(2*(i-1.25) + 1)*pi/m,0.5);
 end
 
 figure;
