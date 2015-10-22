@@ -13,16 +13,16 @@ def FaceVerts(face, verts):
     #print(face)
     vtx = []
     for i in range(len(face)):
-        print(verts[face[i]])
+        #print(verts[face[i]])
         vtx.append(verts[face[i]])
     return vtx
 
 
-#faces = np.array(np.genfromtxt('quads_Torus.csv', delimiter=';'))
-#verts = np.array(np.genfromtxt('vers_Torus.csv', delimiter=';'))
+faces = np.array(np.genfromtxt('quads_Torus.csv', delimiter=';'))
+verts = np.array(np.genfromtxt('vers_Torus.csv', delimiter=';'))
 
-faces = np.array([[0, 1 , 2, 3], [1, 5, 6, 2], [0, 1, 5, 4], [3, 2, 6, 7], [0, 3, 7, 4], [4, 5, 6, 7]])
-verts = np.array([[0.0, 0.0, 0.0], [1.0, 0.0, 0.0], [1.0, 0.0, 1.0], [0.0, 0.0, 1.0], [0.0, 1.0, 0.0], [1.0, 1.0, 0.0], [1.0, 1.0, 1.0], [0.0, 1.0, 1.0]])
+#faces = np.array([[0, 1 , 2, 3], [1, 5, 6, 2], [0, 1, 5, 4], [3, 2, 6, 7], [0, 3, 7, 4], [4, 5, 6, 7]])
+#verts = np.array([[0.0, 0.0, 0.0], [1.0, 0.0, 0.0], [1.0, 0.0, 1.0], [0.0, 0.0, 1.0], [0.0, 1.0, 0.0], [1.0, 1.0, 0.0], [1.0, 1.0, 1.0], [0.0, 1.0, 1.0]])
 quads = [None]*faces.shape[0]
 
 listOfVertices = []
@@ -148,7 +148,7 @@ for i in range(len(listOfVertices)):
         vertC[i][j][0] = listOfVertices[i].C[j][1].id
         vertC[i][j][1] = listOfVertices[i].C[j][0].quad_id
 
-print(vertA)
+#print(vertA)
 # Specify the filename of the .mat file
 matfile = 'test_mat.mat'
 

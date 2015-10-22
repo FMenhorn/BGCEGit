@@ -59,7 +59,7 @@ def DooSabin(vertices, faces, alpha, iter):
                 for i in range(numberOfVertices):
                     face.parent_vertex.C.append([face.parents[i], newVertices[i]])
                     ind = face.parents[i].vertices.index(face.parent_vertex)
-                    print(face.parents[i].quad_id)
+                    #print(face.parents[i].quad_id)
                     face.parents[i].ordered_refined_vertices[globalIndicesInOrderedOriginalQuad[ind]] = newVertices[i]
 
             if face.type == "edge":
