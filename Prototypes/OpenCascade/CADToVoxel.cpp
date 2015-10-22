@@ -36,8 +36,8 @@
 
 int main(void){
 	///File:
-	std::string filePath = "./TestGeometry/RedGreenBlueCube/";
-	std::string fileName = "RedGreenBlueCube";
+	std::string filePath = "./TestGeometry/CantileverColoredNew/";
+	std::string fileName = "CantiLeverWithLoadAtEndSmallerMovedLoad";
 
 	/**
 	 *  INPUT
@@ -80,7 +80,7 @@ int main(void){
     voxelizer.voxelize(fullShape, refinementLevel, voxelShape);
     voxelIndexCalculator.setDimensions(voxelShape.getVoxelDimension());
     voxelizer.fillVolume(voxelShape);
-    voxelIndexCalculator.calculateIndexForVoxelShape(voxelShape);
+    voxelIndexCalculator.calculateIndexForVoxelShape(voxelShape, true);
 
 	std::vector<VoxelShape> bodyVector;
 	bodyVector.push_back(voxelShape);
@@ -95,7 +95,7 @@ int main(void){
 		for(shapeIterator.Initialize(fixtureFacesList.getListOfShape()); shapeIterator.More(); shapeIterator.Next() ){
 			voxelizer.voxelize(shapeIterator.Value(), refinementLevel, fixtureVector[counter]);
 			std::cout << "FixtureIndices: " << std::endl;
-		    voxelIndexCalculator.calculateIndexForVoxelShape(fixtureVector[counter]);
+		    voxelIndexCalculator.calculateIndexForVoxelShape(fixtureVector[counter], false);
 			counter++;
 		}
 	}
@@ -109,7 +109,7 @@ int main(void){
 		for(shapeIterator.Initialize(loadFacesList.getListOfShape()); shapeIterator.More(); shapeIterator.Next() ){
 			voxelizer.voxelize(shapeIterator.Value(), refinementLevel, loadVector[counter]);
 			std::cout << "LoadIndices: " << std::endl;
-			voxelIndexCalculator.calculateIndexForVoxelShape(loadVector[counter]);
+			voxelIndexCalculator.calculateIndexForVoxelShape(loadVector[counter], false);
 			counter++;
 		}
 	}
@@ -123,7 +123,7 @@ int main(void){
 		for(shapeIterator.Initialize(passiveFacesList.getListOfShape()); shapeIterator.More(); shapeIterator.Next() ){
 			voxelizer.voxelize(shapeIterator.Value(), refinementLevel, activeVector[counter]);
 			std::cout << "ActiveIndices: " << std::endl;
-			voxelIndexCalculator.calculateIndexForVoxelShape(activeVector[counter]);
+			voxelIndexCalculator.calculateIndexForVoxelShape(activeVector[counter], true);
 			counter++;
 		}
 	}
@@ -135,7 +135,7 @@ int main(void){
     passiveVector.push_back(passiveShape);
     outputVoxelVector.push_back(passiveVector);
 
-    voxelIndexCalculator.removeDoubleIndices(outputVoxelVector);
+    //voxelIndexCalculator.removeDoubleIndices(outputVoxelVector);
 
     Writer_ToPy writerToPy;
     writerToPy.write("topy_"+fileName, outputVoxelVector);

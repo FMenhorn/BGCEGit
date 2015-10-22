@@ -172,7 +172,7 @@ void VoxelIndexCalculator::removeDoubleIndices(
 	}
 }
 
-void VoxelIndexCalculator::calculateIndexForVoxelShape(VoxelShape& voxelShape) {
+void VoxelIndexCalculator::calculateIndexForVoxelShape(VoxelShape& voxelShape, bool isElem) {
 	int originVoxelX = 0;
 	int originVoxelY = 0;
 	int originVoxelZ = 0;
@@ -190,9 +190,9 @@ void VoxelIndexCalculator::calculateIndexForVoxelShape(VoxelShape& voxelShape) {
 	originX =voxelShape.getVoxelShape().GetX();
 	originY =voxelShape.getVoxelShape().GetY();
 	originZ =voxelShape.getVoxelShape().GetZ();
-	nbX = dimensions[0];
-	nbY = dimensions[1];
-	nbZ = dimensions[2];
+	nbX = isElem ? dimensions[0] : dimensions[0] + 1;
+	nbY = isElem ? dimensions[1] : dimensions[1] + 1;
+	nbZ = isElem ? dimensions[2] : dimensions[2] + 1;
 	voxelSizeX = voxelShape.getVoxelShape().GetXLen()/voxelShape.getVoxelShape().GetNbX();
 	voxelSizeY = voxelShape.getVoxelShape().GetYLen()/voxelShape.getVoxelShape().GetNbY();
 	voxelSizeZ = voxelShape.getVoxelShape().GetZLen()/voxelShape.getVoxelShape().GetNbZ();
@@ -211,7 +211,7 @@ void VoxelIndexCalculator::calculateIndexForVoxelShape(VoxelShape& voxelShape) {
 			if (voxelShape.getVoxelShape().Get(i,j,k)==Standard_True){
 //change to list.append
 				//std::cout<<"X: "<< i*hx<<" Y:  "<<j*hy<<" Z: "<<k*hz << " Index: "<<(j+(voxelShape[h].getVoxelShape().GetNbY())*(i+k*(voxelShape[h].getVoxelShape().GetNbZ()))) << std::endl;
-				curIndex = originVoxelX + originVoxelY*nbX + originVoxelZ*nbY*nbX + i + j * nbX + k * nbX*nbY;
+				curIndex = (nbY-1-originVoxelY) + originVoxelX*nbY + originVoxelZ*nbX*nbY - j + i * nbY + k * nbY*nbX;
 				voxelIndexTmp.push_back( curIndex );
 				//std::cout << " " << curIndex;
 				}
@@ -262,7 +262,7 @@ void VoxelIndexCalculator::calculatePassiveIndexFromBody(VoxelShape& bodyVoxelSh
 			if (bodyVoxelShape.getVoxelShape().Get(i,j,k)==Standard_False){
 //change to list.append
 				//std::cout<<"X: "<< i*hx<<" Y:  "<<j*hy<<" Z: "<<k*hz << " Index: "<<(j+(voxelShape[h].getVoxelShape().GetNbY())*(i+k*(voxelShape[h].getVoxelShape().GetNbZ()))) << std::endl;
-				curIndex = originVoxelX + originVoxelY*nbX + originVoxelZ*nbY*nbX + i + j * nbX + k * nbX*nbY;
+				curIndex = originVoxelY + originVoxelX*nbY + originVoxelZ*nbX*nbY + j + i * nbY + k * nbY*nbX;
 				voxelIndexTmp.push_back( curIndex );
 				//voxelIndexTmp.push_back(originVoxelY + j+(bodyVoxelShape.getVoxelShape().GetNbY())*(originVoxelX + i+(originVoxelZ + k)*(bodyVoxelShape.getVoxelShape().GetNbZ())));
 				}
