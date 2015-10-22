@@ -19,8 +19,6 @@ class Quad:
         self.parent_vertex = None
         self.edges = self.getEdges()
         self.parent_edge = None
-        self.edge_face_positioning = None
-        self.ordered_refined_vertices = [None]*16
 
 
        # self.neighbors = self.find_neighbors(_quadlist)
