@@ -50,6 +50,7 @@ def DooSabin(vertices, faces, alpha, iter):
                 globalIndicesInOrderedOriginalQuad = [5, 6, 10, 9]
                 for i in range(len(face.parents[0].vertices)):
                     face.parents[0].ordered_refined_vertices[globalIndicesInOrderedOriginalQuad[i]] = newVertices[i]
+                    newVertices[i].parentOrigGrid = face.parents[0]
                     face.parents[0].vertices[i].A.append([face.parents[0], newVertices[i]])
 
             if face.type == "vertex":
@@ -61,6 +62,7 @@ def DooSabin(vertices, faces, alpha, iter):
                     ind = face.parents[i].vertices.index(face.parent_vertex)
                     #print(face.parents[i].quad_id)
                     face.parents[i].ordered_refined_vertices[globalIndicesInOrderedOriginalQuad[ind]] = newVertices[i]
+                    newVertices[i].parentOrigGrid = face.parents[i]
 
             if face.type == "edge":
                 globalIndicesInOrderedOriginalQuad = [[1, 7, 14, 8], [2, 11, 13, 4]]
@@ -73,13 +75,17 @@ def DooSabin(vertices, faces, alpha, iter):
                         #ids in the face parent_local_id*2, parent_local_id*2+1
                         edge_id = face.parents[parent_local_id].edges.index(parent_edge)
                         face.parents[parent_local_id].ordered_refined_vertices[globalIndicesInOrderedOriginalQuad[positioning[parent_local_id*2]][edge_id]] = newVertices[parent_local_id*2]
+                        newVertices[parent_local_id*2].parentOrigGrid = face.parents[parent_local_id]
                         face.parents[parent_local_id].ordered_refined_vertices[globalIndicesInOrderedOriginalQuad[positioning[parent_local_id*2+1]][edge_id]] = newVertices[parent_local_id*2+1]
+                        newVertices[parent_local_id*2+1].parentOrigGrid = face.parents[parent_local_id]
 
                     else:
                         edge_id = face.parents[parent_local_id].edges.index([parent_edge[1], parent_edge[0]])
 
                         face.parents[parent_local_id].ordered_refined_vertices[globalIndicesInOrderedOriginalQuad[1-positioning[parent_local_id*2]][edge_id]] = newVertices[parent_local_id*2]
+                        newVertices[parent_local_id*2].parentOrigGrid = face.parents[parent_local_id]
                         face.parents[parent_local_id].ordered_refined_vertices[globalIndicesInOrderedOriginalQuad[1-positioning[parent_local_id*2+1]][edge_id]] = newVertices[parent_local_id*2+1]
+                        newVertices[parent_local_id*2+1].parentOrigGrid = face.parents[parent_local_id]
 
                 #get the neighbouring "vertex" faces with respect to our current "edge" face
                 neighbouringVertexFaces = [face.parent_edge[i].childFace for i in range(2)]

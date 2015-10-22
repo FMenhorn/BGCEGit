@@ -9,6 +9,7 @@ class Vertex:
         self.neighbouringVertices = []
         self.neighbouringFaces = []
         self.childFace = None
+        self.parentOrigGrid = None
         self.A = []
         self.B1 = []
         self.B2 = []

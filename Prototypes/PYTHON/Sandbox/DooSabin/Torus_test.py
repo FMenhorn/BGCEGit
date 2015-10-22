@@ -29,14 +29,13 @@ listOfVertices = []
 for i in range(len(verts)):
     listOfVertices.append(Vertex(i, verts[i]))
 
+
 for i in range(faces.shape[0]):
     face_vertices = [listOfVertices[faces[i].astype(int)[j]] for j in range(len(faces[i]))]
     quads[i] = Quad(i, face_vertices)
 
     for vertex in face_vertices:
         vertex.addNeighbouringFace(quads[i])
-
-
 #neighbours_test = quads[4].find_neighbors(quads)
 
 [vertices_refined, faces_refined] = DooSabin(listOfVertices, quads, 0.5, 1)
@@ -50,17 +49,62 @@ x = []
 y = []
 z = []
 #print(quads[0].ordered_refined_vertices)
-for vertex in quads[0].ordered_refined_vertices:
-    if vertex != None:
-        for i in range(3):
-            x.append(vertex.coordinates[0])
-            y.append(vertex.coordinates[1])
-            z.append(vertex.coordinates[2])
+edge_orientation_check = [0, 1, 2, 3]
+#for vertex in quads[2].ordered_refined_vertices:
+for ind in edge_orientation_check:
+            x.append(quads[2].ordered_refined_vertices[ind].coordinates[0])
+            y.append(quads[2].ordered_refined_vertices[ind].coordinates[1])
+            z.append(quads[2].ordered_refined_vertices[ind].coordinates[2])
+x.append(quads[2].vertices[0].coordinates[0])
+y.append(quads[2].vertices[0].coordinates[1])
+z.append(quads[2].vertices[0].coordinates[2])
+
+x.append(quads[2].vertices[1].coordinates[0])
+y.append(quads[2].vertices[1].coordinates[1])
+z.append(quads[2].vertices[1].coordinates[2])
+
+# k = 5
+# x.append(listOfVertices[k].coordinates[0])
+# y.append(listOfVertices[k].coordinates[1])
+# z.append(listOfVertices[k].coordinates[2])
+#
+# x.append(listOfVertices[k].B2[0][1].coordinates[0])
+# y.append(listOfVertices[k].B2[0][1].coordinates[1])
+# z.append(listOfVertices[k].B2[0][1].coordinates[2])
+#
+# x.append(listOfVertices[k].B2[0][2][0].coordinates[0])
+# y.append(listOfVertices[k].B2[0][2][0].coordinates[1])
+# z.append(listOfVertices[k].B2[0][2][0].coordinates[2])
+#
+# x.append(listOfVertices[k].B2[0][2][1].coordinates[0])
+# y.append(listOfVertices[k].B2[0][2][1].coordinates[1])
+# z.append(listOfVertices[k].B2[0][2][1].coordinates[2])
+
+
+
+# for i in range(len(listOfVertices[k].A)):
+#     x.append(listOfVertices[k].A[i][1].coordinates[0])
+#     y.append(listOfVertices[k].A[i][1].coordinates[1])
+#     z.append(listOfVertices[k].A[i][1].coordinates[2])
+#
+#     x.append(listOfVertices[k].B1[i][1].coordinates[0])
+#     y.append(listOfVertices[k].B1[i][1].coordinates[1])
+#     z.append(listOfVertices[k].B1[i][1].coordinates[2])
+#
+#     x.append(listOfVertices[k].B2[i][1].coordinates[0])
+#     y.append(listOfVertices[k].B2[i][1].coordinates[1])
+#     z.append(listOfVertices[k].B2[i][1].coordinates[2])
+#
+#     x.append(listOfVertices[k].C[i][1].coordinates[0])
+#     y.append(listOfVertices[k].C[i][1].coordinates[1])
+#     z.append(listOfVertices[k].C[i][1].coordinates[2])
+
 ax.scatter(x,y,z, color = 'r')
 #x = []
 #y = []
 #z = []
 for face in quads:
+    #print face.quad_id
    # print(face.ordered_refined_vertices)
     n = len(face.vertices)
     # print(face.vertices)
@@ -94,10 +138,11 @@ for face in quads:
 #         z.append(vertex.C[i][1].coordinates[2])
 #
 # ax.scatter(x,y,z, color = 'b')
+vertices =listOfVertices
 x = []
 y = []
 z = []
-# for j in range(1, len(vertices), 3):
+# for j in range(len(vertices)):
 #     for i in range(len(vertices[j].B2)):
 #         x.append(vertices[j].B1[i][1].coordinates[0])
 #         y.append(vertices[j].B1[i][1].coordinates[1])
@@ -108,15 +153,17 @@ ax.scatter(x,y,z, color = 'r')
 x = []
 y = []
 z = []
-# for j in range(1, len(vertices), 3):
+
+# for j in range(len(vertices)):
 #     for i in range(len(vertices[j].B2)):
 #         #print(vertex.B2)
 #         #if (vertex.B2):
 #          x.append(vertices[j].B2[i][1].coordinates[0])
 #          y.append(vertices[j].B2[i][1].coordinates[1])
 #          z.append(vertices[j].B2[i][1].coordinates[2])
-        #else:
-        # print(vertex.coordinates)
+#         #else:
+#         # print(vertex.coordinates)
+
 ax.scatter(x,y,z, color = 'g')
 
 x = []
@@ -130,31 +177,34 @@ z = []
 vertA = -1*np.ones((len(verts), 7, 2))
 vertB1 = -1*np.ones((len(verts), 7, 4))
 vertB2 = -1*np.ones((len(verts), 7, 4))
-
+nonExtraordinaryPoints = -1*np.ones((len(quads), 16))
 vertC = np.zeros((len(verts), 7, 2))
+
+for i in range(len(quads)):
+    nonExtraordinaryPoints[i] = [quads[i].ordered_refined_vertices[j].id for j in range(16)]
+
 
 for i in range(len(listOfVertices)):
     for j in range(len(listOfVertices[i].A)):
         vertA[i][j][0] = listOfVertices[i].A[j][1].id
-        vertA[i][j][1] = listOfVertices[i].A[j][0].quad_id
+        vertA[i][j][1] = listOfVertices[i].A[j][1].parentOrigGrid.quad_id
         vertB1[i][j][0] = listOfVertices[i].B1[j][1].id
-        vertB1[i][j][1] = listOfVertices[i].B1[j][0].quad_id
+        vertB1[i][j][1] = listOfVertices[i].B1[j][1].parentOrigGrid.quad_id
         vertB1[i][j][2] = listOfVertices[i].B1[j][2][0].id
         vertB1[i][j][3] = listOfVertices[i].B1[j][2][1].id
         vertB2[i][j][0] = listOfVertices[i].B2[j][1].id
-        vertB2[i][j][1] = listOfVertices[i].B2[j][0].quad_id
+        vertB2[i][j][1] = listOfVertices[i].B2[j][1].parentOrigGrid.quad_id
         vertB2[i][j][2] = listOfVertices[i].B2[j][2][0].id
         vertB2[i][j][3] = listOfVertices[i].B2[j][2][1].id
         vertC[i][j][0] = listOfVertices[i].C[j][1].id
-        vertC[i][j][1] = listOfVertices[i].C[j][0].quad_id
+        vertC[i][j][1] = listOfVertices[i].C[j][1].parentOrigGrid.quad_id
 
-#print(vertA)
 # Specify the filename of the .mat file
-matfile = 'test_mat.mat'
+matfile = 'torus_point_data.mat'
 
 # Write the array to the mat file. For this to work, the array must be the value
 # corresponding to a key name of your choice in a dictionary
-scipy.io.savemat(matfile, mdict={'A': vertA, 'B1': vertB1, 'B2' : vertB2, 'C' : vertC}, oned_as='row')
+scipy.io.savemat(matfile, mdict={'A': vertA, 'B1': vertB1, 'B2' : vertB2, 'C' : vertC, 'regularPoints' : nonExtraordinaryPoints}, oned_as='row')
 
 # For the above line, I specified the kwarg oned_as since python (2.7 with
 # numpy 1.6.1) throws a FutureWarning.  Here, this isn't really necessary
