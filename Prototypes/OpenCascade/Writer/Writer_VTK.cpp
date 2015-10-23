@@ -9,7 +9,7 @@
 
 #include <Voxel_BoolDS.hxx>
 
-bool Writer_VTK::write(std::string filename,  std::vector<std::vector<VoxelShape>> &voxelShape){
+bool Writer_VTK::write(std::string filename,  std::vector<std::vector<VoxelShape>> &voxelShape, std::vector<std::vector<double>>& forces){
 	std::string outputFilename;
 	for(size_t i = 0; i < voxelShape.size()-1; ++i){
 		switch(i){

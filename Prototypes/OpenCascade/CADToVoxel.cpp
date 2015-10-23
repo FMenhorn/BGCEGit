@@ -36,8 +36,8 @@
 
 int main(void){
 	///File:
-	std::string filePath = "./TestGeometry/CantileverColoredNew/";
-	std::string fileName = "CantiLeverWithLoadAtEndSmallerMovedLoad";
+	std::string filePath = "./TestGeometry/CantileverColored/";
+	std::string fileName = "CantileverColored";
 
 	/**
 	 *  INPUT
@@ -138,10 +138,10 @@ int main(void){
     //voxelIndexCalculator.removeDoubleIndices(outputVoxelVector);
 
     Writer_ToPy writerToPy;
-    writerToPy.write("topy_"+fileName, outputVoxelVector);
+    writerToPy.write("topy_"+fileName, outputVoxelVector, loadList);
 
     Writer_VTK writerVTK;
-    writerVTK.write("vtk_"+fileName, outputVoxelVector);
+    writerVTK.write("vtk_"+fileName, outputVoxelVector, loadList);
 
 	return EXIT_SUCCESS;
 }

@@ -8,7 +8,7 @@
 #include "Writer_ToPy.hpp"
 
 
-bool Writer_ToPy::write(std::string _filename, std::vector<std::vector<VoxelShape>> &voxelShape){
+bool Writer_ToPy::write(std::string _filename, std::vector<std::vector<VoxelShape>> &voxelShape, std::vector<std::vector<double>>& forces){
     std::vector<int> dimensions(3);
     dimensions[0]=voxelShape[0][0].getVoxelShape().GetNbX();
     dimensions[1]=voxelShape[0][0].getVoxelShape().GetNbY();
@@ -29,10 +29,11 @@ bool Writer_ToPy::write(std::string _filename, std::vector<std::vector<VoxelShap
 	writeNodes("FXTR_NODE_Y",outfile,voxelShape[1],dimensions);
 	writeNodes("FXTR_NODE_Z",outfile,voxelShape[1],dimensions);
 	//writeNodes("LOAD_NODE_X",outfile,voxelShape[2],dimensions);
-	int noLoadVoxelsY = writeNodes("LOAD_NODE_Y",outfile,voxelShape[2],dimensions);
+	std::vector<int> numberOfLoadVoxelsY = writeNodes("LOAD_NODE_Y",outfile,voxelShape[2],dimensions);
 	//writeNodes("LOAD_NODE_Z",outfile,voxelShape[2],dimensions);
 
-	outfile << "LOAD_VALU_Y: " << "-1@" << noLoadVoxelsY << "\n";
+	//outfile << "LOAD_VALU_Y: " << "-1@" << noLoadVoxelsY << "\n";
+	writeForces(outfile, forces, numberOfLoadVoxelsY);
     outfile.close();
 
     std::cout << "Writer_ToPy: .. done!" << std::endl;
@@ -77,8 +78,8 @@ void Writer_ToPy::writeGreyScaleFilters(std::ofstream &outfile){
 	outfile << "Q_MAX      : 5\n";
 }
 
- int Writer_ToPy::writeNodes(std::string name, std::ofstream &outfile, std::vector<VoxelShape> &voxelShape, std::vector<int> dimensions){
-	int size = 0;
+std::vector<int> Writer_ToPy::writeNodes(std::string name, std::ofstream &outfile, std::vector<VoxelShape> &voxelShape, std::vector<int> dimensions){
+	std::vector<int> size;
 	int originVoxelX = 0;
 	int originVoxelY = 0;
 	int originVoxelZ = 0;
@@ -121,13 +122,35 @@ void Writer_ToPy::writeGreyScaleFilters(std::ofstream &outfile){
 			else
 				outfile << voxelIndices[k]+1;
 		}
-		size += voxelIndices.size();
+		size.push_back(voxelIndices.size());
 	}
 	outfile << "\n";
 	return size;
 }
+
+void Writer_ToPy::writeForces(std::ofstream &outfile, std::vector<std::vector<double>> &forces, std::vector<int> numberOfLoadVoxels) {
+	// Write X loads
+	outfile << "LOAD_VALU_X: ";
+	for (int i = 0; i < forces.size()-1; i++) {
+		outfile << forces[i][0] << "@" << numberOfLoadVoxels[i] << ";";
+	}
+	outfile << forces.back()[0] << "@" << numberOfLoadVoxels.back() << "\n";
+
+	outfile << "LOAD_VALU_Y: ";
+	for (int i = 0; i < forces.size()-1; i++) {
+		outfile << forces[i][1] << "@" << numberOfLoadVoxels[i] << ";";
+	}
+	outfile << forces.back()[1] << "@" << numberOfLoadVoxels.back() << "\n";
+
+	outfile << "LOAD_VALU_Z: ";
+	for (int i = 0; i < forces.size()-1; i++) {
+		outfile << forces[i][2] << "@" << numberOfLoadVoxels[i] << ";";
+	}
+	outfile << forces.back()[2] << "@" << numberOfLoadVoxels.back() << "\n";
+
+	outfile << "\n";
+}
+
 int Writer_ToPy::getIndex(int x, int y, int z, std::vector<int> dimensions){
-
-return y + (dimensions[1]+1)*(x + (dimensions[0]+1) * z);
-
+	return y + (dimensions[1]+1)*(x + (dimensions[0]+1) * z);
 }

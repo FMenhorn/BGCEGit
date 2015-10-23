@@ -20,7 +20,7 @@ public:
 
     virtual ~Writer() {};
 
-    virtual bool write(std::string _filename, std::vector<std::vector<VoxelShape>> &voxelShape) = 0;
+    virtual bool write(std::string _filename, std::vector<std::vector<VoxelShape>> &voxelShape, std::vector<std::vector<double>>& forces) = 0;
 
 
 

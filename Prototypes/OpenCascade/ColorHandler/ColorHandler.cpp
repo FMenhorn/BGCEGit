@@ -117,7 +117,7 @@ void ColorHandler::getActiveShapes(ListOfShape& listOfShapes) {
 
 void ColorHandler::getLoadShapes(ListOfShape& listOfShapes, std::vector<std::vector<double>>& listOfLoads) {
 	Quantity_Color blue(0,0,1,Quantity_TOC_RGB);
-	getColoredFaces(listOfShapes, listOfLoads, blue, false);
+	getColoredFaces(listOfShapes, listOfLoads, blue, true);
 }
 
 void ColorHandler::getColoredFaces(ListOfShape& listOfShapes, std::vector<std::vector<double>>& listOfLoads, const Quantity_Color wantedColor, const bool isLoadSeeked) {
@@ -146,7 +146,7 @@ void ColorHandler::findColoredFaces(const Quantity_Color& wantedColor, std::vect
 						&& color.Blue()  == wantedColor.Blue())
 				{
 					coloredFacesVector.push_back(faceStep);
-					std::cout << "ColorHandler::findColoredFaces: YES Color found " << color.Red() << " " << color.Green() << " " << color.Blue() << std::endl;
+					std::cout << "ColorHandler::findColoredFaces: Color found: " << color.Red() << " " << color.Green() << " " << color.Blue() << std::endl;
 				}
 			}
 			else
@@ -163,6 +163,7 @@ void ColorHandler::findColoredFaces(const Quantity_Color& wantedColor, std::vect
 					colorVector.push_back(tempColorVec);
 
 					coloredFacesVector.push_back(faceStep);
+					std::cout << "ColorHandler::findColoredFaces: Force found: " << color.Red() << " " << color.Green() << " " << color.Blue() << std::endl;
 				}
 			}
 		}

@@ -25,7 +25,7 @@ public:
 
     ~Writer_VTK() {this->~Writer();};
 
-    bool write(std::string _filename,  std::vector<std::vector<VoxelShape>> &voxelShape);
+    bool write(std::string _filename,  std::vector<std::vector<VoxelShape>> &voxelShape, std::vector<std::vector<double>>& forces);
 
 private:
     void writeHeader(std::ofstream &outfile);
