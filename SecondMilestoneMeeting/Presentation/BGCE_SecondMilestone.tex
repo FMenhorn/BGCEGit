@@ -1,0 +1,136 @@
+\documentclass[9pt,pdftex]{beamer}
+\setbeamertemplate{section in toc}[sections numbered]
+\setbeamertemplate{subsection in toc}%
+{\leavevmode\leftskip=3em\rlap{\hskip-2em\inserttocsectionnumber.\inserttocsubsectionnumber}\inserttocsubsection\par}
+% use git: import repository as new project in eclipse: http://www.eclipse.org/forums/index.php/t/226301/
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amsfonts, amsmath, amssymb}
+\usepackage[bf,small, format=plain]{caption}
+\usepackage{color}
+
+%\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{graphicx}
+\usepackage{tikz,tikzscale,pgfplots,grffile}
+\usetikzlibrary{arrows,shapes,backgrounds}
+\usetikzlibrary{plotmarks}
+\usepackage{bbding}
+
+\usepackage[clock]{ifsym}
+
+\usepackage{pgfplots}
+\usepackage{grffile}
+\pgfplotsset{compat=newest}
+
+%\author{}
+%\title{}
+%\setbeamercovered{transparent} 
+%\setbeamertemplate{navigation symbols}{} 
+%\logo{} 
+%\institute{} 
+%\date{} 
+%\subject{} 
+
+\pgfdeclarelayer{bg}
+\pgfsetlayers{bg,main}
+
+\usepackage{mdframed}
+\usepackage{multicol}
+\usepackage{tcolorbox}
+%\usepackage{multirow}
+% \usepackage{paralist}
+%\usepackage[colorinlistoftodos]{todonotes}
+%\usepackage{biblatex}
+%usepackage[nolist,nohyperlinks]{acronym}
+%\usepackage{amstext}
+%\usepackage{hyperref} 
+%\usepackage{comment}
+%\usepackage{subcaption}
+%\renewcommand*{\figureautorefname}{fig.}
+%\renewcommand*{\equationautorefname}{eq.}
+\usepackage{bm}
+\usepackage{comment}
+%\usepackage{beamerthemeshadow}
+%\usepackage{tikz}
+%\usepackage{pgfplots}
+%\usepackage{ulem}
+%\usepackage[lofdepth,lotdepth]{subfig}
+%\newenvironment{figure*}%
+%{\begin{figure}}
+%{\end{figure}}
+%\usepackage[style=mla,babel=hyphen,backend=biber]{biblatex}
+% CSE-Beamer-Styles:
+\usepackage[course]{beamertheme_sccstalk}
+%\usepackage[lecture]{beamertheme_sccstalk}
+\usepackage{beamercolorscheme_sccs}
+\usepackage{beamerfontthemestructurebold}
+\setcounter{tocdepth}{3} 
+%colored blocks, example \begin{variableblock}{Title}{bg=blue,fg=white}{bg=white,fg=black}
+\newenvironment{variableblock}[4]{%
+\setbeamercolor{block title}{#2}
+\setbeamercolor{block body}{#3}
+\begin{block}{#1}\begin{mdframed}{#4}\end{mdframed}\end{block}}
+
+%some useful commands
+%\newcommand{\der}[2]{\frac{\text{d}#1}{\text{d}#2}}
+\title{BGCE Project: CAD -- Integrated Topology Optimization}
+\subtitle{BGCE First Milestone Meeting}
+\author[E. Wannerberg, B. Rüth] {S. Joshi, \textit{J.C. Medina}, \textit{F. Menhorn}, S. Reiz, B. Rüth, E. Wannerberg, \textit{A. Yurova}} %[displayed in footer]{displayed on title page}
+\date{\today}
+\institute{Technische Universität München}
+\newtheorem*{rem}{Remark}
+
+
+\begin{document}
+\frame{\maketitle}
+
+\section{Introduction}
+\subsection{Contents}
+\begin{frame}{Contents}
+\tableofcontents
+\end{frame}
+
+\AtBeginSection[]
+{
+  \begin{frame}
+  \frametitle{Contents}
+  \tableofcontents[currentsection]
+  \end{frame}
+}
+
+%-------------------------------------------------------
+
+\subsection{Motivation}
+\input{Sections/Motivation}
+
+%-------------------------------------------------------
+\subsection{Workflow Overview}
+\input{Sections/Workflow}
+
+%-------------------------------------------------------
+\subsection{Schedule \& Milestones}
+\input{Sections/Schedule}
+
+%-------------------------------------------------------
+
+\section{Topology optimization}
+\input{Sections/TopologyOptimization}
+%-------------------------------------------------------
+
+%-------------------------------------------------------
+
+\section{Surface Extraction}
+\input{Sections/SurfaceExtraction}
+
+
+\section{B--Spline Fitting}
+\input{Sections/Nurbs}
+\section{Summary}
+\input{Sections/Summary}
+\section{Outlook}
+\input{Sections/Outlook}
+\section*{Thank You}
+\input{Sections/ThankYou}
+\section*{Literature}
+\input{Sections/Literature}
+\end{document}

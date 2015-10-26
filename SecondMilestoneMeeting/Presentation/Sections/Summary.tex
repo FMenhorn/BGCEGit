@@ -1,0 +1,25 @@
+\begin{frame}{What is done?}
+%\begin{variableblock}{What's done?}{bg=cyan,fg=white}{bg=white,fg=black}
+%{
+\begin{itemize}
+\item First part of the pipeline from CAD model to optimized voxel model:
+\begin{itemize}
+\item[\textcolor{green}{\Checkmark}] CAD to STL with e.g. FreeCAD
+\item[\textcolor{green}{\Checkmark}] STL to Voxels with CVMLCPP
+\item[\textcolor{green}{\Checkmark}] Voxels to ToPy input with custom script
+\item[\textcolor{green}{\Checkmark}] Topology optimized geometry with ToPy
+\item[\textcolor{black}{\VarClock}] Surface reconstruction with VTKToolbox
+\end{itemize}
+\item B--spline fitting
+\begin{itemize}
+	\item[\textcolor{red}{\XSolidBrush}] Automatic patch selection
+	\item[\textcolor{red}{\XSolidBrush}] Parametrization of obtained patches
+	\item[\textcolor{green}{\Checkmark}] B--spline fitting using least squares
+	\item[\textcolor{black}{\VarClock}] Smooth connection of patches
+	\item[\textcolor{red}{\XSolidBrush}] Conversion back to CAD
+\end{itemize}
+\end{itemize}
+%}
+%\end{variableblock}
+\end{frame}
+

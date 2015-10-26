@@ -1,0 +1,65 @@
+% beamercolorscheme_sccs.sty
+% by Stefanie Schraufstetter, 2007
+% (modifiziertes Package 'beamercolorschemeFreebeer')
+% provisorische Version
+%
+
+\RequirePackage{tumcolor}
+
+
+\mode<presentation>
+
+% \definecolor{BeerDark}{RGB}{193,106,35} % outer part of a glas of beer
+% \definecolor{BeerLight}{RGB}{252,223,61} % inner part of a glas of beer
+% \definecolor{BeerLabel}{RGB}{225,43,11} % label at the glas of beer
+
+%% needed by debian-compare
+% \definecolor{DebianBlue}{rgb}{0.01,0.01,0.53} % color of the background of top navigation items at Debian web page
+% \definecolor{DebianLightblue}{rgb}{0.73,0.87,1.0} % color of the background of left navigation items at Debian web page
+% 
+% \definecolor{BlueOnBeer}{RGB}{100,100,255} % Blue headline on Beer background
+
+\setbeamercolor{structure}{fg=tumblau}
+\setbeamercolor{titlelike}{fg=tumblau,bg=white}
+
+
+\setbeamercolor{title in sidebar}{fg=tumblau}
+\setbeamercolor{section in sidebar}{fg=tumblau}
+\setbeamercolor{author in sidebar}{fg=tumblau}
+
+% Color of frame titles
+\setbeamercolor*{normal text}{fg=black}
+\setbeamercolor*{palette primary}{use=structure,fg=white,bg=tumblau!50!white}
+%\setbeamercolor*{palette sidebar primary}{use=structure,fg=BeerDark,bg=white}
+\setbeamercolor*{palette sidebar primary}{use=structure,fg=tumblau}
+
+\colorlet{GoalColor}{tumblau}
+\colorlet{LinkColor}{tumblau}
+\colorlet{ResultColor}{tumblau}
+\colorlet{SorryColor}{tumblau}
+\colorlet{ImportantColor}{tumorange}
+
+% White looks good in combination of yellow in blue
+\definecolor{VarColor}{rgb}{0.95,0.95,1} %
+
+\definecolor{LinkColor}{rgb}{0.95, 0.95, 1}
+
+\colorlet{ProgressColor}{tumblau}
+\colorlet{ProgressBack}{tumblau}
+\colorlet{ProgressBorder}{tumblau}
+
+\colorlet{MsLinuxColor}{tumblau}
+
+\setbeamercolor{block title}{fg=tumblau,bg=white}
+\setbeamercolor{block title alerted}{use=alerted text,fg=red,bg=alerted text.fg!75!bg}
+\setbeamercolor{block title example}{use=example text,fg=green,bg=example text.fg!75!bg}
+% Frame title
+\setbeamercolor*{palette secondary}{use=structure,fg=tumblau,bg=white}
+
+% TOC settings
+\setbeamercolor{section in toc shaded}{fg=black}
+\setbeamertemplate{section in toc shaded}[default][50]
+
+
+\mode
+<all>
