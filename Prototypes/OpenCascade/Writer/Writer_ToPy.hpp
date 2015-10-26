@@ -34,7 +34,7 @@ private:
     void writeHeader(std::ofstream &outfile, std::string _filename);
     void writeGreyScaleFilters(std::ofstream &outfile);
     void writeDimensions(std::ofstream &outfile,std::vector<int> dimensions);
-    std::vector<int> writeNodes(std::string name, std::ofstream &outfile, std::vector<VoxelShape> &voxelShape, std::vector<int> dimensions); //later change to vector of shapes
+    std::vector<int> writeNodes(std::string name, std::ofstream &outfile,const std::vector<VoxelShape> &voxelShape, std::vector<int> dimensions); //later change to vector of shapes
     void writeForces(std::ofstream &outfile, std::vector<std::vector<double>> &forces, std::vector<int> numberOfLoadVoxels);
     int getIndex(int x, int y, int z, std::vector<int> dimensions);
 };

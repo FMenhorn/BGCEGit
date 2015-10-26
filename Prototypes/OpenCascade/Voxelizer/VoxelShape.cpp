@@ -10,8 +10,7 @@
 
 VoxelShape::VoxelShape(){};
 
-VoxelShape::VoxelShape(Voxel_BoolDS voxelShape,
-		std::vector<double> origin): _voxelShape(voxelShape), _origin(origin) {
+VoxelShape::VoxelShape(Voxel_BoolDS voxelShape): _voxelShape(voxelShape){
 }
 
 VoxelShape::~VoxelShape() {
@@ -19,28 +18,12 @@ VoxelShape::~VoxelShape() {
 	//_voxelShape.Destroy();
 }
 
-double VoxelShape::getOriginX() {
-	return _origin[0];
-}
-
-double VoxelShape::getOriginY() {
-	return _origin[1];
-}
-
-double VoxelShape::getOriginZ() {
-	return _origin[2];
-}
-
 Voxel_BoolDS& VoxelShape::getVoxelShape() {
 	return _voxelShape;
 }
 
-const std::vector<double>& VoxelShape::getOrigin() const {
-	return _origin;
-}
-
-void VoxelShape::setOrigin(const std::vector<double> origin) {
-	_origin = origin;
+std::vector<double> VoxelShape::getOrigin() const {
+	return std::vector<double>{getOriginX(), getOriginY(),getOriginZ()};
 }
 
 void VoxelShape::setVoxelShape(const Voxel_BoolDS voxelShape) {
@@ -58,7 +41,6 @@ void VoxelShape::setDimension(const std::vector<double> dimension) {
 VoxelShape& VoxelShape::operator=( const VoxelShape& other ) {
 	      this->_voxelShape = other._voxelShape;
 	      this->_dimension = other._dimension;
-	      this->_origin = other._origin;
 	      return *this;
 }
 
@@ -82,31 +64,43 @@ void VoxelShape::setVoxelDimension(const std::vector<int> voxelDimension) {
 	_voxelDimension = voxelDimension;
 }
 
-double VoxelShape::getXLen() {
+double VoxelShape::getXLen() const{
 	return _voxelShape.GetXLen();
 }
 
-double VoxelShape::getYLen() {
+double VoxelShape::getOriginX() const{
+	return _voxelShape.GetX();
+}
+
+double VoxelShape::getOriginY() const{
+	return _voxelShape.GetY();
+}
+
+double VoxelShape::getOriginZ() const{
+	return _voxelShape.GetZ();
+}
+
+double VoxelShape::getYLen() const{
 	return _voxelShape.GetYLen();
 }
 
-double VoxelShape::getZLen() {
+double VoxelShape::getZLen() const{
 	return _voxelShape.GetZLen();
 }
 
-int VoxelShape::getNbX() {
+int VoxelShape::getNbX() const{
 	return _voxelShape.GetNbX();
 }
 
-int VoxelShape::getNbY() {
+int VoxelShape::getNbY() const{
 	return _voxelShape.GetNbY();
 }
 
-int VoxelShape::getNbZ() {
+int VoxelShape::getNbZ() const{
 	return _voxelShape.GetNbZ();
 }
 
-bool VoxelShape::isVoxel(int x, int y, int z) {
+bool VoxelShape::isVoxel(int x, int y, int z) const{
 	return _voxelShape.Get(x,y,z);
 }
 
