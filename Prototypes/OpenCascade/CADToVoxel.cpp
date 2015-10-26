@@ -110,7 +110,7 @@ int main(void){
 		for(shapeIterator.Initialize(loadFacesList.getListOfShape()); shapeIterator.More(); shapeIterator.Next() ){
 			voxelizer.voxelize(shapeIterator.Value(), refinementLevel, loadVector[counter]);
 			std::cout << "LoadIndices: " << std::endl;
-			voxelIndexCalculator.calculateIndexForVoxelShape(loadVector[counter], true);
+			voxelIndexCalculator.calculateIndexForVoxelShape(loadVector[counter], false);
 			counter++;
 		}
 	}

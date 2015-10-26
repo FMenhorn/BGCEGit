@@ -81,3 +81,35 @@ const std::vector<int> VoxelShape::getVoxelDimension() const {
 void VoxelShape::setVoxelDimension(const std::vector<int> voxelDimension) {
 	_voxelDimension = voxelDimension;
 }
+
+double VoxelShape::getXLen() {
+	return _voxelShape.GetXLen();
+}
+
+double VoxelShape::getYLen() {
+	return _voxelShape.GetYLen();
+}
+
+double VoxelShape::getZLen() {
+	return _voxelShape.GetZLen();
+}
+
+int VoxelShape::getNbX() {
+	return _voxelShape.GetNbX();
+}
+
+int VoxelShape::getNbY() {
+	return _voxelShape.GetNbY();
+}
+
+int VoxelShape::getNbZ() {
+	return _voxelShape.GetNbZ();
+}
+
+bool VoxelShape::isVoxel(int x, int y, int z) {
+	return _voxelShape.Get(x,y,z);
+}
+
+void VoxelShape::setVoxel(int x, int y, int z, bool isVoxel) {
+	_voxelShape.Set(x, y, z, isVoxel);
+}

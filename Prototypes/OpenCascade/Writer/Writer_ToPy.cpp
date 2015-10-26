@@ -28,9 +28,9 @@ bool Writer_ToPy::write(std::string _filename, std::vector<std::vector<VoxelShap
 	writeNodes("FXTR_NODE_X",outfile,voxelShape[1],dimensions);
 	writeNodes("FXTR_NODE_Y",outfile,voxelShape[1],dimensions);
 	writeNodes("FXTR_NODE_Z",outfile,voxelShape[1],dimensions);
-	//writeNodes("LOAD_NODE_X",outfile,voxelShape[2],dimensions);
+	writeNodes("LOAD_NODE_X",outfile,voxelShape[2],dimensions);
 	std::vector<int> numberOfLoadVoxelsY = writeNodes("LOAD_NODE_Y",outfile,voxelShape[2],dimensions);
-	//writeNodes("LOAD_NODE_Z",outfile,voxelShape[2],dimensions);
+	writeNodes("LOAD_NODE_Z",outfile,voxelShape[2],dimensions);
 
 	//outfile << "LOAD_VALU_Y: " << "-1@" << noLoadVoxelsY << "\n";
 	writeForces(outfile, forces, numberOfLoadVoxelsY);
@@ -105,7 +105,7 @@ std::vector<int> Writer_ToPy::writeNodes(std::string name, std::ofstream &outfil
 					 "VoxelOrigin: " << "[" << originVoxelX << "," << originVoxelY <<"," << originVoxelZ<< "] "
 					 "VoxelSizes: "<<"[" << voxelSizeX << "," << voxelSizeY <<"," << voxelSizeZ<< "]" << std::endl;
 		const std::vector<int>& voxelIndices = voxelShape[h].getIndices();
-		for (int k = 0; k < voxelIndices.size(); k++){
+		for (size_t k = 0; k < voxelIndices.size(); k++){
 		//	for (int i = 0; i < voxelShape[h].getVoxelShape().GetNbX(); i++){
 		//		for (int j = 0; j < voxelShape[h].getVoxelShape().GetNbY(); j++){
 					//std::cout << "Current Step: " << name << ":" << h << "," << k << "," << i << "," << j << std::endl;
@@ -117,10 +117,11 @@ std::vector<int> Writer_ToPy::writeNodes(std::string name, std::ofstream &outfil
 		//			}
 		//		}
 		//	}
-			if(k < voxelIndices.size()-1)
-				outfile << voxelIndices[k]+1 <<"; ";
-			else
+		//	if(k < voxelIndices.size()-1)
+			if(h == voxelShape.size()-1 && k == voxelIndices.size()-1)
 				outfile << voxelIndices[k]+1;
+			else
+				outfile << voxelIndices[k]+1 << "; ";
 		}
 		size.push_back(voxelIndices.size());
 	}

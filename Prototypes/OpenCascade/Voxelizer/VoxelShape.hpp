@@ -21,9 +21,48 @@ public:
 
 	virtual ~VoxelShape();
 
+	/**
+	 * Returns the origin of the voxelShape in the corresponding dimension
+	 * @return
+	 */
 	double getOriginX();
 	double getOriginY();
 	double getOriginZ();
+
+	/**
+	 * Returns the size of the shape in the corresponding dimension
+	 * @return
+	 */
+	double getXLen();
+	double getYLen();
+	double getZLen();
+
+	/**
+	 * Returns the number of voxels in the corresponding dimension
+	 * @return
+	 */
+	int getNbX();
+	int getNbY();
+	int getNbZ();
+
+	/**
+	 * Returns if the cell at (x,y,z) is a voxel
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
+	bool isVoxel(int x, int y, int z);
+
+	/**
+	 * Sets the cell at (x,y,z) as isVoxel
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param isVoxel
+	 */
+	void setVoxel(int x, int y, int z, bool isVoxel);
+
 	Voxel_BoolDS& getVoxelShape();
 	Voxel_BoolDS copyVoxelShape();
 	void setVoxelShape(const Voxel_BoolDS voxelShape);
