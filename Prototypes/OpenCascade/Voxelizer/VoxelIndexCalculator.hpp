@@ -21,9 +21,10 @@ public:
 	void calculatePassiveIndexFromBody(VoxelShape& bodyVoxelShape, VoxelShape& passiveVoxelShape);
 	void removeDoubleIndices(std::vector<std::vector<VoxelShape>>& matrixVoxelShapes);
 	void setDimensions(const std::vector<int> dimensions);
-
+	void setOrigin(const std::vector<double> origin);
 private:
 	std::vector<int> dimensions;
+	std::vector<double> origin;
 	void calculateIndexForAllVoxels(std::vector<std::vector<VoxelShape>>& matrixVoxelShapes);
 };
 

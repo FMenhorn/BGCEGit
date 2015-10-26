@@ -187,9 +187,9 @@ void VoxelIndexCalculator::calculateIndexForVoxelShape(VoxelShape& voxelShape, b
 	double voxelSizeZ = 0;
 	std::vector<int> voxelIndexTmp;
 
-	originX =voxelShape.getVoxelShape().GetX();
-	originY =voxelShape.getVoxelShape().GetY();
-	originZ =voxelShape.getVoxelShape().GetZ();
+	originX =voxelShape.getVoxelShape().GetX()-origin[0];
+	originY =voxelShape.getVoxelShape().GetY()-origin[1];
+	originZ =voxelShape.getVoxelShape().GetZ()-origin[2];
 	nbX = isElem ? dimensions[0] : dimensions[0] + 1;
 	nbY = isElem ? dimensions[1] : dimensions[1] + 1;
 	nbZ = isElem ? dimensions[2] : dimensions[2] + 1;
@@ -238,9 +238,9 @@ void VoxelIndexCalculator::calculatePassiveIndexFromBody(VoxelShape& bodyVoxelSh
 	double voxelSizeZ = 0;
 	std::vector<int> voxelIndexTmp;
 
-	originX =bodyVoxelShape.getVoxelShape().GetX();
-	originY =bodyVoxelShape.getVoxelShape().GetY();
-	originZ =bodyVoxelShape.getVoxelShape().GetZ();
+	originX =bodyVoxelShape.getVoxelShape().GetX()-origin[0];
+	originY =bodyVoxelShape.getVoxelShape().GetY()-origin[1];
+	originZ =bodyVoxelShape.getVoxelShape().GetZ()-origin[2];
 	nbX = dimensions[0];
 	nbY = dimensions[1];
 	nbZ = dimensions[2];
@@ -262,7 +262,7 @@ void VoxelIndexCalculator::calculatePassiveIndexFromBody(VoxelShape& bodyVoxelSh
 			if (bodyVoxelShape.getVoxelShape().Get(i,j,k)==Standard_False){
 //change to list.append
 				//std::cout<<"X: "<< i*hx<<" Y:  "<<j*hy<<" Z: "<<k*hz << " Index: "<<(j+(voxelShape[h].getVoxelShape().GetNbY())*(i+k*(voxelShape[h].getVoxelShape().GetNbZ()))) << std::endl;
-				curIndex = originVoxelY + originVoxelX*nbY + originVoxelZ*nbX*nbY + j + i * nbY + k * nbY*nbX;
+				curIndex = (nbY-1-originVoxelY) + originVoxelX*nbY + originVoxelZ*nbX*nbY - j + i * nbY + k * nbY*nbX;
 				voxelIndexTmp.push_back( curIndex );
 				//voxelIndexTmp.push_back(originVoxelY + j+(bodyVoxelShape.getVoxelShape().GetNbY())*(originVoxelX + i+(originVoxelZ + k)*(bodyVoxelShape.getVoxelShape().GetNbZ())));
 				}
@@ -275,4 +275,8 @@ void VoxelIndexCalculator::calculatePassiveIndexFromBody(VoxelShape& bodyVoxelSh
 
 void VoxelIndexCalculator::setDimensions(const std::vector<int> dimensions) {
 	this->dimensions = dimensions;
+}
+
+void VoxelIndexCalculator::setOrigin(const std::vector<double> origin) {
+	this->origin = origin;
 }

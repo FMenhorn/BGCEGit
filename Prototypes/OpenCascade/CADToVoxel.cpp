@@ -36,8 +36,8 @@
 
 int main(void){
 	///File:
-	std::string filePath = "./TestGeometry/CantileverColored/";
-	std::string fileName = "CantileverColored";
+	std::string filePath = "./TestGeometry/CantileverColoredNew/";
+	std::string fileName = "CantiLeverWithLoadAtEndSmallerMovedLoad";
 
 	/**
 	 *  INPUT
@@ -79,6 +79,7 @@ int main(void){
     /**Full Body Treatment**/
     voxelizer.voxelize(fullShape, refinementLevel, voxelShape);
     voxelIndexCalculator.setDimensions(voxelShape.getVoxelDimension());
+    voxelIndexCalculator.setOrigin(voxelShape.getOrigin());
     voxelizer.fillVolume(voxelShape);
     voxelIndexCalculator.calculateIndexForVoxelShape(voxelShape, true);
 
@@ -109,7 +110,7 @@ int main(void){
 		for(shapeIterator.Initialize(loadFacesList.getListOfShape()); shapeIterator.More(); shapeIterator.Next() ){
 			voxelizer.voxelize(shapeIterator.Value(), refinementLevel, loadVector[counter]);
 			std::cout << "LoadIndices: " << std::endl;
-			voxelIndexCalculator.calculateIndexForVoxelShape(loadVector[counter], false);
+			voxelIndexCalculator.calculateIndexForVoxelShape(loadVector[counter], true);
 			counter++;
 		}
 	}
