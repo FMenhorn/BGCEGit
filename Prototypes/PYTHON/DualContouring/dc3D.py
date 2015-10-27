@@ -6,6 +6,7 @@ import numpy.linalg as la
 import scipy.optimize as opt
 import itertools as it
 from dcHelpers import resolve_manifold_edges, create_manifold_edges
+from MeshManager import MeshManager
 
 #########################
 #### DUAL CONTOURING ####
@@ -36,20 +37,11 @@ def estimate_hermite(data, v0, v1):
 
 
 def tworesolution_dual_contour(dataset, resolutions, dims):
-    [dc_verts_fine, dc_quads_fine] = dual_contour(dataset,
-                                                  resolutions['fine'],
-                                                  dims,
-                                                  coarse_level=False)
-    
-    [dc_verts_coarse, dc_quads_coarse] = dual_contour(dataset,
-                                                      resolutions['coarse'],
-                                                      dims,
-                                                      coarse_level=True)
+    Fine = dual_contour(dataset, resolutions['fine'],dims, coarse_level=False)
 
-    dc_verts = {'fine': dc_verts_fine, 'coarse': dc_verts_coarse}
-    dc_quads = {'fine': dc_quads_fine, 'coarse': dc_quads_coarse}
+    Coarse = dual_contour(dataset,resolutions['coarse'],dims, coarse_level=True)
 
-    return dc_verts, dc_quads
+    return Fine,Coarse
 
 
 # Input:
@@ -126,8 +118,9 @@ def dual_contour(data, res, dims, coarse_level):
                         dc_quads.append([vindex[tuple(o)], vindex[tuple(o + res * dirs[i])],
                                          vindex[tuple(o + res * dirs[i] + res * dirs[j])],
                                          vindex[tuple(o + res * dirs[j])]])
-
+    #New Object that manages the indices and the quad/vert list
+    mesh=MeshManager(_quadlist=dc_quads,_vertlist=dc_verts,_data=data,_res=res,_vindex=vindex)
     if coarse_level:
-        dc_verts, dc_quads = resolve_manifold_edges(dc_verts, vindex, dc_quads, data, res)
-
-    return np.array(dc_verts), dc_quads
+        mesh = resolve_manifold_edges(mesh)
+    mesh.verts=np.array(mesh.verts)
+    return mesh
