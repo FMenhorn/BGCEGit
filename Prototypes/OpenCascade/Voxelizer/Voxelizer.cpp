@@ -66,13 +66,13 @@ void Voxelizer::getBoundingBox(const TopoDS_Shape topoDSShape, std::vector<doubl
 
 void Voxelizer::fillVolume(VoxelShape& voxelShape){
 	//Voxel_BoolDS hollowVoxelShapeDS = voxelShape.getVoxelShape();
-	Standard_Real xLen = voxelShape.getVoxelShape().GetXLen();
-	Standard_Real yLen = voxelShape.getVoxelShape().GetYLen();
-	Standard_Real zLen = voxelShape.getVoxelShape().GetZLen();
+	Standard_Real xLen = voxelShape.getXLen();
+	Standard_Real yLen = voxelShape.getYLen();
+	Standard_Real zLen = voxelShape.getZLen();
 
-	Standard_Real nbX = voxelShape.getVoxelShape().GetNbX();
-	Standard_Real nbY = voxelShape.getVoxelShape().GetNbY();
-	Standard_Real nbZ = voxelShape.getVoxelShape().GetNbZ();
+	Standard_Real nbX = voxelShape.getNbX();
+	Standard_Real nbY = voxelShape.getNbY();
+	Standard_Real nbZ = voxelShape.getNbZ();
 
 	std::cout << "Size: " << xLen << "," << yLen << "," << zLen << std::endl;
 
@@ -87,15 +87,16 @@ void Voxelizer::fillVolume(VoxelShape& voxelShape){
 		for (Standard_Integer y = 0; y < nbY; y++) {
 			for (Standard_Integer z = 0; z < nbZ; z++) {
 
-                if (voxelShape.getVoxelShape().Get(x, y, z)) {
+                if (voxelShape.isVoxel(x, y, z)) {
                     if (prev) {
                         inside = true;
                     } else {
                         inside = !inside;
+                        //prev = true;
                     }
                 } else {
                     if (inside) {
-                        voxelShape.getVoxelShape().Set(x,y,z,Standard_True);
+                        voxelShape.setVoxel(x,y,z,Standard_True);
                     } else {
                     }
                 }
@@ -105,13 +106,13 @@ void Voxelizer::fillVolume(VoxelShape& voxelShape){
 }
 
 void Voxelizer::getPassiveVoxels(VoxelShape bodyVoxelShape, VoxelShape& passiveVoxelShape) {
-	Standard_Real xLen = bodyVoxelShape.getVoxelShape().GetXLen();
-	Standard_Real yLen = bodyVoxelShape.getVoxelShape().GetYLen();
-	Standard_Real zLen = bodyVoxelShape.getVoxelShape().GetZLen();
+	Standard_Real xLen = bodyVoxelShape.getXLen();
+	Standard_Real yLen = bodyVoxelShape.getYLen();
+	Standard_Real zLen = bodyVoxelShape.getZLen();
 
-	Standard_Real nbX = bodyVoxelShape.getVoxelShape().GetNbX();
-	Standard_Real nbY = bodyVoxelShape.getVoxelShape().GetNbY();
-	Standard_Real nbZ = bodyVoxelShape.getVoxelShape().GetNbZ();
+	Standard_Real nbX = bodyVoxelShape.getNbX();
+	Standard_Real nbY = bodyVoxelShape.getNbY();
+	Standard_Real nbZ = bodyVoxelShape.getNbZ();
 
 	std::cout << "Size: " << xLen << "," << yLen << "," << zLen << std::endl;
 
@@ -130,10 +131,10 @@ void Voxelizer::getPassiveVoxels(VoxelShape bodyVoxelShape, VoxelShape& passiveV
 				std::cout << "Read2 done" << std::endl;*/
 				//passiveVoxelShape.getVoxelShape().Set(x,y,z, Standard_True);
 				//std::cout << "Set2 done" << std::endl;
-				if(bodyVoxelShape.getVoxelShape().Get(x,y,z)){
-					passiveVoxelShape.getVoxelShape().Set(x,y,z,Standard_False);
+				if(bodyVoxelShape.isVoxel(x,y,z)){
+					passiveVoxelShape.setVoxel(x,y,z,Standard_False);
 				}else{
-					passiveVoxelShape.getVoxelShape().Set(x,y,z,Standard_True);
+					passiveVoxelShape.setVoxel(x,y,z,Standard_True);
 				}
 			}
 		}

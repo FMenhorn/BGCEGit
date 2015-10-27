@@ -1,0 +1,42 @@
+\newcommand{\norm}[1]{\parallel #1 \parallel_2}
+
+\begin{frame}{Status}
+\begin{block}{Last milestone}
+\begin{itemize}
+	\item[\textcolor{red}{\XSolidBrush}] Automatic patch selection
+	\item[\textcolor{red}{\XSolidBrush}] Parametrization of obtained patches
+	\item[\textcolor{green}{\Checkmark}] B--spline fitting using least squares
+	\item[\textcolor{black}{\VarClock}] Smooth connection of patches
+	\item[\textcolor{red}{\XSolidBrush}] Conversion back to CAD
+\end{itemize}
+\end{block}
+\begin{block}{Today}
+\begin{itemize}
+	\item[\textcolor{green}{\Checkmark}] Automatic patch selection -- {\color{gray}moved to the surface extraction part}
+	\item[\textcolor{green}{\Checkmark}] Parametrization of obtained patches -- {\color{gray} moved to the surface extraction part}
+	\item[\textcolor{green}{\Checkmark}] B--spline fitting using least squares
+	\item[\textcolor{green}{\Checkmark}] Smooth connection of patches
+	\item[\textcolor{red}{\XSolidBrush}] Conversion back to CAD
+\end{itemize}
+\end{block}
+\end{frame}
+\begin{frame}{Long way to smoothness}
+\begin{block}{Peters' scheme:}
+Given the control mesh $M_{x}$
+\begin{enumerate}
+\item Refine the \textit{control mesh} 2 times using Doo-Sabin refinement
+\item Construct a tensor product Bezier patches (biquadratic or bicubic) centred on the each vertex of the refined \textit{control mesh}
+\end{enumerate}
+\end{block}
+\textbf{{\color{red} According to Peters obtained surface is $G^{1}$ smooth}}
+\end{frame}
+\begin{frame}{Long way to smoothness}
+\begin{itemize}
+\item Use the mesh obtained from Dual Contouring as a \textit{control mesh}
+\item Modify the fitting step to take advantage of the \textbf{Peters' scheme}
+\end{itemize}
+$$\downarrow$$
+\begin{equation}
+E_{dist}(V_{x}) = \sum_{i=1}^{N}\norm{p_{i} - y_{i}V_{x}}^{2} \rightarrow min
+\end{equation}
+\end{frame}

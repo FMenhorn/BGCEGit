@@ -10,9 +10,9 @@
 
 bool Writer_ToPy::write(std::string _filename, std::vector<std::vector<VoxelShape>> &voxelShape, std::vector<std::vector<double>>& forces){
     std::vector<int> dimensions(3);
-    dimensions[0]=voxelShape[0][0].getVoxelShape().GetNbX();
-    dimensions[1]=voxelShape[0][0].getVoxelShape().GetNbY();
-    dimensions[2]=voxelShape[0][0].getVoxelShape().GetNbZ();
+    dimensions[0]=voxelShape[0][0].getNbX();
+    dimensions[1]=voxelShape[0][0].getNbY();
+    dimensions[2]=voxelShape[0][0].getNbZ();
     ofstream outfile;
     std::cout << "Writer_ToPy: Writing Tpd file for " + _filename + " .." << std::endl;
     std::cout << "Writer_ToPy: with dimensions: " << dimensions[0] << "," << dimensions[1] << "," << dimensions[2] << std::endl;
@@ -28,9 +28,9 @@ bool Writer_ToPy::write(std::string _filename, std::vector<std::vector<VoxelShap
 	writeNodes("FXTR_NODE_X",outfile,voxelShape[1],dimensions);
 	writeNodes("FXTR_NODE_Y",outfile,voxelShape[1],dimensions);
 	writeNodes("FXTR_NODE_Z",outfile,voxelShape[1],dimensions);
-	//writeNodes("LOAD_NODE_X",outfile,voxelShape[2],dimensions);
+	writeNodes("LOAD_NODE_X",outfile,voxelShape[2],dimensions);
 	std::vector<int> numberOfLoadVoxelsY = writeNodes("LOAD_NODE_Y",outfile,voxelShape[2],dimensions);
-	//writeNodes("LOAD_NODE_Z",outfile,voxelShape[2],dimensions);
+	writeNodes("LOAD_NODE_Z",outfile,voxelShape[2],dimensions);
 
 	//outfile << "LOAD_VALU_Y: " << "-1@" << noLoadVoxelsY << "\n";
 	writeForces(outfile, forces, numberOfLoadVoxelsY);
@@ -78,7 +78,7 @@ void Writer_ToPy::writeGreyScaleFilters(std::ofstream &outfile){
 	outfile << "Q_MAX      : 5\n";
 }
 
-std::vector<int> Writer_ToPy::writeNodes(std::string name, std::ofstream &outfile, std::vector<VoxelShape> &voxelShape, std::vector<int> dimensions){
+std::vector<int> Writer_ToPy::writeNodes(std::string name, std::ofstream &outfile,const std::vector<VoxelShape> &voxelShape, std::vector<int> dimensions){
 	std::vector<int> size;
 	int originVoxelX = 0;
 	int originVoxelY = 0;
@@ -90,13 +90,14 @@ std::vector<int> Writer_ToPy::writeNodes(std::string name, std::ofstream &outfil
 	double voxelSizeY = 0;
 	double voxelSizeZ = 0;
 	outfile<< name << ": ";
+	const VoxelShape tmpVoxelShape;
 	for(size_t h = 0; h < voxelShape.size(); ++h){
-		originX =voxelShape[h].getVoxelShape().GetX();
-		originY =voxelShape[h].getVoxelShape().GetY();
-		originZ =voxelShape[h].getVoxelShape().GetZ();
-		voxelSizeX = voxelShape[h].getVoxelShape().GetXLen()/voxelShape[h].getVoxelShape().GetNbX();
-		voxelSizeY = voxelShape[h].getVoxelShape().GetYLen()/voxelShape[h].getVoxelShape().GetNbY();
-		voxelSizeZ = voxelShape[h].getVoxelShape().GetZLen()/voxelShape[h].getVoxelShape().GetNbZ();
+		originX =voxelShape[h].getOriginX();
+		originY =voxelShape[h].getOriginY();
+		originZ =voxelShape[h].getOriginZ();
+		voxelSizeX = voxelShape[h].getXLen()/voxelShape[h].getNbX();
+		voxelSizeY = voxelShape[h].getYLen()/voxelShape[h].getNbY();
+		voxelSizeZ = voxelShape[h].getZLen()/voxelShape[h].getNbZ();
 		originVoxelX = originX * voxelSizeX;
 		originVoxelY = originY * voxelSizeY;
 		originVoxelZ = originZ * voxelSizeZ;
@@ -105,7 +106,7 @@ std::vector<int> Writer_ToPy::writeNodes(std::string name, std::ofstream &outfil
 					 "VoxelOrigin: " << "[" << originVoxelX << "," << originVoxelY <<"," << originVoxelZ<< "] "
 					 "VoxelSizes: "<<"[" << voxelSizeX << "," << voxelSizeY <<"," << voxelSizeZ<< "]" << std::endl;
 		const std::vector<int>& voxelIndices = voxelShape[h].getIndices();
-		for (int k = 0; k < voxelIndices.size(); k++){
+		for (size_t k = 0; k < voxelIndices.size(); k++){
 		//	for (int i = 0; i < voxelShape[h].getVoxelShape().GetNbX(); i++){
 		//		for (int j = 0; j < voxelShape[h].getVoxelShape().GetNbY(); j++){
 					//std::cout << "Current Step: " << name << ":" << h << "," << k << "," << i << "," << j << std::endl;
@@ -117,10 +118,11 @@ std::vector<int> Writer_ToPy::writeNodes(std::string name, std::ofstream &outfil
 		//			}
 		//		}
 		//	}
-			if(k < voxelIndices.size()-1)
-				outfile << voxelIndices[k]+1 <<"; ";
-			else
+		//	if(k < voxelIndices.size()-1)
+			if(h == voxelShape.size()-1 && k == voxelIndices.size()-1)
 				outfile << voxelIndices[k]+1;
+			else
+				outfile << voxelIndices[k]+1 << "; ";
 		}
 		size.push_back(voxelIndices.size());
 	}
