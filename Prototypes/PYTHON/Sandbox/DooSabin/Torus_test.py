@@ -6,20 +6,33 @@ from vertex import Vertex
 import numpy as np
 import matplotlib.pyplot as plt
 import scipy.io
+import sys
 
 __author__ = 'anna'
 
-def FaceVerts(face, verts):
-    #print(face)
-    vtx = []
-    for i in range(len(face)):
-        #print(verts[face[i]])
-        vtx.append(verts[face[i]])
-    return vtx
+# def FaceVerts(face, verts):
+#     #print(face)
+#     vtx = []
+#     for i in range(len(face)):
+#         #print(verts[face[i]])
+#         vtx.append(verts[face[i]])
+#     return vtx
+quads_file = sys.argv[1]
+verts_file = sys.argv[2]
+output_file_name = sys.argv[3]
+# print(quads_file)
+# print(verts_file)
+# print(output_file_name)
+#print("Hello!")
 
 
-faces = np.array(np.genfromtxt('quads_Torus.csv', delimiter=';'))
-verts = np.array(np.genfromtxt('vers_Torus.csv', delimiter=';'))
+# faces = np.array(np.genfromtxt('quads_Torus.csv', delimiter=';'))
+# verts = np.array(np.genfromtxt('vers_Torus.csv', delimiter=';'))
+faces = np.array(np.genfromtxt(quads_file, delimiter=';'))
+verts = np.array(np.genfromtxt(verts_file, delimiter=';'))
+#faces = np.array(np.genfromtxt('sphere_quads_coarse.csv', delimiter=';'))
+#verts = np.array(np.genfromtxt('sphere_verts_coarse.csv', delimiter=';'))
+
 
 #faces = np.array([[0, 1 , 2, 3], [1, 5, 6, 2], [0, 1, 5, 4], [3, 2, 6, 7], [0, 3, 7, 4], [4, 5, 6, 7]])
 #verts = np.array([[0.0, 0.0, 0.0], [1.0, 0.0, 0.0], [1.0, 0.0, 1.0], [0.0, 0.0, 1.0], [0.0, 1.0, 0.0], [1.0, 1.0, 0.0], [1.0, 1.0, 1.0], [0.0, 1.0, 1.0]])
@@ -103,7 +116,7 @@ ax.scatter(x,y,z, color = 'r')
 #x = []
 #y = []
 #z = []
-for face in quads:
+for face in faces_refined1:
     #print face.quad_id
    # print(face.ordered_refined_vertices)
     n = len(face.vertices)
@@ -200,7 +213,9 @@ for i in range(len(listOfVertices)):
         vertC[i][j][1] = listOfVertices[i].C[j][1].parentOrigGrid.quad_id
 
 # Specify the filename of the .mat file
-matfile = 'torus_point_data.mat'
+#matfile = 'torus_point_data.mat'
+matfile = output_file_name+'.mat'
+
 
 # Write the array to the mat file. For this to work, the array must be the value
 # corresponding to a key name of your choice in a dictionary
