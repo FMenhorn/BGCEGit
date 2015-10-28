@@ -17,20 +17,58 @@
 class VoxelShape {
 public:
 	VoxelShape();
-	VoxelShape(Voxel_BoolDS voxelShape, std::vector<double> origin);
+	VoxelShape(Voxel_BoolDS voxelShape);
 
 	virtual ~VoxelShape();
 
-	double getOriginX();
-	double getOriginY();
-	double getOriginZ();
+	/**
+	 * Returns the origin of the voxelShape in the corresponding dimension
+	 * @return
+	 */
+	double getOriginX() const;
+	double getOriginY() const;
+	double getOriginZ() const;
+
+	/**
+	 * Returns the size of the shape in the corresponding dimension
+	 * @return
+	 */
+	double getXLen() const;
+	double getYLen() const;
+	double getZLen() const;
+
+	/**
+	 * Returns the number of voxels in the corresponding dimension
+	 * @return
+	 */
+	int getNbX() const;
+	int getNbY() const;
+	int getNbZ() const;
+
+	/**
+	 * Returns if the cell at (x,y,z) is a voxel
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
+	bool isVoxel(int x, int y, int z) const;
+
+	/**
+	 * Sets the cell at (x,y,z) as isVoxel
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param isVoxel
+	 */
+	void setVoxel(int x, int y, int z, bool isVoxel);
+
 	Voxel_BoolDS& getVoxelShape();
 	Voxel_BoolDS copyVoxelShape();
 	void setVoxelShape(const Voxel_BoolDS voxelShape);
-	void setOrigin(const std::vector<double> origin);
 	const std::vector<double>& getDimension() const;
 	void setDimension(const std::vector<double> dimension);
-	const std::vector<double>& getOrigin() const;
+	std::vector<double> getOrigin() const;
 
 	VoxelShape& operator=( const VoxelShape& other );
 	const std::vector<int>& getIndices() const;
@@ -42,7 +80,6 @@ private:
 	Voxel_BoolDS _voxelShape;
 	std::vector<int> _indices;
 	std::vector<double> _dimension;
-	std::vector<double> _origin;
 	std::vector<int> _voxelDimension;
 };
 

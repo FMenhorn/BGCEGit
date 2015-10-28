@@ -25,7 +25,6 @@ public:
 private:
 	std::vector<int> dimensions;
 	std::vector<double> origin;
-	void calculateIndexForAllVoxels(std::vector<std::vector<VoxelShape>>& matrixVoxelShapes);
 };
 
 #endif /* VOXELIZER_VOXELINDEXCALCULATOR_HPP_ */

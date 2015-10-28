@@ -30,16 +30,14 @@ void Voxelizer::voxelize(const TopoDS_Shape topoDSShape,const int refinementLeve
 
     //Voxel_BoolDS* voxelShapeOCE = new Voxel_BoolDS(); // Result holder of the voxelization
     Standard_Integer progress; // Progress of voxelization (useful in case of parallel code)
-    std::cout << "Voxelizer: Voxelizing .." << std::endl;
-    std::cout << "Voxelizer: with number of voxels: " << voxelDimension[0]*voxelDimension[1]*voxelDimension[2] << std::endl;
+    std::cout << "Voxelizer::voxelize: Voxelizing .." << std::endl;
+    std::cout << "Voxelizer::voxelize: with number of voxels: " << voxelDimension[0]*voxelDimension[1]*voxelDimension[2] << std::endl;
 	Voxel_FastConverter voxelConverter(topoDSShape, voxelShape.getVoxelShape(), 0.1, voxelDimension[0], voxelDimension[1], voxelDimension[2]);
 	voxelConverter.FillInVolume(1, topoDSShape);
 	voxelConverter.Convert(progress);
 	voxelConverter.FillInVolume(1, topoDSShape);
-	std::cout << "Voxelizer: Progress of Conversion: " << progress << std::endl;
-    std::cout << "Voxelizer: .. done!" << std::endl;
-    //voxelShape.setVoxelShape(*voxelShapeOCE);
-    voxelShape.setOrigin(origin);
+	std::cout << "Voxelizer::voxelize: Progress of Conversion: " << progress << std::endl;
+    std::cout << "Voxelizer::voxelize: .. done!" << std::endl;
     voxelShape.setDimension(shapeDimensions);
     voxelShape.setVoxelDimension(voxelDimension);
 }
@@ -58,7 +56,7 @@ void Voxelizer::getBoundingBox(const TopoDS_Shape topoDSShape, std::vector<doubl
     shapeDimensions[1] = absolut(Ymax - Ymin);
     shapeDimensions[2] = absolut(Zmax - Zmin);
 
-    std::cout << "Voxelizer-getBoundingBox:" << std::endl;
+    std::cout << "Voxelizer::getBoundingBox:" << std::endl;
     std::cout << "    X[" << Xmin << ", " << Xmax << "]     | xDimension: " << shapeDimensions[0] << std::endl;
     std::cout << "    Y[" << Ymin << ", " << Ymax << "]     | yDimension: " << shapeDimensions[1] << std::endl;
     std::cout << "    Z[" << Zmin << ", " << Zmax << "]     | zDimension: " << shapeDimensions[2] << std::endl;
@@ -66,19 +64,15 @@ void Voxelizer::getBoundingBox(const TopoDS_Shape topoDSShape, std::vector<doubl
 
 void Voxelizer::fillVolume(VoxelShape& voxelShape){
 	//Voxel_BoolDS hollowVoxelShapeDS = voxelShape.getVoxelShape();
-	Standard_Real xLen = voxelShape.getVoxelShape().GetXLen();
-	Standard_Real yLen = voxelShape.getVoxelShape().GetYLen();
-	Standard_Real zLen = voxelShape.getVoxelShape().GetZLen();
+	Standard_Real xLen = voxelShape.getXLen();
+	Standard_Real yLen = voxelShape.getYLen();
+	Standard_Real zLen = voxelShape.getZLen();
 
-	Standard_Real nbX = voxelShape.getVoxelShape().GetNbX();
-	Standard_Real nbY = voxelShape.getVoxelShape().GetNbY();
-	Standard_Real nbZ = voxelShape.getVoxelShape().GetNbZ();
+	Standard_Real nbX = voxelShape.getNbX();
+	Standard_Real nbY = voxelShape.getNbY();
+	Standard_Real nbZ = voxelShape.getNbZ();
 
-	std::cout << "Size: " << xLen << "," << yLen << "," << zLen << std::endl;
-
-	Standard_Real xStep = xLen/nbX;
-	Standard_Real yStep = yLen/nbY;
-	Standard_Real zStep = zLen/nbZ;
+	std::cout << "Voxelizer::fillVolume: Size: " << xLen << "," << yLen << "," << zLen << std::endl;
 
 	bool inside = false;
 	bool prev   = false;
@@ -87,15 +81,16 @@ void Voxelizer::fillVolume(VoxelShape& voxelShape){
 		for (Standard_Integer y = 0; y < nbY; y++) {
 			for (Standard_Integer z = 0; z < nbZ; z++) {
 
-                if (voxelShape.getVoxelShape().Get(x, y, z)) {
+                if (voxelShape.isVoxel(x, y, z)) {
                     if (prev) {
                         inside = true;
                     } else {
                         inside = !inside;
+                        //prev = true;
                     }
                 } else {
                     if (inside) {
-                        voxelShape.getVoxelShape().Set(x,y,z,Standard_True);
+                        voxelShape.setVoxel(x,y,z,Standard_True);
                     } else {
                     }
                 }
@@ -104,20 +99,16 @@ void Voxelizer::fillVolume(VoxelShape& voxelShape){
 	}
 }
 
-void Voxelizer::getPassiveVoxels(VoxelShape bodyVoxelShape, VoxelShape& passiveVoxelShape) {
-	Standard_Real xLen = bodyVoxelShape.getVoxelShape().GetXLen();
-	Standard_Real yLen = bodyVoxelShape.getVoxelShape().GetYLen();
-	Standard_Real zLen = bodyVoxelShape.getVoxelShape().GetZLen();
+void Voxelizer::getPassiveVoxels(const VoxelShape bodyVoxelShape, VoxelShape& passiveVoxelShape) {
+	Standard_Real xLen = bodyVoxelShape.getXLen();
+	Standard_Real yLen = bodyVoxelShape.getYLen();
+	Standard_Real zLen = bodyVoxelShape.getZLen();
 
-	Standard_Real nbX = bodyVoxelShape.getVoxelShape().GetNbX();
-	Standard_Real nbY = bodyVoxelShape.getVoxelShape().GetNbY();
-	Standard_Real nbZ = bodyVoxelShape.getVoxelShape().GetNbZ();
+	Standard_Real nbX = bodyVoxelShape.getNbX();
+	Standard_Real nbY = bodyVoxelShape.getNbY();
+	Standard_Real nbZ = bodyVoxelShape.getNbZ();
 
-	std::cout << "Size: " << xLen << "," << yLen << "," << zLen << std::endl;
-
-	Standard_Real xStep = xLen/nbX;
-	Standard_Real yStep = yLen/nbY;
-	Standard_Real zStep = zLen/nbZ;
+	std::cout << "Voxelizer::getPassiveVoxels: Size: " << xLen << "," << yLen << "," << zLen << std::endl;
 
 	//Voxel_BoolDS filledVoxelShapeDS = hollowVoxelShapeDS;
 	for (Standard_Integer x = 0; x < nbX; x++) {
@@ -130,10 +121,10 @@ void Voxelizer::getPassiveVoxels(VoxelShape bodyVoxelShape, VoxelShape& passiveV
 				std::cout << "Read2 done" << std::endl;*/
 				//passiveVoxelShape.getVoxelShape().Set(x,y,z, Standard_True);
 				//std::cout << "Set2 done" << std::endl;
-				if(bodyVoxelShape.getVoxelShape().Get(x,y,z)){
-					passiveVoxelShape.getVoxelShape().Set(x,y,z,Standard_False);
+				if(bodyVoxelShape.isVoxel(x,y,z)){
+					passiveVoxelShape.setVoxel(x,y,z,Standard_False);
 				}else{
-					passiveVoxelShape.getVoxelShape().Set(x,y,z,Standard_True);
+					passiveVoxelShape.setVoxel(x,y,z,Standard_True);
 				}
 			}
 		}

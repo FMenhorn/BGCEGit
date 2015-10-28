@@ -178,7 +178,7 @@ vertA = -1*np.ones((len(verts), 7, 2))
 vertB1 = -1*np.ones((len(verts), 7, 4))
 vertB2 = -1*np.ones((len(verts), 7, 4))
 nonExtraordinaryPoints = -1*np.ones((len(quads), 16))
-vertC = np.zeros((len(verts), 7, 2))
+vertC = -1*np.ones((len(verts), 7, 2))
 
 for i in range(len(quads)):
     nonExtraordinaryPoints[i] = [quads[i].ordered_refined_vertices[j].id for j in range(16)]

@@ -24,7 +24,7 @@ public:
 
     void fillVolume(VoxelShape& voxelShape);
 
-    void getPassiveVoxels(VoxelShape bodyVoxelShape, VoxelShape& passiveVoxelShape);
+    void getPassiveVoxels(const VoxelShape bodyVoxelShape, VoxelShape& passiveVoxelShape);
 private:
     void getBoundingBox(const TopoDS_Shape topoDSShape, std::vector<double>& origin, std::vector<double>& shapeDimensions);
 };
