@@ -1,5 +1,6 @@
 __author__ = 'benjamin'
 
+import numpy as np
 
 # exports a np.ndarray to a csv file
 def export_as_csv(data,name):
