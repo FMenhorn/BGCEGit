@@ -29,14 +29,41 @@ Given the control mesh $M_{x}$
 \end{enumerate}
 \end{block}
 \textbf{{\color{red} According to Peters obtained surface is $G^{1}$ smooth}}
+
+Add pictures for Doo-Sabin and for fitting
 \end{frame}
 \begin{frame}{Long way to smoothness}
+\begin{block}{Main ideas}
 \begin{itemize}
 \item Use the mesh obtained from Dual Contouring as a \textit{control mesh}
 \item Modify the fitting step to take advantage of the \textbf{Peters' scheme}
 \end{itemize}
+\end{block}
 $$\downarrow$$
 \begin{equation}
-E_{dist}(V_{x}) = \sum_{i=1}^{N}\norm{p_{i} - y_{i}V_{x}}^{2} \rightarrow min
+E_{dist}(V_{x}) = \sum_{i=1}^{N}\norm{p_{i} - y_{i}V_{x}}^{2} \rightarrow min,
 \end{equation}
+$y_{i}$ - coefficients obtained from the Peters' scheme theory.
+\begin{block}{What is achieved?}
+\begin{itemize}
+\item Smoothness of the fitted surface is now guaranteed by construction
+\item Fitting is possible for more complex shapes achieved by using an information from the Dual Contouring algorithm
+\end{itemize}
+\end{block}
+\end{frame}
+\begin{frame}{Improved pipeline}
+Insert a nice new pipeline in tikz: orig points $->$ dual contouring $->$ clouds $->$ Doo-Sabin $->$ fitted surface together with clouds
+\end{frame}
+\begin{frame}{Before and after}
+May be some pictures with a really easy shape, which we were able to fit last time and it was not smooth and the ones with new fancy smooth shapes
+\end{frame}
+\begin{frame}{What is next?}
+\begin{itemize}
+\item Finishing of the implementation of the improved pipeline in Python
+\item Full integration with Surface Extraction part
+\item Introducing of the \textit{fairness functional} in order to deal with more complex shapes
+\item Implementation of the \textit{adaptive refinement} in order to control a maximum error tolerance
+\item Implementation of the \textit{parameter correction} for the improved pipeline
+\item Exporting the results back to CAD  
+\end{itemize}
 \end{frame}
