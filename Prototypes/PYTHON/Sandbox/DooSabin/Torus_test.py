@@ -7,9 +7,17 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy.io
 import sys
+import argparse
+
 
 __author__ = 'anna'
+parser=argparse.ArgumentParser(
+    description='''First argument: the file with quads information, second argument: the file with verts information; third argument: the name of the output file WITHOUT EXTENSION. The output always stored in .mat format''')
+parser.add_argument('quads', type=str, help='quads')
+parser.add_argument('verts', type=str, help='verts')
+parser.add_argument('output_name', type=str, help='output_name')
 
+args = parser.parse_args()
 # def FaceVerts(face, verts):
 #     #print(face)
 #     vtx = []
@@ -17,9 +25,9 @@ __author__ = 'anna'
 #         #print(verts[face[i]])
 #         vtx.append(verts[face[i]])
 #     return vtx
-quads_file = sys.argv[1]
-verts_file = sys.argv[2]
-output_file_name = sys.argv[3]
+quads_file = args.quads
+verts_file = args.verts
+output_file_name = args.output_name
 # print(quads_file)
 # print(verts_file)
 # print(output_file_name)
