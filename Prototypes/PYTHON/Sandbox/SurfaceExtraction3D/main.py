@@ -3,6 +3,7 @@ __author__ = 'benjamin'
 from dc3D import tworesolution_dual_contour
 from dcSample import sample_data, sphere_f, doubletorus_f, torus_f
 from quad import Quad
+from dcHelpers import export_as_csv
 
 import numpy as np
 
@@ -20,11 +21,11 @@ def find_closest_quads(_point, _quadlist, _n_closest):
 
 
 dimensions = {'xmin': 0.0, 'xmax': 8.0, 'ymin': 0.0, 'ymax': 8.0, 'zmin': 0.0, 'zmax': 8.0}
-res_fine = 1
-res_coarse = res_fine * 4.0
+res_fine = 1.0/4.0
+res_coarse = 2.0
 resolutions = {'fine': res_fine,'coarse': res_coarse}
 
-fine_data = sample_data(sphere_f, resolutions['fine'], dimensions)
+fine_data = sample_data(torus_f, resolutions['fine'], dimensions)
 [verts_out_dc, quads_out_dc] = tworesolution_dual_contour(fine_data, resolutions, dimensions)
 
 N_quads = {'coarse': quads_out_dc['coarse'].shape[0], 'fine': quads_out_dc['fine'].shape[0]}
@@ -38,46 +39,48 @@ for i in range(N_quads['coarse']):
 
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
-from mpl_toolkits.mplot3d.art3d import Poly3DCollection
+from mpl_toolkits.mplot3d.art3d import Poly3DCollection, Line3DCollection
 
 fig = plt.figure()
 ax = Axes3D(fig)
 ax.set_aspect('equal')
 
 plane_oo = [False] * quads['coarse'].__len__()
-for q in quads['coarse']:
-    vtx = q.vertices_plane
-    M = vtx[1:4,:]-vtx[0,:]
-    plane_oo[q.quad_id] = abs(np.linalg.det(M))<10**-10
-    vtx_orig = verts['coarse'][q.vertex_ids]
-    x = vtx[:,0].tolist()
-    y = vtx[:,1].tolist()
-    z = vtx[:,2].tolist()
-    x_orig = vtx_orig[:,0].tolist()
-    y_orig = vtx_orig[:,1].tolist()
-    z_orig = vtx_orig[:,2].tolist()
-    vtx = [zip(x,y,z)]
-    vtx_orig = [zip(x_orig,y_orig,z_orig)]
-    poly=Poly3DCollection(vtx)
-    poly.set_color('b')
-    poly.set_edgecolor('k')
-    #poly.set_alpha(.25)
-    ax.add_collection3d(poly)
-
-for q in quads_out_dc['fine']:
-    vtx = verts['fine'][q]
-    x = vtx[:,0].tolist()
-    y = vtx[:,1].tolist()
-    z = vtx[:,2].tolist()
-    vtx = [zip(x,y,z)]
-    poly=Poly3DCollection(vtx)
-    poly.set_color('r')
-    poly.set_edgecolor('k')
-    poly.set_alpha(.25)
-    ax.add_collection3d(poly)
+# for q in quads['coarse']:
+#     vtx = q.vertices_plane
+#     M = vtx[1:4,:]-vtx[0,:]
+#     plane_oo[q.quad_id] = abs(np.linalg.det(M))<10**-10
+#     vtx_orig = verts['coarse'][q.vertex_ids]
+#     x = vtx[:,0].tolist()
+#     y = vtx[:,1].tolist()
+#     z = vtx[:,2].tolist()
+#     x_orig = vtx_orig[:,0].tolist()
+#     y_orig = vtx_orig[:,1].tolist()
+#     z_orig = vtx_orig[:,2].tolist()
+#     vtx = [zip(x,y,z)]
+#     vtx_orig = [zip(x_orig,y_orig,z_orig)]
+#     poly=Poly3DCollection(vtx)
+#     poly.set_color('b')
+#     poly.set_edgecolor('k')
+#     poly.set_alpha(.25)
+#     ax.add_collection3d(poly)
+#
+# for q in quads_out_dc['fine']:
+#     vtx = verts['fine'][q]
+#     x = vtx[:,0].tolist()
+#     y = vtx[:,1].tolist()
+#     z = vtx[:,2].tolist()
+#     vtx = [zip(x,y,z)]
+#     poly=Poly3DCollection(vtx)
+#     poly.set_color('r')
+#     poly.set_edgecolor('k')
+#     poly.set_alpha(.25)
+#     ax.add_collection3d(poly)
 
 # do projection of fine verts on coarse quads
 N_closest_candidates = 6 # compute list of N_closest_candidates closest quads
+param = []
+
 for vertex in verts['fine']:
     closest_idx_candidates = find_closest_quads(vertex, quads['coarse'], N_closest_candidates) # find N closest quads with fast criterion: distance to centroid
 
@@ -89,15 +92,38 @@ for vertex in verts['fine']:
         if abs(distance) < distance_min:
             projected_point_min = projected_point
             distance_min = abs(distance)
+            u_min = u
+            v_min = v
+            idx_min = candidate_idx
 
-    #only plotting information
-    start = projected_point_min
-    end = vertex
-    ax.plot([start[0],end[0]],[start[1],end[1]],[start[2],end[2]],'k',linewidth=2.0)
+    param.append(np.array([candidate_idx,u,v]))
 
-ax.set_xlim3d(2, 6)
-ax.set_ylim3d(2, 6)
-ax.set_zlim3d(2, 6)
-plt.show()
+    # #only plotting information
+    # start = projected_point_min
+    # end = vertex
+    # x = [start[0],end[0]]
+    # y = [start[1],end[1]]
+    # z = [start[2],end[2]]
+    # vtx = [zip(x,y,z)]
+    # line = Line3DCollection(vtx)
+    # line.set_color('k')
+    # line.set_linewidth(2.0)
+    # ax.add_collection3d(line)
+
+
+param = np.array(param)
+
+export_as_csv(verts_out_dc['coarse'],'verts_coarse')
+export_as_csv(verts_out_dc['fine'],'verts_fine')
+export_as_csv(quads_out_dc['coarse'],'quads_coarse')
+export_as_csv(quads_out_dc['fine'],'quads_fine')
+export_as_csv(param,'param')
+
+# ax.set_xlim3d(2, 6)
+# ax.set_ylim3d(2, 6)
+# ax.set_zlim3d(2, 6)
+# plt.show()
+
+
 
 
