@@ -230,14 +230,12 @@ def resolve_manifold_edges(_dc_verts, _dc_vindex, _dc_quads, _data, _resolution)
                                           delete_quads_list)
 
     edge_usage_dict = generate_edge_usage_dict(_dc_quads)  # here we save the quads using a certain edge
-
     not_consistent_edges = {}
     for edge, used in edge_usage_dict.items():
         if used.__len__() != 2:
             not_consistent_edges[edge] = used
 
     _dc_verts, _dc_quads = resolve_not_consistent(_dc_verts, _dc_quads, not_consistent_edges)
-
     return _dc_verts, _dc_quads
 
 
@@ -270,6 +268,7 @@ def resolve_quad_cluster(_dc_quads, _dc_verts, _cluster, o_idx_nodes):
     all_nodes = np.array(quads).reshape(16).tolist()
 
     new_node = np.zeros([3])
+
     for v_id in np.unique(quads):
         vtx = _dc_verts[v_id]
         new_node += vtx

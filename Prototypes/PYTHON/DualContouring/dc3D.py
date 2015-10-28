@@ -126,7 +126,6 @@ def dual_contour(data, res, dims, coarse_level):
                         dc_quads.append([vindex[tuple(o)], vindex[tuple(o + res * dirs[i])],
                                          vindex[tuple(o + res * dirs[i] + res * dirs[j])],
                                          vindex[tuple(o + res * dirs[j])]])
-
     if coarse_level:
         dc_verts, dc_quads = resolve_manifold_edges(dc_verts, vindex, dc_quads, data, res)
 

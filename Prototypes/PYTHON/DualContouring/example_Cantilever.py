@@ -32,7 +32,6 @@ data = transform_dict(cellsDict)
 
 dcHelpers.export_as_stl(quads_out_dc, verts_out_dc, plot_scale = 'coarse', filename = 'canti.stl')
 dcHelpers.export_as_stl(quads_out_dc, verts_out_dc, plot_scale = 'fine', filename = 'canfi_fine.stl')
-quit()
 
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
