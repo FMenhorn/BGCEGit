@@ -1,5 +1,5 @@
 
-numPoints = 600;
+numPoints = 20;
 
 polParams = rand(numPoints,1);
 torParams = rand(numPoints,1);
@@ -14,8 +14,8 @@ torusPointZ = @(majorRad,minorRad,torAngle,polAngle) sin(polAngle).*minorRad;
 torPerturbations = 1 + 0.1.*sin(torParams*2*pi);
 polPerturbations = 1 + 0.1.*sin(polParams*2*pi);
 
-torParamsPerturbed = torParams ;%.* torPerturbations;
-polParamsPerturbed = polParams ;%.* polPerturbations;
+torParamsPerturbed = torParams .* torPerturbations;
+polParamsPerturbed = polParams .* polPerturbations;
 
 pointsX = torusPointX(majorRadis, minorRads, torParamsPerturbed*2*pi, polParamsPerturbed*2*pi);
 pointsY = torusPointY(majorRadis, minorRads, torParamsPerturbed*2*pi, polParamsPerturbed*2*pi);
