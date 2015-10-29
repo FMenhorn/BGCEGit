@@ -69,6 +69,9 @@ class Quad:
 
         return normal
 
+    # TODO there is a problem with the coordinate system of the quad:
+    # One system is right handed, one left. In the end the parameters are therefore flipped. For now we fixed this in a
+    # quite pragmatic way, but it should be improved in a refactoring session!
     def compute_basis(self, _vertexlist):
         import numpy as np
 
@@ -148,23 +151,26 @@ class Quad:
             x = solve_triangular(R_BCD,b)
             distance = x[0]
             projected_point = _point - distance * self.normal
-            u = 1-x[1]
-            v = 1-x[2]
+            u = 1-x[2]
+            v = 1-x[1]
 
         distance = abs(distance)
 
+        u_crop = u
+        v_crop = v
+
         if not (0<=u<=1 and 0<=v<=1):
             if u < 0:
-                u = 0
+                u_crop = 0
             elif u > 1:
-                u = 1
+                u_crop = 1
 
             if v < 0:
-                v = 0
+                v_crop = 0
             elif v > 1:
-                v = 1
+                v_crop = 1
 
-            projected_point = self.point_on_quad(u,v)
+            projected_point = self.point_on_quad(u_crop,v_crop)
             distance = np.linalg.norm(_point-projected_point)
 
         return projected_point, distance, u, v
