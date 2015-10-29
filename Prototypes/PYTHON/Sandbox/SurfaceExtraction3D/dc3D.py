@@ -7,10 +7,6 @@ import scipy.optimize as opt
 import itertools as it
 
 # Cardinal directions
-from skimage.morphology.selem import cube
-from sqlalchemy.util.langhelpers import dependencies
-from sympy.geometry.polygon import rad
-
 dirs = [np.array([0.0,0.0,1.0]), np.array([0.0, 1.0, 0.0]), np.array([1.0, 0.0, 0.0])]
 
 # Vertices of cube
