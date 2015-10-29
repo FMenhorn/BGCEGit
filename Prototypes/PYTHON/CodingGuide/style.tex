@@ -1,0 +1,56 @@
+\documentclass[10pt,a4paper]{scrartcl}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\title{OOP PYTHON coding style}
+\author{Benjamin Rüth}
+\subtitle{for the BGCE Project 2015}
+\begin{document}
+\maketitle
+In this we are going to collect coding style guidelines for our project
+
+\section{General Style}
+\begin{itemize}
+\item follow PyCharm style (PEP8)
+\item use meaningful names in any case! No abbreviations without a comment
+\end{itemize}
+
+\section{Functions and Variables}
+\begin{itemize}
+\item separate different words in variable names and function names with \verb+_+ (e.g. \verb+my_variable+ instead of \verb+myVariable+)
+\item only use lowercase for variable and function names
+\end{itemize}
+
+\section{Object oriented programming}
+\begin{itemize}
+\item use camelcase for class names!
+\item start class names with uppercase (e.g. \verb+MyObject+ instead of \verb+my_object+)
+\item there is no way for defining private variables in python! the following convention is applied:
+\begin{itemize}
+\item variables starting with \verb+_+ or \verb+__+ (e.g. \verb+_private+ or \verb+__private+) should not be touched from outside
+\item for variable modification and access add appropriate getters and setters
+\item from my personal experience and fails: \verb+_+ seems to me to mean something like protected and \verb+__+ derived. Also to the interpreter! This means, if you want to access variables from a base class via a derived class you have to be careful. See the following example:
+\begin{verbatim}
+class base(object):    
+    def __init__(self):
+        self._foo = 1
+
+class derived(base):    
+    def __init__(self):
+        base.__init__(self)
+        self._bar = 2
+    def print_foo(self):
+        print self._foo
+
+a = derived()
+a.print_foo()
+\end{verbatim}
+This doesn't work, if \verb+_foo+ has two leading \verb+_+ instead of one (\verb+__foo+)!
+\item see \href{http://stackoverflow.com/questions/1641219/does-python-have-private-variables-in-classes}{this post} for additional information
+\end{itemize}
+
+\end{itemize}
+
+\end{document}
