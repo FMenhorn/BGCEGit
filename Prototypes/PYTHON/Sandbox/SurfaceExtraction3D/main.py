@@ -5,23 +5,32 @@ from dcSample import sample_data, sphere_f, doubletorus_f, torus_f
 from quad import Quad
 from dcHelpers import export_as_csv
 
+import cPickle
 import numpy as np
 
 
+def transform_dict(cellsDict):
+    dataset = {}
+    for key in cellsDict:
+        dataset[key] = -1
+
+    return dataset
+
+
 def refine(verts, quads):
-    verts = verts.tolist()
+    verts_refined = list(verts.tolist())
     for q in quads:
         centroid = np.zeros(3)
         for v_id in q:
             centroid += np.array(verts[v_id])
 
         centroid /= 4
-        verts.append(centroid.tolist())
+        verts_refined.append(centroid.tolist())
 
         for v_id in q:
-            verts.append(((centroid + np.array(verts[v_id]))/2).tolist())
+            verts_refined.append(((centroid + np.array(verts[v_id]))/2).tolist())
 
-    return verts
+    return verts_refined
 
 
 def find_closest_quads(_point, _quadlist, _n_closest):
@@ -35,25 +44,118 @@ def find_closest_quads(_point, _quadlist, _n_closest):
 
     return n_closest_idx
 
+#choose example here
+__EXAMPLE__ = "Torus"
 
-dimensions = {'xmin': 0.0, 'xmax': 8.0, 'ymin': 0.0, 'ymax': 8.0, 'zmin': 0.0, 'zmax': 8.0}
-res_fine = 1.0/16.0
-res_coarse = 1.0/4.
-resolutions = {'fine': res_fine,'coarse': res_coarse}
+if __EXAMPLE__ == "Cantilever":
+    wfFile = open('Cantilever/Cells_01', 'rb')
+    cellsDict = cPickle.load(wfFile)
+    wfFile.close()
 
-fine_data = sample_data(doubletorus_f, resolutions['fine'], dimensions)
+    wfFile = open('Cantilever/Dimensions_01', 'rb')
+    dimensions = cPickle.load(wfFile)
+    wfFile.close()
+
+    res_fine = 1.0
+    res_coarse = res_fine * 2.0
+
+    resolutions = {'fine': res_fine,'coarse': res_coarse}
+
+    fine_data = transform_dict(cellsDict)
+
+    plot_dims =  {'xmin': 2.0, 'xmax': 6.0, 'ymin': 2.0, 'ymax': 6.0, 'zmin': 2.0, 'zmax': 6.0}
+    plot_dims = dimensions
+
+elif __EXAMPLE__ == "Sphere":
+    dimensions = {'xmin': 0.0, 'xmax': 8.0, 'ymin': 0.0, 'ymax': 8.0, 'zmin': 0.0, 'zmax': 8.0}
+    plot_dims =  {'xmin': 2.0, 'xmax': 6.0, 'ymin': 2.0, 'ymax': 6.0, 'zmin': 2.0, 'zmax': 6.0}
+
+    res_fine = 1.0/4.0
+    res_coarse = 1.0
+
+    resolutions = {'fine': res_fine,'coarse': res_coarse}
+
+    fine_data = sample_data(sphere_f, resolutions['fine'], dimensions)
+
+elif __EXAMPLE__ == "Torus":
+    dimensions = {'xmin': 0.0, 'xmax': 8.0, 'ymin': 0.0, 'ymax': 8.0, 'zmin': 0.0, 'zmax': 8.0}
+    plot_dims =  {'xmin': 2.0, 'xmax': 6.0, 'ymin': 2.0, 'ymax': 6.0, 'zmin': 2.0, 'zmax': 6.0}
+
+    res_fine = 1.0/4.0
+    res_coarse = 1.0
+
+    resolutions = {'fine': res_fine,'coarse': res_coarse}
+
+    fine_data = sample_data(torus_f, resolutions['fine'], dimensions)
+
+else:
+    print "Example "+__EXAMPLE__+" not known!"
+    raise Exception("ABOTRING!")
 
 print "###Dual Contouring###"
+print "..."
 [verts_out_dc, quads_out_dc] = tworesolution_dual_contour(fine_data, resolutions, dimensions)
+print "###Dual Contouring DONE###"
 
-N_quads = {'coarse': quads_out_dc['coarse'].shape[0], 'fine': quads_out_dc['fine'].shape[0]}
-N_verts = {'coarse': verts_out_dc['coarse'].shape[0], 'fine': verts_out_dc['fine'].shape[0]}
+N_quads = {'coarse': quads_out_dc['coarse'].__len__(), 'fine': quads_out_dc['fine'].__len__()}
+N_verts = {'coarse': verts_out_dc['coarse'].__len__(), 'fine': verts_out_dc['fine'].__len__()}
 
 quads = {'coarse': [None] * N_quads['coarse'], 'fine': [None] * N_quads['fine']}
 verts = {'coarse': verts_out_dc['coarse'], 'fine': verts_out_dc['fine']} # todo substitute with vertex objects
 
 for i in range(N_quads['coarse']):
     quads['coarse'][i]=Quad(i,quads_out_dc['coarse'],verts_out_dc['coarse'])
+
+print "###Projecting Datapoints onto coarse quads###"
+
+# do projection of fine verts on coarse quads
+N_closest_candidates = 4 # compute list of N_closest_candidates closest quads
+param = []
+
+verts_refined=refine(verts['fine'], quads_out_dc['fine'])
+
+for vertex in verts['fine']:
+    closest_idx_candidates = find_closest_quads(vertex, quads['coarse'], N_closest_candidates) # find N closest quads with fast criterion: distance to centroid
+
+    distance_min = np.inf
+    for candidate_idx in closest_idx_candidates: # iterate over all candidates from coarse criterion
+        projected_point, distance, u, v = \
+            quads['coarse'][candidate_idx].projection_onto_quad(vertex) # find closest quad with fine criterion: projection onto quad
+
+        if abs(distance) < distance_min:
+            projected_point_min = projected_point
+            distance_min = abs(distance)
+            u_min = u
+            v_min = v
+            idx_min = candidate_idx
+
+        # #only plotting information
+        # start = projected_point_min
+        # end = vertex
+        # x = [start[0],end[0]]
+        # y = [start[1],end[1]]
+        # z = [start[2],end[2]]
+        # vtx = [zip(x,y,z)]
+        # line = Line3DCollection(vtx)
+        # line.set_color('k')
+        # line.set_linewidth(2.0)
+        # ax.add_collection3d(line)
+
+    param.append(np.array([idx_min,u_min,v_min]))
+
+param = np.array(param)
+
+print "###Projecting Datapoints onto coarse quads DONE###"
+
+print "###Exporting output###"
+export_as_csv(verts_out_dc['coarse'],'verts_coarse')
+export_as_csv(verts['fine'],'verts_fine')
+export_as_csv(quads_out_dc['coarse'],'quads_coarse')
+export_as_csv(quads_out_dc['fine'],'quads_fine')
+export_as_csv(param,'param')
+print "###Exporting output DONE###"
+
+print "###Plotting###"
 
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
@@ -94,58 +196,14 @@ for q in quads_out_dc['fine']:
     poly.set_color('r')
     poly.set_edgecolor('k')
     poly.set_alpha(.25)
-    ax.add_collection3d(poly)
+    #ax.add_collection3d(poly)
 
-# do projection of fine verts on coarse quads
-N_closest_candidates = 4 # compute list of N_closest_candidates closest quads
-param = []
-
-verts['fine']=refine(verts['fine'], quads_out_dc['fine'])
-
-print "###Projecting Datapoints on coarse quads###"
-
-for vertex in verts['fine']:
-    closest_idx_candidates = find_closest_quads(vertex, quads['coarse'], N_closest_candidates) # find N closest quads with fast criterion: distance to centroid
-
-    distance_min = np.inf
-    for candidate_idx in closest_idx_candidates: # iterate over all candidates from coarse criterion
-        projected_point, distance, u, v = \
-            quads['coarse'][candidate_idx].projection_onto_quad(vertex) # find closest quad with fine criterion: projection onto quad
-
-        if abs(distance) < distance_min:
-            projected_point_min = projected_point
-            distance_min = abs(distance)
-            u_min = u
-            v_min = v
-            idx_min = candidate_idx
-
-    param.append(np.array([idx_min,u_min,v_min]))
-
-    # #only plotting information
-    # start = projected_point_min
-    # end = vertex
-    # x = [start[0],end[0]]
-    # y = [start[1],end[1]]
-    # z = [start[2],end[2]]
-    # vtx = [zip(x,y,z)]
-    # line = Line3DCollection(vtx)
-    # line.set_color('k')
-    # line.set_linewidth(2.0)
-    # ax.add_collection3d(line)
-
-
-param = np.array(param)
-
-export_as_csv(verts_out_dc['coarse'],'verts_coarse')
-export_as_csv(verts['fine'],'verts_fine')
-export_as_csv(quads_out_dc['coarse'],'quads_coarse')
-export_as_csv(quads_out_dc['fine'],'quads_fine')
-export_as_csv(param,'param')
-
-ax.set_xlim3d(2, 6)
-ax.set_ylim3d(2, 6)
-ax.set_zlim3d(2, 6)
+ax.set_xlim3d(plot_dims['xmin'], plot_dims['xmax'])
+ax.set_ylim3d(plot_dims['ymin'], plot_dims['ymax'])
+ax.set_zlim3d(plot_dims['zmin'], plot_dims['zmax'])
 plt.show()
+
+print "###Plotting DONE###"
 
 
 

@@ -5,9 +5,13 @@ class Quad:
     # _quadlist and _vertexlist have to be of type np.array!
     def __init__(self, _id, _quadlist, _vertexlist):
         import numpy as np
+        if (type(_quadlist) is list):
+            _quadlist = np.array(_quadlist)
+        if (type(_vertexlist) is list):
+            _vertexlist = np.array(_vertexlist)
+
         if not (type(_quadlist) is np.ndarray and type(_vertexlist) is np.ndarray):
-            print "WRONG TYPE! exiting..."
-            quit()
+            raise Exception("WRONG TYPE! exiting...")
 
         self.quad_id = _id
         self.vertex_ids = _quadlist[_id]
