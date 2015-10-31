@@ -2,11 +2,12 @@
 
 parametersString = 'param.csv';
 dataPointsString = 'verts_fine.csv';
-quadsString = 'quads_coarse.csv';
-verticesString = 'matlabData.mat';
+quadsString = 'quads_torusminimal.csv';
+verticesString = 'matlab_torusminimal.mat';
 baseFolder = 'TorusData/BGCE/';
 subFolder = 'Cantilever_Out/';
-folder = strcat(baseFolder,subFolder);
+% folder = strcat(baseFolder,subFolder);
+folder = 'TestData/';
 
 data_parameters = strcat(folder,parametersString);
 data_datapoints = strcat(folder,dataPointsString);
@@ -57,8 +58,8 @@ data_vertices_torus_finer = 'TorusData/Torus_Data/matlabData.mat';
 
 quads_Torus = load(data_quads);
 load(data_vertices);
-parameters = load(data_parameters);
-torus_verts_fine = load(data_datapoints);
+parameters = createdParams;%load(data_parameters);
+torus_verts_fine = createdPoints;%load(data_datapoints);
 
 [parameters,torus_verts_fine] = scaleAwayParameters(parameters,torus_verts_fine);
 

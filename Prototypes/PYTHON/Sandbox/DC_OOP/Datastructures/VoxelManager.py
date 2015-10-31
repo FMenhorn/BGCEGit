@@ -8,18 +8,31 @@ from Voxel import Voxel2, Voxel3
 
 
 class AbstractVoxelManager(object):
-    _dimension = None
-    _voxel_dict = {}
-    _resolution = None
-    _min_origin = None
-    _max_origin = None
-    _num_voxels = None
-
     def __init__(self, resolution, min_data, max_data):
+        self._voxel_dict = {}
         self._resolution = float(resolution)
         self._min_origin = float(min_data)
         self._max_origin = float(max_data)
         self._num_voxels = ((self._max_origin - self._min_origin) / self._resolution)**self._dimension
+
+    def get_voxel_dict(self):
+        return self._voxel_dict
+
+    def get_voxel_vertices(self):
+        voxel_vertices = {}
+        for origin, voxel in self._voxel_dict.items():
+            dc_vertices = voxel.get_dc_vertices()
+            if dc_vertices.__len__() > 0:
+                voxel_vertices[origin] = dc_vertices
+        return voxel_vertices
+
+    def calculate_dc_vertices(self):
+        for origin, voxel in self._voxel_dict.items():
+            connectivity = voxel.generate_dc_vertices()
+
+    def draw_voxels(self):
+        for origin, voxel in self._voxel_dict.items():
+            voxel.draw_voxel()
 
 
 class VoxelManager2(AbstractVoxelManager):
@@ -56,4 +69,11 @@ class VoxelManager3(AbstractVoxelManager):
             key = (x, y, z)
             origin = np.array([x, y, z])
             self._voxel_dict[key] = Voxel3(origin, self._resolution, dataset)
+
+    def set_ax(self, ax):
+        self._ax = ax
+        for key, vox in self._voxel_dict.items():
+            print type(vox)
+            vox.set_ax(ax)
+
 

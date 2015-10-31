@@ -36,3 +36,21 @@ class Vertex2(Point):
 
     def get_edges(self):
         return self._edges
+
+class VertexDC2(Vertex2):
+    def __init__(self, id, x, y):
+        super(VertexDC2, self).__init__(id, x, y)
+        self._connected_to = []
+
+    def connect_to_voxel(self, voxel):
+        self._connected_to.append(voxel)
+
+
+class VertexDC3(Vertex3):
+    def __init__(self, id, x, y, z):
+        super(VertexDC3, self).__init__(id, x, y, z)
+        self._connected_to = []
+
+    def connect_to_voxel(self, voxel):
+        self._connected_to.append(voxel)
+
