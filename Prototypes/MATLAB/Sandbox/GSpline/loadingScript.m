@@ -1,5 +1,20 @@
 %% script for loading data and preformatting the indices for matlab
 
+parametersString = 'param.csv';
+dataPointsString = 'verts_fine.csv';
+quadsString = 'quads_coarse.csv';
+verticesString = 'matlabData.mat';
+baseFolder = 'TorusData/BGCE/';
+subFolder = 'Cantilever_Out/';
+folder = strcat(baseFolder,subFolder);
+
+data_parameters = strcat(folder,parametersString);
+data_datapoints = strcat(folder,dataPointsString);
+data_quads = strcat(folder,quadsString);
+data_vertices = strcat(folder,verticesString);
+
+
+
 data_given_parameters = 'TestData/params_DCTorus.csv';
 data_made_parameters = 'TestData/parameters.csv';
 data_given_parameters_new = '../../../PYTHON/Sandbox/SurfaceFitting/Cantilever_data/parameters.csv';
@@ -8,6 +23,8 @@ data_parameters_torus_new = 'TorusData/newTorus/param.csv';
 data_parameters_torus_new_unscaled = 'TorusData/uncroppedTorus/param.csv';
 data_parameters_torus_newdatavers = 'TorusData/Doubletorus_Data/param.csv';
 data_parameters_torus_finer = 'TorusData/Torus_Data/param.csv';
+
+
 
 
 data_given_datapoints = 'TestData/torus_verts_fine.csv';
@@ -38,10 +55,10 @@ data_vertices_torus_new_unscaled = 'TorusData/uncroppedTorus/matlabData.mat';
 data_vertices_torus_newdatavers = 'TorusData/Doubletorus_Data/matlabData.mat';
 data_vertices_torus_finer = 'TorusData/Torus_Data/matlabData.mat';
 
-quads_Torus = load(data_quads_torus_newdatavers);
-load(data_vertices_torus_newdatavers);
-parameters = load(data_parameters_torus_newdatavers);
-torus_verts_fine = load(data_datapoints_torus_newdatavers);
+quads_Torus = load(data_quads);
+load(data_vertices);
+parameters = load(data_parameters);
+torus_verts_fine = load(data_datapoints);
 
 [parameters,torus_verts_fine] = scaleAwayParameters(parameters,torus_verts_fine);
 

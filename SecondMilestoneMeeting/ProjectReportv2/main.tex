@@ -1,0 +1,134 @@
+ % The main file for CAMP reports
+ % Don't put any content in here. 
+ % Don't even include content files by using \input or \inlcude. 
+ % Put your content to TEXT.TEX or include it there using \input.
+ % Uses:
+ %		SETTINGS.TEX	contains the settings for this document
+ %		COMMANDS.TEX	contains commands which can be used while writing
+ %		INFO.TEX			contains the author, title and so on for the cover
+ %		COVER.TEX			formats the front cover of the document
+ %		ABSTRACT.TEX	contains the abstract to be included (if needed)
+ %		TEXT.TEX			contains the actual content of the document
+ %		BIB.BIB				containt the BibTeX entries for the document
+ 
+
+
+%% Draft document mode
+%% Final document
+%\documentclass[11pt,a4paper,bibtotoc,idxtotoc,headsepline,footsepline,footexclude,BCOR15mm,DIV13]{scrbook}
+\documentclass[11pt,a4paper,bibtotoc,idxtotoc,headsepline,footsepline,footexclude,DIV13,oneside]{scrbook}
+
+%\documentclass[11pt,a4paper,bibtotoc,idxtotoc,headsepline,footsepline,footexclude,BCOR20mm,DIV10]{scrbook}
+
+%\usepackage{epstopdf}
+% KOMA-Optionen:
+%  bibtotoc: include bibliography in table of contents
+%  idxtotoc: include index in table of contents
+%  headsepline: use horizontalline under heading
+%  BCOR: binding correcion (Bindungskorrektur) (e.g.: BCOR5mm)
+%  DIV: Number of sheet sections (used for layout) (e.g.: DIV12) 
+
+
+
+% include title and author information for the cover
+\input{components/info}
+
+% include settings
+\input{components/settings}
+
+% include commands
+\input{components/commands}
+
+
+%\makeindex
+	%% inter line spacing
+%\linespread{1.0}
+
+\makeglossary
+
+\begin{document}
+
+	\frontmatter
+	
+	
+	%\input{components/cover}
+%	\clearemptydoublepage
+%	
+%	\input{components/titlepage}
+	
+	
+%	\input{components/cover_maschmeyer}
+	%\clearemptydoublepage
+	
+	\input{components/titlepage}
+	
+	\input{components/preface}
+	
+	%\input{components/disclaimer}
+	
+	\input{components/acknowledgements}
+	
+	%\input{components/abstract}
+
+	\tableofcontents
+  %outline and overview
+   \input{components/outline}
+
+	\mainmatter
+	
+	
+		% ---------------------------------------------------------------------------
+		%
+		%Introduction 
+		%
+		% ---------------------------------------------------------------------------
+		\part*{\ref{chapter:Introduction}\; Introduction}
+		%\label{part:intro}
+		\input{chapters/Introduction}
+		
+		
+		%
+		%% ---------------------------------------------------------------------------
+		%%
+		%% and Background Theory
+		%%
+		%%% ---------------------------------------------------------------------------
+		\part*{\ref{chapter:Background}\; Background Theory}
+%		\label{part:backgroundTheory}
+		\input{chapters/Background}
+		
+		
+		% ---------------------------------------------------------------------------
+		%
+		% Implementation coming somewhere here
+		%
+		% ---------------------------------------------------------------------------
+		\part*{\ref{chapter:software}\; Implementation}		
+%		\label{part:Implementation}
+		\input{chapters/Implementation}
+		
+		% ---------------------------------------------------------------------------
+		%
+		% Appendix
+		%
+		% ---------------------------------------------------------------------------
+%		\part*{Appendix}
+	%	\addcontentsline{toc}{part}{Appendix}
+%		\appendix 
+		
+		%---------------------------------------
+%		\chapter{Source Code}
+%		\label{chapter:source}
+%		\input{chapters/sourceCodeAppendix}
+		
+		%\chapter{Next Appendix}
+		
+
+
+  	\clearemptydoublepage
+  
+	\bibliography{bibliography/literature}
+	
+ 
+\end{document}
+
