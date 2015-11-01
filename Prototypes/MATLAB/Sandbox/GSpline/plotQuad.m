@@ -1,9 +1,5 @@
-function figure_handle = plotPatchPointsOnQuad(quad_list, quad_vertices, quad_index, figure_handle)
-%--------------------------------
-%ADDED FOR ANNA'S PURPOSES
-%function [figure_handle, patch_points_res] = plotPatchPointsOnQuad(quad_list, quad_vertices, quad_index, figure_handle)
+function figure_handle = plotQuad(quad_list, quad_vertices, quad_index, figure_handle)
 % 
-%--------------------------------
 % datapointsOnQuad = data_points(data_parameters(:,1) == quad_index,:);
 % parametersOnQuad = data_parameters(data_parameters(:,1) == quad_index,:);
 % 
@@ -31,6 +27,9 @@ hold on;
 
 % plots the face
 %patch('Faces',thisQuadVertices,'Vertices',quad_vertices,'FaceColor', 'cyan', 'FaceAlpha', 0.3, 'BackFaceLighting', 'reverselit')
+%fill3(quad_vertices([thisQuadVertices(1,:) thisQuadVertices(1,1)],1), quad_vertices([thisQuadVertices(1,:) thisQuadVertices(1,1)],2), quad_vertices([thisQuadVertices(1,:) thisQuadVertices(1,1)],3), 'cyan', 'FaceAlpha', 0.3)
+fill3(quad_vertices(thisQuadVertices(1,:),1), quad_vertices(thisQuadVertices(1,:),2), quad_vertices(thisQuadVertices(1,:),3), 'cyan', 'FaceAlpha', 0.3)
+
 % 
 % %plots the points and hairs
 % for p = 1:numPointsOnQuad
@@ -45,38 +44,6 @@ hold on;
 
 %plot the lines
 
-plotLine = @(point1,point2) plot3([point1(1),point2(1)],...
-    [point1(2),point2(2)],...
-    [point1(3),point2(3)],'k--');
-plotPoint = @(point) plot3(point(1),point(2),point(3),'kx','MarkerSize',5);
-
-%--------------------------------
-%ADDED FOR ANNA'S PURPOSES
-%patch_points = zeros(3, 3, 3);
-%--------------------------------
-
-for i = 1:4
-    for j = 1:4
-        
-    
-    patchPoint = getPointOnThisQuad(i*0.25-1/8,j*0.25-1/8);
-    
-    %--------------------------------
-    %ADDED FOR ANNA'S PURPOSES
-    %   patch_points(:, i, j) = patchPoint;
-    %--------------------------------
-    
-    plotPoint(patchPoint);
-
-        
-    
-    end
-end
-
-%--------------------------------
-%ADDED FOR ANNA'S PURPOSES
-%patch_points_res = patch_points(:, 2:4, 2:4);
-%--------------------------------
 hold off
 
 
