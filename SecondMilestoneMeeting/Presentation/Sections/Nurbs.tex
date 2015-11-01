@@ -1,5 +1,72 @@
 \newcommand{\norm}[1]{\parallel #1 \parallel_2}
+%\subsection{B--Spline}
+\begin{frame}{B--Spline}
+\begin{equation*}
+\vec{S}\left(u,v\right)=\sum\limits_{i,j=1}^{n,m} \vec{C}_{i,j} N_i^p\left(u\right) N_j^p\left(v\right),
+\end{equation*}
+where $p$ -- degree of the B--Spline surface and $n,m$ -- number of control points in each direction.
+\begin{columns}
+\begin{column}{.45\textwidth}
+B--Splines
+\begin{itemize}
+\item offer great flexibility for handling arbitrary shapes
+\item are CAD--standard
+\end{itemize}
+\textbf{Engineers are working with CAD}
+\end{column}
+\begin{column}{.45\textwidth}
+\includegraphics[width=\textwidth]{Pictures/BSplineEx/example.pdf}
+\end{column}
+\end{columns}
+\end{frame}
 
+\begin{frame}{B--Spline Fitting}
+
+\begin{figure}
+			\only<1>{\includegraphics[scale=0.7]{Pictures/EasyBSplineFit/onlyData.pdf}}
+			\only<2>{\includegraphics[scale=0.7]{Pictures/EasyBSplineFit/withFit.pdf}}
+\end{figure}
+%\input{Pictures/EasyBSplineFit/onlyData}
+%}
+%
+%\input{Pictures/EasyBSplineFit/withFit}
+%%this works quite good!
+%}
+
+\begin{variableblock}{Goal:}{bg=cyan,fg=white}{bg=white,fg=black}
+{
+Find B--Spline representation of our data!\\
+\begin{equation*}
+\vec{S}\left(u_\alpha,v_\alpha\right) \approx \vec{P}_{\alpha} 
+\end{equation*}
+}
+\end{variableblock}
+
+\end{frame}
+
+\begin{frame}{B--Spline Fitting: Least Squares}
+\begin{variableblock}{The task:}{bg=cyan,fg=white}{bg=white,fg=black}
+{
+Find control points $C_{i,j}$, such that the B--Spline surface
+\begin{equation*}
+\vec{S}\left(u,v\right)=\sum\limits_{i,j=1}^{n,m} \vec{C}_{i,j} N_i^p\left(u\right) N_j^p\left(v\right)
+\end{equation*}
+approximates our dataset of points $\left\lbrace \vec{P}_{\alpha} \right\rbrace $. 
+}
+\end{variableblock}
+
+This leads to \textit{minimization problem}:
+\begin{equation*}
+\vec{S}\left(u_\alpha,v_\alpha\right) \approx \vec{P}_{\alpha} \forall \alpha \leftrightarrow 
+\underset{\vec{C}_{i,j}\in \mathbb{R}^3}{\min} \sum\limits_\alpha \norm{\vec{P}_{\alpha}-\vec{S}\left(u_\alpha,v_\alpha\right)}
+\end{equation*}
+\end{frame}
+\begin{frame}{B--Spline Fitting Pipeline [Becker, Schäfer, Jameson]}
+\begin{figure}
+\includegraphics[scale=0.25]{Pictures/NURBS/TheArc.png}
+\end{figure}
+        
+\end{frame}
 \begin{frame}{Status}
 \begin{block}{Last milestone}
 \begin{itemize}
@@ -13,24 +80,53 @@
 \begin{block}{Today}
 \begin{itemize}
 	\item[\textcolor{green}{\Checkmark}] Automatic patch selection -- {\color{gray}moved to the surface extraction part}
-	\item[\textcolor{green}{\Checkmark}] Parametrization of obtained patches -- {\color{gray} moved to the surface extraction part}
-	\item[\textcolor{green}{\Checkmark}] B--spline fitting using least squares
+	\item[\textcolor{green}{\Checkmark}] Parametrization of obtained patches 
+	\item[\textcolor{green}{\Checkmark}] B--spline fitting using least squares --  {\color{gray}modified}
 	\item[\textcolor{green}{\Checkmark}] Smooth connection of patches
 	\item[\textcolor{red}{\XSolidBrush}] Conversion back to CAD
 \end{itemize}
 \end{block}
 \end{frame}
-\begin{frame}{Long way to smoothness}
-\begin{block}{Peters' scheme:}
-Given the control mesh $M_{x}$
-\begin{enumerate}
-\item Refine the \textit{control mesh} 2 times using Doo-Sabin refinement
-\item Construct a tensor product Bezier patches (biquadratic or bicubic) centred on the each vertex of the refined \textit{control mesh}
-\end{enumerate}
-\end{block}
-\textbf{{\color{red} According to Peters obtained surface is $G^{1}$ smooth}}
-
-Add pictures for Doo-Sabin and for fitting
+\begin{frame}{Long way to smoothness. Peter's scheme}
+%\begin{block}{Peters' scheme:}
+%Given the control mesh $M_{x}$
+%\begin{enumerate}
+%\item Refine the \textit{control mesh} 2 times using Doo-Sabin refinement
+%\item Construct a tensor product Bezier patches (biquadratic or bicubic) centred on the each vertex of the refined \textit{control mesh}
+%\end{enumerate}
+%\end{block}
+	\only<1>{Control mesh}
+	\only<2>{Refined control mesh}
+	\only<3>{Bezier control points}
+	\only<4>{Bezier patch}
+	\only<5>{Peter's surface}
+    \begin{center}
+		\begin{tikzpicture} 
+        \node at (0,3.5)[inner sep=0pt, scale = 0.4](N1)
+                {\input{Pictures/NURBS/tikz/control_mesh.tex}};
+                \pause
+        \node at (3.5,3.5) [inner sep=0pt, scale = 0.32](N2)
+        			%{\includegraphics[width=5cm]{Pictures/NURBS/tikz/patch_points.eps}};
+                 {\input{Pictures/NURBS/tikz/patch_points.tex}};
+                  
+        \draw[thick,->] (N1) -- (N2);
+        \pause
+        \node at (7,2)[inner sep=0pt, scale = 0.32](N3)
+                 {\input{Pictures/NURBS/tikz/bezier_points.tex}};
+                 % {\includegraphics[width=5cm]{Pictures/NURBS/tikz/bezier_points.eps}};
+        \draw[thick,->] (N2) -- (N3);
+        \pause
+        \node at (3.5, 0)[inner sep=0pt, scale = 0.35](N4)
+                 {\input{Pictures/NURBS/tikz/peters_surface.tex}};
+                %{\includegraphics[width=5cm]{Pictures/NURBS/tikz/peters_surface.eps}};
+        \draw[thick,->] (N3) -- (N4);
+        \pause
+        \node at (0, 0)[inner sep=0pt](N5)
+                 {\includegraphics[width=5cm]{Pictures/NURBS/tikz/torus.eps}};
+        \draw[thick,->] (N4) -- (N5);
+        \end{tikzpicture}
+	\end{center}
+%\textbf{{\color{red} According to Peters obtained surface is $G^{1}$ smooth}}
 \end{frame}
 \begin{frame}{Long way to smoothness}
 \begin{block}{Main ideas}
@@ -41,7 +137,7 @@ Add pictures for Doo-Sabin and for fitting
 \end{block}
 $$\downarrow$$
 \begin{equation}
-E_{dist}(V_{x}) = \sum_{i=1}^{N}\norm{p_{i} - y_{i}V_{x}}^{2} \rightarrow min,
+E_{dist}(V_{x}) = \sum_{i=1}^{N}\norm{P_{i} - y_{i}V_{x}}^{2} \rightarrow min,
 \end{equation}
 $y_{i}$ - coefficients obtained from the Peters' scheme theory.
 \begin{block}{What is achieved?}
@@ -52,18 +148,64 @@ $y_{i}$ - coefficients obtained from the Peters' scheme theory.
 \end{block}
 \end{frame}
 \begin{frame}{Improved pipeline}
-Insert a nice new pipeline in tikz: orig points $->$ dual contouring $->$ clouds $->$ Doo-Sabin $->$ fitted surface together with clouds
+\hspace*{-2cm}%
+\begin{tikzpicture} 
+        \node at (0,0)[inner sep=0pt, scale = 0.43](N1)
+                %{\input{Pictures/NURBS/tikz/control_mesh.tex}};
+                {\includegraphics{Pictures/NURBS/fitting_pipeline/half_torus.eps}};
+        \node at (2,4) [inner sep=0pt, scale = 0.4](N2)
+        			%{\includegraphics[width=5cm]{Pictures/NURBS/tikz/patch_points.eps}};
+                 %{\input{Pictures/NURBS/tikz/patch_points.tex}};
+                 {\includegraphics{Pictures/NURBS/fitting_pipeline/half_torus_dc.eps}};                   
+        \node at (7,4)[inner sep=0pt, scale = 0.4](N3)
+                 %{\input{Pictures/NURBS/tikz/bezier_points.tex}};
+                  %{\includegraphics[width=5cm]{Pictures/NURBS/tikz/bezier_points.eps}};
+                  {\includegraphics{Pictures/NURBS/fitting_pipeline/half_torus_hair.eps}};        
+        \node at (9, 0)[inner sep=0pt, scale = 0.43](N4)
+                 %{\input{Pictures/NURBS/tikz/peters_surface.tex}};
+                {\includegraphics{Pictures/NURBS/fitting_pipeline/half_torus.eps}};
+        \draw[thick,->] (N2) -- (N1);
+        \draw[thick,->] (N3) -- (N2);
+        \draw[thick,->] (N4) -- (N3);
+       
+\end{tikzpicture}
 \end{frame}
-\begin{frame}{Before and after}
-May be some pictures with a really easy shape, which we were able to fit last time and it was not smooth and the ones with new fancy smooth shapes
+\begin{frame}{Before and after Peters}
+%\vspace{-6mm}
+%\begin{minipage}[t]{0.48\linewidth}
+%\begin{block}{Before}
+%\begin{figure}
+%\includegraphics[width=0.8\linewidth]{uniform_hermite.eps}
+%\end{figure}
+%\end{block}
+%\end{minipage}%
+%\hfill%
+%\begin{minipage}[t]{0.48\linewidth}
+%\begin{block}{Legendre Chaos}
+%\begin{itemize}
+%\item[{\color{green}\smiley}] First order Legendre Chaos expansion represents the random variable \textit{exactly}.
+%\vspace{5mm}
+%
+%\end{itemize}
+%\begin{figure}
+%\includegraphics[width=0.85\linewidth]{legendre_exact.eps}
+%\end{figure}
+%\end{block}
+%\end{minipage}
+
 \end{frame}
 \begin{frame}{What is next?}
+\begin{block}{Further steps:}
 \begin{itemize}
-\item Finishing of the implementation of the improved pipeline in Python
 \item Full integration with Surface Extraction part
+\item Exporting the results back to CAD  
+\end{itemize}
+\end{block}
+\begin{block}{Possible optimizations}
+\begin{itemize}
 \item Introducing of the \textit{fairness functional} in order to deal with more complex shapes
 \item Implementation of the \textit{adaptive refinement} in order to control a maximum error tolerance
 \item Implementation of the \textit{parameter correction} for the improved pipeline
-\item Exporting the results back to CAD  
 \end{itemize}
+\end{block}
 \end{frame}
