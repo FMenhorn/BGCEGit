@@ -14,6 +14,14 @@
 \usepackage{tikz,tikzscale,pgfplots,grffile}
 \usetikzlibrary{arrows,shapes,backgrounds}
 \usetikzlibrary{plotmarks}
+\usetikzlibrary{spy}
+\tikzset{
+    invisible/.style={opacity=0,text opacity=0},
+    visible on/.style={alt={#1{}{invisible}}},
+    alt/.code args={<#1>#2#3}{%
+      \alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} 
+    },
+}
 \usepackage{bbding}
 
 \usepackage[clock]{ifsym}
@@ -122,7 +130,7 @@
 %-------------------------------------------------------
 
 %-------------------------------------------------------
-
+%
 \section{Surface Extraction}
 \input{Sections/SurfaceExtraction}
 
