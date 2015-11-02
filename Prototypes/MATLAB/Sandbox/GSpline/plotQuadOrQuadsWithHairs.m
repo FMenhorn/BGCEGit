@@ -1,7 +1,7 @@
 %% script to create model torus quads
 clear all
 close all
-quadsToPlot = 1:3;
+quadsToPlot = [1 4];
 
 
 %create data
@@ -33,7 +33,7 @@ for i = 1:length(quadsToPlot)
 %     plotOneQuadWhole(quads_Torus,newA,newB1,newB2,newC,regularPoints,vertices,i,fig_handle);
     plotLinesOnQuad(quads_Torus,createdQuadVerts,quadsToPlot(i),fig_handle);
     plotPatchPointsOnQuad(quads_Torus,createdQuadVerts,quadsToPlot(i),fig_handle);
-    plotPatchesOnQuad(quads_Torus,newA,newB1,newB2,newC,regularPoints,regular_quadpoints,i,[5,8,9,12],fig_handle);
+    plotPatchesOnQuad(quads_Torus,newA,newB1,newB2,newC,regularPoints,regular_quadpoints,quadsToPlot(i),1:16,fig_handle);
     
     
     %------------------------
