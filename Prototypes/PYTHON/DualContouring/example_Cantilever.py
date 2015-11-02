@@ -14,11 +14,11 @@ def transform_dict(cellsDict):
     return dataset
 
 
-wfFile = open('Cantilever/Cells_01', 'rb')
+wfFile = open('Cantilever/Cells', 'rb')
 cellsDict = cPickle.load(wfFile)
 wfFile.close()
 
-wfFile = open('Cantilever/Dimensions_01', 'rb')
+wfFile = open('Cantilever/Dimensions', 'rb')
 dimensions = cPickle.load(wfFile)
 wfFile.close()
 
@@ -51,7 +51,7 @@ for q in quads_out_dc[plot_scale]:
     poly.set_color('r')
     poly.set_edgecolor('k')
     poly.set_alpha(.25)
-    ax.add_collection3d(poly)
+    #ax.add_collection3d(poly)
 
 ''' # useful for debugging
 for m_e_key, m_edge in manifold_edges_dc[plot_scale].items():

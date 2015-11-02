@@ -23,7 +23,9 @@ Voxelizer/VoxelIndexCalculator.cpp
 Writer/Writer_ToPy.cpp
 Writer/Writer_VTK.cpp
 ColorHandler/ColorHandler.cpp
-DataWrappers/ListOfShape.cpp)
+DataWrappers/ListOfShape.cpp
+DataWrappers/BodyPartsContainer.cpp
+DataWrappers/VoxelShapesContainer.cpp)
 
 target_link_libraries(CADToVoxel
 TKTopAlgo

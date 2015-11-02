@@ -111,6 +111,9 @@ void VoxelIndexCalculator::calculateIndexForVoxelShape(VoxelShape& voxelShape, b
 	int nbX = 0;
 	int nbY = 0;
 	int nbZ = 0;
+	int localNbX = 0;
+	int localNbY = 0;
+	int localNbZ = 0;
 	double originX = 0;
 	double originY = 0;
 	double originZ = 0;
@@ -122,19 +125,25 @@ void VoxelIndexCalculator::calculateIndexForVoxelShape(VoxelShape& voxelShape, b
 	originX =voxelShape.getOriginX()-origin[0];
 	originY =voxelShape.getOriginY()-origin[1];
 	originZ =voxelShape.getOriginZ()-origin[2];
-	nbX = isElem ? dimensions[0] : dimensions[0] + 1;
-	nbY = isElem ? dimensions[1] : dimensions[1] + 1;
-	nbZ = isElem ? dimensions[2] : dimensions[2] + 1;
 	voxelSizeX = voxelShape.getXLen()/voxelShape.getNbX();
 	voxelSizeY = voxelShape.getYLen()/voxelShape.getNbY();
 	voxelSizeZ = voxelShape.getZLen()/voxelShape.getNbZ();
-	originVoxelX = originX * voxelSizeX;
-	originVoxelY = originY * voxelSizeY;
-	originVoxelZ = originZ * voxelSizeZ;
-//	std::cout << "Origin: "<< "[" << originX << "," << originY << "," << originZ << "] " <<
-//				 "VoxelOrigin: " << "[" << originVoxelX << "," << originVoxelY <<"," << originVoxelZ<< "] " <<
-//				 "VoxelSizes: "<<"[" << voxelSizeX << "," << voxelSizeY <<"," << voxelSizeZ<< "] " <<
-//				 "NoVoxels: "<<"[" << nbX << "," << nbY <<"," << nbZ << "]"<< std::endl;
+	nbX = isElem ? dimensions[0] : dimensions[0] + 1;
+	nbY = isElem ? dimensions[1] : dimensions[1] + 1;
+	nbZ = isElem ? dimensions[2] : dimensions[2] + 1;
+	std::cout << "originX: " << originX;
+	originVoxelX = originX * 1./voxelSizeX + 1;
+	originVoxelY = originY * 1./voxelSizeY + 1;
+	originVoxelZ = originZ * 1./voxelSizeZ + 1;
+	localNbX = voxelShape.getNbX();
+	localNbY = voxelShape.getNbY();
+	localNbZ = voxelShape.getNbZ();
+	std::cout << "VoxelIndexCalulator::calculateIndexForVoxelShape: " << std::endl;
+	std::cout << "Origin: "<< "[" << originX << "," << originY << "," << originZ << "] \n" <<
+				 "VoxelOrigin: " << "[" << originVoxelX << "," << originVoxelY <<"," << originVoxelZ<< "] \n" <<
+				 "VoxelSizes: "<<"[" << voxelSizeX << "," << voxelSizeY <<"," << voxelSizeZ<< "] \n" <<
+				 "NoVoxelsGlobal: "<<"[" << nbX << "," << nbY <<"," << nbZ << "] \n"
+				 "NoVoxelsLocal: "<< "[" << localNbX << ", " << localNbY << "," << localNbZ << "]" << std::endl;
 	int curIndex;
 	for (int k = 0; k < voxelShape.getNbZ(); k++){
 		for (int i = 0; i < voxelShape.getNbX(); i++){

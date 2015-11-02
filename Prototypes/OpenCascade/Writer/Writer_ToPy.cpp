@@ -98,9 +98,9 @@ std::vector<int> Writer_ToPy::writeNodes(std::string name, std::ofstream &outfil
 		voxelSizeX = voxelShape[h].getXLen()/voxelShape[h].getNbX();
 		voxelSizeY = voxelShape[h].getYLen()/voxelShape[h].getNbY();
 		voxelSizeZ = voxelShape[h].getZLen()/voxelShape[h].getNbZ();
-		originVoxelX = originX * voxelSizeX;
-		originVoxelY = originY * voxelSizeY;
-		originVoxelZ = originZ * voxelSizeZ;
+		originVoxelX = originX * 1./voxelSizeX;
+		originVoxelY = originY * 1./voxelSizeY;
+		originVoxelZ = originZ * 1./voxelSizeZ;
 		std::cout << "Name: " << name << ": \n"
 					 "Origin: "<< "[" << originX << "," << originY << "," << originZ << "] " <<
 					 "VoxelOrigin: " << "[" << originVoxelX << "," << originVoxelY <<"," << originVoxelZ<< "] "
