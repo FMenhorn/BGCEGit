@@ -19,6 +19,8 @@
 
 \subsection{The user's view}
 \begin{frame}{The user's view DRAFT}
+\begin{minipage}{0.65\textwidth}
+\begin{overlayarea}{\textwidth}{.9\textheight}
 \begin{itemize}
 	\item Model geometry in favorite CAD tool (FreeCAD, OpenSCAD)
 	\item Colour faces where boundary conditions are applied
@@ -31,19 +33,29 @@
 	\item Run \textit{\textbf{NAME}} \textit{filename} \textit{force{\_}scaling}
 \end{itemize}
 \begin{figure}[htp]
-
 \centering
 \includegraphics[width=.3\textwidth]{Pictures/TopOp/CantileverFCAD1.png}\hfill
 \includegraphics[width=.3\textwidth]{Pictures/TopOp/CantileverFCAD2.png}\hfill
 \includegraphics[width=.3\textwidth]{Pictures/TopOp/CantileverFCAD3.png}
-
 \caption{Color faces in FreeCAD}
 \label{fig: FreeCADColoring}
 \end{figure}
+\end{overlayarea}
+\end{minipage}
+\begin{minipage}{0.3\textwidth}
+\begin{overlayarea}{\textwidth}{.9\textheight}
+\begin{figure}[htp]
+	\centering
+	\includegraphics[scale=.25]{Pictures/TopOp/FlowDiagram2.pdf}
+\end{figure}
+\end{overlayarea}
+\end{minipage}
 \end{frame}
 
 \subsection{The internal view}
 \begin{frame}{The internal view DRAFT}
+\begin{minipage}{0.65\textwidth}
+\begin{overlayarea}{\textwidth}{.9\textheight}
 \begin{itemize}
 	\item The pipeline:
 	\begin{enumerate}
@@ -129,10 +141,34 @@
 		\item Execute Surface Reconstruction on ToPy vtk output
 		\begin{itemize}
 			\item Running dual contouring algorithm
-			\item add Picture
+			\begin{figure}[htp]
+			\centering
+			\includegraphics[scale=0.15]{Pictures/TopOp/SurfaceExtraction1.png}
+			\includegraphics[scale=0.15]{Pictures/TopOp/SurfaceExtraction3.png}
+			\caption{Surface extraction for Cantilever}
+			\label{fig: SurfaceExtraction}
+			\end{figure}
 		\end{itemize}				
 		}
 	\end{enumerate}
 \end{itemize}
+\end{overlayarea}
+\end{minipage}
+\begin{minipage}{0.3\textwidth}
+\begin{overlayarea}{\textwidth}{.9\textheight}
+\begin{figure}[htp]
+	\centering
+	\includegraphics[scale=.25]{Pictures/TopOp/FlowDiagram2.pdf}
+\end{figure}
+\end{overlayarea}
+\end{minipage}
+\end{frame}
 
+\subsection{The next steps MOVE TO LATER}
+\begin{frame}{The next steps MOVE TO LATER}
+\begin{itemize}
+\item GUI for input
+\item Speed up ToPY
+\item Usage of different optimizers
+\end{itemize}
 \end{frame}
