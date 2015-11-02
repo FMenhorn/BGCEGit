@@ -4,11 +4,13 @@ import exampleData
 from Dataset import Dataset2, Dataset3
 from VoxelManager import VoxelManager2, VoxelManager3
 
-ds_circl = Dataset2(exampleData.data_circle)
+ds_circl = Dataset2(exampleData.data_2D_doubletorus)
 
-vm_circl = VoxelManager2(1.0/2.0,0,2,ds_circl)
+vm_circl = VoxelManager2(1.0/4.0,0,6,ds_circl)
 
 vm_circl.calculate_dc_vertices()
+
+vm_circl.calculate_connections()
 
 v_verts = vm_circl.get_voxel_vertices()
 
@@ -24,6 +26,13 @@ for k,vs in v_verts.items():
 ds_circl.draw_dataset()
 
 vm_circl.draw_voxels()
+
+vm_circl.draw_edges()
+
+for key, vox in vm_circl.get_voxel_dict().items():
+    print str(key)+":"
+    print "\t neighbor voxel at"
+    print "\t"+str(vox.get_neighbor_voxels())
 
 plt.show()
 

@@ -28,7 +28,7 @@ print vox3.get_signs()
 
 print ds_circ.get_all_dataset_values()
 
-vox4 = Voxel2(np.array([0,0]),1,ds_circ)
+vox4 = Voxel2(np.array([0,0]),.1,ds_circ)
 
 print vox2
 print vox4
@@ -38,5 +38,8 @@ print vox2.get_signs()
 print vox4.get_signs()
 print vox4._get_sign_change_edges()
 print vox4._get_roots_sign_change_edges()
-print vox4._generate_dc_vertex()
+print vox4.generate_dc_vertices()
 print vox4._dc_vertices
+print vox4.get_origin()
+for i in range(4):
+    print vox4.neighbor_keys_of_edge(i)

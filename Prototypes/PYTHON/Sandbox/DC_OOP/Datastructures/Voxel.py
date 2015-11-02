@@ -35,6 +35,7 @@ class AbstractVoxel(object): # todo reimplement with PYTHON way of defining abst
 
     _voxel_verts = None
     _voxel_edges = None
+    _voxel_neighbor_origin = None
 
     def __init__(self, origin, edge_length, dataset):
         self._origin = Point(origin)
@@ -42,6 +43,9 @@ class AbstractVoxel(object): # todo reimplement with PYTHON way of defining abst
         self._dataset = dataset
         self._set_voxel_datapoints()
         self._dc_vertices = []
+        self._edge_neighbor_voxels = {}
+        for i in range(self._voxel_edges.__len__()):
+            self._edge_neighbor_voxels[i] = []
 
     def get_origin(self):
         return self._origin.get_position()
@@ -109,21 +113,16 @@ class AbstractVoxel(object): # todo reimplement with PYTHON way of defining abst
     def generate_dc_vertices(self):
         root_positions = self._get_roots_sign_change_edges()
         vertex_position = np.zeros([self._dimension])
-        connectivity = set()
+        connectivity = []
         n_roots = 0
         for edge_id, root_position in root_positions.items():
             vertex_position += root_position
             n_roots += 1
-            connectivity.add(edge_id)
+            connectivity.append(self._edge_neighbor_voxels[edge_id])
 
         if n_roots != 0:
             vertex_position /= n_roots
-            self._add_vertex_at(vertex_position)
-
-        return connectivity
-
-    def _add_vertex_at(self, position):
-        raise Exception("abstract method: is implemented in subclass")
+            self._add_vertex_at(vertex_position, connectivity)
 
     def _add_vertex(self, vertex):
         self._dc_vertices.append(vertex)
@@ -138,11 +137,21 @@ class AbstractVoxel(object): # todo reimplement with PYTHON way of defining abst
         for local_edge_id, edge in self._voxel_edges.items():
             self._draw_edge(local_edge_id)
 
-    def _draw_datapoint(self, local_id):
-        raise Exception("Abstract method!")
+    def neighbor_keys_of_edge(self, local_edge_id):
+        neighbor_keys = []
+        for displacement in self._voxel_neighbor_origin[local_edge_id]:
+            neighbor_origin = self._origin.get_position() + displacement * self._edge_length
+            neighbor_keys.append(tuple(neighbor_origin))
 
-    def _draw_edge(self, local_edge_id):
-        raise Exception("Abstract method!")
+        return neighbor_keys
+
+    def add_neighbor_voxel(self, local_edge_id, voxel):
+        print "adding voxel to edge "+str(local_edge_id)+": "+str(voxel)
+        self._edge_neighbor_voxels[local_edge_id].append(voxel)
+        print self._edge_neighbor_voxels
+
+    def get_neighbor_voxels(self):
+        return self._edge_neighbor_voxels
 
 
 class Voxel2(AbstractVoxel):
@@ -152,18 +161,23 @@ class Voxel2(AbstractVoxel):
                     2: np.array([1.0, 1.0]),
                     3: np.array([0.0, 1.0])}  # traverse verts  of voxel in CCW manner
 
-    _voxel_edges = {0: (0,1),
-                    1: (1,2),
-                    2: (2,3),
-                    3: (3,0)} # traverse edges of voxel in CCW manner, starting at bottom edge
+    _voxel_edges = {0: (0, 1),
+                    1: (1, 2),
+                    2: (2, 3),
+                    3: (3, 0)} # traverse edges of voxel in CCW manner, starting at bottom edge
+
+    _voxel_neighbor_origin = {0: [np.array([0.0, -1.0])],
+                              1: [np.array([1.0, 0.0])],
+                              2: [np.array([0.0, 1.0])],
+                              3: [np.array([-1.0, 0.0])]} # origins of each edge's neighbor voxel
 
     _dimension = 2
 
     def __init__(self, origin, edge_length, dataset):
         super(Voxel2, self).__init__(origin, edge_length, dataset)
 
-    def _add_vertex_at(self, position):
-        vertex = VertexDC2(self._dc_vertex_id, position[0], position[1])
+    def _add_vertex_at(self, position, connectivity):
+        vertex = VertexDC2(self._dc_vertex_id, position[0], position[1], connectivity)
         super(Voxel2,self)._add_vertex(vertex)
 
     def _draw_datapoint(self, local_id):
@@ -220,8 +234,8 @@ class Voxel3(AbstractVoxel):
     def __init__(self, origin, edge_length, dataset):
         super(Voxel3, self).__init__(origin, edge_length, dataset)
 
-    def _add_vertex_at(self, position):
-        vertex = VertexDC3(self._dc_vertex_id, position[0], position[1], position[2])
+    def _add_vertex_at(self, position, connectivity):
+        vertex = VertexDC3(self._dc_vertex_id, position[0], position[1], position[2], connectivity)
         super(Voxel3,self)._add_vertex(vertex)
 
     def _draw_datapoint(self, local_id):
@@ -255,3 +269,26 @@ class Voxel3(AbstractVoxel):
 
     def set_ax(self, ax):
         self._ax = ax
+
+
+def AbstractVoxelEdge(object):
+    def __init__(self, edge_length, datapoints):
+        self._edge_length = edge_length
+        for i in range(2):
+            self._datapoints[i] = datapoints[i]
+
+
+def VoxelEdge2(AbstractVoxelEdge):
+    def __init__(self, edge_length, datapoints):
+        super(VoxelEdge2, self).__init__(edge_length, datapoints)
+
+
+def VoxelEdge3(AbstractVoxelEdge):
+    def __init__(self, edge_length, datapoints):
+        super(VoxelEdge3, self).__init__(edge_length, datapoints)
+
+
+def VoxelFace(object):
+    def __init__(self, face_edges):
+        for i in range(2):
+            self._face_edges[i] = face_edges[i]
