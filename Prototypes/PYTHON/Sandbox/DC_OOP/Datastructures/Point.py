@@ -21,10 +21,5 @@ class Point(object):
         return self._coordinates
 
 
-class Datapoint(Point):
-    def __init__(self, coordinates, value):
-        super(Datapoint, self).__init__(coordinates)
-        self._value = value
 
-    def get_value(self):
-        return self._value
+

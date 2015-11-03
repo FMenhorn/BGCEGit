@@ -1,14 +1,15 @@
 __author__ = 'benjamin'
 
 import numpy as np
+import matplotlib.pyplot as plt
 
 from Voxel import Voxel2, Voxel3
-from Dataset import Dataset
+from Dataset import Dataset2, Dataset3
 import exampleData
 
-ds2 = Dataset(exampleData.data2)
-ds3 = Dataset(exampleData.data3)
-ds_circ = Dataset(exampleData.data_circle)
+ds2 = Dataset2(exampleData.data2)
+ds3 = Dataset3(exampleData.data3)
+ds_circ = Dataset2(exampleData.data_circle)
 
 print ds_circ
 
@@ -43,3 +44,6 @@ print vox4._dc_vertices
 print vox4.get_origin()
 for i in range(4):
     print vox4.neighbor_keys_of_edge(i)
+
+vox2.draw()
+plt.show()

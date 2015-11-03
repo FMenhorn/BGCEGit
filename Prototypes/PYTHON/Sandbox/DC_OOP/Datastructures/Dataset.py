@@ -1,12 +1,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-from BasicDatastructures import Datapoint
+from Datapoint import Datapoint2, Datapoint3
 
 __author__ = 'benjamin'
 
 
-class Dataset(object):
+class AbstractDataset(object):
     # parses data from a dictionary with {(position): datavalue} and constructs Dataset object out of it.
     # position has to be a tuple!
 
@@ -14,14 +14,6 @@ class Dataset(object):
 
     def __init__(self, data_dict):
         self._datapoint_dict = {}
-        for key, value in data_dict.items():
-            if isinstance(key, tuple):
-                position = np.array(key)
-                key = tuple(position.astype(float))
-                self._datapoint_dict[key] = Datapoint(position, value)
-            else:
-                raise Exception('class Dataset::__init__\n\t'
-                                'Wrong format for key! Only Tuple keys are accepted! Aborting!')
 
     # return number of datapoints in this dataset
     def get_num_datapoints(self):
@@ -47,10 +39,6 @@ class Dataset(object):
         else:
             self._add_datapoint(key, position, value)
             return True
-
-    # same like add_datapoint, but without checks
-    def _add_datapoint(self, key, position, value):
-        self._datapoint_dict[key] = Datapoint(position, value)
 
     # checks for existance of a datapoint in the set
     def datapoint_at_exists(self, position_or_key):
@@ -79,11 +67,26 @@ class Dataset(object):
                             "Wrong format for position! Only np.ndarray and tuple supported. Aborting!")
         return key, position
 
-class Dataset2(Dataset):
+class Dataset2(AbstractDataset):
 
     _dimension = 2
 
-    def draw_dataset(self):
+    def __init__(self, data_dict):
+        self._datapoint_dict = {}
+        for key, value in data_dict.items():
+            if isinstance(key, tuple):
+                position = np.array(key)
+                key = tuple(position.astype(float))
+                self._datapoint_dict[key] = Datapoint2(position, value)
+            else:
+                raise Exception('class Dataset::__init__\n\t'
+                                'Wrong format for key! Only Tuple keys are accepted! Aborting!')
+
+    # same like add_datapoint, but without checks
+    def _add_datapoint(self, key, position, value):
+        self._datapoint_dict[key] = Datapoint2(position, value)
+
+    def draw(self):
         for key, datapoint in self._datapoint_dict.items():
             pos = datapoint.get_position()
             xx = pos[0]
@@ -93,11 +96,28 @@ class Dataset2(Dataset):
             else:
                 plt.plot(xx,yy,'b.')
 
-class Dataset3(Dataset):
+class Dataset3(AbstractDataset):
+    # ax where plots are created
+    _ax = None
 
     _dimension = 3
 
-    def draw_dataset(self):
+    def __init__(self, data_dict):
+        self._datapoint_dict = {}
+        for key, value in data_dict.items():
+            if isinstance(key, tuple):
+                position = np.array(key)
+                key = tuple(position.astype(float))
+                self._datapoint_dict[key] = Datapoint3(position, value)
+            else:
+                raise Exception('class Dataset::__init__\n\t'
+                                'Wrong format for key! Only Tuple keys are accepted! Aborting!')
+
+    # same like add_datapoint, but without checks
+    def _add_datapoint(self, key, position, value):
+        self._datapoint_dict[key] = Datapoint3(position, value)
+
+    def draw(self):
         for key, datapoint in self._datapoint_dict.items():
             pos = datapoint.get_position()
             xx = pos[0]

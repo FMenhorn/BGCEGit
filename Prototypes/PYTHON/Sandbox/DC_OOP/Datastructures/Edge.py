@@ -2,12 +2,11 @@ import matplotlib.pyplot as plt
 
 __author__ = 'erik'
 
-class Edge(object):
-    _counter_id = 0
+class AbstractEdge(object):
+    _id_counter = 0
 
     def __init__(self, _vertex1, _vertex2):
-        self._id = self._counter_id
-        self._counter_id += 1
+        self._id = self._obtain_id()
         self._vertices = [_vertex1, _vertex2]
         for vertex in self._vertices:
             vertex.add_edge(self)
@@ -18,9 +17,13 @@ class Edge(object):
     def get_id(self):
         return self._id
 
+    def _obtain_id(self):
+        id = AbstractEdge._id_counter
+        AbstractEdge._id_counter += 1
+        return id
 
-class Edge3(Edge):
 
+class Edge3(AbstractEdge):
 
     def __init__(self, _vertex1, _vertex2):
         super(Edge3, self).__init__(_vertex1, _vertex2)
@@ -33,7 +36,7 @@ class Edge3(Edge):
         return self.quads
 
 
-class Edge2(Edge):
+class Edge2(AbstractEdge):
     def __init__(self, _vertex1, _vertex2):
         super(Edge2, self).__init__(_vertex1, _vertex2)
 
