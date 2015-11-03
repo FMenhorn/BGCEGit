@@ -1,9 +1,10 @@
 __author__ = 'benjamin'
 
 import numpy as np
+import matplotlib.pyplot as plt
 
 import exampleData
-from Dataset import Dataset
+from Dataset import Dataset2, Dataset3
 
 
 
@@ -14,7 +15,7 @@ pos3 = (1.0, 1.0)
 pos4 = (1.0, 3.0)
 
 data2 = exampleData.data2
-ds2 = Dataset(data2)
+ds2 = Dataset2(data2)
 
 dp = ds2.get_datapoint_at(pos1)
 assert (dp.get_position() == np.array(pos1)).all()
@@ -42,4 +43,8 @@ ds2.add_datapoint((0,1), True)
 ds2.add_datapoint((1,0), False)
 
 data3 = exampleData.data3
-ds3 = Dataset(data3)
+ds3 = Dataset3(data3)
+
+ds2.draw()
+
+plt.show()

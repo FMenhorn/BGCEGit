@@ -70,8 +70,8 @@ elif __EXAMPLE__ == "Sphere":
     dimensions = {'xmin': 0.0, 'xmax': 8.0, 'ymin': 0.0, 'ymax': 8.0, 'zmin': 0.0, 'zmax': 8.0}
     plot_dims =  {'xmin': 2.0, 'xmax': 6.0, 'ymin': 2.0, 'ymax': 6.0, 'zmin': 2.0, 'zmax': 6.0}
 
-    res_fine = 1.0/4.0
-    res_coarse = 1.0
+    res_fine = 1.0/2.0
+    res_coarse = 2.0
 
     resolutions = {'fine': res_fine,'coarse': res_coarse}
 
@@ -82,7 +82,7 @@ elif __EXAMPLE__ == "Torus":
     plot_dims =  {'xmin': 2.0, 'xmax': 6.0, 'ymin': 2.0, 'ymax': 6.0, 'zmin': 2.0, 'zmax': 6.0}
 
     res_fine = 1.0/4.0
-    res_coarse = 1.0
+    res_coarse = 2.0
 
     resolutions = {'fine': res_fine,'coarse': res_coarse}
 
@@ -108,12 +108,20 @@ for i in range(N_quads['coarse']):
 
 print "###Projecting Datapoints onto coarse quads###"
 
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+from mpl_toolkits.mplot3d.art3d import Poly3DCollection, Line3DCollection
+
+fig = plt.figure()
+ax = Axes3D(fig)
+ax.set_aspect('equal')
+
 # do projection of fine verts on coarse quads
 N_closest_candidates = 4 # compute list of N_closest_candidates closest quads
 param = []
 
 verts_refined=refine(verts['fine'], quads_out_dc['fine'])
-
+#for vertex in verts_refined:
 for vertex in verts['fine']:
     closest_idx_candidates = find_closest_quads(vertex, quads['coarse'], N_closest_candidates) # find N closest quads with fast criterion: distance to centroid
 
@@ -129,17 +137,22 @@ for vertex in verts['fine']:
             v_min = v
             idx_min = candidate_idx
 
-        # #only plotting information
-        # start = projected_point_min
-        # end = vertex
-        # x = [start[0],end[0]]
-        # y = [start[1],end[1]]
-        # z = [start[2],end[2]]
-        # vtx = [zip(x,y,z)]
-        # line = Line3DCollection(vtx)
-        # line.set_color('k')
-        # line.set_linewidth(2.0)
-        # ax.add_collection3d(line)
+        #only plotting information
+        start = projected_point_min
+        end = vertex
+        x = [start[0],end[0]]
+        y = [start[1],end[1]]
+        z = [start[2],end[2]]
+        vtx = [zip(x,y,z)]
+        line = Line3DCollection(vtx)
+        line.set_color('k')
+        line.set_linewidth(.5)
+
+        ax.scatter(end[0],end[1],end[2],'bo')
+        ax.scatter(start[0],start[1],start[2],'ro')
+
+        ax.add_collection3d(line)
+
 
     param.append(np.array([idx_min,u_min,v_min]))
 
@@ -149,21 +162,13 @@ print "###Projecting Datapoints onto coarse quads DONE###"
 
 print "###Exporting output###"
 export_as_csv(verts_out_dc['coarse'],'verts_coarse')
-export_as_csv(verts['fine'],'verts_fine')
+export_as_csv(verts_refined,'verts_fine')
 export_as_csv(quads_out_dc['coarse'],'quads_coarse')
 export_as_csv(quads_out_dc['fine'],'quads_fine')
 export_as_csv(param,'param')
 print "###Exporting output DONE###"
 
 print "###Plotting###"
-
-import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
-from mpl_toolkits.mplot3d.art3d import Poly3DCollection, Line3DCollection
-
-fig = plt.figure()
-ax = Axes3D(fig)
-ax.set_aspect('equal')
 
 plane_oo = [False] * quads['coarse'].__len__()
 for q in quads['coarse']:
@@ -183,7 +188,7 @@ for q in quads['coarse']:
     poly=Poly3DCollection(vtx_orig)
     poly.set_color('b')
     poly.set_edgecolor('k')
-    poly.set_alpha(.25)
+    #poly.set_alpha(.25)
     ax.add_collection3d(poly)
 
 for q in quads_out_dc['fine']:

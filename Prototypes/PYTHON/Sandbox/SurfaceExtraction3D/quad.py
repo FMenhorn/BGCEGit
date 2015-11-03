@@ -89,19 +89,19 @@ class Quad:
         edgeCD = vertexD - vertexC
 
         basis_BAD = np.array([self.normal, edgeAB, edgeAD])
-        basis_BCD = np.array([self.normal, edgeCB, edgeCD])
+        basis_BCD = np.array([self.normal, edgeCD, edgeCB])
 
         edgeAB_normalized = edgeAB / np.linalg.norm(edgeAB)
-        edgeCB_normalized = edgeAD / np.linalg.norm(edgeCB)
+        edgeCD_normalized = edgeCD / np.linalg.norm(edgeCD)
 
         ortho_basis_AB = np.array([self.normal,
                                    edgeAB_normalized,
                                    np.cross(edgeAB_normalized, self.normal)])
-        ortho_basis_CB = np.array([self.normal,
-                                   edgeCB_normalized,
-                                   np.cross(edgeCB_normalized, self.normal)])
+        ortho_basis_CD = np.array([self.normal,
+                                   edgeCD_normalized,
+                                   np.cross(edgeCD_normalized, self.normal)])
 
-        return ortho_basis_AB.transpose(), basis_BAD.transpose(), ortho_basis_CB.transpose(), basis_BCD.transpose()
+        return ortho_basis_AB.transpose(), basis_BAD.transpose(), ortho_basis_CD.transpose(), basis_BCD.transpose()
 
     def projection_onto_plane(self, _point):
         import numpy as np
@@ -155,8 +155,8 @@ class Quad:
             x = solve_triangular(R_BCD,b)
             distance = x[0]
             projected_point = _point - distance * self.normal
-            u = 1-x[2]
-            v = 1-x[1]
+            u = 1-x[1]
+            v = 1-x[2]
 
         distance = abs(distance)
 

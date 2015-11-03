@@ -12,8 +12,24 @@
 %\usepackage[usenames,dvipsnames]{xcolor}
 \usepackage{graphicx}
 \usepackage{tikz,tikzscale,pgfplots,grffile}
+\usepackage{3dplot}
 \usetikzlibrary{arrows,shapes,backgrounds}
 \usetikzlibrary{plotmarks}
+\usetikzlibrary{spy}
+\tikzset{
+    invisible/.style={opacity=0,text opacity=0},
+    visible on/.style={alt={#1{}{invisible}}},
+    alt/.code args={<#1>#2#3}{%
+      \alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} 
+    },
+}
+\usetikzlibrary{shapes.misc}
+\usetikzlibrary{calc}
+\tikzset{cross/.style={cross out, draw=black, minimum size=2*(#1-\pgflinewidth), inner sep=0pt, outer sep=0pt},
+%default radius will be 1pt. 
+cross/.default={2pt}}
+\tikzstyle{dot}=[fill, draw, circle,inner sep=1pt]
+
 \usepackage{bbding}
 
 \usepackage[clock]{ifsym}
@@ -113,12 +129,16 @@
 
 %-------------------------------------------------------
 
+\subsection{Organization}
+\input{Sections/Organization}
+
+%-------------------------------------------------------
 \section{Topology optimization}
 \input{Sections/TopologyOptimization}
 %-------------------------------------------------------
 
 %-------------------------------------------------------
-
+%
 \section{Surface Extraction}
 \input{Sections/SurfaceExtraction}
 
@@ -133,4 +153,6 @@
 \input{Sections/ThankYou}
 \section*{Literature}
 \input{Sections/Literature}
+\section*{Theory}
+\input{Sections/BackupSlidesProjection}
 \end{document}

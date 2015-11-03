@@ -34,10 +34,23 @@
 #include "Reader/IGESCAFReader.hpp"
 #include "Reader/STEPCAFReader.hpp"
 
-int main(void){
+int main(int argc, char** argv){
+
+	std::cout << "Starting CADToVoxel Pipeline..." << std::endl;
+	if ( argc != 5 )
+	{
+		std::cout << std::endl;
+		std::cout << "CADToVoxel: Usage: " << argv[0] << " /path/to/file/ fileName forceScalingFactor refinementLevel" << std::endl;
+		std::cout << std::endl;
+
+		return -1;
+	}
+
 	///File:
-	std::string filePath = "./TestGeometry/CantileverColoredNew/";
-	std::string fileName = "CantiLeverWithLoadAtEndSmallerMovedLoad";
+	std::string filePath = argv[1];
+	std::string fileName = argv[2];
+	double forceScalingFactor = atof(argv[3]);
+    int refinementLevel = atoi(argv[4]);
 
 	/**
 	 *  INPUT
@@ -63,13 +76,13 @@ int main(void){
 	std::vector<std::vector<double>> loadList;
 	colorDetector.getLoadShapes(loadFacesList, loadList);
 
-	ListOfShape passiveFacesList;
-	colorDetector.getActiveShapes(passiveFacesList);
+	ListOfShape activeFacesList;
+	colorDetector.getActiveShapes(activeFacesList);
 
     /**
      * VOXELIZE AND OUTPUT
      */
-    int refinementLevel = 0;
+
     Voxelizer voxelizer;
     TopTools_ListIteratorOfListOfShape shapeIterator;
 	VoxelShape voxelShape;
@@ -105,23 +118,27 @@ int main(void){
     counter = 0;
     /**Load Treatment**/
 	std::vector<VoxelShape> loadVector;
+	std::vector<VoxelShape> activeVector; /**Treat Loadelements as active cells aswell**/
+	activeVector.resize(loadFacesList.getSize()+activeFacesList.getSize());
 	if(loadFacesList.getSize() > 0){
 		loadVector.resize(loadFacesList.getSize());
 		for(shapeIterator.Initialize(loadFacesList.getListOfShape()); shapeIterator.More(); shapeIterator.Next() ){
 			voxelizer.voxelize(shapeIterator.Value(), refinementLevel, loadVector[counter]);
+			voxelizer.voxelize(shapeIterator.Value(), refinementLevel, activeVector[counter]);
 			std::cout << "LoadIndices: " << std::endl;
 			voxelIndexCalculator.calculateIndexForVoxelShape(loadVector[counter], false);
+			voxelIndexCalculator.calculateIndexForVoxelShape(activeVector[counter], true);
 			counter++;
 		}
 	}
     outputVoxelVector.push_back(loadVector);
 
-    counter = 0;
+    counter = loadFacesList.getSize();
     /**Active Treatment**/
-	std::vector<VoxelShape> activeVector;
-	if(passiveFacesList.getSize()>0){
-		activeVector.resize(passiveFacesList.getSize());
-		for(shapeIterator.Initialize(passiveFacesList.getListOfShape()); shapeIterator.More(); shapeIterator.Next() ){
+	//std::vector<VoxelShape> activeVector;
+	if(activeFacesList.getSize()>0){
+		activeVector.resize(activeFacesList.getSize());
+		for(shapeIterator.Initialize(activeFacesList.getListOfShape()); shapeIterator.More(); shapeIterator.Next() ){
 			voxelizer.voxelize(shapeIterator.Value(), refinementLevel, activeVector[counter]);
 			std::cout << "ActiveIndices: " << std::endl;
 			voxelIndexCalculator.calculateIndexForVoxelShape(activeVector[counter], true);

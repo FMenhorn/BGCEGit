@@ -1,0 +1,111 @@
+% This file was created by matlab2tikz.
+%
+%The latest updates can be retrieved from
+%  http://www.mathworks.com/matlabcentral/fileexchange/22022-matlab2tikz-matlab2tikz
+%where you can also make suggestions and rate matlab2tikz.
+%
+\definecolor{mycolor1}{rgb}{0.00000,1.00000,1.00000}%
+%
+\begin{tikzpicture}
+
+\begin{axis}[%
+width=4.133in,
+height=3.26in,
+at={(0.693in,0.44in)},
+scale only axis,
+xmin=-2,
+xmax=3,
+tick align=outside,
+ymin=-3,
+ymax=3,
+zmin=-1,
+zmax=1,
+view={42}{80},
+hide axis,
+axis x line*=bottom,
+axis y line*=left,
+axis z line*=left
+]
+
+\addplot3[area legend,solid,draw=black,fill=mycolor1,fill opacity=0.3,forget plot]
+table[row sep=crcr] {%
+x	y	z\\
+3	0	0\\
+-1.5	2.59807621135332	0\\
+-0.75	1.29903810567666	0.866025403784439\\
+1.5	0	0.866025403784439\\
+}--cycle;
+
+\addplot3[area legend,solid,draw=black,fill=mycolor1,fill opacity=0.3,forget plot]
+table[row sep=crcr] {%
+x	y	z\\
+-1.5	2.59807621135332	0\\
+-1.5	-2.59807621135332	0\\
+-0.750000000000001	-1.29903810567666	0.866025403784439\\
+-0.75	1.29903810567666	0.866025403784439\\
+}--cycle;
+
+\addplot3[area legend,solid,draw=black,fill=mycolor1,fill opacity=0.3,forget plot]
+table[row sep=crcr] {%
+x	y	z\\
+-1.5	-2.59807621135332	0\\
+3	0	0\\
+1.5	0	0.866025403784439\\
+-0.750000000000001	-1.29903810567666	0.866025403784439\\
+}--cycle;
+
+\addplot3[area legend,solid,draw=black,fill=mycolor1,fill opacity=0.3,forget plot]
+table[row sep=crcr] {%
+x	y	z\\
+1.5	0	0.866025403784439\\
+-0.75	1.29903810567666	0.866025403784439\\
+-0.749999999999999	1.29903810567666	-0.866025403784438\\
+1.5	0	-0.866025403784438\\
+}--cycle;
+
+\addplot3[area legend,solid,draw=black,fill=mycolor1,fill opacity=0.3,forget plot]
+table[row sep=crcr] {%
+x	y	z\\
+-0.75	1.29903810567666	0.866025403784439\\
+-0.750000000000001	-1.29903810567666	0.866025403784439\\
+-0.75	-1.29903810567666	-0.866025403784438\\
+-0.749999999999999	1.29903810567666	-0.866025403784438\\
+}--cycle;
+
+\addplot3[area legend,solid,draw=black,fill=mycolor1,fill opacity=0.3,forget plot]
+table[row sep=crcr] {%
+x	y	z\\
+-0.750000000000001	-1.29903810567666	0.866025403784439\\
+1.5	0	0.866025403784439\\
+1.5	0	-0.866025403784438\\
+-0.75	-1.29903810567666	-0.866025403784438\\
+}--cycle;
+
+\addplot3[area legend,solid,draw=black,fill=mycolor1,fill opacity=0.3,forget plot]
+table[row sep=crcr] {%
+x	y	z\\
+1.5	0	-0.866025403784438\\
+-0.749999999999999	1.29903810567666	-0.866025403784438\\
+-1.5	2.59807621135332	0\\
+3	0	0\\
+}--cycle;
+
+\addplot3[area legend,solid,draw=black,fill=mycolor1,fill opacity=0.3,forget plot]
+table[row sep=crcr] {%
+x	y	z\\
+-0.749999999999999	1.29903810567666	-0.866025403784438\\
+-0.75	-1.29903810567666	-0.866025403784438\\
+-1.5	-2.59807621135332	0\\
+-1.5	2.59807621135332	0\\
+}--cycle;
+
+\addplot3[area legend,solid,draw=black,fill=mycolor1,fill opacity=0.3,forget plot]
+table[row sep=crcr] {%
+x	y	z\\
+-0.75	-1.29903810567666	-0.866025403784438\\
+1.5	0	-0.866025403784438\\
+3	0	0\\
+-1.5	-2.59807621135332	0\\
+}--cycle;
+\end{axis}
+\end{tikzpicture}%
