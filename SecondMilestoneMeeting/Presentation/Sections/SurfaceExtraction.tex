@@ -1,5 +1,3 @@
-\subsection{Status}
-
 \begin{frame}{Status}
 \begin{block}{Last milestone}
 \begin{itemize}
@@ -10,10 +8,10 @@
 \begin{block}{Today}
 \begin{itemize}
 	\item[\textcolor{green}{\Checkmark}] Extraction of voxel data from Topy
-	\item[\textcolor{green}{\Checkmark}] 3D Dual Contouring program 
+	\item[\textcolor{green}{\Checkmark}] 3D Dual Contouring implementation 
 	\item[\textcolor{green}{\Checkmark}] Coarsening and non-manifold edge treatment 
-	\item[\textcolor{green}{\Checkmark}] Projection to quads and respective parametrization
-	\item[\textcolor{black}{\VarClock}]  Interface to NURBs
+	\item[\textcolor{green}{\Checkmark}] Projection of datapoints onto quads and respective parametrization
+	\item[\textcolor{black}{\VarClock}]  Interface to NURBS
 \end{itemize}
 \end{block}
 \end{frame}
@@ -45,7 +43,7 @@
 	\frametitle{Dual Contouring}
 	
 	\begin{itemize}
-	\item Python implementation- Use of powerful libraries, including VTK
+	\item Python implementation --- Use of powerful libraries, including VTK
 	\item Output: Closed surface made out of \textit{quads}
 	\item Coarsening is needed for surface fitting's algorithms
 	\end{itemize}
@@ -87,12 +85,12 @@
 
 \begin{frame}
 
-	\frametitle{Dual Contouring- Problems}
+	\frametitle{Dual Contouring --- Problems}
 	
 	\begin{itemize}
-	\item  \textbf{Non-manifold edges} appear
+	\item  \textbf{Non--manifold edges} appear
 	\item One edge can only belong to two quads for the surface to be closed
-	\item Special treatments in the implementation to avoid them
+	\item Special treatment in the implementation to avoid them
 	\end{itemize}
 	\begin{figure}
 	\includegraphics[scale=0.35]{Pictures/DC/DC_3.pdf}
@@ -102,10 +100,10 @@
 
 \begin{frame}
 
-	\frametitle{Dual Contouring- Input}
+	\frametitle{Dual Contouring --- Input}
 	
 	\begin{itemize}
-	\item  Sixth step of the DRAFT pipeline- Interface between Topology Optimization and Surface Extraction
+	\item  Sixth step of the DRAFT pipeline --- Interface between Topology Optimization and Surface Extraction
 	\item Special implementation to use voxel data from Topy as input
 	\end{itemize}
 	\begin{figure}
