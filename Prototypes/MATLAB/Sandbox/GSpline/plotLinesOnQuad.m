@@ -26,7 +26,9 @@ figure(figure_handle);
 hold on;
 
 % plots the face
-patch('Faces',thisQuadVertices,'Vertices',quad_vertices,'FaceColor', 'cyan', 'FaceAlpha', 0.3, 'BackFaceLighting', 'reverselit')
+%patch('Faces',thisQuadVertices,'Vertices',quad_vertices,'FaceColor', 'cyan', 'FaceAlpha', 0.5)%, 'BackFaceLighting', 'reverselit')
+fill3(quad_vertices(thisQuadVertices(1,:),1), quad_vertices(thisQuadVertices(1,:),2), quad_vertices(thisQuadVertices(1,:),3), 'cyan', 'FaceAlpha', 0.3)
+
 % 
 % %plots the points and hairs
 % for p = 1:numPointsOnQuad

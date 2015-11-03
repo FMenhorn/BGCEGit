@@ -27,6 +27,7 @@ for j = 1:4
             Bs = cat(2,reshape(B1s,3,1,numberOfEdges),reshape(B2s,3,1,numberOfEdges));
             patch = getBicubicPatchIndex(1,As,Bs,Cs);
             %     patch(:,3,3) = rot(pi)*patch(:,3,3);
+%             plotPoints(patch);
             [xx,yy,zz]=bezier(patch,0.1);
             surf(xx,yy,zz)
             
@@ -41,6 +42,7 @@ for j = 1:4
             
             APatch = getBiquadraticPatch(controlVertices);
             %     patch(:,3,3) = rot(pi)*patch(:,3,3);
+%             plotPoints(APatch);
             [xx,yy,zz]=bezier(APatch,0.1);
             surf(xx,yy,zz)
             
