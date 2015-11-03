@@ -75,6 +75,11 @@ int main(int argc, char** argv){
 	ListOfShape loadFacesList;
 	std::vector<std::vector<double>> loadList;
 	colorDetector.getLoadShapes(loadFacesList, loadList);
+	for(size_t i = 0; i < loadList.size(); ++i){
+		for(size_t j = 0; j < loadList[i].size(); ++j){
+			loadList[i][j] *= forceScalingFactor;
+		}
+	}
 
 	ListOfShape activeFacesList;
 	colorDetector.getActiveShapes(activeFacesList);
