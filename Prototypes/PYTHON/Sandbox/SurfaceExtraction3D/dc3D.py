@@ -52,6 +52,9 @@ def estimate_hermite(data, v0, v1, res, res_fine, coarse_level):
         x0 = .5*(v0 + v1)
         res /= 2.0
 
+    if coarse_level:
+        print x0
+
     return x0
 
 
@@ -61,12 +64,13 @@ def tworesolution_dual_contour(dataset, resolutions, dims):
                                                   resolutions['fine'],
                                                   dims,
                                                   coarse_level=False)
-    
+    print "coarse level:"
     [dc_verts_coarse, dc_quads_coarse] = dual_contour(dataset,
                                                       resolutions['coarse'],
                                                       resolutions['fine'],
                                                       dims,
                                                       coarse_level=True)
+    #quit()
 
     dc_verts = {'fine': dc_verts_fine, 'coarse': dc_verts_coarse}
     dc_quads = {'fine': dc_quads_fine, 'coarse': dc_quads_coarse}
@@ -98,7 +102,7 @@ def dual_contour(data, res, res_fine, dims, coarse_level):
 
         if all(cube_signs) or not any(cube_signs):
             continue
-
+        print "vtx at voxel "+str(o)
         # Estimate hermite data
         h_data = []
         for e in cube_edges:
@@ -121,6 +125,7 @@ def dual_contour(data, res, res_fine, dims, coarse_level):
         # Emit one vertex per every cube that crosses
         vindex[tuple(o)] = len(dc_verts)
         dc_verts.append(v)
+        print "\tplaced at "+str(v)
 
     # Construct faces
     dc_quads = []
