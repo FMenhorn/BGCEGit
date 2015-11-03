@@ -12,6 +12,7 @@
 %\usepackage[usenames,dvipsnames]{xcolor}
 \usepackage{graphicx}
 \usepackage{tikz,tikzscale,pgfplots,grffile}
+\usepackage{3dplot}
 \usetikzlibrary{arrows,shapes,backgrounds}
 \usetikzlibrary{plotmarks}
 \usetikzlibrary{spy}
@@ -22,6 +23,13 @@
       \alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} 
     },
 }
+\usetikzlibrary{shapes.misc}
+\usetikzlibrary{calc}
+\tikzset{cross/.style={cross out, draw=black, minimum size=2*(#1-\pgflinewidth), inner sep=0pt, outer sep=0pt},
+%default radius will be 1pt. 
+cross/.default={2pt}}
+\tikzstyle{dot}=[fill, draw, circle,inner sep=1pt]
+
 \usepackage{bbding}
 
 \usepackage[clock]{ifsym}
@@ -145,4 +153,6 @@
 \input{Sections/ThankYou}
 \section*{Literature}
 \input{Sections/Literature}
+\section*{Theory}
+\input{Sections/BackupSlidesProjection}
 \end{document}
