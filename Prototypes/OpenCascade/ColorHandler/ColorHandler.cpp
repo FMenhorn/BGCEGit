@@ -151,20 +151,48 @@ void ColorHandler::findColoredFaces(const Quantity_Color& wantedColor, std::vect
 			}
 			else
 			{
-				if (color.Red() < 0.999
-						&& color.Green() < 0.999
-						&& color.Blue()  < 0.999)
-				{
+			if (color.Red() < 1
+				&& color.Green() < 1
+				&& color.Blue()  < 1){
 					std::vector<double> tempColorVec;
+					if (color.Red()==0){
 						tempColorVec.push_back(color.Red());
+					}else if(color.Red() < 0.5){
+						tempColorVec.push_back(-color.Red());
+					}else if(color.Red() < 1){
+						tempColorVec.push_back(-0.5+color.Red());
+					}
+					if (color.Green()==0){
 						tempColorVec.push_back(color.Green());
+					}else if(color.Green() < 0.5){
+						tempColorVec.push_back(-color.Green());
+					}else if(color.Green() < 1){
+						tempColorVec.push_back(-0.5+color.Green());
+					}
+					if (color.Blue()==0){
 						tempColorVec.push_back(color.Blue());
-
+					}else if(color.Blue() < 0.5){
+						tempColorVec.push_back(-color.Blue());
+					}else if(color.Blue() < 1){
+						tempColorVec.push_back(-0.5+color.Blue());
+					}
 					colorVector.push_back(tempColorVec);
-
 					coloredFacesVector.push_back(faceStep);
-					std::cout << "ColorHandler::findColoredFaces: Force found: " << color.Red() << " " << color.Green() << " " << color.Blue() << std::endl;
 				}
+//				if (color.Red() < 1
+//						&& color.Green() < 1
+//						&& color.Blue()  < 1)
+//				{
+//					std::vector<double> tempColorVec;
+//					tempColorVec.push_back(-0.5+color.Red());
+//					tempColorVec.push_back(-0.5+color.Green());
+//					tempColorVec.push_back(-0.5+color.Blue());
+//
+//					colorVector.push_back(tempColorVec);
+//
+//					coloredFacesVector.push_back(faceStep);
+//					std::cout << "ColorHandler::findColoredFaces: Force found: " << color.Red() << " " << color.Green() << " " << color.Blue() << std::endl;
+//				}
 			}
 		}
 		else
