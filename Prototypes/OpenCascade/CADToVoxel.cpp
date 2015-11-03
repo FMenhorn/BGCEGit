@@ -34,10 +34,23 @@
 #include "Reader/IGESCAFReader.hpp"
 #include "Reader/STEPCAFReader.hpp"
 
-int main(void){
+int main(int argc, char** argv){
+
+	std::cout << "Starting CADToVoxel Pipeline..." << std::endl;
+	if ( argc != 5 )
+	{
+		std::cout << std::endl;
+		std::cout << "CADToVoxel: Usage: " << argv[0] << " /path/to/file/ fileName forceScalingFactor refinementLevel" << std::endl;
+		std::cout << std::endl;
+
+		return -1;
+	}
+
 	///File:
-	std::string filePath = "./TestGeometry/CantileverColoredNew/";
-	std::string fileName = "CantiLeverWithLoadAtEndSmallerMovedLoad";
+	std::string filePath = argv[1];
+	std::string fileName = argv[2];
+	double forceScalingFactor = atof(argv[3]);
+    int refinementLevel = atoi(argv[4]);
 
 	/**
 	 *  INPUT
@@ -69,7 +82,7 @@ int main(void){
     /**
      * VOXELIZE AND OUTPUT
      */
-    int refinementLevel = 0;
+
     Voxelizer voxelizer;
     TopTools_ListIteratorOfListOfShape shapeIterator;
 	VoxelShape voxelShape;
