@@ -1,23 +1,35 @@
+
 \begin{frame}
 
 	\frametitle{Remaining questions}
-	
-	\begin{block}{Python or C++?}
+	\begin{columns}[c] % The "c" option specifies centered vertical alignment while the "t" option is used for top vertical alignment
 
+	\column{.45\textwidth} % Left column and width
+	\begin{block}{Python}
 	\begin{itemize}
-	\item The original decision was to use C++ 
-	\item Second part of the pipeline is now in Python
-	\item Python includes the vtk library  
-	\item Easier to port from the original Matlab prototypes
-	\end{itemize}	
-	\end{block}
-	
-	\begin{block}{Topy problem}
-	\begin{itemize}
-	\item Topy is not available anymore
-	\item Should we stay with Topy?
+		\item[{\color{red}$\ominus$}] First part of the pipeline is in C++
+		\item[{\color{green}$\oplus$}] Second part of the pipeline is now in Python
+		\item[{\color{green}$\oplus$}] Easy to port from the original MATLAB prototypes
+
 	\end{itemize}
+	\end{block}
 
+	\column{.45\textwidth} % Right column and width
+	\begin{block}{C++}	
+	\begin{itemize}
+		\item[{\color{green}$\oplus$}] First time of the pipeline is in C++
+		\item[{\color{red}$\ominus$}] Second part of the pipeline is now in Python
+		\item[{\color{red}$\ominus$}] Cumbersome to implement
+	\end{itemize}
+	\vspace{3.5mm}
+
+	\end{block}
+	\end{columns}
+	\begin{block}{ToPy Problem}
+	\begin{itemize}
+	\item[{\color{green}$\oplus$}] Current implementation is using ToPy
+	\item[{\color{red}$\ominus$}] ToPy is not available any more!
+	\end{itemize}
 	\end{block}
 	
 \end{frame}
