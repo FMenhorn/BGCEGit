@@ -72,19 +72,16 @@ B--Splines
         \uncover<+->{
         \node at (3.5,3.5) [inner sep=0pt, scale = 0.5](N2)
         			{\includegraphics[width=5cm]{Pictures/NURBS/tikz/patch_points.pdf}};
-                 %{\input{Pictures/NURBS/tikz/patch_points.tex}};
-                  
+        			                  
         \draw[thick,->] (N1) -- (N2);
         }
         \uncover<+->{
         \node at (7,2)[inner sep=0pt, scale = 0.5](N3)
-                 %{\input{Pictures/NURBS/tikz/bezier_points.tex}};
                   {\includegraphics[width=5cm]{Pictures/NURBS/tikz/bezier_points.pdf}};
         \draw[thick,->] (N2) -- (N3);
         }
         \uncover<+->{
         \node at (3.5, 0)[inner sep=0pt, scale = 0.5](N4)
-                 %{\input{Pictures/NURBS/tikz/peters_surface.tex}};
                 {\includegraphics[width=5cm]{Pictures/NURBS/tikz/bspline_patches.pdf}};
         \draw[thick,->] (N3) -- (N4);
         }
@@ -110,6 +107,7 @@ $$\downarrow$$
 E_{dist}(V_{x}) = \sum_{i=1}^{N}\norm{P_{i} - y_{i}V_{x}}^{2} \rightarrow min,
 \end{equation*}
 $y_{i}$ - coefficients obtained from the Peters' scheme theory.
+\pause
 \begin{block}{What is achieved?}
 \begin{itemize}
 \item Smoothness of the fitted surface is now guaranteed by construction
@@ -171,4 +169,7 @@ $y_{i}$ - coefficients obtained from the Peters' scheme theory.
 \item Implementation of the \textit{adaptive refinement} in order to control a maximum error tolerance
 \item Implementation of the \textit{parameter correction} for the improved pipeline
 \end{itemize}
+\begin{figure}
+\includegraphics[width=\textwidth]{Pictures/NURBS/torus_from_DC.png}
+\end{figure}
 \end{frame}
