@@ -1,5 +1,4 @@
-\subsection{Status}
-\begin{frame}{Status DRAFT}
+\begin{frame}{Status}
 \begin{block}{Last milestone}
 \begin{itemize}
 	\item[\textcolor{green}{\Checkmark}] Manual voxelization using CVMLCPP
@@ -17,7 +16,7 @@
 \end{block}
 \end{frame}
 
-\subsection{The user's view}
+\subsection{Internal structure}
 %\begin{frame}{The user's view DRAFT}
 %\begin{minipage}{0.65\textwidth}
 %\begin{overlayarea}{\textwidth}{.9\textheight}
@@ -71,7 +70,7 @@
 \node[draw,text width=7.1cm] at (5.7,-0.6) {
 	%\footnotesize{
 	\begin{itemize}
-	\item Model geometry in favorite CAD tool % (FreeCAD, OpenSCAD)
+	\item Model geometry in your favorite CAD tool % (FreeCAD, OpenSCAD)
 	\item Colour faces for boundary conditions% are applied
 	\begin{itemize}
 	%\footnotesize{
@@ -112,7 +111,7 @@
 \spy [blue,visible on=<6>] on ([yshift=-0.2cm]RunScript)
              in node [left] at (9.2,2.6);
 \node[draw,text width=7.1cm] at (5.7,-0.6) {
-	$\rightarrow$ Run \\ \texttt{CADTopOpt filename ref{\_}level force{\_}scaling}
+	$\rightarrow$ Run \\ \texttt{CADTopOpt filedir filename force{\_}scaling refinement}
 	};
 }
 %\visible<7->{
@@ -135,7 +134,6 @@
 \end{overlayarea}
 \end{frame}
 
-\subsection{The internal view}
 \begin{frame}
 \begin{overlayarea}{\textwidth}{.9\textheight}
 \begin{tikzpicture}[spy using outlines={rectangle,lens={scale=2}, height=2cm,width=6cm, connect spies}]
@@ -173,14 +171,11 @@
 	%\footnotesize{
 	\begin{itemize}
 		\item[] Voxelize faces using OpenCascade
-		\begin{itemize}
-			\item Included open cascade voxelizer
-		\end{itemize}
 	\end{itemize}
 	
 			\begin{figure}[htp]
 				\centering
-				\includegraphics[scale=0.12]{Pictures/TopOp/VoxelizerScalingPlot.png}
+				\includegraphics[scale=0.14]{Pictures/TopOp/VoxelizerScalingPlot.png}
 				\caption{Scaling of voxelizer}
 			\end{figure}
 	%}
@@ -199,11 +194,10 @@
 			\item[] Different indexing for elements and nodes in ToPy
 		\end{itemize}
 	
-		
 			\begin{figure}[htp]
 				\centering
 				\includegraphics[scale=0.26]{Pictures/TopOp/ToPyIndexing.png}
-				\caption{Indexing in ToPy}
+				\caption{Indexing in ToPy [1]}
 			\end{figure}
 	%}
 };
@@ -214,7 +208,7 @@
 \node[draw,text width=6.1cm] at (6.3,-1.2) {
 	%\footnotesize{
 		\begin{itemize}
-			\item[] Each voxelindex is specifically written
+			\item[] Each voxel index is specifically written
 		\end{itemize}
 		
 			\begin{figure}[htp]
@@ -255,7 +249,7 @@
 \node[draw,text width=6.1cm] at (6.3,-1.1) {
 	%\footnotesize{
 		\begin{itemize}
-		\item[] Running dual contouring algorithm
+		\item[] Run dual contouring algorithm
 		\end{itemize}	
 			\begin{figure}[htp]
 			\centering
@@ -271,7 +265,7 @@
     {\includegraphics[scale=0.23]{Pictures/TopOp/FlowChart/EnjoySurfaceInternal.png}};
 }
 \visible<13>{
-\node[draw,text width=3.1cm] at (6.3,1.1) {
+\node[draw,text width=4.5cm] at (5.8,1.1) {
 	%\footnotesize{
 		But what does the user see?
 	%}
@@ -283,7 +277,7 @@
 \end{overlayarea}
 \end{frame}
 
-\subsection{Back to the user's view}
+\subsection{User view}
 \begin{frame}
 \begin{overlayarea}{\textwidth}{.9\textheight}
 \begin{tikzpicture}[spy using outlines={rectangle,lens={scale=2}, height=2cm,width=6cm, connect spies}]
@@ -297,10 +291,9 @@
     {\includegraphics[scale=0.23]{Pictures/TopOp/FlowChart/RunScript.png}}; 
 \node[inner sep=0pt] (EnjoySurface) at (-0.15,-0.9)
     {\includegraphics[scale=0.23]{Pictures/TopOp/FlowChart/EnjoySurfaceUser.png}};
-\node[draw,text width=3.1cm] at (6.3,1.1) {
+\node[draw,text width=4.5cm] at (5.8,1.1) {
 	%\footnotesize{
-		But what does the user see? \\
-		This!
+		But what does the user see?
 	%}
 };
 \end{tikzpicture}
@@ -362,7 +355,7 @@
 %		\item Calculate index for each voxel for ToPy
 %		\item Write ToPy input file
 %		\begin{itemize}
-%			\item Each voxelindex is specifically written
+%			\item Each voxel index is specifically written
 %			\begin{figure}[htp]
 %				\centering
 %				\includegraphics[width=.4\textwidth]{Pictures/TopOp/ToPyInput.png}
@@ -418,12 +411,3 @@
 %\end{overlayarea}
 %\end{minipage}
 %\end{frame}
-
-\subsection{The next steps MOVE TO LATER}
-\begin{frame}{The next steps MOVE TO LATER}
-\begin{itemize}
-\item GUI for input
-\item Speed up ToPY
-\item Usage of different optimizers
-\end{itemize}
-\end{frame}

@@ -19,7 +19,7 @@ B--Splines
 \end{column}
 \end{columns}
 \end{frame}
-\begin{frame}{B--Spline Fitting Pipeline [Becker, Schäfer, Jameson]}
+\begin{frame}{B--Spline Fitting Pipeline [2]}
 \begin{figure}
 \includegraphics[scale=0.25]{Pictures/NURBS/TheArc.png}
 \end{figure}
@@ -39,7 +39,7 @@ B--Splines
 \begin{block}{Today}
 \begin{itemize}
 	\item[\textcolor{green}{\Checkmark}] Automatic patch selection -- {\color{gray}moved to the surface extraction part}
-	\item[\textcolor{green}{\Checkmark}] Parametrization of obtained patches 
+	\item[\textcolor{green}{\Checkmark}] Parametrization of obtained patches -- {\color{gray}moved to the surface extraction part}
 	\item[\textcolor{green}{\Checkmark}] B--spline fitting using least squares --  {\color{gray}modified}
 	\item[\textcolor{green}{\Checkmark}] Smooth connection of patches
 	\item[\textcolor{red}{\XSolidBrush}] Conversion back to CAD
@@ -47,7 +47,7 @@ B--Splines
 \end{block}
 \end{frame}
 \subsection{Peters' scheme}
-\begin{frame}{Long way to smoothness. Peter's scheme}
+\begin{frame}{Long way to smoothness -- Peter's scheme}
 %\begin{block}{Peters' scheme:}
 %Given the control mesh $M_{x}$
 %\begin{enumerate}
@@ -55,37 +55,44 @@ B--Splines
 %\item Construct a tensor product Bezier patches (biquadratic or bicubic) centred on the each vertex of the refined \textit{control mesh}
 %\end{enumerate}
 %\end{block}
+\begin{overlayarea}{\textwidth}{.1\textheight}
 	\only<1>{Control mesh}
 	\only<2>{Refined control mesh}
 	\only<3>{Bezier control points}
 	\only<4>{B-Spline patch}
-	\only<5>{Peter's surface}
+	\only<5>{Peters' surface}
+\end{overlayarea}
+\begin{overlayarea}{\textwidth}{.9\textheight}
     \begin{center}
 		\begin{tikzpicture} 
+        \uncover<+->{
         \node at (0,3.5)[inner sep=0pt, scale = 0.5](N1)
                 {\includegraphics[width=5cm]{Pictures/NURBS/tikz/control_mesh.pdf}};
-                \pause
+        }
+        \uncover<+->{
         \node at (3.5,3.5) [inner sep=0pt, scale = 0.5](N2)
         			{\includegraphics[width=5cm]{Pictures/NURBS/tikz/patch_points.pdf}};
-                 %{\input{Pictures/NURBS/tikz/patch_points.tex}};
-                  
+        			                  
         \draw[thick,->] (N1) -- (N2);
-        \pause
+        }
+        \uncover<+->{
         \node at (7,2)[inner sep=0pt, scale = 0.5](N3)
-                 %{\input{Pictures/NURBS/tikz/bezier_points.tex}};
                   {\includegraphics[width=5cm]{Pictures/NURBS/tikz/bezier_points.pdf}};
         \draw[thick,->] (N2) -- (N3);
-        \pause
+        }
+        \uncover<+->{
         \node at (3.5, 0)[inner sep=0pt, scale = 0.5](N4)
-                 %{\input{Pictures/NURBS/tikz/peters_surface.tex}};
                 {\includegraphics[width=5cm]{Pictures/NURBS/tikz/bspline_patches.pdf}};
         \draw[thick,->] (N3) -- (N4);
-        \pause
+        }
+        \uncover<+->{
         \node at (0, 0)[inner sep=0pt, scale = 0.5](N5)
                  {\includegraphics{Pictures/NURBS/tikz/torus_peters.pdf}};
         \draw[thick,->] (N4) -- (N5);
+        }
         \end{tikzpicture}
 	\end{center}
+\end{overlayarea}
 %\textbf{{\color{red} According to Peters obtained surface is $G^{1}$ smooth}}
 \end{frame}
 \begin{frame}{Long way to smoothness}
@@ -96,19 +103,20 @@ B--Splines
 \end{itemize}
 \end{block}
 $$\downarrow$$
-\begin{equation}
+\begin{equation*}
 E_{dist}(V_{x}) = \sum_{i=1}^{N}\norm{P_{i} - y_{i}V_{x}}^{2} \rightarrow min,
-\end{equation}
+\end{equation*}
 $y_{i}$ - coefficients obtained from the Peters' scheme theory.
+\pause
 \begin{block}{What is achieved?}
 \begin{itemize}
 \item Smoothness of the fitted surface is now guaranteed by construction
-\item Fitting is possible for more complex shapes achieved by using an information from the Dual Contouring algorithm
+\item Fitting of more complex shapes achieved
 \end{itemize}
 \end{block}
 \end{frame}
 \subsection{Fitting pipeline}
-\begin{frame}{Improved pipeline}
+\begin{frame}{Improved pipeline[3]}
 \hspace*{-2cm}%
 \begin{tikzpicture} 
         \node at (0,0)[inner sep=0pt, scale = 0.43](N1)
@@ -131,7 +139,7 @@ $y_{i}$ - coefficients obtained from the Peters' scheme theory.
        
 \end{tikzpicture}
 \end{frame}
-\begin{frame}{Before and after Peters}
+%\begin{frame}{Before and after Peters}
 %\vspace{-6mm}
 %\begin{minipage}[t]{0.48\linewidth}
 %\begin{block}{Before}
@@ -154,19 +162,14 @@ $y_{i}$ - coefficients obtained from the Peters' scheme theory.
 %\end{block}
 %\end{minipage}
 
-\end{frame}
-\begin{frame}{What is next?}
-\begin{block}{Further steps:}
+%\end{frame}
+\begin{frame}{Possible optimizations}
 \begin{itemize}
-\item Full integration with Surface Extraction part
-\item Exporting the results back to CAD  
-\end{itemize}
-\end{block}
-\begin{block}{Possible optimizations}
-\begin{itemize}
-\item Introducing of the \textit{fairness functional} in order to deal with more complex shapes
+\item Introduction of the \textit{fairness functional} in order to deal with more complex shapes
 \item Implementation of the \textit{adaptive refinement} in order to control a maximum error tolerance
 \item Implementation of the \textit{parameter correction} for the improved pipeline
 \end{itemize}
-\end{block}
+\begin{figure}
+\includegraphics[width=\textwidth]{Pictures/NURBS/torus_from_DC.png}
+\end{figure}
 \end{frame}

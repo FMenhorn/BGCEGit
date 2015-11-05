@@ -90,18 +90,21 @@ cross/.default={2pt}}
 %some useful commands
 %\newcommand{\der}[2]{\frac{\text{d}#1}{\text{d}#2}}
 \title{BGCE Project: CAD -- Integrated Topology Optimization}
-\subtitle{BGCE First Milestone Meeting}
-\author[E. Wannerberg, B. Rüth] {S. Joshi, \textit{J.C. Medina}, \textit{F. Menhorn}, S. Reiz, B. Rüth, E. Wannerberg, \textit{A. Yurova}} %[displayed in footer]{displayed on title page}
+\subtitle{BGCE Second Milestone Meeting}
+\author[J.C. Medina, F. Menhorn, A. Yurova] {
+S. Joshi, J.C. Medina, F. Menhorn, 
+\\
+S. Reiz, B. Rüth, E. Wannerberg, A. Yurova} %[displayed in footer]{displayed on title page}
 \date{\today}
 \institute{Technische Universität München}
 \newtheorem*{rem}{Remark}
 
 
 \begin{document}
+\setbeamertemplate{caption}{\raggedright\insertcaption\par} % removes "figure" label at figures
 \frame{\maketitle}
 
 \section{Introduction}
-\subsection{Contents}
 \begin{frame}{Contents}
 \tableofcontents
 \end{frame}
@@ -115,7 +118,6 @@ cross/.default={2pt}}
 }
 
 %-------------------------------------------------------
-
 \subsection{Motivation}
 \input{Sections/Motivation}
 
@@ -124,11 +126,6 @@ cross/.default={2pt}}
 \input{Sections/Workflow}
 
 %-------------------------------------------------------
-\subsection{Schedule \& Milestones}
-\input{Sections/Schedule}
-
-%-------------------------------------------------------
-
 \subsection{Organization}
 \input{Sections/Organization}
 
@@ -145,10 +142,8 @@ cross/.default={2pt}}
 
 \section{B--Spline Fitting}
 \input{Sections/Nurbs}
-\section{Summary}
-\input{Sections/Summary}
-\section{Outlook}
-\input{Sections/Outlook}
+\section{Summary \& Outlook}
+\input{Sections/SummaryOutlook}
 \section*{Thank You}
 \input{Sections/ThankYou}
 \section*{Literature}
