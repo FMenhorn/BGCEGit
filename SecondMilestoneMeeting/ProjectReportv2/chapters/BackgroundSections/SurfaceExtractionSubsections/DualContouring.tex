@@ -8,7 +8,7 @@ edges of the cubes, it locates them inside the cubes that have vertex values bot
 The approach can be seen in \autoref{fig:bunny_MCDC}, with a similar Marching Cubes illustration for comparison. \todo[inline]{show an example from our code?}
 
 \subsubsection{Minimizing the quadratic error function (QEF)}
-The relevant question is now where in the cube the ideal place for the vertex is, and here is where different dual algorithms are distinguished. Dual Contouring in particular generates a vertex positioned at the minimizer of a certain quadratic function, which depends on the (interpolated) isosurface intersection points, as well as the gradient --- or just the normal of the isosurface --- at these points, together the first--order \emph{Hermite data} of the set.
+The relevant question is now where in the cube the ideal place for the vertex is, and here is where different dual algorithms are distinguished. Dual Contouring in particular generates a vertex positioned at the minimizer of a certain quadratic function, which depends on the (interpolated) isosurface intersection points, as well as the gradient --- or just the normal of the isosurface --- at these points, together the first-order \emph{Hermite data} of the set.
 The quadratic function for Dual Contouring is defined in \cite{Hermite2002} as follows:
 \begin{equation*}
 E(x)= x^TA^TAx-2x^TA^Tb+b^Tb
@@ -17,11 +17,11 @@ where \textit{A} is a matrix whose rows are the isosurface normals at the inters
 \todo[inline]{explain our approach without hermite data (only root, no gradient, only boolean values) of taking the mean value of the roots, drawbacks of simplification?}
 
 
-\subsubsection{Non--Manifold surfaces}
-\todo[inline]{define what they are, explain why they are bad and our aproach to non--manifold surfaces}
+\subsubsection{Non-Manifold surfaces}
+\todo[inline]{define what they are, explain why they are bad and our aproach to non-manifold surfaces}
 \todo[inline]{2D pictures!!!}
 
-\subsubsection{Topology--safe adaptivity}
+\subsubsection{Topology-safe adaptivity}
 \todo[inline]{refer to \cite{Hermite2002}, might be part of the third milestone. At least discuss impact already in this milestone!}
 
 \subsubsection{Discussion}
@@ -36,7 +36,7 @@ Pro:
 Contra:
 \begin{itemize}
 \item simplification from first order hermite data to boolean values destroys feature detection, anyhow, we don't care about features (like edges or corners)
-\item non--manifold surfaces nogo for following steps of the pipeline
+\item non-manifold surfaces nogo for following steps of the pipeline
 \end{itemize}
 \todo[inline]{clearly state what's done and what we will do}
 
