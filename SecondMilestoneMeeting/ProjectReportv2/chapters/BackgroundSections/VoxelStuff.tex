@@ -1,0 +1,19 @@
+%%%%%% THIS PART WILL BE INCLUDED IN THE NEXT M. in case this approach is needed.
+
+\subsection{Voxel Data to NURBS}
+\todo[inline]{what about this part? talk to Juan Carlos!}
+There are two possible roads to go from the voxel data to the CAD representation (in our case NURBS based representation).
+\subsubsection{Quad Contouring}
+This approach uses the Dual Contouring algorithm as first step in order to obtain a quad mesh representation from the voxel data. The first challenge is to implement the algorithm with the ideas presented in \cite{Hermite2002} correctly. The original Marching Cubes algorithm is implemented in VTK but the source code is not public. Once this first step is done, the quads will be chosen for the NURBS parametrization. A second step considers multiple smaller quads which have to be combined into one larger patch. This is another challenge, since the remeshing of quad meshes is not as straightforward as with the triangles. Different approaches have been taken in order to achieve this coarsening. In \cite{Puppo2010} an incremental and greedy approach, which is based on local operations only, is presented. It depicts an iterative process which performs local optimizing, coarsening and smoothing operations. Other approaches, like the one presented in \cite{Dong2005} uses smooth harmonic scalar fields to simplify the mesh.
+
+2= “Practical quad mesh simplification”
+3= “Harmonic Functions for Quadrilateral Remeshing of Arbitrary Manifolds”
+
+
+\subsubsection{Multiresolution Analysis of Arbitrary Meshes}
+With \textit{Multiresolution Analysis of Arbitrary Meshes} approach there is no need to apply a Dual Contouring algorithm, since it takes as beginning data the triangles from the Marching Cubes. The main concepts are shown in the paper \cite{eck1996automatic}. It mainly takes a series of intermediate steps which permits a parametrization of data. It includes a partitioning scheme based on the ideas of the Voronoi Diagrams \todo{reference} Delaunay triangulations \todo{reference}.Large patches or quads are obtained with this method. 
+
+4=reference to MAAM, a.k.a Benni's favorite paper!
+
+\subsubsection{implementation part!}
+Both approaches have not been implemented in open source documentation, therefore there is a need to implement it from scratch. Up to now, the second approach has been chosen.
