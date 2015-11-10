@@ -1,8 +1,8 @@
-\section{From Voxels to a surface representation}
+\section{Surface Reconstruction}
 \label{sec:surfaceBackg}
-In order to fit NURBS and other curves to an optimized geometry, a \emph{mesh-based geometry}, that is, a representation of the object at a set of (connected) points, is typically needed, this as opposed to the volumetric representation of density in each voxel, that results from the topology optimization process. 
+In order to fit \ac{NURBS} and other curves to an optimized geometry, a \emph{mesh-based geometry}, that is, a representation of the object at a set of (connected) points, is typically needed, this as opposed to the volumetric representation of density in each voxel, that results from the topology optimization process. 
 
-In order to produce the mesh-based geometry, the data can be represented by a contour at a value of a smooth function in space, that is, an isosurface. Below, we describe three methods that solve this problem, the \emph{Marching Cubes}, the \emph{Dual Contouring} and the \emph{Dual marching cubes} method. For detailed description of the methods we refer to \todo[inline]{insert references to main papers of MC, DC, dualMC}.
+In order to produce the mesh-based geometry, the data can be represented by a contour at a value of a smooth function in space, that is, an isosurface. Below, we describe three methods that solve this problem, the \ac{MC}, the \ac{DC} and the \ac{DualMC} method. This section is only intended for giving a brief overview over the different methods and the most important properties. For more details we refer to \cite{Marching2006, Hermite2002, Nielson2004}.
 
 % subsection on Marching Cubes
 \input{chapters/BackgroundSections/SurfaceExtractionSubsections/MarchingCubes}
