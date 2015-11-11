@@ -3,7 +3,7 @@ The \acf{MC} method \cite{Marching2006} takes as an input a set of scalar functi
 
 \subsubsection{The \acl{MC} cases}
 Since there are 8 vertices on each cube, each above or below the isovalue (with equality falling to one of these categories), there are $2^8=256$ possible polygon configurations. However, many of these can be constructed by rotating or reflecting other polygons. As such, there are therefore 15 base cases which represent all the surface polygons of the marching cubes. To illustrate what the polygons may look like, these are shown in \autoref{fig:MC_basecase}, where one can also see that they are composed of \acp{tri}. 
-The original algorithm presents two main problems. Firstly, it does not guarantee neither correctness nor topological consistency, which means that holes may appear on the surface due to inaccurate base case selection. Second, another problem is ambiguity, which appears when two base cases are possible and the algorithm chooses the incorrect one. There are many extended \ac{MC} algorithms that tackle the problems of the original one, getting rid of the ambiguities and providing correctness (see for example \cite{ExtendedMC}).
+
 \begin{figure}[b]
 \centering
    \scalebox{0.8}{\includegraphics{Pictures/cubes.pdf}}\\
@@ -11,17 +11,5 @@ The original algorithm presents two main problems. Firstly, it does not guarante
    \label{fig:MC_basecase}
 \end{figure}
 
-\subsubsection{Discussion}
-\todo[inline]{discussion makes more sense after the NURBS part.}
-\todo[inline]{needs to be formulated}
-Pro:
-\begin{itemize}
-\item produces proper \todo{what does proper mean?} surfaces
-\item very simple
-\end{itemize}
-Contra:
-\begin{itemize}
-\item triangles
-\item no feature detection (explicit detection with extended MC)
-\item very many faces (at least in basic implementation)
-\end{itemize}
+\subsubsection{Cracks and ambiguities}
+The original algorithm presents two main problems. Firstly, it does not guarantee neither correctness nor topological consistency, which means that holes may appear on the surface due to inaccurate base case selection. Second, another problem is ambiguity, which appears when two base cases are possible and the algorithm chooses the incorrect one. There are many extended \ac{MC} algorithms that tackle the problems of the original one, getting rid of the ambiguities and providing correctness (see for example \cite{ExtendedMC}).

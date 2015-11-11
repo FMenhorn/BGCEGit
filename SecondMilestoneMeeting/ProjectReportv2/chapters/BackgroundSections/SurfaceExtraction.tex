@@ -1,8 +1,8 @@
-\section{Surface Reconstruction}
+\section{Voxel data surface reconstruction}
 \label{sec:surfaceBackg}
 In order to fit \ac{NURBS} and other curves to an optimized geometry, a \emph{mesh-based geometry}, that is, a representation of the object at a set of (connected) points, is typically needed, this as opposed to the volumetric representation of density in each voxel, that results from the topology optimization process. 
 
-In order to produce the mesh-based geometry, the data can be represented by a contour at a value of a smooth function in space, that is, an isosurface. Below, we describe three methods that solve this problem, the \ac{MC}, the \ac{DC} and the \ac{DualMC} method. This section is only intended for giving a brief overview over the different methods and the most important properties. For more details we refer to \cite{Marching2006, Hermite2002, Nielson2004}.
+In order to produce the mesh-based geometry, the data can be represented by a contour at a value of a smooth function in space, that is, an isosurface. Below, we describe four methods that solve this problem, the \acl{MC}, the \acl{DC}, the \acl{DualMC} and the \acl{DualMT} method. This section is only intended for giving a brief overview over the different methods and the most important properties regarding our application. For more details we refer to \cite{Marching2006, Hermite2002, Nielson2004, Nielson2008}. \todo{this remark is useful?} One should also note that surface reconstruction from voxel data --- what we are doing --- and surface reconstruction from range scan data (for examples see \todo{give example}) are similar, but still different tasks.
 
 % subsection on Marching Cubes
 \input{chapters/BackgroundSections/SurfaceExtractionSubsections/MarchingCubes}
@@ -11,4 +11,4 @@ In order to produce the mesh-based geometry, the data can be represented by a co
 \input{chapters/BackgroundSections/SurfaceExtractionSubsections/DualContouring}
 
 % subsection on Dual Marching Cubes
-\input{chapters/BackgroundSections/SurfaceExtractionSubsections/DualMarchingCubes}
+\input{chapters/BackgroundSections/SurfaceExtractionSubsections/DualMarching}
