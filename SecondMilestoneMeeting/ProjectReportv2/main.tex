@@ -3,11 +3,11 @@
  % Don't even include content files by using \input or \inlcude. 
  % Put your content to TEXT.TEX or include it there using \input.
  % Uses:
- %		SETTINGS.TEX	contains the settings for this document
- %		COMMANDS.TEX	contains commands which can be used while writing
+ %		SETTINGS.TEX		contains the settings for this document
+ %		COMMANDS.TEX		contains commands which can be used while writing
  %		INFO.TEX			contains the author, title and so on for the cover
  %		COVER.TEX			formats the front cover of the document
- %		ABSTRACT.TEX	contains the abstract to be included (if needed)
+ %		ABSTRACT.TEX		contains the abstract to be included (if needed)
  %		TEXT.TEX			contains the actual content of the document
  %		BIB.BIB				containt the BibTeX entries for the document
  
@@ -38,6 +38,9 @@
 
 % include commands
 \input{components/commands}
+
+% include acronyms and glossary
+\input{components/acronyms}
 
 
 %\makeindex
@@ -71,8 +74,8 @@
 	%\input{components/abstract}
 
 	\tableofcontents
-  %outline and overview
-   \input{components/outline}
+  	%outline and overview
+   	\input{components/outline}
 
 	\mainmatter
 	
@@ -82,8 +85,8 @@
 		%Introduction 
 		%
 		% ---------------------------------------------------------------------------
-		\part*{\ref{chapter:Introduction}\; Introduction}
-		%\label{part:intro}
+		\chapter{Introduction}
+		\label{chapter:Introduction}
 		\input{chapters/Introduction}
 		
 		
@@ -93,28 +96,37 @@
 		%% and Background Theory
 		%%
 		%%% ---------------------------------------------------------------------------
-		\part*{\ref{chapter:Background}\; Background Theory}
-%		\label{part:backgroundTheory}
+		\chapter{Background Theory}
+		\label{chapter:Background}
 		\input{chapters/Background}
 		
 		
 		% ---------------------------------------------------------------------------
 		%
-		% Implementation coming somewhere here
+		% Implementation 
 		%
 		% ---------------------------------------------------------------------------
-		\part*{\ref{chapter:software}\; Implementation}		
-%		\label{part:Implementation}
+		\chapter{Implementation}
+		\label{chapter:Implementation}		
 		\input{chapters/Implementation}
+		
+		% ---------------------------------------------------------------------------
+		%
+		% Implementation 
+		%
+		% ---------------------------------------------------------------------------
+		\chapter{Summary \& discussion\todo{better caption?}}
+		\label{chapter:Discussion}		
+		\input{chapters/Discussion}
 		
 		% ---------------------------------------------------------------------------
 		%
 		% Appendix
 		%
 		% ---------------------------------------------------------------------------
-%		\part*{Appendix}
-	%	\addcontentsline{toc}{part}{Appendix}
-%		\appendix 
+		\part*{Appendix}
+		\addcontentsline{toc}{part}{Appendix}
+		\appendix 
 		
 		%---------------------------------------
 %		\chapter{Source Code}
@@ -128,6 +140,15 @@
   	\clearemptydoublepage
   
 	\bibliography{bibliography/literature}
+	
+	\cleardoublepage
+	\printacronyms[	include-classes=abbrev,
+					name=Abbreviations,
+					sort = true]
+
+	\printacronyms[	include-classes=nomencl,
+					name=Nomenclature,
+					sort = true]
 	
  
 \end{document}

@@ -18,6 +18,9 @@ class AbstractVertex(Point):
     def get_edges(self):
         return self._edges
 
+    def get_id(self):
+        return self._id
+
     def _obtain_id(self):
         id = AbstractVertex._id_counter
         AbstractVertex._id_counter += 1
@@ -46,8 +49,8 @@ class Vertex3(AbstractVertex):
 
 class AbstractVertexDC(object):
     def _link_to_edges(self, connectivity):
-        for voxel_edge in connectivity:
-            voxel_edge.link_to(self)
+        for link_id, voxel_edge in connectivity:
+            voxel_edge.link_to(self, link_id)
 
 
 class VertexDC2(Vertex2, AbstractVertexDC):

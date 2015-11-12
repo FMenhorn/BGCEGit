@@ -1,0 +1,31 @@
+\subsection{Surface reconstruction}
+\todo[inline]{put discussion from schemes here}
+
+\subsubsection{Discussion \ac{MC}}
+\todo[inline]{discussion makes more sense after the NURBS part.}
+\todo[inline]{needs to be formulated}
+Pro:
+\begin{itemize}
+\item produces proper \todo{what does proper mean?} surfaces
+\item very simple
+\end{itemize}
+Contra:
+\begin{itemize}
+\item triangles
+\item no feature detection (explicit detection with extended MC)
+\item very many faces (at least in basic implementation)
+\end{itemize}
+
+\subsubsection{Manifold \ac{DC}}
+Since we want to deduce a first estimate for the topology of the \ac{NURBS} surface output of our \ac{CADTopOpt} tool, non-manifold surfaces cannot be accepted\footnote{Surfaces consisting of smoothly connected \ac{NURBS} \acp{patch} are always manifold surfaces. Therefore we cannot start with a non-manifold surface and assume we will end up with a manifold surface.}. We implemented a remeshing procedure for generating manifold surfaces out of non-manifold surfaces. This procedure considers the different occurring patterns of non-manifold edges and resolves them in a proper way. 
+\todo[inline]{2D pictures!!!}
+
+\subsubsection{Topology--safe adaptivity \ac{DC}}
+Implementing this feature in \ac{DC} will be one of our major goals in the future. Whether adding adaptivity to the basic \ac{DC} algorithm will destroy the property of \ac{DC} only generating \acp{quad} by introducing \acp{tri}, is going to be part of our future research.
+
+\subsubsection{Discussion \ac{DC}}
+\todo[inline]{discussion makes more sense after the NURBS part.}
+\todo[inline]{poorly written...}
+\ac{DC} generates \acp{quad} instead of \acp{tri} and therefore fits better to the rectangular topology of \ac{NURBS}. The possibility of making \ac{DC} an adaptive algorithm is another advantage.
+Since we do not rely on first order Hermite data and the minimization of the \ac{QEF} but just on a very simple averaging procedure, we loose one of the main advantages of \ac{DC}, namely the ability to represent sharp features. But we do not care about sharp features in the context of topology optimization. 
+The main disadvantage of \ac{DC} is that it is not always generating manifold surfaces. Our approach of solving this issue by remeshing is more a hack than a real solution to the problem.

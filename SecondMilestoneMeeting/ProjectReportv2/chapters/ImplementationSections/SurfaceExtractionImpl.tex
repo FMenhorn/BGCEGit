@@ -1,4 +1,16 @@
-As was mentioned above, surface extraction is an intermediate step after Topology Optimization and NURBS representation in order to facilitate the conversion. In terms of implementing the surface extraction, we used VTK \cite{VTKToolbox}.
+\section{From Voxels to Parametrized Surface Points}
+\label{sec:surfaceImpl}
+\todo[inline]{whole section should be changed a lot!}
+As was mentioned above, surface extraction is an intermediate step between Topology Optimization and \ac{NURBS} representation in order to facilitate the conversion. Still this intermediate step is crucial, because it generates the data for the \ac{NURBS} surface fitting and generates the underlying topology of the \ac{NURBS} patches.
+Firstly we had to find out, which one of the surface extraction schemes introduced in \autoref{sec:surfaceBackg} fits our demands best. Then we had to come up with a scheme providing a good patch distribution and parameter estimation for the datapoints.
+
+%Subsection on surface reconstruction
+\input{chapters/ImplementationSections/SurfaceExtractionSubsections/Reconstruction}
+%Subsection on parametrization
+\input{chapters/ImplementationSections/SurfaceExtractionSubsections/Parametrization}
+
+\begin{comment}
+%In terms of implementing the surface extraction, we used VTK \cite{VTKToolbox}\todo{this has changed!}.
 
 %\subsection{VTK Toolbox}
 
@@ -44,3 +56,4 @@ triangles barely provides a noticeable difference, and even with a 90 \% reducti
    \caption{Decimation of triangles. \emph{Top:} 50\% reduction of triangle number from the object in \autoref{fig:contouring}. \emph{Lower:} 90\% reduction. The difference is barely noticable in both cases.}
    \label{fig:Decimation}
 \end{figure}
+\end{comment}

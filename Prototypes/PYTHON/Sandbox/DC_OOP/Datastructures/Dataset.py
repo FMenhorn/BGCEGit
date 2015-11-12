@@ -12,12 +12,16 @@ class AbstractDataset(object):
 
     _dimension = None
 
-    def __init__(self, data_dict):
+    def __init__(self, resolution):
         self._datapoint_dict = {}
+        self._resolution = resolution
 
     # return number of datapoints in this dataset
     def get_num_datapoints(self):
         return self._datapoint_dict.__len__()
+
+    def get_resolution(self):
+        return self._resolution
 
     # returns a datapoint at position with some checks
     def get_datapoint_at(self, position_or_key):
@@ -71,8 +75,8 @@ class Dataset2(AbstractDataset):
 
     _dimension = 2
 
-    def __init__(self, data_dict):
-        self._datapoint_dict = {}
+    def __init__(self, data_dict, resolution):
+        super(Dataset2, self).__init__(resolution)
         for key, value in data_dict.items():
             if isinstance(key, tuple):
                 position = np.array(key)
@@ -102,8 +106,8 @@ class Dataset3(AbstractDataset):
 
     _dimension = 3
 
-    def __init__(self, data_dict):
-        self._datapoint_dict = {}
+    def __init__(self, data_dict, resolution):
+        super(Dataset3, self).__init__(resolution)
         for key, value in data_dict.items():
             if isinstance(key, tuple):
                 position = np.array(key)
@@ -129,4 +133,6 @@ class Dataset3(AbstractDataset):
                 self._ax.scatter(xx,yy,zz,'b.')
 
     def set_ax(self, ax):
-        self._ax = ax
+        Dataset3._ax = ax
+        for key, dp in self._datapoint_dict.items():
+            dp.set_ax(ax)
