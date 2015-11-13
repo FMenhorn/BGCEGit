@@ -72,7 +72,7 @@
 	\input{components/acknowledgements}
 	
 	%\input{components/abstract}
-
+	\listoftodos
 	\tableofcontents
   	%outline and overview
    	\input{components/outline}
@@ -124,9 +124,9 @@
 		% Appendix
 		%
 		% ---------------------------------------------------------------------------
-		\part*{Appendix}
-		\addcontentsline{toc}{part}{Appendix}
-		\appendix 
+%		\part*{Appendix}
+	%	\addcontentsline{toc}{part}{Appendix}
+%		\appendix 
 		
 		%---------------------------------------
 %		\chapter{Source Code}
@@ -140,15 +140,15 @@
   	\clearemptydoublepage
   
 	\bibliography{bibliography/literature}
-	
-	\cleardoublepage
-	\printacronyms[	include-classes=abbrev,
-					name=Abbreviations,
-					sort = true]
-
-	\printacronyms[	include-classes=nomencl,
-					name=Nomenclature,
-					sort = true]
+	\todo[inline]{insert all the acronym stuff for final delivery of report}
+	%\cleardoublepage
+	%\printacronyms[	include-classes=abbrev,
+	%				name=Abbreviations,
+	%				sort = true]
+	%
+	%\printacronyms[	include-classes=nomencl,
+	%				name=Nomenclature,
+	%				sort = true]
 	
  
 \end{document}
