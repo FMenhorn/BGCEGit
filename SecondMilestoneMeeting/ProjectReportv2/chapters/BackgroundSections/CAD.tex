@@ -1,5 +1,6 @@
 \section{CAD overview}
 \label{sec:CADbackg}
+\todo[inline]{Explain voxelization}
 %interaction with it, programs, geometry represenations, datastructures, formats etc., maybe even history if we're overkill
 \Acf{CAD} refers to the process of designing a product using a computer system. Before \ac{CAD} applications were used, products were designed using a sketch board. It was a challenge to incorporate changes in the construction drafts as well as to keep documentations up to date; hence, it was no surprise that \ac{CAD} systems spread rapidly across all design development branches. \Ac{CAD} is now of irreplaceable use in architecture, mechanical, electrical and civil engineering.
 
@@ -8,6 +9,7 @@ Depending on the discipline, different requirements are set on the virtual model
 This section presents the relevant geometrical and computational aspects of \ac{CAD} for the project; for a more thorough introduction we refer to \cite{sarcarCAD}.
 
 \subsection{Geometry representations}
+\todo[inline]{Saumitra: Repetitive use of names, review}
 In general, two different ways of describing a geometry are used in \ac{CAD} systems: a \acf{CSG} or a \acf{BREP}. Other approaches, such as a complete voxelised geometry are not common due to extensive memory consumption.
 \subsubsection{\Acl{CSG}}
 \begin{figure}
@@ -16,11 +18,11 @@ In general, two different ways of describing a geometry are used in \ac{CAD} sys
 \caption{\ac{CSG} object tree. The picture shows the construction of a complex object from a cube, a sphere, and a set of cylinders. Figure taken from \cite{WikipediaCSG}.}
 \label{fig:csg_tree}
 \end{figure}
-One way of representing a geometry in \ac{CAD} is the approach of \ac{CSG}\todo{long form at the beginning of the subsubsection?}. The basic idea is to start from a set of primitives, e.g. spheres, cylinders and/or cubes. Basic Boolean operations link these primitives towards a complex geometry, as illustrated in \autoref{fig:csg_tree}.
+One way of representing a geometry in \ac{CAD} is the approach of \ac{CSG}. The basic idea is to start from a set of primitives, e.g. spheres, cylinders and/or cubes. Basic Boolean operations link these primitives towards a complex geometry, as illustrated in \autoref{fig:csg_tree}.
 
 Key advantages of this format is the precise representation using very little storage memory. However, not all desired forms can be represented by \ac{CSG} and hence, a second type of geometry description is needed. 
 \subsubsection{\Acl{BREP}}
-A different kind of modelling approach is the \ac{BREP}\todo{long form at the beginning of the subsubsection?}. Instead of storing the geometry information as geometrical objects, \ac{BREP} formats only save the boundary surface of the body. The interior is assumed to be uniformly filled. Especially in complex geometries, this approach simplifies the model to such an extent, that the amount of data becomes much easier to handle. Surfaces can then be for example stored as a set of triangles (as in \ac{STL} files, see \autoref{subsub:STL} below) or in \ac{NURBS} \acsp{patch} (see \autoref{sec:NURBS}).
+A different kind of modelling approach is the \ac{BREP}. Instead of storing the geometry information as geometrical objects, \ac{BREP} formats only save the boundary surface of the body. The interior is assumed to be uniformly filled. Especially in complex geometries, this approach simplifies the model to such an extent, that the amount of data becomes much easier to handle. Surfaces can then be for example stored as a set of triangles (as in \ac{STL} files, see \autoref{subsub:STL} below) or in \ac{NURBS} \acsp{patch} (see \autoref{sec:NURBS}).
 Furthermore, holes in the body are made possible by saving the surface normal of the respective boundary. 
 
 By the boundary representation arbitrary geometries can be created. While the data sizes are commonly larger than in \ac{CSG} representation, \ac{BREP} files are usually easier to work with. One also has to keep in mind, that non-physical geometries can result from \ac{BREP} formats through a not closed surface.
