@@ -1,5 +1,6 @@
 
 \subsection{Fitting problem}
+\todo[inline]{is this really nurbs? well maybe. PRobably stuff the Peter's fitting in here and remove some other parts}
 In order to represent a given line or surface by Bezier curves or surfaces respectively, just as with NURBS, one has to solve a fitting problem. The goal of it is to fit in a parametric curve to the set of given data points. In the case of interest, the given set of points is a mesh, obtained from surface contouring.
 \subsubsection{Fitting problem: Bezier curve}
 First we want to find a Bezier-curve $\vec{B}_n\left(u\right)$ of degree $n$ which is approximating a given spline $\vec{s}_m\left(u\right)$ defined by $m$ points in a optimal way. For this purpose we want to minimize the L2-error. This leads to the minimization problem
@@ -34,4 +35,4 @@ The above system needs to be solved for the unknown $P^{0}$. This can be done nu
 %part of implementation
 
 \subsubsection{Fitting Problem: Peter's Scheme}
-\todo[inline]{insert stuff here}
+\todo[inline]{insert stuff here, what's described in peter's scheme, will see where it fits}
