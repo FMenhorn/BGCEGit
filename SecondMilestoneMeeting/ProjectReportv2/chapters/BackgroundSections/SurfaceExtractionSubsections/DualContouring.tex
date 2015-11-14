@@ -4,7 +4,7 @@ The idea of \emph{dual algorithms}, to which \acf{DC} belongs, is similar to \ac
 \item Locate the position of the vertex inside each cube.
 \item Join the vertices associated with four cubes sharing a common edge, to form a \ac{quad}.
 \end{enumerate}
-The approach can be seen in \autoref{fig:bunny_MCDC}, with a similar \ac{MC} illustration for comparison. \todo[inline]{show an example from our code?}
+The approach can be seen in \autoref{fig:bunny_MCDC}, with a similar \ac{MC} illustration for comparison.
 
 \begin{figure}
 \centering
@@ -15,13 +15,13 @@ The approach can be seen in \autoref{fig:bunny_MCDC}, with a similar \ac{MC} ill
 
 \subsubsection{Minimizing the \acl{QEF}}
 The relevant question is now where in the cube the ideal place for the vertex is, and here is where different dual algorithms are distinguished. \Ac{DC} in particular generates a vertex positioned at the minimizer of a certain quadratic function, which depends on the (interpolated) isosurface intersection points, as well as the gradient --- or just the normal of the isosurface --- at these points, together the first-order \emph{Hermite data} of the set.
-The \acf{QEF} for \ac{DC} is defined in \cite{Hermite2002} as follows:
+The \acf{QEF}\todo{don't use acronym, but refer to equation number.} for \ac{DC} is defined in \cite{Hermite2002} as follows:
 \begin{equation*}
 E(x)= x^TA^TAx-2x^TA^Tb+b^Tb
 \end{equation*}
 where the columns of the matrix \textit{A} are the  isosurface normals at the intersection points, and \textit{b} is a vector containing the scalarproduct of the normals and the intersection points. This system can be solved numerically, for example as proposed in \cite{Hermite2002} by computing the singular value decomposition of \textit{A} and forming the pseudo-inverse, truncating its small singular values. 
 The effect of considering the gradient for the calculation of the vertex is huge: \ac{DC} has the ability to represent sharp features like edges and corners, while \ac{MC} often smoothens them away.
-\todo[inline]{explain our approach without hermite data (only root, no gradient, only boolean values) of taking the mean value of the roots, drawbacks of simplification? Or put this part into implementation?}
+\todo[inline]{Benni: explain our approach without hermite data (only root, no gradient, only boolean values) of taking the mean value of the roots, drawbacks of simplification. Do something like a proof why this is resonable.}
 In our implementation of \ac{DC} we do not compute the position of the vertex by minimizing the \ac{QEF}, since we cannot access gradient information for our data. Additionally we can only access a discrete dataset with boolean values (determining whether there is material inside the voxel or not) and no function for which we want to compute the isosurface. Therefore we use the following modified approach:
 \begin{enumerate}
 \item On each voxel edge find the root (i.e. the interface of material and no-material voxels) using bisection.
