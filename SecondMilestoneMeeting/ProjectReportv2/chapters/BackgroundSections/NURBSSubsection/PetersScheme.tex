@@ -1,5 +1,8 @@
-\subsection{Peter's Scheme}
-In this section we will cover the following, referring to paper[]:
+\subsection{Peters' Scheme for $C^1$ Bezier surface reconstruction}
+In order to build a Bezier- or NURBS-based surface, the scheme of Peters described in \cite{peters1992constructing} can be used. The scheme takes an unstructured mesh of polygonal faces, and creates from the location and connectivity of its vertices a surface that is \emph{tangent plane continous}, or $G^1$, meaning that the normal vector to the plane is countinous, producing a smooth surface. The process consists of two steps, as described below.
+
+\todo[inline]{insert stuff here}
+In this section we will cover the following, referring to \cite{peters1992constructing}:
 \begin{itemize}
 \item How we go from polygonal faces to a set of mesh control points. "patch points", specifying that we're talking about quads, and that we then get 16
 \item That for each of these 16 points, we will make a small Bezier patch
