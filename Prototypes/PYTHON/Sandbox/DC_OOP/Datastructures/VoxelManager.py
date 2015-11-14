@@ -10,7 +10,6 @@ from Edge import Edge2
 
 class AbstractVoxelManager(object):
     def __init__(self, resolution, min_data, max_data, dataset):
-        self._voxel_dict = {}
         self._resolution = float(resolution)
         self._min_origin = float(min_data)
         self._max_origin = float(max_data)
@@ -44,6 +43,7 @@ class VoxelManager2(AbstractVoxelManager):
         super(VoxelManager2, self).__init__(resolution, min_data, max_data, dataset)
 
     def _setup_voxel_dict(self, dataset):
+        self._voxel_dict = {}
         for x, y in it.product(np.arange(self._min_origin,
                                          self._max_origin,
                                          self._resolution),
@@ -66,7 +66,7 @@ class VoxelManager3(AbstractVoxelManager):
         super(VoxelManager3,self).__init__(resolution, min_data, max_data, dataset)
 
     def _setup_voxel_dict(self, dataset):
-
+        self._voxel_dict = {}
         for x, y, z in it.product(np.arange(self._min_origin, self._max_origin, self._resolution),
                                   np.arange(self._min_origin, self._max_origin, self._resolution),
                                   np.arange(self._min_origin, self._max_origin, self._resolution)):
@@ -77,7 +77,9 @@ class VoxelManager3(AbstractVoxelManager):
     def set_ax(self, ax):
         VoxelManager3._ax = ax
         for key, vox in self._voxel_dict.items():
-            print type(vox)
             vox.set_ax(ax)
+
+    def get_voxel_quads(self):
+        return Voxel3._voxel_edge_manager.create_all_dc_quads()
 
 

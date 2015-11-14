@@ -2,10 +2,13 @@ __author__ = 'erik'
 
 
 class Quad:
-    # _quadlist and _vertexlist have to be of type np.array!
-    def __init__(self, _id, _vertex1, _vertex2, _vertex3, _vertex4, _edge1, _edge2, _edge3, _edge4):
 
-        self.id = _id
+    _id_counter = 0
+
+    # _quadlist and _vertexlist have to be of type np.array!
+    def __init__(self, _vertex1, _vertex2, _vertex3, _vertex4, _edge1, _edge2, _edge3, _edge4):
+
+        self.id = self._obtain_id()
         self.vertices = [_vertex1, _vertex2, _vertex3, _vertex4]
         for vertex in self.vertices:
             vertex.add_quad(self)
@@ -42,6 +45,11 @@ class Quad:
                     quad_list.append(quad)
 
         return quad_list
+
+    def _obtain_id(self):
+        id = Quad._id_counter
+        Quad._id_counter += 1
+        return id
 
     # def replace_edge(self, old_edge, new_edge):
     #     edge_index = self.edges.index(old_edge)

@@ -1,0 +1,37 @@
+\subsection{Dual Marching Methods}
+So far we have introduces \ac{MC} and \ac{DC} and discovered that both methods have certain drawbacks:
+\begin{itemize}
+\item \ac{MC} always produces manifold surfaces and resolves ambiguities correctly, while \ac{DC} does not have this property.
+\item \ac{DC} has the ability to produce \ac{quad} surfaces and preserve sharp features, while \ac{MC} produces surfaces consisting of \acp{tri}\footnote{The construction of \acp{tri} is not a drawback of the \ac{MC} method in general, but for our purpose we have to construct \acp{quad} and therefore this point is crucial. If we want to finally produce a \ac{NURBS} surface, we have to rely on \acp{quad}, because \ac{NURBS} have a rectangular topology. \Acp{tri} just do not fit the topology of \ac{NURBS}. Further explanation can be found in \autoref{sec:NURBS} and \autoref{sec:surfaceImpl}} and sharp features are often lost.
+\end{itemize}
+To come up with these drawback, hybrid methods have been developed: The \acf{DualMC} method and the \acf{DualMT} method. Both methods use ideas from both the \ac{MC} and the \ac{DC} world:
+\begin{center}
+\begin{tabularx}{.9\textwidth}{|X|X|}
+\hline
+\multicolumn{1}{|c|}{\acl{MC}} 
+    & \multicolumn{1}{c|}{\acl{DC}} 
+\\
+\hline
+\begin{itemize}[noitemsep, topsep = 0pt, leftmargin=1em]
+\item traverse voxels and use a look up table for the creation of faces
+\item creates manifold and ambiguity free surfaces
+\end{itemize}
+&
+\begin{itemize}[noitemsep, topsep = 0pt, leftmargin=1em]
+\item place vertices inside voxel\footnote{Determine positions by --- for example --- minimizing the \ac{QEF}.}
+\item construct \acp{quad} by joining vertices in voxels with a common edge
+\end{itemize}
+\\
+\hline
+\end{tabularx}
+\end{center}
+
+\subsubsection{\acl{DualMC}}
+The \acf{DualMC} method is --- like already stated above --- a hybrid of \ac{MC} and \ac{DC}: We traverse the cubes like in \ac{MC} and insert vertices and connect them like in \ac{DC}. The combination of the $256$ different cases from the basic \ac{MC}, the extension for creating ambiguity free surfaces and the framework of \ac{DC} results in a very complex and effective algorithm. A drawback of this method is that for certain configurations we have to create non-\ac{quad} faces --- especially faces with odd number of vertices are difficult to convert to \acp{quad}, if one wants to obtain a \ac{quad}-only surface like in \ac{DC}. We refer the interested reader to  \cite{Nielson2004, Zhang2012}.
+
+\todo[inline]{insert picture on \ac{DualMC}}
+
+\subsubsection{\acl{DualMT}}
+\todo[inline]{stress differences to \ac{DualMC}. Show how to come up with a scheme for voxel data. Explain which faces are generated(our assumptions really true?).}
+
+\todo[inline]{clearly state that this part is nothing but an outlook right now!}

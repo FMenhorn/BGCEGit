@@ -10,6 +10,8 @@ class AbstractDatapoint(Point):
     def __init__(self, coordinates, value):
         super(AbstractDatapoint, self).__init__(coordinates)
         self._id = self._obtain_id()
+        if isinstance(value, float):
+            value = value < 0
         self._value = value
 
     def get_value(self):
@@ -36,6 +38,13 @@ class Datapoint2(AbstractDatapoint):
         else:
             plt.plot(xx,yy,'bo')
 
+    def draw_gradient(self, gradient, length):
+        pos = self.get_position()
+        xx = pos[0]
+        yy = pos[1]
+
+        plt.quiver(pos[0],pos[1],gradient[0],gradient[1],scale = length)
+
 
 class Datapoint3(AbstractDatapoint):
     # ax where plots are created
@@ -53,3 +62,6 @@ class Datapoint3(AbstractDatapoint):
             Datapoint3._ax.scatter(xx,yy,zz,'ro')
         else:
             Datapoint3._ax.scatter(xx,yy,zz,'bo')
+
+    def set_ax(self, ax):
+        Datapoint3._ax = ax

@@ -1,0 +1,20 @@
+\subsection{Peters' Scheme for $C^1$ Bezier surface reconstruction}
+In order to build a Bezier- or NURBS-based surface, the scheme of Peters described in \cite{peters1992constructing} can be used. The scheme takes an unstructured mesh of polygonal faces, and creates from the location and connectivity of its vertices a surface that is \emph{tangent plane continous}, or $G^1$, meaning that the normal vector to the plane is countinous, producing a smooth surface. The process consists of two steps, as described below.
+
+
+\todo[inline]{insert stuff here}
+In this section we will cover the following, referring to \cite{peters1992constructing}:
+\begin{itemize}
+\item How we go from polygonal faces to a set of mesh control points. "patch points", specifying that we're talking about quads, and that we then get 16
+\item That for each of these 16 points, we will make a small Bezier patch
+\item That if we define the Bezier control points of these patches in a special way, as described in appendix XYZ \todo{TODO: create this appendix, or change this to refer to paper for coefficients}, we get a surface that is $G^1$ continous
+\item Maybe describe that we then need for every one of these Bezier patches the locations of the neighbours
+\item That the location of a point on the surface defined by parameters $\vec{s} = (u,v)$ depends on the Bezier control points, whose linear dependence on the "patch points" give us coefficients on these "patch points" of the location described by the parameters, as can be seen in \autoref{fig:PetersPoints}
+\item Possibly that this can used to fit the location of these "patch points" to a set of datapoints by minimusing a least-squares error 
+\end{itemize}
+\begin{figure}
+
+\missingfigure{Graphical descirption of all those different points in peter's scheme}
+\label{fig:PetersPoints}
+\caption{The points in Peter's scheme. As clearly seen in the figure above, this scheme is self-explanatory.}
+\end{figure}

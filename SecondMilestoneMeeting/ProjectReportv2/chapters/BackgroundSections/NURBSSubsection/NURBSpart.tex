@@ -1,8 +1,9 @@
-
+\subsection{Parametric curves}
+\todo{add thing about control points in description and possibly names, because they're kinda important}
 %As mentioned in the Introduction, the main challenge of our project is to convert the mesh based geometry, obtained on a previous step, back to CAD representation. 
 Parametrised geometries are often given in terms of \emph{Non-Uniform Rational B-Spline} (NURBS) curve patches (see for example, documentation of FreeCAD software \cite{FreeCAD}). 
 To define NURBS from a mathematical standpoint, we first define so-called \emph{Bezier curves} and use them later for the definition of NURBS. For these two sections, we refer to \cite{farin2002handbook} for a more in-depth introduction and further material. 
-\subsection{Bezier Curves}
+\subsubsection{Bezier Curves}
 A Bezier curve is a \textit{parametric} curve, which is often used for producing a smooth approximation of a given set of data points.
  
 An analytical expression for the Bezier curve parametrized by the variable $u$ is given by:
@@ -23,13 +24,14 @@ one can define a \textit{Bezier surface}, given by the analytical expression
 \vec{S}(u,v)=\sum\limits_{i=0}^n \sum\limits_{j=0}^m b_i^n(u) b_j^m(v) \vec{P}_{i,j}
 \end{equation*}
 \\
-Note that Bezier curves and surfaces may be unstable -- minor changes in control points might lead to major global changes.
+Note that Bezier curves \todo{higher-order only?} and surfaces may be unstable --- minor changes in control points might lead to major global changes.
 
 
-\subsection{NURBS basis functions}
+\subsubsection{NURBS basis functions}
+\todo[inline]{rename subsubsection and name that Bezier curves are subset of NURBS}
 Extending the idea described in previous section, one could use \emph{B-spline basis functions} (see below) instead of the Bernstein polynomial basis.
 
-Unlike with Bezier curves, for the B-splines a parameter domain is subdivided by so-called \textit{knots}. For the one-dimensional parameter domain $[u_{0}, u_{m}]$, the \textit{knot vector} will be given by $u_{0} \leq u_{1} \leq ... \leq u_{m}$. In most cases $u_{0} = 0, u_{m} = 1$ is chosen, so that we get the unit interval for our parameter values. For the case of NURBS, the knots $u_{0},..., u_{m}$ need not be equidistant -- hence the Non-Uniform in the beginning NU of NURBS.
+Unlike with Bezier curves, for the B-splines a parameter domain is subdivided by so-called \textit{knots}. For the one-dimensional parameter domain $[u_{0}, u_{m}]$, the \textit{knot vector} will be given by $u_{0} \leq u_{1} \leq ... \leq u_{m}$. In most cases $u_{0} = 0, u_{m} = 1$ is chosen, so that we get the unit interval for our parameter values. For the case of NURBS, the knots $u_{0},..., u_{m}$ need not be equidistant --- hence the Non-Uniform in the beginning NU of NURBS.
 
 Given a knot vector $[u_{0}, u_{m}]$ and a degree of B-spline $p$, the $i$-th B-spline basis function is then defined recursively as follows:
 \begin{equation}
