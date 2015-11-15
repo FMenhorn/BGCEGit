@@ -5,7 +5,7 @@ In \autoref{sec:surfaceBackg} different surface reconstruction schemes have been
 Since the surface reconstruction is just an intermediate step before our final \ac{NURBS} fitting procedure, only producing a good approximation of the surface of our topology is not sufficient, but some further constraints have to be kept in mind:
 \begin{enumerate}
 \item \ac{NURBS} have a rectangular topology, therefore our surface reconstruction should also be able to provide a surface consisting of rectangular patches.
-\item Peters scheme only covers manifold surfaces, meaning that per edge each patch is only allowed to have exactly one neighbour.
+\item Peters' Scheme only covers manifold surfaces, meaning that per edge each patch is only allowed to have exactly one neighbour.
 \end{enumerate}
 The first requirement is met by \ac{DC}, while the second one is only met by \ac{MC}. We decided to use the \ac{DC} method, because already the basic version of it creates \acp{quad}, while \ac{MC} creates a mesh of triangles, which can only be changed into a mesh of \acp{quad} by considerably increasing the number of faces.
 

@@ -25,11 +25,11 @@ Now that we have constructed a \ac{NURBS}-patch distribution we can estimate the
 \todo[inline]{making quads plane using least squares (Reference?), otherwise each projection is a non-linear optimization! show picture with both}
 \todo[inline]{coarse criterion: Distance to centroid (better: spacetree!)}
 \todo[inline]{fine criterion: Projection with QR decomposition}
-Finally the projection of some datapoints might lead to parameters $u,v\not\in\left[0,1\right]^2$ in our algorithm we just omitted all those datapoints. If we do not get enough datapoints on each patch for the least squares fitting step after Peters scheme we artificially increase the number of datapoints by applying a subdivision scheme \todo{ref?} to the fine scale surface reconstruction.
+Finally the projection of some datapoints might lead to parameters $u,v\not\in\left[0,1\right]^2$ in our algorithm we just omitted all those datapoints. If we do not get enough datapoints on each patch for the least squares fitting step after Peters' Scheme we artificially increase the number of datapoints by applying a subdivision scheme \todo{ref?} to the fine scale surface reconstruction.
 
 After having completed all these steps we obtain the following data for the subsequent steps of our algorithm:
 \begin{itemize}
-\item a coarse surface delivering the topology for our \ac{NURBS}-patches in Peters scheme
+\item a coarse surface delivering the topology for our \ac{NURBS}-patches in Peters' Scheme
 \item a set of datapoints from the fine scale with coordinates $\left(x,y,z\right)^T$ and parameters $\left(u,v\right)\in\left[0,1\right]^2$, where each datapoint is associated with a \ac{NURBS}-patch. 
 \end{itemize}
 For a visualization of our algorithm in 2D see \autoref{fig:TwoScale}.
