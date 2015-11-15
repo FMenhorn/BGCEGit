@@ -43,16 +43,19 @@ N_{i,p}(u) = \frac{u - u_{i}}{u_{i+p} - u_{i}}N_{i, p-1}(u)  + \frac{u_{i+p+1}-u
 For $p=0$ we get just step functions, and $p=1$ familiar hat functions, whereas the quadratic basis functions look more complicated (\autoref{fig:bsplineBases}).
 \begin{figure}
 \centering
-\begin{subfigure}[B-spline basis for $p=0$]{
-  \includegraphics[width=.3\linewidth]{basis_constant.eps}}
+\begin{subfigure}[b]{.3\linewidth}
+  \includegraphics[width=\linewidth]{Pictures/basisconstant}
+  \subcaption{B-spline basis for $p=0$}
   \label{fig:bspline_basis_constant}
 \end{subfigure}%
-\begin{subfigure}[B-spline basis for $p=1$]{
-  \includegraphics[width=.3\linewidth]{basis_linear.eps}}
+\begin{subfigure}[b]{.3\linewidth}
+  \includegraphics[width=\linewidth]{Pictures/basislinear}
+  \subcaption{B-spline basis for $p=1$}
   \label{fig:bspline_basis_linear}
 \end{subfigure}
-\begin{subfigure}[B-spline basis for $p=2$]{
-  \includegraphics[width=.3\linewidth]{basis_quadratic.eps}}
+\begin{subfigure}[b]{.3\linewidth}
+  \includegraphics[width=\linewidth]{Pictures/basisquadratic}
+  \subcaption{B-spline basis for $p=2$}
   \label{fig:lognorm_quadratic}
 \end{subfigure}
 \caption{B-spline basis functions, of degree $p=0$ (left), $p=1$ (middle) and $p=2$ (right).}
