@@ -6,19 +6,19 @@ So far we have introduces \ac{MC} and \ac{DC} and discovered that both methods h
 \item \ac{DC} has the ability to produce \ac{quad} surfaces and preserve sharp features, while \ac{MC} produces surfaces consisting of \acp{tri}\footnote{The construction of \acp{tri} is not a drawback of the \ac{MC} method in general, but for our purpose we have to construct \acp{quad} and therefore this point is crucial. If we want to finally produce a \ac{NURBS} surface, we have to rely on \acp{quad}, because \ac{NURBS} have a rectangular topology. \Acp{tri} just do not fit the topology of \ac{NURBS}. Further explanation can be found in \autoref{sec:NURBS} and \autoref{sec:surfaceImpl}} and sharp features are often lost.
 \end{itemize}
 To come up with these drawback, hybrid methods have been developed. These methods use ideas from both the \ac{MC} and the \ac{DC} world (For a short summary of those ideas see \autoref{tab:dualmarching}).
-\tododone[inline]{Benni: Change table}
+\tododone[inline]{Benni: Change table | Erik: I added newline - separates out the different points. Also think maybe different bullets than in text bullet lists - minuses maybe?}
 \begin{table}[H]
 \begin{tabularx}{\textwidth}{X|X}
 \multicolumn{1}{c|}{\acl{MC}} 
     & \multicolumn{1}{c}{\acl{DC}} 
 \\
 \hline
-\begin{itemize}[noitemsep, topsep = 0pt, leftmargin=1em]
+\begin{itemize}[ topsep = 0pt, leftmargin=1em]
 \item traverse voxels and use a look up table for the creation of faces
 \item creates manifold and ambiguity free surfaces
 \end{itemize}
 &
-\begin{itemize}[noitemsep, topsep = 0pt, leftmargin=1em]
+\begin{itemize}[ topsep = 0pt, leftmargin=1em]
 \item place vertices inside voxel\footnote{Determine positions by -- for example -- minimizing \autoref{eq:QEF}.}
 \item construct \acp{quad} by joining vertices in voxels with a common edge
 \end{itemize}
