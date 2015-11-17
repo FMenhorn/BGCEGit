@@ -13,12 +13,12 @@
  
 
 
-%% Draft document mode
-%% Final document
-%\documentclass[11pt,a4paper,bibtotoc,idxtotoc,headsepline,footsepline,footexclude,BCOR15mm,DIV13]{scrbook}
+%% Draft document mode (with todos, no pictures just bounding box)
+%\documentclass[draft,11pt,a4paper,bibtotoc,idxtotoc,headsepline,footsepline,footexclude,DIV13,oneside]{scrbook}
+%% Final document mode (no todos, with pictures)
+%\documentclass[final,11pt,a4paper,bibtotoc,idxtotoc,headsepline,footsepline,footexclude,DIV13,oneside]{scrbook}
+%% Intermediate document mode (todos and pictures)
 \documentclass[11pt,a4paper,bibtotoc,idxtotoc,headsepline,footsepline,footexclude,DIV13,oneside]{scrbook}
-
-%\documentclass[11pt,a4paper,bibtotoc,idxtotoc,headsepline,footsepline,footexclude,BCOR20mm,DIV10]{scrbook}
 
 %\usepackage{epstopdf}
 % KOMA-Optionen:
@@ -28,7 +28,7 @@
 %  BCOR: binding correcion (Bindungskorrektur) (e.g.: BCOR5mm)
 %  DIV: Number of sheet sections (used for layout) (e.g.: DIV12) 
 
-\usepackage{booktabs}
+
 
 % include title and author information for the cover
 \input{components/info}
@@ -42,26 +42,11 @@
 % include acronyms and glossary
 \input{components/acronyms}
 
-
-%\makeindex
-	%% inter line spacing
-%\linespread{1.0}
-
 \makeglossary
 
 \begin{document}
 
 	\frontmatter
-	
-	
-	%\input{components/cover}
-%	\clearemptydoublepage
-%	
-%	\input{components/titlepage}
-	
-	
-%	\input{components/cover_maschmeyer}
-	%\clearemptydoublepage
 	
 	\input{components/titlepage}
 	
@@ -84,46 +69,34 @@
 		%
 		%Introduction 
 		%
-		% ---------------------------------------------------------------------------
-		\chapter{Introduction}
-		\label{chapter:Introduction}
+ ---------------------------------------------------------------------------
 		\input{chapters/Introduction}
 		
-		
+ ---------------------------------------------------------------------------
 		%
-		%% ---------------------------------------------------------------------------
-		%%
-		%% and Background Theory
-		%%
-		%%% ---------------------------------------------------------------------------
-		\chapter{Background Theory}
-		\label{chapter:Background}
+		% and Background Theory
+		%
+ ---------------------------------------------------------------------------
 		\input{chapters/Background}
 		
-		
-		% ---------------------------------------------------------------------------
+ ---------------------------------------------------------------------------
 		%
 		% Implementation 
 		%
-		% ---------------------------------------------------------------------------
-		\chapter{Implementation}
-		\label{chapter:Implementation}		
+--------------------------------------------------------------------------
 		\input{chapters/Implementation}
 		
-		% ---------------------------------------------------------------------------
+ ---------------------------------------------------------------------------
 		%
 		% Summary and discussion 
 		%
-		% ---------------------------------------------------------------------------
-		\chapter{Summary \& discussion\todo{better caption?}}
-		\label{chapter:Discussion}		
+ -------------------------------------------------------------------------
 		\input{chapters/Discussion}
-		
-		% ---------------------------------------------------------------------------
+		 ---------------------------------------------------------------------------
 		%
 		% Appendix
 		%
-		% ---------------------------------------------------------------------------
+ ---------------------------------------------------------------------------
 %		\chapter{Appendix}
 	%	\addcontentsline{toc}{part}{Appendix}
 %		\appendix 

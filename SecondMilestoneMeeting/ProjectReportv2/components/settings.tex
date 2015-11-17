@@ -23,13 +23,14 @@
 \usepackage{thumbpdf}
 
 %to use the subfigures
-\usepackage{subfigure}
-
+\usepackage{subcaption}
 
 \usepackage{colortbl}
 \usepackage{color}
 \definecolor{Gray}{gray}{0.9}
 
+%for high quality horizontal lines
+\usepackage{booktabs}
 
 %% show program code\ldots
 %\usepackage{verbatim}
@@ -139,7 +140,10 @@
 \lstset{framextopmargin=50pt,frame=bottomline}
 
 % package for notes
-\usepackage{todonotes}
+\usepackage[obeyFinal, colorinlistoftodos]{todonotes}
+
+% for comments
+\usepackage{verbatim}
 
 % package for acronyms
 \usepackage{acro}
@@ -161,3 +165,6 @@
 %\bibliographystyle{styles/bauermaNum}
 %\bibliographystyle{alpha}
 \bibliographystyle{unsrt}
+
+% for striking out sentences
+\usepackage{soul}

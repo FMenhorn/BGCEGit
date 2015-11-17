@@ -1,6 +1,6 @@
 \section{Topology Optimization}
 \label{sec:ToPy}
-\todo[inline]{Severin: Review}
+\todointern[inline]{Severin: Review}
 Due to the good range of topology optimization software available, we decided to adapt an open-source topology optimizer to our needs, namely \emph{ToPy}.
 
 
@@ -13,17 +13,21 @@ We use ToPy as a black-box topology optimizer. This means, we launch the program
 Results of the topology optimization process can be seen in figure \ref{fig: topyStar}. Here, a star was given as input from a STL-file. We set the voxels in the star's points as fixtures, while we set a load in the middle, in the direction normal to the plane of the star. As can be seen, the optimization process "cuts" away unnecessary material in-between the corners and even in the middle of the material, returning an optimally stiff structure for the chosen remaining volume fraction. 
 \begin{figure}
 \centering
-\begin{subfigure}{
-  \includegraphics[width=.2\linewidth]{Pictures/TopOp/Star_Optimized0_Trans.png}}
+\begin{subfigure}[c]{.24\linewidth}
+\centering
+  \includegraphics[width=\linewidth]{Pictures/TopOp/Star_Optimized0_Trans.png}
 \end{subfigure}%
-\begin{subfigure}{
-  \includegraphics[width=.2\linewidth]{Pictures/TopOp/Star_Optimized2_Trans.png}}
+\begin{subfigure}[c]{.24\linewidth}
+\centering
+  \includegraphics[width=\linewidth]{Pictures/TopOp/Star_Optimized2_Trans.png}
 \end{subfigure}
-\begin{subfigure}{
-  \includegraphics[width=.2\linewidth]{Pictures/TopOp/Star_Optimized4_Trans.png}}
+\begin{subfigure}[c]{.24\linewidth}
+\centering
+  \includegraphics[width=\linewidth]{Pictures/TopOp/Star_Optimized4_Trans.png}
 \end{subfigure}
-\begin{subfigure}{
-  \includegraphics[width=.2\linewidth]{Pictures/TopOp/Star_Optimized5_Trans.png}}
+\begin{subfigure}[c]{.24\linewidth}
+\centering
+  \includegraphics[width=\linewidth]{Pictures/TopOp/Star_Optimized5_Trans.png}
 \end{subfigure}
 \caption{Topology Optimization by ToPy \cite{ToPy}, with minimum compliance. \emph{From left to right}: increasing number of SIMP iterations until convergence. The star-shaped structure was given by an STL-file which was processed into input readable by ToPy, with fixtures in the corners, and a load in the middle. Throughout the SIMP iterations, one can see how material from the less dense regions (blue) is concentrated into denser regions (red) that carry the load. The last picture gives a rotated view, to illustrate how material has been eliminated even from the inside of the star. } %which volume fraction?
 \label{fig: topyStar}

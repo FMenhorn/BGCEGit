@@ -1,8 +1,8 @@
 \section{Least-squares fitting of parametrized surfaces}
-\todo[inline]{Erik: define section}
+\todointern[inline]{Erik: define section}
 
 \subsection{Fitting problem}
-\todo[inline]{is this really nurbs? well maybe. PRobably stuff the Peter's fitting in here and remove some other parts}
+\todointern[inline]{is this really nurbs? well maybe. Probably stuff the Peters' Scheme fitting in here and remove some other parts}
 In order to represent a given line or surface by Bezier curves or surfaces respectively, just as with NURBS, one has to solve a fitting problem. The goal of it is to fit in a parametric curve to the set of given data points. In the case of interest, the given set of points is a mesh, obtained from surface contouring.
 \subsubsection{Fitting problem: Bezier curve}
 First we want to find a Bezier-curve $\vec{B}_n\left(u\right)$ of degree $n$ which is approximating a given spline $\vec{s}_m\left(u\right)$ defined by $m$ points in a optimal way. For this purpose we want to minimize the L2-error. This leads to the minimization problem
@@ -20,7 +20,7 @@ A a = b
 where $A$ is the matrix of pair-wise scalar products of basis functions (Bernstein polynomials), $b$ is the vector of scalar products of the given spline $s_{m}$ and basis functions and $a$ is a required vector of coefficients for Bezier curve representation.
 
 \subsubsection{Fitting problem (least squares): NURBS}
-\todo[inline]{why (least squares) here and not above? is this consistent?}
+\todourgent[inline]{why (least squares) here and not above? is this consistent?}
 Although the approach used above showed good results, it appears to be very computationally intensive. Analogically, one could reduce the original problem to a \emph{regression problem}, which allows us to reduce computational costs. Also, to improve the locality of our solution, from now on we are going to use NURBS basis functions with weights $\omega_{j} = 1$ instead of Bezier curves. For this purpose, we adopted an algorithm, provided in \cite{becker2011advanced}:
 
 Let $X^{0}$ be the $n \times 2$ matrix of the given set of points, $N^{p}$ the basis functions of degree $p$ ($n \times (n+p)$ matrix, where $n$ is the number of points), and $P^{0}$ the control points ($(n+p) \times 2$ matrix).
@@ -36,5 +36,6 @@ X^{0} = N^{p} P^{0}
 The above system needs to be solved for the unknown $P^{0}$. This can be done numerically, for example through singular value decomposition. 
 %part of implementation
 
-\subsubsection{Fitting Problem: Peter's Scheme}
-\todo[inline]{insert stuff here, what's described in peter's scheme, will see where it fits}
+\subsubsection{Fitting Problem: Peters' Scheme}
+\todointern[inline]{insert stuff here, what's described in Peters' Scheme, will see where it fits}
+\todourgent[inline]{more ugly lines... argh!!!}

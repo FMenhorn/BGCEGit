@@ -20,6 +20,7 @@
 \newcommand{\dx}{\text{d}x}
 \newcommand{\dt}{\text{d}t}
 \newcommand{\du}{\text{d}u}
+\newcommand{\where}{\text{where}}
 
 % norm
 \newcommand{\norm}[1]{\left\| #1 \right\|}
@@ -50,7 +51,20 @@
 
 
 %-------------------------------------------------------------
-%-------------------------------------------------------------
+% some peters' nomenclature ----------------------------------
+\newcommand{\petersPatchPoint}{V}
+\newcommand{\petersPatchPoints}{\petersPatchPoint_x}
+\newcommand{\petersControlMesh}{M}
+\newcommand{\petersControlMeshVec}{\vec{\MakeLowercase{\petersControlMesh}}}
+\newcommand{\petersPatchPointVec}{\vec{\MakeLowercase{\petersPatchPoint}}}
+\newcommand{\bezierPoint}{P}
+\newcommand{\bezierPointSet}{\bezierPoint_x}
+\newcommand{\bezierPointVec}{\vec{\bezierPoint}}
+\newcommand{\petersFaces}{F}
+\newcommand{\suchthat}{:}
+\newcommand{\centroidof}[1]{\vec{c}_{#1}}
+\newcommand{\verticesof}[1]{V_{#1}}
+\newcommand{\facesof}[1]{\petersFaces_{#1}}
 
 
 %-------------------------------------------------------------
@@ -83,6 +97,17 @@
 	\begin{figure}[htbp]
 		\begin{center}
 			\includegraphics[width=#4\textwidth]{#1}
+		\end{center}
+		\vspace{-0.4cm}
+		\caption{#2}
+		\label{#3}
+	\end{figure}
+}
+
+\newcommand{\insertfigureMISSING}[4]{ % Filename, Caption, Label, Width percent of textwidth
+	\begin{figure}[htbp]
+		\begin{center}
+			\missingfigure{#1}
 		\end{center}
 		\vspace{-0.4cm}
 		\caption{#2}
@@ -130,9 +155,6 @@
 \newcommand{\code}[1]
  {\texttt{#1}}
 
-% comment that appears on the border - very practical !!!
-\newcommand{\comment}[1]{\marginpar{\raggedright \noindent \footnotesize {\sl #1} }}
-
 % page clearing
 \newcommand{\clearemptydoublepage}{%
   \ifthenelse{\boolean{@twoside}}{\newpage{\pagestyle{empty}\cleardoublepage}}%
@@ -144,3 +166,8 @@
 
 
 \newcommand{\etAl}{\emph{et al.}\mbox{ }}
+
+
+\newcommand{\tododone}[2][noinline]{\todo[#1, color=green!40]{\textit{#2}}}
+\newcommand{\todointern}[2][noinline]{\todo[#1, color=blue!40]{#2}}
+\newcommand{\todourgent}[2][noinline]{\todo[#1, color=red!40]{\textbf{#2}}}
