@@ -6,22 +6,22 @@ The approach sometimes referred to as \emph{surface splines} or \emph{G-splines}
 One such scheme is the scheme of Peters, described in \cite{peters1992constructing}, which starts from an unstructured mesh of polygonal faces, and creates from the location and connectivity of its vertices a $G^1$--continous surface. This means that the normal vector to the plane is countinous, resulting in a smooth surface without sharp corners. The process consists of two steps, described below for a mesh of quadrilateral faces (quads), however, the scheme can be applied for a mesh of any mixture of polygons.\tododone[inline]{mention that it's called surface splines or G-splines to create surface from a mesh}
 
 \subsubsection{Mesh refinement}
-In the first step, the mesh is refined through two applications of \emph{Doo-Sabin refinement}. In one step of this refinement, a new point $\vec{m}_{ref}$  is created for each vertex $\petersPatchPointVec$ in the control mesh $\petersPatchPoints$, for every face $f_{\vec{m}}$ that $\petersPatchPointVec$ corners,  between $\petersPatchPointVec$ and the centroid $\centroidof{f_{\vec{m}}}$ (the average position of its vertices) of the bordering face $f_{\vec{m}}$. The refined mesh $\petersPatchPoints^ref$ then consists of all these created points. Mathematically, for the faces $\petersFaces$, with face ${\hat{f}}$ having vertices $V_{\hat{f}}$:
+In the first step, the mesh is refined through two applications of \emph{Doo-Sabin refinement}. In one step of this refinement, a new point $\vec{m}_{ref}$  is created for each vertex $\petersControlMeshVec$ in the control mesh $\petersControlMesh$, for every face $f_{\vec{m}}$ that $\petersControlMeshVec$ corners,  between $\petersControlMeshVec$ and the centroid $\centroidof{f_{\petersControlMeshVec}}$ (the average position of its vertices) of the bordering face $f_{\petersControlMeshVec}$. The refined mesh $\petersControlMesh^ref$ then consists of all these created points. Mathematically, for the faces $\petersFaces$, with face ${\hat{f}}$ having vertices $V_{\hat{f}}$:
 
 \begin{align}
-\petersControlMesh^{(ref)} =& \lbrace \vec{m}_{ref} \suchthat \vec{m}_{ref} = \alpha\vec{m} + (1-\alpha)\centroidof{f} \suchthat f \in \facesof{\vec{m}} \suchthat
+\petersControlMesh^{(ref)} =& \lbrace \petersControlMeshVec_{ref} \suchthat\petersControlMeshVec_{ref} = \alpha\petersControlMeshVec + (1-\alpha)\centroidof{f} \suchthat f \in \facesof{\petersControlMeshVec} \suchthat
 \\ \notag &
- \suchthat \vec{m} \in \petersControlMesh, \alpha \in (0,1) \rbrace
+ \suchthat \petersControlMeshVec \in \petersControlMesh, \alpha \in (0,1) \rbrace
 \\
-\where \qquad\qquad \centroidof{\hat{f}} =& \text{average}(\vec{m}_{\hat{f}})_{\vec{m}_{\hat{f}} \in \verticesof{\hat{f}}}
+\where \qquad\qquad \centroidof{\hat{f}} =& \text{average}(\petersControlMeshVec_{\hat{f}})_{\petersControlMeshVec_{\hat{f}} \in \verticesof{\hat{f}}}
 \\
 \text{and} \qquad\qquad F_{\vec{\hat{m}}} =& \left\lbrace \hat{f} \suchthat \vec{\hat{m}} \in \verticesof{\hat{f}}	\right\rbrace
 \end{align}
 
-Thus, in every refinement step on an $n$-gon, $n$ vertices are created, giving $4 \times 4 = 16$ vertices for a quad in the original control mesh.
+Thus, in every refinement step on an $n$--gon, $n$ vertices are created, giving 4 vertices for a quad in the original control mesh. These are then joined up with the neighbours on the quad to form a smaller quad, and with the neighbouring points from the same vertex on the neighbouring quads, forming a quad along each edge, and an $n$--gon around each original vertex, where $n$ is the number of quads that the original cornered. After two refinements, we thus get a mesh of vertices $\petersPatchPoints$ that consists mainly of quads, with some possible other-$n$--gons around the vertices of the original mesh $\petersControlMesh$. \todointernal{maybe fancy peter's scheme picture, alt the one in EckHoppe for what the thingymajong looks like after 2x ref.}
 
 \subsubsection{Bezier patch creation}
-
+In this step, we create one B{\'e}zier patch for every vertex in the double refined mesh $\petersControlMesh$. 
 
 
 \todointern[inline]{insert stuff here}
