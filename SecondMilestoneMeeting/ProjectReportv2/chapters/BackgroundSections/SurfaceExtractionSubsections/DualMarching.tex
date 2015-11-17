@@ -1,11 +1,11 @@
 \subsection{Dual Marching Methods}
 \todourgent[inline]{Benni: this part is more a outlook than something which has been implemented, remove this and keep it for next milestone? If yes, don't forget to remove the references in the introduction of this chapter!}
-So far we have introduces \ac{MC} and \ac{DC} and discovered that both methods have certain drawbacks:
+So far we have introduced \ac{MC} and \ac{DC} and discovered that both methods have certain drawbacks:
 \begin{itemize}
 \item \ac{MC} always produces manifold surfaces and resolves ambiguities correctly, while \ac{DC} does not have this property.
-\item \ac{DC} has the ability to produce \ac{quad} surfaces and preserve sharp features, while \ac{MC} produces surfaces consisting of \acp{tri}\footnote{The construction of \acp{tri} is not a drawback of the \ac{MC} method in general, but for our purpose we have to construct \acp{quad} and therefore this point is crucial. If we want to finally produce a \ac{NURBS} surface, we have to rely on \acp{quad}, because \ac{NURBS} have a rectangular topology. \Acp{tri} just do not fit the topology of \ac{NURBS}. Further explanation can be found in \autoref{sec:NURBS} and \autoref{sec:surfaceImpl}} and sharp features are often lost.
+\item \ac{DC} has the ability to produce \ac{quad} surfaces and preserve sharp features, while \ac{MC} produces surfaces consisting of \acp{tri}\footnote{The construction of \acp{tri} is not a drawback of the \ac{MC} method in general, but for our purpose we have to construct \acp{quad} and therefore this point is crucial. If we want at the end to produce a \ac{NURBS} surface, we have to rely on \acp{quad}, because \ac{NURBS} have a rectangular topology. \Acp{tri} just do not fit the topology of \ac{NURBS}. Further explanation can be found in \autoref{sec:NURBS} and \autoref{sec:surfaceImpl}} and sharp features are often lost.
 \end{itemize}
-To come up with these drawback, hybrid methods have been developed. These methods use ideas from both the \ac{MC} and the \ac{DC} world (For a short summary of those ideas see \autoref{tab:dualmarching}).
+To come up with these drawbacks, hybrid methods have been developed. These methods use ideas from both the \ac{MC} and the \ac{DC} approaches (For a short summary of those ideas see \autoref{tab:dualmarching}).
 \tododone[inline]{Benni: Change table | Erik: I added newline - separates out the different points. Also think maybe different bullets than in text bullet lists - minuses maybe?}
 \begin{table}[H]
 \begin{tabularx}{\textwidth}{X|X}
@@ -39,7 +39,7 @@ The \acf{DualMC} method is --- like already stated above --- a hybrid of \ac{MC}
 
 \subsubsection{\acl{DualMT}}
 While \ac{DualMC} is a very complicated algorithm, \acf{DualMT} uses tetrahedra instead of cubes and therefore reduces the $256$\footnote{With a proper treatment of ambiguities we get even more than those $256$ cases.} different cases from \ac{MC} to $2^4=16$ cases. Furthermore a treatment of ambiguous cases is not necessary anymore, since there are no ambiguous cases for this method\todointern{really? check this or find reference!}.
-Even though the method is working on tetrahedra, we can still apply it to a voxel dataset, by composing each cube out of 5 or 6 tetrahedra (\autoref{fig:splittingCubes}). But this high amount of simplifictaion comes with a drawback: The treatment of ambiguous cases depends on the splitting scheme applied to a cube\todointern{proof or reference! Show 2D example.}. Further detail on this method can be found in \cite{Nielson2008}.
+Even though the method is working on tetrahedra, we can still apply it to a voxel dataset, by composing each cube out of 5 or 6 tetrahedra (\autoref{fig:splittingCubes}). Nevertheless, this high amount of simplification comes with a drawback: The treatment of ambiguous cases depends on the splitting scheme applied to a cube\todointern{proof or reference! Show 2D example.}. Further detail on this method can be found in \cite{Nielson2008}.
 
 \begin{figure}
 \begin{center}
