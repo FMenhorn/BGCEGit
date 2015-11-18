@@ -32,9 +32,9 @@ For those cells, we can now create biquadratic tensor splines that meet $G^1$ al
 The exceptions which might not be placeable in a regular mesh is now the points residing on the corners of the original quads. This comes from the fact that at quad corners, we may have any number of quads meeting, starting from 3. \todointern{possible example fig?} As mentioned above, this forms an $n$--gon ($n \geq 3$) in the doubly refined mesh, for whose vertices we cannot apply the same procedure as in the example above. 
 The solution to how to create \Bez patches over these corners is to place a bicubic (of polynomial order 3) \Bez patch for each corner point, placing the \Bez control points in such a way that they both match up smoothly to the regular mesh patches, and to the other neighbouring patches, and that all match up smoothly about the original mesh corner. For bicubic \Bez patches, there are more than enough degrees of freedom to do this, and in Peters' scheme, this is done by letting each \Bez control point, just as in the regular case, be a linear combination of all the neighbouring points, but here taking into account all the vertices that were generated from the Doo--Sabin refinement with the original corner vertex, that is, all vertices that are neighbouring a corner on the $n$--gon. The formulae are derived and proved to result in a $G^1$ surface in \cite{peters1992constructing}, and can be found in \todointern[inline]{insert appendix}. 
 
-To summarize, Peters' scheme is a mathematical algorithm for creating biquadratic and bicubic \Bez patches that join with $G^1$ continuity, from a mesh of polygons. The \Bez control points are all created from linear combinations of the vertices in the polygonal mesh, with an inbetween\todointern[inline]{HAD TO LEAVE MID-SENTENCE}
+To summarize, Peters' scheme is a mathematical algorithm for creating biquadratic and bicubic \Bez patches that join with $G^1$ continuity, from a mesh of polygons. The \Bez control points defining the patches are all created from linear combinations of the vertices in the polygonal mesh, with an inbetween step to the refined mesh points (that is, the refined mesh points are linear combinations of the original mesh points, and they then form linear combinations to create the \Bez control points).
 
-\todointern[inline]{insert stuff here}
+\tododone[inline]{Erik: inserted stuff here}
 In this section we will cover the following, referring to \cite{peters1992constructing}:
 \begin{itemize}
 \item How we go from polygonal faces to a set of mesh control points. "patch points", specifying that we're talking about quads, and that we then get 16
@@ -42,7 +42,7 @@ In this section we will cover the following, referring to \cite{peters1992constr
 \item That if we define the B{\'e}zier control points of these patches in a special way, as described in appendix XYZ \todointern{TODO: create this appendix, or change this to refer to paper for coefficients}, we get a surface that is $G^1$ continous
 \item Maybe describe that we then need for every one of these B{\'e}zier patches the locations of the neighbours
 \item That the location of a point on the surface defined by parameters $\vec{s} = (u,v)$ depends on the B{\'e}zier control points, whose linear dependence on the "patch points" give us coefficients on these "patch points" of the location described by the parameters, as can be seen in \autoref{fig:PetersPoints}
-\item Possibly that this can used to fit the location of these "patch points" to a set of datapoints by minimusing a least-squares error \todointern{stress the relation to parametrized datapoints}
+
 \end{itemize}
 \begin{figure}
 
