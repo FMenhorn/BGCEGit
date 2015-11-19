@@ -1,14 +1,18 @@
-\section{\acs{NURBS}}
+\section{B{\'e}zier curves and \acs{NURBS}}
 \label{sec:NURBS}
 
-\todointern[inline]{Erik: expand this! and a better name}
-\todointern[inline]{Erik: split this section into two: fitting and NURBS}
-In this section we will discuss:
-\begin{itemize}
-\item Parametrized curves and surfaces such as Bezier and NURBS surfaces
-\item Peters' Scheme, a scheme for generating tangent plane continous ($G^1$) surfaces from an unstructured mesh of polygonal faces as first described in...[ref]
-\item Possibly how to fit this surface to parametrized datapoints using least squares. That could be impl.
-\end{itemize}
+\tododone[inline]{Erik: expand this! and a better name}
+\tododone[inline]{Erik: split this section into two: fitting and NURBS}
+
+\emph{\Bez curves} and \emph{\acl{NURBS}} (\acs{NURBS}) are two types of curves which are very important in CAD (see \autoref{sec:CADbackg} above) used mainly to model surfaces. They are both defined parametrically by creating linear combinations of a set of \emph{control points}, with the coefficients in these linear combinations being functions of the input parameter. There are many reasons behind their popularity, some of them being their relatively straightforward way of calculation and approximation, and the intuitive way of modification by changing the control points. In this section, we will provide definitions and backgrounds on them, as well as a description of \emph{Peters' scheme} \cite{peters1992constructing}, a scheme for constructing a smooth ($G^1$) surface from the vertices in a polygonal mesh.
+
+%Parametrised geometries are often given in terms of \emph{Non-Uniform Rational B-Spline} (NURBS) curve patches (see for example the documentation of the CAD software FreeCAD in \cite{FreeCAD}). 
+%In this section we will discuss:
+%\begin{itemize}
+%\item Parametrized curves and surfaces such as Bezier and NURBS surfaces
+%\item Peters' Scheme, a scheme for generating tangent plane continous ($G^1$) surfaces from an unstructured mesh of polygonal faces as first described in...[ref]
+%\item Possibly how to fit this surface to parametrized datapoints using least squares. That could be impl.
+%\end{itemize}
 
 
 \input{chapters/BackgroundSections/NURBSSubsection/NURBSpart}
