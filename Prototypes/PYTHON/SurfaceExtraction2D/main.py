@@ -3,6 +3,7 @@ __author__ = 'benjamin'
 from dc2D import tworesolution_dual_contour
 from dcSample import sample_data, sphere_f, doubletorus_f, torus_f
 from edge import Edge
+from dcPlotting import draw_voxel
 
 import numpy as np
 
@@ -20,8 +21,8 @@ def find_closest_edges(_point, _edgelist, _n_closest):
 
 
 dimensions = {'xmin': 0.0, 'xmax': 6.0, 'ymin': 2.0, 'ymax': 6.0}
-res_fine = 1.0/16.0
-res_coarse = res_fine * 8.0
+res_fine = 1.0/8.0
+res_coarse = res_fine * 4.0
 resolutions = {'fine': res_fine,'coarse': res_coarse}
 
 fine_data = sample_data(doubletorus_f, resolutions['fine'], dimensions)
@@ -44,31 +45,37 @@ for q in edges_out_dc['fine']:
     vtx = verts_out_dc['fine'][q]
     x = vtx[:,0]
     y = vtx[:,1]
-    plt.plot(x, y, 'b')
+    plt.plot(x, y, 'b',linewidth=2.0)
     plt.plot(x, y, 'bo')
 
 for q in edges_out_dc['coarse']:
     vtx = verts_out_dc['coarse'][q]
     x = vtx[:,0]
     y = vtx[:,1]
-    plt.plot(x, y, 'k')
-    plt.plot(x, y,'ko')
+    plt.plot(x, y, 'r',linewidth=2.0)
+    plt.plot(x, y,'ro')#,markersize=15.0)
 
 for v in verts_pseudo_out_dc['coarse']:
     x = v.x
     y = v.y
-    plt.plot(x, y,'kx')
+    #plt.plot(x, y,'kx',markersize=20.0,markeredgewidth=2.0)
 
 print verts_pseudo_out_dc
 
-# show voxel data on resolution depending on res_key
+# show voxels on resolution depending on res_key
 res_key = 'coarse'
 for key in fine_data:
     if (key[0] % resolutions[res_key] == 0) and (key[1] % resolutions[res_key] == 0):
+        1#draw_voxel(fine_data, key, resolutions[res_key])
+
+# show voxel data on resolution depending on res_key
+res_key = 'fine'
+for key in fine_data:
+    if (key[0] % resolutions[res_key] == 0) and (key[1] % resolutions[res_key] == 0):
         if fine_data[key] > 0: # outer point
-            plt.plot(key[0],key[1],'b.')
+            1#plt.plot(key[0],key[1],'b.')#,markersize=15.0)
         elif fine_data[key] < 0: # inner point
-            plt.plot(key[0],key[1],'r.')
+            1#plt.plot(key[0],key[1],'r.')#,markersize=15.0)
 
 N_closest_candidates = 6 # compute list of N_closest_candidates closest quads
 for vertex in verts['fine']:
@@ -87,11 +94,14 @@ for vertex in verts['fine']:
     #only plotting information
     start = projected_point_min
     end = vertex
-    print t_min
-    plt.plot([start[0],end[0]],[start[1],end[1]],'k',linewidth=2.0)
+    #print t_min
+    plt.plot([start[0],end[0]],[start[1],end[1]],'k',linewidth=1.0)
 
 
 plt.xlim(xmin = -1, xmax = 7)
 plt.ylim(ymin = 1 , ymax = 7)
+plt.axis('equal')
+plt.gca().xaxis.set_major_locator(plt.NullLocator())
+plt.gca().yaxis.set_major_locator(plt.NullLocator())
 plt.show()
 

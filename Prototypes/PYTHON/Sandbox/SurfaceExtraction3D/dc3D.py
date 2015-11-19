@@ -4,7 +4,7 @@ from operator import pos
 import numpy as np
 import numpy.linalg as la
 import itertools as it
-from dcHelpers import resolve_manifold_edges, is_inside
+from dcHelpers import resolve_manifold_edges, is_inside, create_manifold_edges
 
 #########################
 #### DUAL CONTOURING ####
@@ -52,37 +52,37 @@ def estimate_hermite(data, v0, v1, res, res_fine, coarse_level):
         x0 = .5*(v0 + v1)
         res /= 2.0
 
-    if coarse_level:
-        print x0
-
     return x0
 
 
 def tworesolution_dual_contour(dataset, resolutions, dims):
-    [dc_verts_fine, dc_quads_fine] = dual_contour(dataset,
-                                                  resolutions['fine'],
-                                                  resolutions['fine'],
-                                                  dims,
-                                                  coarse_level=False)
+    [dc_verts_fine, dc_quads_fine, dc_manifold_edges_fine] = dual_contour(dataset,
+                                                                          resolutions['fine'],
+                                                                          resolutions['fine'],
+                                                                          dims,
+                                                                          coarse_level=False,
+                                                                          do_manifold_treatment=False)
     print "coarse level:"
-    [dc_verts_coarse, dc_quads_coarse] = dual_contour(dataset,
-                                                      resolutions['coarse'],
-                                                      resolutions['fine'],
-                                                      dims,
-                                                      coarse_level=True)
+    [dc_verts_coarse, dc_quads_coarse, dc_manifold_edges_coarse] = dual_contour(dataset,
+                                                                                resolutions['coarse'],
+                                                                                resolutions['fine'],
+                                                                                dims,
+                                                                                coarse_level=True,
+                                                                                do_manifold_treatment=False)
     #quit()
 
     dc_verts = {'fine': dc_verts_fine, 'coarse': dc_verts_coarse}
     dc_quads = {'fine': dc_quads_fine, 'coarse': dc_quads_coarse}
+    dc_manifolds = {'fine': dc_manifold_edges_fine, 'coarse': dc_manifold_edges_coarse}
 
-    return dc_verts, dc_quads
+    return dc_verts, dc_quads, dc_manifolds
 
 
 # Input:
 # data = voxel data
 # res = resolution
 # dims = dimension of data
-def dual_contour(data, res, res_fine, dims, coarse_level):
+def dual_contour(data, res, res_fine, dims, coarse_level, do_manifold_treatment):
     # Compute vertices
     dc_verts = []
     vindex = {}
@@ -102,7 +102,7 @@ def dual_contour(data, res, res_fine, dims, coarse_level):
 
         if all(cube_signs) or not any(cube_signs):
             continue
-        print "vtx at voxel "+str(o)
+
         # Estimate hermite data
         h_data = []
         for e in cube_edges:
@@ -125,7 +125,6 @@ def dual_contour(data, res, res_fine, dims, coarse_level):
         # Emit one vertex per every cube that crosses
         vindex[tuple(o)] = len(dc_verts)
         dc_verts.append(v)
-        print "\tplaced at "+str(v)
 
     # Construct faces
     dc_quads = []
@@ -154,7 +153,9 @@ def dual_contour(data, res, res_fine, dims, coarse_level):
                                          vindex[tuple(o + res * dirs[i] + res * dirs[j])],
                                          vindex[tuple(o + res * dirs[j])]])
 
-    if coarse_level:
-        dc_verts, dc_quads = resolve_manifold_edges(dc_verts, vindex, dc_quads, data, res)
+    if do_manifold_treatment:
+        dc_verts, dc_quads, dc_manifold_edges = resolve_manifold_edges(dc_verts, vindex, dc_quads, data, res)
+    else:
+        dc_manifold_edges = create_manifold_edges(dc_quads, vindex, data, res)
 
-    return np.array(dc_verts), dc_quads
+    return np.array(dc_verts), dc_quads, dc_manifold_edges

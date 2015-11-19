@@ -1,5 +1,6 @@
 \subsection{\Acl{DC}}
 \tododone[inline]{Proofreading of Benni \& JC}
+\todointern[inline]{generally longer, more explanatory captions}
 \label{ssec:DC}
 The idea of \emph{dual algorithms}, to which \acf{DC} belongs, is similar to \ac{MC}. However, instead of generating polygon vertices on the edges of the cubes, this method locates them inside the cubes that have at least one edge which has vertex values both above and below the isovalue (\acs{SignChangingEdge}). The basic algorithm can be summarized in these two steps:
 \begin{enumerate}
@@ -24,8 +25,7 @@ E(x)= x^TA^TAx-2x^TA^Tb+b^Tb
 \end{equation}
 where the columns of the matrix \textit{A} are the  isosurface normals at the intersection points, and \textit{b} is a vector containing the scalar product of the normals and the intersection points. This system can be solved numerically, for example as proposed in \cite{Hermite2002} by computing the singular value decomposition of \textit{A} and forming the pseudo-inverse, truncating its small singular values. 
 The effect of considering the gradient for the calculation of the vertex is huge: \ac{DC} has the ability to represent sharp features like edges and corners.
-\tododone[inline]{Benni: explain our approach without hermite data (only root, no gradient, only boolean values) of taking the mean value of the roots, drawbacks of simplification. Do something like a proof why this is resonable.}
-Computing the position of the new node by just taking the mean value of all the roots on the \acsp{SignChangingEdge} of one cube represent an easier approach, which does not rely on gradient information, but is also not able to represent sharp features. The resulting vertex is obviously\todourgent{obvious?} inside the cube, because it represents the average of nodes lying on the edges of the cube. 
+Computing the position of the new node by just taking the mean value of all the roots on the \acsp{SignChangingEdge} of one cube represent an easier approach, which does not rely on gradient information, but is also not able to represent sharp features. The resulting vertex is inside the cube, because it represents the average position of the nodes lying on edges of the cube.
 
 \subsubsection{Non-manifold surfaces}
 The risk to also obtain non-manifold surfaces represents one of the big drawbacks of \ac{DC}. A manifold surface is defined by the following topological property:
@@ -33,6 +33,7 @@ The risk to also obtain non-manifold surfaces represents one of the big drawback
 \emph{A $d$-dimensional contour is locally a \emph{manifold} if it is topologically equivalent to a $d$-dimensional disc.}\cite{Hermite2002}
 \end{quote}
 This means that for 2D data we only get a manifold isocontour, if each vertex is connected to exactly 2 edges. For 3D we only get a manifold isosurface, if each edge is at maximum shared by two \acp{quad}. Since the original method does not deal with this issue, extensions have been developed to solve this problem.\autoref{fig:manifold}) shows one configuration creating a non-manifold surface for the basic method from \cite{Hermite2002} and its correct resolution by \cite{Schaefer2007}.
+\todo[inline]{\ref{fig:manifold} put all subfigures into one line}
 
 \begin{figure}
 \begin{center}
