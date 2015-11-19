@@ -1,14 +1,14 @@
-\section{From a \acs{CAD} model to Voxels}
-\todourgent[inline]{combine 3.1 and 3.2 into one part like in the discussion section? This section is much more than the voxelization, but also preprocessing for topy. And the topy section is quite short.}
+\section{From a \acs{CAD} model to Optimised Voxel Grid}
+\tododone[inline]{combine 3.1 and 3.2 into one part like in the discussion section? This section is much more than the voxelization, but also preprocessing for topy. And the topy section is quite short.}
 \label{sec: CADToVoxels}
-
+\todointernal[inline]{Saumitra: Mention extensive use of OpenCascade}
 \begin{figure}
   \includegraphics[scale=0.5]{Pictures/CADToVoxel/UML_Complete_PNG.png}
 \caption{UML diagram of the pipeline from CAD to a voxelized output. Many sections of the code use data-structures and algorithms from OpenCascade\cite{OpenCascade}.}
 \label{fig: umlCADToVoxel}
 \end{figure}
 
-In the modern world, some branch of almost every engineering discipline involves the design and construction of structural components. Engineers in these sectors rely heavily on CAD software for this purpose. This makes CAD files the natural choice of input for our pipeline. This input then needs to be optimized using a topology optimimzation algorithm.
+In the modern world, some branch of almost every engineering discipline involves the design and construction of structural components. Engineers in these sectors rely heavily on CAD software for this purpose. This makes CAD files the natural choice of input for our pipeline. This input then needs to be optimized using a topology optimization algorithm.
 
 However, one of the hurdles with most state-of-the-art open source topology optimization tools is their input format, where many of them (including ToPy, the topology optimizer of our choice) require input to be specified as a 3-dimensional voxel grid. Converting the CAD input to ToPy input along with all the boundary conditions is the first problem that needs to be addressed in our pipeline.
 
@@ -21,6 +21,9 @@ The procedure has been described in four sections: the first section explains th
 \input{chapters/ImplementationSections/CADImpl/Voxelization}
 
 \input{chapters/ImplementationSections/CADImpl/ToPyInputConstruction}
+
+
+\input{chapters/ImplementationSections/CADImpl/TopOpt}
 
  %In the end, to voxelize a file given as .stl-input, we could just call 
 %\begin{lstlisting}
