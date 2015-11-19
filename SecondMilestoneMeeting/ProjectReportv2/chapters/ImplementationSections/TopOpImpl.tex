@@ -8,7 +8,7 @@ ToPy \cite{ToPy} is a python library/program, written by William Hunter and docu
 
 
 %In terms of our implementation, 
-We use ToPy as a black-box topology optimizer. This means, we launch the program with an input file based on our scenario and let ToPy run. Next, as soon as the output is available, we proceed with the next step. The intention is to create separate modules to be able to plug in different solvers later on. In order to specify our input, we wrote an auxiliary program taking a voxelized CAD design provided by CVMLCPP as input, outputting a .tpd file with geometry, load and fixture information in the format required by ToPy. 
+We use ToPy as a black-box topology optimizer. This means, we launch the program with an input file based on our scenario and let ToPy run. Next, as soon as the output is available, we proceed with the next step. The intention is to create separate modules to be able to plug in different solvers later on. In order to specify our input, we wrote an auxiliary program taking a voxelized CAD design provided by OpenCascade as input, outputting a .tpd file with geometry, load and fixture information in the format required by ToPy. 
 
 Results of the topology optimization process can be seen in figure \ref{fig: topyStar}. Here, a star was given as input from a STL-file. We set the voxels in the star's points as fixtures, while we set a load in the middle, in the direction normal to the plane of the star. As can be seen, the optimization process "cuts" away unnecessary material in-between the corners and even in the middle of the material, returning an optimally stiff structure for the chosen remaining volume fraction. 
 \begin{figure}
