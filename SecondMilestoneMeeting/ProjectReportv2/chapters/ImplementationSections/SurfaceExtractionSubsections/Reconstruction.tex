@@ -2,54 +2,32 @@
 In \autoref{sec:surfaceBackg} different surface reconstruction schemes have been introduced. In the following we want to discuss our choice for an appropriate surface reconstruction scheme and explain necessary modifications to it.
 
 \subsubsection{Discussion on surface reconstruction schemes}
-Since the surface reconstruction is just an intermediate step before our final \ac{NURBS} fitting procedure, only producing a good approximation of the surface of our topology is not sufficient, but some further constraints have to be kept in mind:
+\tododone[inline]{proofreading Benni\& JC}
+Since the surface reconstruction is just an intermediate step before our final \ac{NURBS} fitting procedure, it is not sufficient to only produce a good surface approximation of our optimized topology, but additional constraints have to be kept in mind:
 \begin{enumerate}
 \item \ac{NURBS} have a rectangular topology, therefore our surface reconstruction should also be able to provide a surface consisting of rectangular patches.
 \item Peters' Scheme only covers manifold surfaces, meaning that per edge each patch is only allowed to have exactly one neighbour.
 \end{enumerate}
 The first requirement is met by \ac{DC}, while the second one is only met by \ac{MC}. We decided to use the \ac{DC} method, because already the basic version of it creates \acp{quad}, while \ac{MC} creates a mesh of triangles, which can only be changed into a mesh of \acp{quad} by considerably increasing the number of faces.
 
-\begin{comment}
-
-\subsubsection{Discussion \ac{MC}}
-\todo[inline]{discussion makes more sense after the NURBS part.}
-\todo[inline]{needs to be formulated}
-Pro:
-\begin{itemize}
-\item produces proper \todo{what does proper mean?} surfaces
-\item very simple
-\end{itemize}
-Contra:
-\begin{itemize}
-\item triangles
-\item no feature detection (explicit detection with extended MC)
-\item very many faces (at least in basic implementation)
-\end{itemize}
-
-\subsubsection{Discussion \ac{DC}}
-\todo[inline]{discussion makes more sense after the NURBS part.}
-\todo[inline]{poorly written...}
-\ac{DC} generates \acp{quad} instead of \acp{tri} and therefore fits better to the rectangular topology of \ac{NURBS}. The possibility of making \ac{DC} an adaptive algorithm is another advantage.
-Since we do not rely on first order Hermite data and the minimization of the \ac{QEF} but just on a very simple averaging procedure, we loose one of the main advantages of \ac{DC}, namely the ability to represent sharp features. But we do not care about sharp features in the context of topology optimization. 
-The main disadvantage of \ac{DC} is that it is not always generating manifold surfaces. Our approach of solving this issue by remeshing is more a hack than a real solution to the problem.
-\end{comment}
-
 \subsubsection{Our implementation of \ac{DC}}
-We used the open-source language PYTHON \cite{Python} for the implementation of \ac{DC}. Compared to the version described in \cite{Hermite2002} we applied some modifications:
+\tododone[inline]{proofreading Benni\& JC}
+We used the open-source language PYTHON \cite{Python} for the implementation of \ac{DC}. Compared to the version described in \cite{Hermite2002} we applied some simplifications:
 \begin{itemize}
-\item We do not care about sharp features and cannot easily access gradient information in our algorithm. Therefore, we did not use \autoref{eq:QEF} for the generation of new vertices, but the simple averaging scheme decribed in \autoref{ssec:DC}.
-\item We want to locate our surface at the interface of material and no-material and not at a certain isovalue, because our dataset only consists of boolean values instead of real valued quantities.
-\item We did not implement the adaptive and topology safe scheme but a scheme for uniform grids which does not support adaptive mesh simplification or topology checks.
+\item We do not care about sharp features and cannot easily access gradient information in our algorithm. Therefore, we did not use \autoref{eq:QEF} for the generation of new vertices, but the simple averaging scheme described in \autoref{ssec:DC}.
+\item For the reason that our dataset only consists of boolean values instead of real valued quantities, we locate our surface at the interface of material and no-material and not at a certain isovalue.
+\item We did not implement the adaptive and topology safe scheme but a scheme for uniform grids which does not support adaptive mesh simplification nor topology checks.
 \end{itemize}
 This leads to the following modified \ac{DC} scheme:
 \begin{enumerate}
-\item On each cube edge find the root (i.e. the interface of material and no-material voxels) using bisection. We assume our surface to exactly lie in the middle between material and no-material voxels, if no further information is available.
+\item On each cube edge find the root (i.e. the interface of material and no-material voxels) using bisection. We assume our surface to exactly lie in the middle between material and no-material voxels.
 \item Take the mean value of all root positions for determining the position of the newly introduced vertex.
-\item Join the vertices associated with four cubes sharing a common edge, to form a \ac{quad}.
+\item Join the vertices associated with four cubes sharing a common edge to form a \ac{quad}.
 \end{enumerate}
 So far our procedure generates \ac{quad} surfaces for boolean datasets on uniform Cartesian grids. But like for the original \ac{DC} algorithm we cannot guarantee that those surfaces are manifold.
 
 \subsubsection{Obtaining manifold surfaces}
+\todointern[inline]{proofreading!}
 Since we want to deduce a first estimate for the topology of the \ac{NURBS} surface output of our \ac{CADTopOpt} tool, non-manifold surfaces cannot be accepted\footnote{Surfaces consisting of smoothly connected \ac{NURBS} \acp{patch} are always manifold surfaces. Therefore we cannot start with a non-manifold surface and assume we will end up with a manifold surface.}. We implemented a remeshing procedure for generating manifold surfaces out of non-manifold surfaces.
 
 Our procedure has the following steps:
