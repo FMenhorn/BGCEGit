@@ -27,7 +27,7 @@ This leads to the following modified \ac{DC} scheme:
 So far our procedure generates \ac{quad} surfaces for boolean datasets on uniform Cartesian grids. But like for the original \ac{DC} algorithm we cannot guarantee that those surfaces are manifold.
 
 \subsubsection{Obtaining manifold surfaces}
-\todointern[inline]{proofreading!}
+%\todointernal[inline]{proofreading!}
 Since we want to deduce a first estimate for the topology of the \ac{NURBS} surface output of our \ac{CADTopOpt} tool, non-manifold surfaces cannot be accepted\footnote{Surfaces consisting of smoothly connected \ac{NURBS} \acp{patch} are always manifold surfaces. Therefore we cannot start with a non-manifold surface and assume we will end up with a manifold surface.}. We implemented a remeshing procedure for generating manifold surfaces out of non-manifold surfaces.
 
 Our procedure has the following steps:
@@ -36,7 +36,7 @@ Our procedure has the following steps:
 \item All non-manifold edges are split into two manifold edges with only two \acp{quad} connected to them.
 \item The members of each pair of manifold edges are moved into opposite directions. 
 \end{enumerate}
-The directions, in which we are moving the resulting manifold edges, can be determined by estimating the gradient at the position of the former non-manifold edge. Please note that we can only estimate the gradient if additional information in the middle of the faces penetrated by non-manifold edges is available. Otherwise it is not possible to resolve the ambiguity, generating the non-manifold edge, in a proper way and therefore we cannot eliminate the non-manifold edge. \tododone[inline]{I dont understand this sentence Benni}
+The directions in which we are moving the resulting manifold edges can be determined by estimating the gradient at the position of the former non-manifold edge. Please note that we can only estimate the gradient if additional information in the middle of the faces penetrated by non-manifold edges is available. Otherwise it is not possible to resolve the ambiguity in a proper way and therefore we cannot eliminate the non-manifold edge. \tododone[inline]{I dont understand this sentence Benni}
 
 We illustrate the procedure for a 2D example in \autoref{fig:manifoldResolution2D}. Please note that for the 3D case additional patterns occur and not only the \acp{quad} which are connected to the whole non-manifold edge have to be considered, but also the \acp{quad} connected to only one vertex of the edge. This also implies the introduction of new \acp{quad} at other locations (\autoref{fig:manifoldPatterns3D}).
 
