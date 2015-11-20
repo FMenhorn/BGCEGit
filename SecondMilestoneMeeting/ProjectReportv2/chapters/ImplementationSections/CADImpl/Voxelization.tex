@@ -1,15 +1,16 @@
 \subsection{Voxelization}
 \label{sec: Voxelization}
 
-\todointern[inline]{Severin: Describe the voxelization process. Explain concept of refinement.}
+\tododone[inline]{Severin: Describe the voxelization process. Explain concept of refinement.}
 %what is voxelisation
-As pointed out in section \ref{sec:ToPy} a very common formulation of topology optimization deals with regions that are specified as filled or empty. The minimum compliance problem is then solved on a discretized grid; the most common one is a volume raster in the form of cubes - so called voxels. Since ToPy requires a voxel grid in their input format, the next step is to render the geometry with a 3D raster of voxels.  
+As pointed out in section \ref{sec:TopOpt} a very common formulation of topology optimization deals with regions that are specified as filled or empty. The minimum compliance problem is then solved on a discretized grid; the most common one is a volume raster in the form of cubes - so called voxels. Since ToPy requires a voxel grid in their input format, the next step is to render the geometry with a 3D raster of voxels.  
 
 As described in the previous section, the geometry shape and faces for each boundary condition type, are stored in OpenCascade through the internal data type \lstinline|TopoDSShape|. As one can see in the UML Diagram \ref{fig: umlCADToVoxel} the \lstinline|voxelise| function is called internally by \lstinline|CADTOVoxel| -- for the shape and each faces separately. The voxelisation is then performed as follows: 
 \begin{enumerate}
-\item In order to combine the 3D voxel raster consistently, a bounding box is introduced.
+\item In order to combine the 3D voxel raster consistently, a bounding box is introduced. As a consequence the same coordinate system is used and voxel numbers are consistent between different voxelization types (faces and shapes). 
 \item In each dimension $2^n*l_d$ voxels are created, where $n$ is the user specified refinement level and $l_d$ is the size of the bounding box in the respective dimension $d$
 \item Voxelization is performed with the OpenCascade  \lstinline|Voxel_FastConverter.hxx| class creating a \lstinline|VoxelShape|
 \end{enumerate}
-\todointern[inline]{OpenCascade TopoBoolDS shape}
+\tododone[inline]{OpenCascade TopoBoolDS shape}
 
+Consequentially, a 3D boolean voxel raster is created for each type -- since boundary conditions may consist of more than one face, they are voxelized separately and lists of \lstinline|VoxelShape| are created. 
