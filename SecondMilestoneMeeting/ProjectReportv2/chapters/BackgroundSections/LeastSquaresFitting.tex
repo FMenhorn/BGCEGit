@@ -71,6 +71,7 @@ However, this requires there to be a solution, which typically relies on the spe
 This again is a central problem in computing, and can be solved by many standard libraries with excellent performance.
 
 \subsubsection{Fitting Problem: Peters' scheme}
+\label{subsub:petersleastsq}
 One of the major drawbacks with the approach above is that it is typically very complicated to impose smoothness constraints on structures of multiple patches, something that is essential for representing more complicated geometries. One of the ways of avoiding this is to use an existing scheme for creating a smooth surface, such as the scheme of Peters \cite{peters1992constructing,eck1996automatic}, which we introduced in \autoref{subsec:peters}. Here, we create smoothly connected square \Bez patches by letting their control points be linear combinations of vertices in a refined control mesh $\petersPatchPoints$, and ensure smoothness by the way that we calculate these coefficients on the vertices in $\petersPatchPoints$, using the imformation we have on their local positions in the mesh to make sure which neighbouring vertices they should be infulenced by. Once more, we can express this mathematically with relative simplicity, again letting $\lsControlPointi{p}$ denote the $p^\text{th}$ control point, and $\petersPatchPointVec_l$ being the $l^\text{th}$ refined control mesh vertex
 \begin{equation}
 \lsControlPointi{p} = \sum\limits_{l} \petersControlPointCoef_{p,l} \petersPatchPointVec_l
