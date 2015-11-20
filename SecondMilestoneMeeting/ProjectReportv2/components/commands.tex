@@ -59,6 +59,10 @@
 \newcommand{\petersControlMesh}{M}
 \newcommand{\petersControlMeshVec}{\vec{\MakeLowercase{\petersControlMesh}}}
 \newcommand{\petersPatchPointVec}{\vec{\MakeLowercase{\petersPatchPoint}}}
+\newcommand{\petersPatchPointMatrix}{\MakeUppercase{\petersPatchPoint}}
+\newcommand{\petersControlPointCoefLetter}{c}
+\newcommand{\petersControlPointCoef}{\petersControlPointCoefLetter^{PS}}
+\newcommand{\petersControlPointCoefMatrix}{\MakeUppercase{\petersControlPointCoefLetter}^{PS}}
 \newcommand{\bezierPoint}{P}
 \newcommand{\bezierPointSet}{\bezierPoint_x}
 \newcommand{\bezierPointVec}{\vec{\bezierPoint}}
@@ -67,9 +71,22 @@
 \newcommand{\centroidof}[1]{\vec{c}_{#1}}
 \newcommand{\verticesof}[1]{V_{#1}}
 \newcommand{\facesof}[1]{\petersFaces_{#1}}
+\newcommand{\lsDataPointLetter}{D}
+\newcommand{\lsDataPoint}{\vec{\MakeLowercase{\lsDataPointLetter}}}
+\newcommand{\lsDataPointMatrix}{\MakeUppercase{\lsDataPointLetter}}
+\newcommand{\lsControlPointLetter}{P}
+\newcommand{\lsControlPointMatrix}{\MakeUppercase{\lsControlPointLetter}}
+\newcommand{\lsControlPoint}{\vec{\MakeLowercase{\lsControlPointLetter}}}
+\newcommand{\lsControlPointCoef}{c}
+\newcommand{\lsControlPointCoefVec}{\vec{\lsControlPointCoef}}
+\newcommand{\lsControlPointCoefMatrix}{\MakeUppercase{\lsControlPointCoef}}
+
+\newcommand{\lsDataPointi}[1]{\lsDataPoint_{#1}}
+\newcommand{\lsControlPointi}[1]{\lsControlPoint_{#1}}
+\newcommand{\lsControlPointCoefi}[1]{\lsControlPointCoef_{#1}}
 
 
-\newcommand{\Bez}{B{\'e}zier}
+\newcommand{\Bez}{B{\'e}zier }
 %-------------------------------------------------------------
 % some abreviations ------------------------------------------
 \newcommand{\Reg}{$^{\textregistered}$}
