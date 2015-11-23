@@ -1,0 +1,103 @@
+\section{Least-squares fitting of parametrized surfaces}
+\tododone[inline]{Erik: define section}
+In order to make a surface adhere as closely as possible to our desired form, some fitting is usually required. This typically involves varying some parameters in order to minimize some error. As minimizing the error squared of a function -- for example distance between a calculated point and its desired location -- is an important building block in many practical applications, extensive literature can be found regarding this, especially when the function depends linearly on its input. The field that treats this topic is called \emph{linear least-squares fitting}, and in this section, some selected subtopics relevant to the fitting of \acs{NURBS} is treated.
+
+%\begin{itemize}
+%\item Possibly that this can used to fit the location of these "patch points" to a set of datapoints by minimusing a least-squares error 
+%\end{itemize}
+
+\subsection{Fitting problem}
+\tododone[inline]{is this really nurbs? well maybe. Probably stuff the Peters' Scheme fitting in here and remove some other parts}
+In order to represent a given line or surface by Bezier curves or surfaces respectively, just as with NURBS, one has to solve a fitting problem. The goal of it is to fit in a parametric curve to the set of given data points. In the case of interest, the given set of points is a mesh, obtained from surface contouring.
+\subsubsection{Fitting problem: Parametric curves}
+\todourgent[inline]{this section goes to Anna}
+\todointern{we don't want to do something in the background section, thats implementation! -> Passive style!}
+First we want to find a Bezier-curve $\vec{B}_n\left(u\right)$ of degree $n$ which is approximating a given spline $\vec{s}_m\left(u\right)$ defined by $m$ points in a optimal way. For this purpose we want to minimize the $L_2$-error. This leads to the minimization problem:
+\begin{equation}
+\text{find\ } \underset{\vec{B}_n\in \mathbb{B}_n}{\min} \Ltwonorm{\vec{B}_n-\vec{s}_m}.
+\end{equation}
+Minimizing the $L_2$-norm is equal to minimizing the functional:
+\begin{equation}
+F(\vec{B}_n)=\int\limits_{u=0}^{u=1} \left(\vec{B}_n-\vec{s}_m\right)^2\du
+\end{equation}
+Using the variational principle we get the the system of linear equations:
+\begin{equation}
+A a = b
+\end{equation}
+where $A$ is the matrix of pair-wise scalar products of basis functions (Bernstein polynomials), $b$ is the vector of scalar products of the given spline $s_{m}$ and basis functions and $a$ is a required vector of coefficients for Bezier curve representation.
+
+\tododone[inline]{why (least squares) here and not above? is this consistent?}
+Although the approach used above shows good results, it appears to be computationally very intensive. Analogously, one could reduce the original problem to a \emph{regression problem}, which allows us to reduce computational costs. Also, to improve the locality of our solution, from now on we use NURBS basis functions with weights $\omega_{j} = 1$ instead of Bezier curves. For this purpose, we adopted an algorithm, provided in \cite{becker2011advanced}:
+
+Let $X^{0}$ be the $n \times 2$ matrix of the given set of points, $N^{p}$ the basis functions of degree $p$ ($n \times (n+p)$ matrix, where $n$ is the number of points), and $P^{0}$ the control points ($(n+p) \times 2$ matrix).
+
+The original problem can be written as:
+\begin{equation}
+X_{i}^{0} = \sum\limits_{j=1}^{n+p} P_{j}^{0} N_{i,j}^{p}, \quad i \in \{1,..,n\}
+\end{equation}
+Or, in short:
+\begin{equation}
+X^{0} = N^{p} P^{0}
+\end{equation}
+The above system needs to be solved for the unknown $P^{0}$. This can be done numerically, for example through singular value decomposition. 
+%part of implementation
+
+\subsubsection{Fitting Problem: Parametric surfaces}
+\todointern[inline]{insert stuff here, what's described in Peters' Scheme, will see where it fits}
+In order to fit a \Bez surface to a set of datapoints with fixed locations and parameters on this surface, we can use an approach similar to the approach above. The base of the approach is making use of the way a point with specific parameters is mapped by either the Bernstein polynomials (\Bez curves) or the B--spline basis functions (NURBS) to a linear combination on the control points. That is, from the parameters $(u,v)$ of each data point on the surface, we get a set of coefficients on the control points that define the surface. Expressing this as a sum, we have for the point $\lsDataPointi{k}$ with the parameters $(u_k,v_k)$ on the surface defined by the $N \times M$ control points $\lsControlPointi{i,j}$:
+\begin{equation}
+\lsDataPointi{k} = \sum\limits_{i,j=1}^{N,M} \lsControlPointCoefi{i,j}(u_k,v_k) \lsControlPointi{i,j}
+\end{equation} 
+where $\lsControlPointCoefi{i,j}(u,v)$ are the coefficients calculated on control point $\lsControlPointi{i,j}$ from the parameters $(u,v)$. Reindexing, realizing that the matrix indexing $i,j$ can be flattened to a vector index $p = 1,2,...,S=N\times M$ mapping to $i$ and $j$, we can express this as:
+\begin{equation}
+\lsDataPointi{k} = \sum\limits_{p=1}^{S} \lsControlPointCoefi{p}(u_k,v_k) \lsControlPointi{p} \overset{!}{=} \vec{\lsControlPointCoef}(u_k,v_k)\lsControlPointMatrix
+\label{eqn:lsmatrix1}
+\end{equation} 
+where in the last equality, we've expressed the control points as a vector-matrix product, where the $S\times 3$ matrix $P$ has the $p^\text{th}$ row as the position of the $p^\text{th}$ control points as a 3D row-vector, and $\vec{\lsControlPointCoef}(u_k,v_k)$ is the row vector whose entries are the coefficients $\lsControlPointCoefi{p}(u_k,v_k)$ on the control points. Now, again realizing that for $Q$ datapoints $\lsDataPointi{k}$ we can view them as the columns in a $3\times Q$ matrix $\lsDataPointMatrix$, and create an analogous matrix $\lsControlPointCoefMatrix(\vec{u},\vec{v})$ with the $k^\text{th}$ containing the coefficients calculated from the parameters $(u_k,v_k)$ of datapoint $\lsDataPointi{k}$, resulting in the matrix equation:
+
+\begin{equation}
+\lsDataPointMatrix = \lsControlPointCoefMatrix(\vec{u},\vec{v})\lsControlPointMatrix
+\label{eqn:lsmatrix2}
+\end{equation}
+
+Now, in the case that we have a set of datapoints that we manage to parametrize to the surface, we can calculate the positions of the control points by calculating the control point matrix $\lsControlPointCoefMatrix$ using these parameters, and then solving the system for $P$:
+\begin{equation*}
+\lsControlPointMatrix = \left[\lsControlPointCoefMatrix(\vec{u},\vec{v})\right]^{-1}\lsDataPointMatrix
+\end{equation*}
+However, this requires that there be a solution, which typically relies on the specific number of datapoints being exactly equal to the number of control points, and on the fact that here we also interpolate the points exactly. In most cases there are many more datapoints, and we try to find the $\lsControlPointMatrix$ that minimizes the least-squares error:
+\begin{equation}
+\norm{\lsDataPointMatrix - \lsControlPointCoefMatrix(\vec{u},\vec{v})\lsControlPointMatrix}^2
+\label{eqn:lsminim}
+\end{equation}
+This again is a central problem in computing, and can be solved by many standard libraries with excellent performance.
+
+\subsubsection{Fitting Problem: Peters' scheme}
+\label{subsub:petersleastsq}
+One of the major drawbacks with the approach above is that it is typically very complicated to impose smoothness constraints on structures of multiple patches, something that is essential for representing more complicated geometries. One of the ways of avoiding this is to use an existing scheme for creating a smooth surface, such as the scheme of Peters \cite{peters1992constructing,eck1996automatic}, which we introduced in \autoref{subsec:peters}. Here, we create smoothly connected square \Bez patches by letting their control points be linear combinations of vertices in a refined control mesh $\petersPatchPoints$, and ensure smoothness by the way that we calculate these coefficients on the vertices in $\petersPatchPoints$, using the imformation we have on their local positions in the mesh to make sure which neighbouring vertices they should be infulenced by. Once more, we can express this mathematically with relative simplicity, again letting $\lsControlPointi{p}$ denote the $p^\text{th}$ control point, and $\petersPatchPointVec_l$ being the $l^\text{th}$ refined control mesh vertex:
+\begin{equation}
+\lsControlPointi{p} = \sum\limits_{l} \petersControlPointCoef_{p,l} \petersPatchPointVec_l
+\end{equation} 
+with $\petersControlPointCoef_{p,l}$ being the coefficient for the $p^\text{th}$ \Bez control point on the $l^\text{th}$ refined control mesh vertex as obtained from Peters' scheme. Analogously to before in equations \ref{eqn:lsmatrix1} and \ref{eqn:lsmatrix2}, we can extend this to all \Bez control points on all patches, and cast it in a matrix form to obtain:
+
+\begin{equation}
+\lsControlPointMatrix = \petersControlPointCoefMatrix\petersPatchPointMatrix
+\end{equation}
+where $\lsControlPointMatrix$ as before is the \Bez control point position matrix, $\petersControlPointCoefMatrix$ is the matrix of coefficients for the \Bez control points from on the refined control mesh vertices of $\petersPatchPoints$, and $\petersPatchPointMatrix$ is the matrix of the positions of these vertices. 
+
+Finally, we can now substitute this into our equations \ref{eqn:lsmatrix2} and \ref{eqn:lsminim} above, to solve the system:
+
+\begin{equation}
+\lsDataPointMatrix = \lsControlPointCoefMatrix(\vec{u},\vec{v})\lsControlPointMatrix = \lsControlPointCoefMatrix(\vec{u},\vec{v})\petersControlPointCoefMatrix\petersPatchPointMatrix
+\end{equation}
+or minimize the least squares error:
+\begin{equation}
+\norm{\lsDataPointMatrix - \left [\lsControlPointCoefMatrix(\vec{u},\vec{v})\petersControlPointCoefMatrix\right ]\petersPatchPointMatrix}^2
+\label{eqn:petersminimisation}
+\end{equation}
+for the only unknown now in this case, the positions of the refined control mesh vertices $\petersPatchPointMatrix$.
+
+To summarize, using the standard methods of minimisation of least-squares errors, we compute a set of points, which when used in Peters' scheme produces a surface with the smallest error to a set of datapoints. For this, we require the parametrisations of these datapoints on the surface to compute $\lsControlPointCoefMatrix(\vec{u},\vec{v})$, and in order to obtain $\petersControlPointCoefMatrix$, we also need to know how the patches connect with each other. 
+Worth noting is that both $\lsControlPointCoefMatrix(\vec{u},\vec{v})$ and $\petersControlPointCoefMatrix$ are, although likely very large for large amounts of datapoints, also very sparse, as the $\lsControlPointCoefMatrix(\vec{u},\vec{v})$ will only contain coefficients on one patch, and the algorithms for computing $\petersControlPointCoefMatrix$ only use information of a few vertices around the patch, resulting in the combined coefficient matrix $\lsControlPointCoefMatrix(\vec{u},\vec{v})\petersControlPointCoefMatrix$ also having high sparsity. Thus, the minimisation problem in \autoref{eqn:petersminimisation} will be able to use specialised, fast solvers for sparse systems.
+
+
+\todourgent[inline]{more ugly lines... argh!!!}

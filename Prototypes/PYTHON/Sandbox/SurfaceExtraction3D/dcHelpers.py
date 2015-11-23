@@ -243,7 +243,7 @@ def resolve_manifold_edges(_dc_verts, _dc_vindex, _dc_quads, _data, _resolution)
 
     _dc_verts, _dc_quads = resolve_not_consistent(_dc_verts, _dc_quads, not_consistent_edges)
 
-    return _dc_verts, _dc_quads
+    return _dc_verts, _dc_quads, manifold_edges
 
 
 def resolve_not_consistent(_dc_verts, _dc_quads, _not_consistent_edges):

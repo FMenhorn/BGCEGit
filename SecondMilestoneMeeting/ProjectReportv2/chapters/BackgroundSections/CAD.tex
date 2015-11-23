@@ -1,29 +1,31 @@
 \section{CAD overview}
 \label{sec:CADbackg}
+\todointern[inline]{Explain voxelization}
 %interaction with it, programs, geometry represenations, datastructures, formats etc., maybe even history if we're overkill
-\Acf{CAD} refers to the process of designing a product using a computer system. Before \ac{CAD} applications were used, products were designed using a sketch board. It was a challenge to incorporate changes in the construction drafts as well as to keep documentations up to date; hence, it was no surprise that \ac{CAD} systems spread rapidly across all design development branches. \Ac{CAD} is now of irreplaceable use in architecture, mechanical, electrical and civil engineering.
+\Acf{CAD} refers to the process of designing a product using a computer system. Until a few decades back, products were designed using a sketch board. It was a challenge to incorporate changes in the construction drafts as well as to keep documentations up to date; hence, it was no surprise that \ac{CAD} systems spread rapidly across all design development branches. They now have irreplaceable use in architecture, mechanical, electrical and civil engineering.
 
-Depending on the discipline, different requirements are set on the virtual model. One may imagine that in a civil engineering model of a building a 2D floor plan is often sufficient; however, in the design of a mechanical motor a 3D model is always necessary. Given these circumstances, various \ac{CAD} software bundles evolved in the different disciplines with completely different modelling approaches. Besides the geometry representation additional parameters, such as material properties or manufacturing information, are stored. In order to move between different data structures standardized exchange interfaces are commonly used. 
+Depending on the discipline, different requirements are set on the virtual model. One may imagine that in a civil engineering model of a building a 2D floor plan is often sufficient; however, in the design of a mechanical motor a 3D model is always necessary. Given these circumstances, various \ac{CAD} software bundles evolved in the different disciplines with completely different modelling approaches. Depending on the discipline, besides the geometry representation, additional parameters such as material properties or manufacturing information are stored. standardized exchange interfaces are employed in order to switch efficiently between different data structures. 
 
-This section presents the relevant geometrical and computational aspects of \ac{CAD} for the project; for a more thorough introduction we refer to \cite{sarcarCAD}.
+This section presents the relevant geometrical and computational aspects of \ac{CAD} for the project; for a more thorough introduction we refer the reader to \cite{sarcarCAD}.
 
 \subsection{Geometry representations}
-In general, two different ways of describing a geometry are used in \ac{CAD} systems: a \acf{CSG} or a \acf{BREP}. Other approaches, such as a complete voxelised geometry are not common due to extensive memory consumption.
-\subsubsection{\Acl{CSG}}
+\todointern[inline]{Saumitra: Repetitive use of names, review}
+In general, two different ways of describing a geometry are used: a \acf{CSG} or a \acf{BREP}. Other approaches, such as a complete voxelised geometry are not common due to extensive memory consumption.
+\subsubsection{Constructive Solid Geometry}
 \begin{figure}
 \centering
 \includegraphics[width=0.5\textwidth]{Pictures/Csg_tree.png}
 \caption{\ac{CSG} object tree. The picture shows the construction of a complex object from a cube, a sphere, and a set of cylinders. Figure taken from \cite{WikipediaCSG}.}
 \label{fig:csg_tree}
 \end{figure}
-One way of representing a geometry in \ac{CAD} is the approach of \ac{CSG}\todo{long form at the beginning of the subsubsection?}. The basic idea is to start from a set of primitives, e.g. spheres, cylinders and/or cubes. Basic Boolean operations link these primitives towards a complex geometry, as illustrated in \autoref{fig:csg_tree}.
+The basic idea for a CSG is to start from a set of primitives, e.g. spheres, cylinders and/or cubes. Basic Boolean operations link these primitives towards a complex geometry, as illustrated in \autoref{fig:csg_tree}.
 
-Key advantages of this format is the precise representation using very little storage memory. However, not all desired forms can be represented by \ac{CSG} and hence, a second type of geometry description is needed. 
+The key advantage of this format is the precise representation using very little storage memory. However, not all desired forms can be represented by \ac{CSG} and hence, a second type of geometry description is needed. 
 \subsubsection{\Acl{BREP}}
-A different kind of modelling approach is the \ac{BREP}\todo{long form at the beginning of the subsubsection?}. Instead of storing the geometry information as geometrical objects, \ac{BREP} formats only save the boundary surface of the body. The interior is assumed to be uniformly filled. Especially in complex geometries, this approach simplifies the model to such an extent, that the amount of data becomes much easier to handle. Surfaces can then be for example stored as a set of triangles (as in \ac{STL} files, see \autoref{subsub:STL} below) or in \ac{NURBS} \acsp{patch} (see \autoref{sec:NURBS}).
+A different kind of modelling approach is the \ac{BREP}. Instead of storing the geometry information as geometrical objects, \ac{BREP} formats only save the boundary surface of the body. The interior is assumed to be uniformly filled. Especially in complex geometries, this approach simplifies the model to an extent where the amount of data becomes much easier to handle. Surfaces can then be for example stored as a set of triangles (as in \ac{STL} files, see \autoref{subsub:STL} below) or in \ac{NURBS} \acsp{patch} (see \autoref{sec:NURBS}).
 Furthermore, holes in the body are made possible by saving the surface normal of the respective boundary. 
 
-By the boundary representation arbitrary geometries can be created. While the data sizes are commonly larger than in \ac{CSG} representation, \ac{BREP} files are usually easier to work with. One also has to keep in mind, that non-physical geometries can result from \ac{BREP} formats through a not closed surface.
+By the boundary representation arbitrary geometries can be created. While the data sizes are commonly larger than in \ac{CSG} representation, \ac{BREP} files are usually easier to work with. One also has to keep in mind, that non-physical geometries can result from \ac{BREP} formats through a non-closed surface.
 \subsection{Data exchange interfaces}
 \ac{CAD} software programs usually use their own data formats; in order to exchange models standardized interface formats have been developed. Geometric models are compressed to certain geometry descriptions; transferring additional information, such as material properties or manufacturing information, is in general a difficult task and in some exchange file formats even prohibited. A few common exchange file types are described below, as also compared in \cite{STL}.
 \subsubsection{\acs{STL} file format} \label{subsub:STL}
@@ -45,9 +47,9 @@ As this is the only information provided, no additional data such as material pr
 \subsubsection{\acs{STEP} and \acs{IGES} file formats}
 To overcome issues of insufficient precision also more elaborate exchange formats exist; these save e.g. a circle as a parameter where no discretization step is involved. Also, the possibility of passing additional parameter information (e.g. density, manufacturing information) is required by certain users. Popular file types that offer these two functionalities are \acf{STEP} and \acf{IGES} files. 
 
-The \ac{STEP} file format is a newly developed \ac{CAD} data exchange standard and documented in the ISO 10303 norm. On the contrary to \ac{STL} files it uses a combination of \ac{CSG} and \ac{BREP} to store the geometry. Additional information (e.g. density) are passed through attribute sets that are stored besides geometry instances (e.g. a circle). A key disadvantage, however, is that \ac{STEP} files carry much redundant information \cite{STL}.
+The \ac{STEP} file format is a newly developed \ac{CAD} data exchange standard and documented in the ISO 10303 norm. On the contrary to \ac{STL} files it uses a combination of \ac{CSG} and \ac{BREP} to store the geometry. Additional information (e.g. density, color) are passed through attribute sets that are stored besides geometry instances (e.g. a circle). A key disadvantage, however, is that \ac{STEP} files carry much redundant information \cite{STL}.
 
 
-The \acl{IGES} is an American National Standard since 1981 to exchange graphics information. Similar to the \ac{STEP} format it uses a combination of \ac{CSG} and \ac{BREP} for the geometry representation. Instead of storing a set of manufacturing information as done in the \ac{STEP} file, the \ac{IGES} is build only to exchange graphics information. For example, the step file transfers a physical density information; in the \ac{IGES} format the only additional parameter store node coloring information. Consequentially, \ac{IGES} file sizes are significantly smaller compared to the \ac{STEP} file format \cite{STL}.
+The \acl{IGES} is an American National Standard since 1981 to exchange graphics information. Similar to the \ac{STEP} format it uses a combination of \ac{CSG} and \ac{BREP} for the geometry representation. Instead of storing a set of manufacturing information as done in the \ac{STEP} file, the \ac{IGES} is build only to exchange graphics information. For example, the \ac{STEP} file transfers a physical density information; in the \ac{IGES} format the only additional parameter stored on a node is the coloring information. Consequentially, \ac{IGES} file sizes are significantly smaller compared to the \ac{STEP} file format \cite{STL}.
 
 The \ac{IGES} file format contains five different sections: a \emph{Start}, \emph{Global}, \emph{Directory Entry}, \emph{Parameter Data} and \emph{Terminate} section. The \emph{Start} and \emph{Global} section are used for naming and part information. In the \emph{Directory Entry} section additional information like the node color is saved. The \emph{Parameter Data} section is used for storing the coordinate points; the \emph{Terminate} section signals the end of the file \cite{sarcarCAD}.

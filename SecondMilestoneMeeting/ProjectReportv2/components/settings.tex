@@ -23,13 +23,14 @@
 \usepackage{thumbpdf}
 
 %to use the subfigures
-\usepackage{subfigure}
-
+\usepackage{subcaption}
 
 \usepackage{colortbl}
 \usepackage{color}
 \definecolor{Gray}{gray}{0.9}
 
+%for high quality horizontal lines
+\usepackage{booktabs}
 
 %% show program code\ldots
 %\usepackage{verbatim}
@@ -48,6 +49,7 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
+\usepackage{units}
 \usepackage{textcomp}
 \usepackage{yhmath} % fr die adots 
 %% mark text as preliminary
@@ -133,9 +135,16 @@
 \epstopdfsetup{update} % only regenerate pdf files when eps file is newer
 
 \usepackage{listings} %source code formatter
+%\usepackage{courier}
+
+\lstset{basicstyle=\ttfamily,breaklines=true}
+\lstset{framextopmargin=50pt,frame=bottomline}
 
 % package for notes
-\usepackage{todonotes}
+\usepackage[obeyFinal, colorinlistoftodos]{todonotes}
+
+% for comments
+\usepackage{verbatim}
 
 % package for acronyms
 \usepackage{acro}
@@ -157,3 +166,6 @@
 %\bibliographystyle{styles/bauermaNum}
 %\bibliographystyle{alpha}
 \bibliographystyle{unsrt}
+
+% for striking out sentences
+\usepackage{soul}

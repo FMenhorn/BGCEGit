@@ -1,8 +1,8 @@
 \subsection{Parametric curves}
-\todo{add thing about control points in description and possibly names, because they're kinda important}
+\todointern{add thing about control points in description and possibly names, because they're kinda important}
 %As mentioned in the Introduction, the main challenge of our project is to convert the mesh based geometry, obtained on a previous step, back to CAD representation. 
-Parametrised geometries are often given in terms of \emph{Non-Uniform Rational B-Spline} (NURBS) curve patches (see for example, documentation of FreeCAD software \cite{FreeCAD}). 
-To define NURBS from a mathematical standpoint, we first define so-called \emph{Bezier curves} and use them later for the definition of NURBS. For these two sections, we refer to \cite{farin2002handbook} for a more in-depth introduction and further material. 
+
+To define NURBS from a mathematical standpoint, we first define so-called \emph{Bezier curves} and use them later for the definition of NURBS. 
 \subsubsection{Bezier Curves}
 A Bezier curve is a \textit{parametric} curve, which is often used for producing a smooth approximation of a given set of data points.
  
@@ -16,19 +16,14 @@ b_i^n(u)=\binom{n}{i}(1-u)^{(n-i)}u^i
 \end{equation*}
 with $\binom{n}{i}$ being a binomial coefficient, is the $i^{\text{th}}$ \emph{Bernstein polynomial} (see \cite{lorentz2012bernstein}) of degree $n$.
 
-Additionally to the expression with the Bernstein polynomials, one can use a recursion formula (so-called \emph{de Casteljau Algorithm}) for the construction of the Bezier curve, which we will not cover here.
-
-Analogically to Bezier curves, but with $n\cdot m$ points $\vec{P}_{i,j}$,
+In addition to the expression with the Bernstein polynomials, one can use a recursion formula (so-called \emph{de Casteljau Algorithm}) for the construction of the Bezier curve, which we will not cover here. Analogous to Bezier curves, but with $n\cdot m$ points $\vec{P}_{i,j}$,
 one can define a \textit{Bezier surface}, given by the analytical expression
 \begin{equation*}
 \vec{S}(u,v)=\sum\limits_{i=0}^n \sum\limits_{j=0}^m b_i^n(u) b_j^m(v) \vec{P}_{i,j}
 \end{equation*}
-\\
-Note that Bezier curves \todo{higher-order only?} and surfaces may be unstable --- minor changes in control points might lead to major global changes.
-
 
 \subsubsection{NURBS basis functions}
-\todo[inline]{rename subsubsection and name that Bezier curves are subset of NURBS}
+\todointern[inline]{rename subsubsection and name that Bezier curves are subset of NURBS}
 Extending the idea described in previous section, one could use \emph{B-spline basis functions} (see below) instead of the Bernstein polynomial basis.
 
 Unlike with Bezier curves, for the B-splines a parameter domain is subdivided by so-called \textit{knots}. For the one-dimensional parameter domain $[u_{0}, u_{m}]$, the \textit{knot vector} will be given by $u_{0} \leq u_{1} \leq ... \leq u_{m}$. In most cases $u_{0} = 0, u_{m} = 1$ is chosen, so that we get the unit interval for our parameter values. For the case of NURBS, the knots $u_{0},..., u_{m}$ need not be equidistant --- hence the Non-Uniform in the beginning NU of NURBS.
@@ -43,16 +38,19 @@ N_{i,p}(u) = \frac{u - u_{i}}{u_{i+p} - u_{i}}N_{i, p-1}(u)  + \frac{u_{i+p+1}-u
 For $p=0$ we get just step functions, and $p=1$ familiar hat functions, whereas the quadratic basis functions look more complicated (\autoref{fig:bsplineBases}).
 \begin{figure}
 \centering
-\begin{subfigure}[B-spline basis for $p=0$]{
-  \includegraphics[width=.3\linewidth]{basis_constant.eps}}
+\begin{subfigure}[b]{.3\linewidth}
+  \includegraphics[width=\linewidth]{Pictures/basisconstant}
+  \subcaption{B-spline basis for $p=0$}
   \label{fig:bspline_basis_constant}
 \end{subfigure}%
-\begin{subfigure}[B-spline basis for $p=1$]{
-  \includegraphics[width=.3\linewidth]{basis_linear.eps}}
+\begin{subfigure}[b]{.3\linewidth}
+  \includegraphics[width=\linewidth]{Pictures/basislinear}
+  \subcaption{B-spline basis for $p=1$}
   \label{fig:bspline_basis_linear}
 \end{subfigure}
-\begin{subfigure}[B-spline basis for $p=2$]{
-  \includegraphics[width=.3\linewidth]{basis_quadratic.eps}}
+\begin{subfigure}[b]{.3\linewidth}
+  \includegraphics[width=\linewidth]{Pictures/basisquadratic}
+  \subcaption{B-spline basis for $p=2$}
   \label{fig:lognorm_quadratic}
 \end{subfigure}
 \caption{B-spline basis functions, of degree $p=0$ (left), $p=1$ (middle) and $p=2$ (right).}
@@ -71,4 +69,4 @@ B-splines are have the following properties, which are useful for our problem:
 \item B-Splines only change locally (depending on the degree $n$) when a control point is changed.
 \end{itemize}
 
-Analogically to the Bezier curve surfaces, one can define B-spline or NURBS surfaces. For more information about NURBS see \cite{farin1999nurbs}.
+Analogous to the Bezier curve surfaces, one can define B-spline or NURBS surfaces. With varying degrees and number of control points, these can be made to fit a variety of shapes. However, as the parameters $u$ and $v$ define a square in their two-dimensional parameter domain, there is a limit to what topologies may be realized with just one such NURBS surface. For example, an open cylinder could be constructed by one such surface where one of the sides meets its own beginning, whereas something with multiple holes - like a double torus, or a non-flat 8-shaped surface, would be impossible. Therefore, when using NURBS, surfaces are most often moddeled using a network of connected patches. \todointern{maybe should include an example picture here} For more information about NURBS see \cite{farin1999nurbs}.

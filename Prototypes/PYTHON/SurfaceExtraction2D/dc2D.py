@@ -7,7 +7,7 @@ import scipy.optimize as opt
 import itertools as it
 
 from ManifoldNode import ManifoldNode
-from dcHelpers import update_mesh_2d, generate_vertex_usage_dict
+from dcHelpers import update_mesh_2d, generate_vertex_usage_dict, is_inside
 
 # Cardinal directions
 dirs = [np.array([1.0, 0.0]), np.array([0.0, 1.0])]
@@ -23,25 +23,56 @@ quad_verts = [np.array([0.0, 0.0]), np.array([1.0, 0.0]), np.array([1.0, 1.0]), 
 quad_edges = [[0,1],[1,2],[2,3],[3,0]] # traverse edges in CCW manner
 
 # Use non-linear root finding to compute intersection point
-def estimate_hermite(data, v0, v1):
+def estimate_hermite_easy(data, v0, v1, res, res_fine, corase_level):
     t0 = .5
     x0 = (1. - t0) * v0 + t0 * v1
     #print 'x0='+str(v0)
     #print 'x1='+str(v1)
     return x0
 
+def estimate_hermite(data, v0, v1, res, res_fine, coarse_level):
+    data_v0 = is_inside(data, tuple(v0))
+    data_v1 = is_inside(data, tuple(v1))
 
-def tworesolution_dual_contour(dataset,resolutions,dims):
-    print "DC FINE"
-    [dc_verts_fine, dc_edges_fine, dc_verts_pseudo_fine]=dual_contour(dataset,
-                                                                      resolutions['fine'],
-                                                                      dims,
-                                                                      coarse_level = False)
-    print "DC COARSE"
-    [dc_verts_coarse, dc_edges_coarse,dc_verts_pseudo_coarse]=dual_contour(dataset,
-                                                                           resolutions['coarse'],
-                                                                           dims,
-                                                                           coarse_level = True)
+    if coarse_level:
+        res_min = res_fine
+    else:
+        res_min = res
+
+    x0 = .5*(v0 + v1)
+    while res != res_min:
+        data_x0 = is_inside(data, tuple(x0))
+        if data_v0 != data_x0:
+            v1 = x0
+        elif data_v1 != data_x0:
+            v0 = x0
+        else:
+            print "ERROR!"
+            quit()
+        x0 = .5*(v0 + v1)
+        res /= 2.0
+
+    if coarse_level:
+        print x0
+
+    return x0
+
+
+def tworesolution_dual_contour(dataset, resolutions, dims):
+    print "fine_level"
+    [dc_verts_fine, dc_edges_fine, dc_verts_pseudo_fine] = dual_contour(dataset,
+                                                                        resolutions['fine'],
+                                                                        resolutions['fine'],
+                                                                        dims,
+                                                                        coarse_level=False,
+                                                                        do_manifold_treatment=False)
+    print "coarse level:"
+    [dc_verts_coarse, dc_edges_coarse, dc_verts_pseudo_coarse] = dual_contour(dataset,
+                                                                              resolutions['coarse'],
+                                                                              resolutions['fine'],
+                                                                              dims,
+                                                                              coarse_level=True,
+                                                                              do_manifold_treatment=True)
 
     dc_verts={'fine':dc_verts_fine, 'coarse':dc_verts_coarse}
     dc_edges={'fine':dc_edges_fine, 'coarse':dc_edges_coarse}
@@ -54,7 +85,7 @@ def tworesolution_dual_contour(dataset,resolutions,dims):
 # data = voxel data
 # res = resolution
 # dims = dimension of data
-def dual_contour(data, res, dims, coarse_level):
+def dual_contour(data, res, res_fine, dims, coarse_level, do_manifold_treatment):
     # Compute vertices
     dc_verts = []
     vindex = {}
@@ -94,7 +125,7 @@ def dual_contour(data, res, dims, coarse_level):
         h_data = []
         for e in quad_edges:
             if quad_signs[e[0]] != quad_signs[e[1]]:
-                h_data.append(estimate_hermite(data, o + quad_verts[e[0]]*res, o + quad_verts[e[1]]*res))
+                h_data.append(estimate_hermite(data, o + quad_verts[e[0]] * res, o + quad_verts[e[1]] * res, res, res_fine, coarse_level))
 
         counter = 0
         v = np.array([0.0, 0.0])
@@ -127,7 +158,7 @@ def dual_contour(data, res, dims, coarse_level):
         else:
             continue
 
-    if coarse_level:
+    if do_manifold_treatment:
         vertex_usage_dict = generate_vertex_usage_dict(dc_edges)
 
         new_edges_list = []

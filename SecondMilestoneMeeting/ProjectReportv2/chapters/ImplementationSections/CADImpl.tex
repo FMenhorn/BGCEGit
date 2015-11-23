@@ -1,8 +1,18 @@
-\section{From \acs{CAD} to Voxels}
-
-\todo[inline]{Include a super-diagram of the classes being used}
+\section{From a \acs{CAD} model to Voxel Grid}
+\tododone[inline]{combine 3.1 and 3.2 into one part like in the discussion section? This section is much more than the voxelization, but also preprocessing for topy. And the topy section is quite short.}
 \label{sec: CADToVoxels}
-One of the hurdles with most state-of-the-art open source topology optimization tools is their input format, where many of them (including ToPy, our topology optimizer of choice) require input to be specified as a 3-dimensional voxel grid. Presence (or absence) of material in these voxels is defined by a boolean variable, and boundary conditions are imposed on the appropriate locations. An example of voxelized data can be seen in \autoref{fig: voxelOpenCascade}. %Since there is a variety of toolboxes available which are able to perform a voxelization of common CAD input files, we did not implement one of our own but rather adapted one of the open source tools. %This section describes how we overcame this hurdle of converting CAD representations to voxelized input.
+\tododone[inline]{Saumitra: Mention extensive use of OpenCascade}
+\begin{figure}
+  \includegraphics[scale=0.5]{Pictures/CADToVoxel/UML_Complete_PNG.png}
+\caption{UML diagram of the pipeline from CAD to a voxelized output. Many sections of the code use data-structures and algorithms from OpenCascade\cite{OpenCascade}.}
+\label{fig: umlCADToVoxel}
+\end{figure}
+
+In the modern world, some branch of almost every engineering discipline involves the design and construction of structural components. Engineers in these sectors rely heavily on CAD software for this purpose. This makes CAD files the natural choice of input for our pipeline. This input then needs to be optimized using a topology optimization algorithm.
+
+However, one of the hurdles with most state-of-the-art open source topology optimization tools is their input format, where many of them (including ToPy, the topology optimizer of our choice) require input to be specified as a 3-dimensional voxel grid. Converting the CAD input to ToPy input along with all the boundary conditions is the first problem that needs to be addressed in our pipeline.
+
+The procedure has been described in four sections: the first section explains the logic behind specifying boundary conditions using a CAD software. Subsequent sections then talk about what the code does with this CAD input. The second section explains the extraction of different boundaries from the CAD geometry with extensive use of the OpenCascade C++ library. This is followed by two more sections on voxelization and writing of the output file. Finally, the last section explains the input file format for ToPy, and describes its operation.
 
 \input{chapters/ImplementationSections/CADImpl/GeomCreation}
 
@@ -10,28 +20,11 @@ One of the hurdles with most state-of-the-art open source topology optimization 
 
 \input{chapters/ImplementationSections/CADImpl/Voxelization}
 
-\input{chapters/ImplementationSections/CADImpl/ToPyInputConstruction}
+%\input{chapters/ImplementationSections/CADImpl/ToPyInputConstruction}
 
-\begin{figure}
-\centering
-  \includegraphics[scale=0.3]{Pictures/CADToVoxel/voxels_wp_image005.png}
-\caption{A shape and its voxel representation. \emph{Leftmost picture}: The original parametrized shape. \emph{Rightmost picture}: The voxel representation. Picture from OpenCascade \cite{OpenCascade}.}
-\label{fig: voxelOpenCascade}
-\end{figure}
 
-\begin{figure}
-\centering
-\begin{subfigure}{
-  \includegraphics[width=.2\linewidth]{Pictures/STLToVoxels/Star_STL.png}}
-\end{subfigure}
-\begin{subfigure}{
-  \includegraphics[width=.2\linewidth]{Pictures/STLToVoxels/Star_VTK_Trans.png}}
-\end{subfigure}
-\caption{The STL geometry of a star (left) and its voxelized form (right) obtained via the CVMLCPP voxelizer, visualized by Paraview \cite{Paraview}.}
-\label{fig: voxelizerStar}
-\end{figure}
+%\input{chapters/ImplementationSections/CADImpl/TopOpt}
 
-In terms of implementation, the only thing required is the installation of the CVMLCPP library. The voxelizer is then included as a callable binary, that takes STL-file input (\autoref{subsub:STL}) and converts it to a .dat binary file with dimension and voxel information, with specifiable voxel size. An example result of using the voxelizer is shown in \autoref{fig: voxelizerStar}.
  %In the end, to voxelize a file given as .stl-input, we could just call 
 %\begin{lstlisting}
 %~/Path/To/CVMLCPP/bin/voxelize ./<stl_file>.stl <voxelSize>

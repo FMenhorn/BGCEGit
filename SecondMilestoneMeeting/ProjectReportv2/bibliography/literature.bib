@@ -20,17 +20,32 @@
   ISBN                     = {978-3-662-05086-6}
 }
 
-@inproceedings{Puppo2010,
-  title={Practical quad mesh simplification},
-  author={Tarini, Marco and Pietroni, Nico and Cignoni, Paolo and Panozzo, Daniele and Puppo, Enrico},
-  booktitle={Computer Graphics Forum},
-  volume={29},
-  number={2},
-  pages={407--418},
-  year={2010},
-  organization={Wiley Online Library}
+@Article{Dong2005,
+  Title                    = {Harmonic functions for quadrilateral remeshing of arbitrary manifolds},
+  Author                   = {Dong, Shen and Kircher, Scott and Garland, Michael},
+  Journal                  = {Computer aided geometric design},
+  Year                     = {2005},
+  Number                   = {5},
+  Pages                    = {392--423},
+  Volume                   = {22},
+
+  Publisher                = {Elsevier}
 }
 
+@Article{DooSabin1978subdiv,
+  Title                    = {Behaviour of recursive division surfaces near extraordinary points},
+  Author                   = {D. Doo and M. Sabin},
+  Journal                  = {Computer-Aided Design},
+  Year                     = {1978},
+  Number                   = {6},
+  Pages                    = {356 - 360},
+  Volume                   = {10},
+
+  Abstract                 = {The behaviour of the limits surface defined by a recursive division construction can be analysed in terms of the eigenvalues of a set of matrices. This analysis predicts effects actually observed, and leads to suggestions for the further improvement of the method.},
+  Doi                      = {http://dx.doi.org/10.1016/0010-4485(78)90111-2},
+  ISSN                     = {0010-4485},
+  Url                      = {http://www.sciencedirect.com/science/article/pii/0010448578901112}
+}
 
 @Book{eck1996automatic,
   Title                    = {Automatic reconstruction of B-spline surfaces of arbitrary topological type},
@@ -41,42 +56,6 @@
   Organization             = {ACM},
   Pages                    = {325--334}
 }
-
-@article{Hermite2002,
-  title={Dual contouring of hermite data},
-  author={Ju, Tao and Losasso, Frank and Schaefer, Scott and Warren, Joe},
-  journal={ACM Transactions on Graphics (TOG)},
-  volume={21},
-  number={3},
-  pages={339--346},
-  year={2002},
-  publisher={ACM}
-}
-
-@article{Marching2006,
-  title={A survey of the marching cubes algorithm},
-  author={Newman, Timothy S and Yi, Hong},
-  journal={Computers \& Graphics},
-  volume={30},
-  number={5},
-  pages={854--879},
-  year={2006},
-  publisher={Elsevier}
-}
-
-@article{ExtendedMC,
-  title={Feature Sensitive Surface Extraction from Volume Data},
-  author={Schwanecke, Ulrich and Botsch,Mario},
-  journal={Proceedings of the 28th annual conference on Computer graphics and interactive techniques},
-  number={121},
-  pages={57-66 },
-  year={2001},
-  publisher={AMC}
-}
-
-
-
-
 
 @Book{farin2002handbook,
   Title                    = {Handbook of Computer Aided Geometric Design},
@@ -132,6 +111,18 @@
   Year                     = {2009}
 }
 
+@Article{Hermite2002,
+  Title                    = {Dual contouring of hermite data},
+  Author                   = {Ju, Tao and Losasso, Frank and Schaefer, Scott and Warren, Joe},
+  Journal                  = {ACM Transactions on Graphics (TOG)},
+  Year                     = {2002},
+  Number                   = {3},
+  Pages                    = {339--346},
+  Volume                   = {21},
+
+  Publisher                = {ACM}
+}
+
 @Article{STL,
   Title                    = {Interface between CAD and Rapid Prototyping systems. Part 1: A study of existing interfaces},
   Author                   = {Kai, ChuaChee and Jacob, GanG.K. and Mei, Tong},
@@ -185,6 +176,65 @@
   Address                  = {Natick, Massachusetts}
 }
 
+@Article{Marching2006,
+  Title                    = {A survey of the marching cubes algorithm},
+  Author                   = {Newman, Timothy S and Yi, Hong},
+  Journal                  = {Computers \& Graphics},
+  Year                     = {2006},
+  Number                   = {5},
+  Pages                    = {854--879},
+  Volume                   = {30},
+
+  Publisher                = {Elsevier}
+}
+
+@Article{Nielson2004,
+  Title                    = {{Dual marching cubes}},
+  Author                   = {Nielson, G.M.},
+  Journal                  = {IEEE Visualization 2004},
+  Year                     = {2004},
+  Pages                    = {489--496},
+
+  Abstract                 = { We present the definition and computational algorithms for a new class of surfaces which are dual to the isosurface produced by the widely used marching cubes (MC) algorithm. These new isosurfaces have the same separating properties as the MC surfaces but they are comprised of quad patches that tend to eliminate the common negative aspect of poorly shaped triangles of the MC isosurfaces. Based upon the concept of this new dual operator, we describe a simple, but rather effective iterative scheme for producing smooth separating surfaces for binary, enumerated volumes which are often produced by segmentation algorithms. Both the dual surface algorithm and the iterative smoothing scheme are easily implemented.},
+  Doi                      = {10.1109/VISUAL.2004.28},
+  File                     = {:home/benjamin/benjamin.rueth@gmail.com/TUM BGCE master folder/Working Groups/SurfaceExtraction/Dual Marching Cubes.pdf:pdf},
+  ISBN                     = {0-7803-8788-0},
+  ISSN                     = {1077-2626}
+}
+
+@Article{Nielson2008,
+  Title                    = {{Dual marching tetrahedra: contouring in the tetrahedronal environment}},
+  Author                   = {Nielson, Gregory M},
+  Journal                  = {Lecture Notes in Computer Science (including subseries Lecture Notes in Artificial Intelligence and Lecture Notes in Bioinformatics)},
+  Year                     = {2008},
+  Pages                    = {183--194},
+  Volume                   = {5358 LNCS},
+
+  Abstract                 = {We discuss the dual marching tetrahedra (DMT) method. The DMT can be viewed as a generalization of the classical cuberille method of Chen et al. to a tetrahedronal. The cuberille method produces a rendering of quadrilaterals comprising a surface that separates voxels deemed to be contained in an object of interest from those voxels not in the object. A cuberille is a region of 3D space partitioned into cubes. A tetrahedronal is a region of 3D space decomposed into tetrahedra. The DMT method generalizes the cubille method from cubes to tetrahedra and corrects a fundamental problem of the original cuberille method where separating surfaces are not necessarily manifolds. For binary segmented data, we propose a method for computing the location of vertices this is based upon the use of a minimal discrete norm curvature criterion. For applications where dependent function values are given at grid points, two alternative methods for computing vertex positions are discussed and compared. Examples are drawn from a variety of applications, including the Yes/No/Don’t{\_}Know data sets resulting from inconclusive segmentation processes and Well-Log data sets.},
+  Doi                      = {10.1007/978-3-540-89639-5{\_}18},
+  File                     = {:home/benjamin/benjamin.rueth@gmail.com/TUM BGCE master folder/Working Groups/SurfaceExtraction/Paper{\_}Nielson{\_}Dua.pdf:pdf},
+  ISBN                     = {3540896384},
+  ISSN                     = {03029743}
+}
+
+@InBook{peters1994book,
+  Title                    = {Constructing {$C^1$} Surfaces of Arbitrary Topology Using Biquadratic and Bicubic Splines},
+  Author                   = {J{\"o}rg Peters},
+  Chapter                  = {11},
+  Pages                    = {277-293},
+
+  Booktitle                = {Designing Fair Curves and Surfaces},
+  Doi                      = {10.1137/1.9781611971521.ch11},
+  Eprint                   = {http://epubs.siam.org/doi/pdf/10.1137/1.9781611971521.ch11},
+  Url                      = {http://epubs.siam.org/doi/abs/10.1137/1.9781611971521.ch11}
+}
+
+@Article{peters1992constructing,
+  Title                    = {Constructing {$C^1$} Surfaces of Arbitrary Topology Using Biquadratic and Bicubic Splines},
+  Author                   = {Peters, J{\"o}rg },
+  Year                     = {1992}
+}
+
 @Misc{Pysparse,
   Title                    = {Pysparse},
 
@@ -194,17 +244,14 @@
   Year                     = {2008-2011}
 }
 
-@article{Dong2005,
-  title={Harmonic functions for quadrilateral remeshing of arbitrary manifolds},
-  author={Dong, Shen and Kircher, Scott and Garland, Michael},
-  journal={Computer aided geometric design},
-  volume={22},
-  number={5},
-  pages={392--423},
-  year={2005},
-  publisher={Elsevier}
-}
+@Misc{Python,
+  Title                    = {Python},
 
+  Author                   = {Python.org},
+  HowPublished             = {\url{https://www.python.org/}},
+  Note                     = {lastly accessed on 14/11/2015},
+  Year                     = {2015}
+}
 
 @Misc{OpenCascade,
   Title                    = {Open CASCADE},
@@ -220,6 +267,35 @@
   Author                   = {SARCAR, MMM and Rao, K Mallikarjuna and Narayan, K Lalit},
   Publisher                = {PHI Learning Pvt. Ltd.},
   Year                     = {2008}
+}
+
+@Article{Schaefer2007,
+  Title                    = {{Manifold Dual Contouring}},
+  Author                   = {Schaefer, Scott and Ju, Tao and Warren, Joe},
+  Journal                  = {IEEE Transactions on Visualization and Computer Graphics},
+  Year                     = {2007},
+  Number                   = {3},
+  Pages                    = {610--619},
+  Volume                   = {13},
+
+  Abstract                 = {Dual Contouring (DC) is a feature-preserving isosurfacing method that extracts crack-free surfaces from both uniform and adaptive octree grids. We present an extension of DC that further guarantees that the mesh generated is a manifold even under adaptive simplification. Our main contribution is an octree-based topology-preserving vertex-clustering algorithm for adaptive contouring. The contoured surface generated by our method contains only manifold vertices and edges, preserves sharp features, and possesses much better adaptivity than those generated by other isosurfacing methods under topologically safe simplification.},
+  Doi                      = {10.1109/TVCG.2007.1012},
+  File                     = {:home/benjamin/.local/share/data/Mendeley Ltd./Mendeley Desktop/Downloaded/Schaefer, Ju, Warren - 2007 - Manifold Dual Contouring.pdf:pdf},
+  ISSN                     = {1077-2626},
+  Keywords                 = {Contour simplification,Isosurfacing,Manifold,Vertex clustering},
+  Pmid                     = {17356225},
+  Url                      = {http://ieeexplore.ieee.org/lpdocs/epic03/wrapper.htm?arnumber=4297690}
+}
+
+@Article{ExtendedMC,
+  Title                    = {Feature Sensitive Surface Extraction from Volume Data},
+  Author                   = {Schwanecke, Ulrich and Botsch,Mario},
+  Journal                  = {Proceedings of the 28th annual conference on Computer graphics and interactive techniques},
+  Year                     = {2001},
+  Number                   = {121},
+  Pages                    = {57-66 },
+
+  Publisher                = {AMC}
 }
 
 @Misc{Numpy,
@@ -243,77 +319,59 @@
   Publisher                = {Springer}
 }
 
-@misc{WikipediaCSG,
-   author = "Wikipedia",
-   title = "Constructive solid geometry --- Wikipedia{,} The Free Encyclopedia",
-   year = "2015",
-   HowPublished = "\url{https://en.wikipedia.org/w/index.php?title=Constructive_solid_geometry&oldid=674883510}",
-   note = "[Online; accessed 31-August-2015]",
+@InProceedings{Puppo2010,
+  Title                    = {Practical quad mesh simplification},
+  Author                   = {Tarini, Marco and Pietroni, Nico and Cignoni, Paolo and Panozzo, Daniele and Puppo, Enrico},
+  Booktitle                = {Computer Graphics Forum},
+  Year                     = {2010},
+  Number                   = {2},
+  Organization             = {Wiley Online Library},
+  Pages                    = {407--418},
+  Volume                   = {29}
+}
 
+@Misc{WikipediaCSG,
+  Title                    = {Constructive solid geometry --- Wikipedia{,} The Free Encyclopedia},
+
+  Author                   = {Wikipedia},
+  HowPublished             = {\url{https://en.wikipedia.org/w/index.php?title=Constructive_solid_geometry&oldid=674883510}},
+  Note                     = {[Online; accessed 31-August-2015]},
+  Year                     = {2015},
 
   Key                      = {WikipediaCSG},
   Owner                    = {severin},
   Timestamp                = {2015.08.29}
 }
 
-@article{Nielson2004,
-abstract = { We present the definition and computational algorithms for a new class of surfaces which are dual to the isosurface produced by the widely used marching cubes (MC) algorithm. These new isosurfaces have the same separating properties as the MC surfaces but they are comprised of quad patches that tend to eliminate the common negative aspect of poorly shaped triangles of the MC isosurfaces. Based upon the concept of this new dual operator, we describe a simple, but rather effective iterative scheme for producing smooth separating surfaces for binary, enumerated volumes which are often produced by segmentation algorithms. Both the dual surface algorithm and the iterative smoothing scheme are easily implemented.},
-author = {Nielson, G.M.},
-doi = {10.1109/VISUAL.2004.28},
-file = {:home/benjamin/benjamin.rueth@gmail.com/TUM BGCE master folder/Working Groups/SurfaceExtraction/Dual Marching Cubes.pdf:pdf},
-isbn = {0-7803-8788-0},
-issn = {1077-2626},
-journal = {IEEE Visualization 2004},
-pages = {489--496},
-title = {{Dual marching cubes}},
-year = {2004}
+@Article{Yang1995,
+  Title                    = {Automotive applications of topology optimization},
+  Author                   = {Yang, RJ and Chahande, AI},
+  Journal                  = {Structural optimization},
+  Year                     = {1995},
+  Number                   = {3-4},
+  Pages                    = {245--249},
+  Volume                   = {9},
+
+  Owner                    = {severin},
+  Publisher                = {Springer},
+  Timestamp                = {2015.11.19}
 }
 
-@article{Nielson2008,
-abstract = {We discuss the dual marching tetrahedra (DMT) method. The DMT can be viewed as a generalization of the classical cuberille method of Chen et al. to a tetrahedronal. The cuberille method produces a rendering of quadrilaterals comprising a surface that separates voxels deemed to be contained in an object of interest from those voxels not in the object. A cuberille is a region of 3D space partitioned into cubes. A tetrahedronal is a region of 3D space decomposed into tetrahedra. The DMT method generalizes the cubille method from cubes to tetrahedra and corrects a fundamental problem of the original cuberille method where separating surfaces are not necessarily manifolds. For binary segmented data, we propose a method for computing the location of vertices this is based upon the use of a minimal discrete norm curvature criterion. For applications where dependent function values are given at grid points, two alternative methods for computing vertex positions are discussed and compared. Examples are drawn from a variety of applications, including the Yes/No/Don’t{\_}Know data sets resulting from inconclusive segmentation processes and Well-Log data sets.},
-author = {Nielson, Gregory M},
-doi = {10.1007/978-3-540-89639-5{\_}18},
-file = {:home/benjamin/benjamin.rueth@gmail.com/TUM BGCE master folder/Working Groups/SurfaceExtraction/Paper{\_}Nielson{\_}Dua.pdf:pdf},
-isbn = {3540896384},
-issn = {03029743},
-journal = {Lecture Notes in Computer Science (including subseries Lecture Notes in Artificial Intelligence and Lecture Notes in Bioinformatics)},
-pages = {183--194},
-title = {{Dual marching tetrahedra: contouring in the tetrahedronal environment}},
-volume = {5358 LNCS},
-year = {2008}
-}
+@Article{Zhang2012,
+  Title                    = {{Dual Contouring for domains with topology ambiguity}},
+  Author                   = {Zhang, Yongjie and Qian, Jin},
+  Journal                  = {Computer Methods in Applied Mechanics and Engineering},
+  Year                     = {2012},
+  Pages                    = {34--45},
+  Volume                   = {217-220},
 
-@article{Zhang2012,
-annote = {Nice pictures on non-manifold, ambiguous cases in DC.
-
+  Annote                   = {Nice pictures on non-manifold, ambiguous cases in DC.
 BUT! Very complicated. Good decision for our purpose: Always join on finest level, then topology safe mesh simplification?},
-author = {Zhang, Yongjie and Qian, Jin},
-doi = {10.1016/j.cma.2012.01.004},
-file = {:home/benjamin/.local/share/data/Mendeley Ltd./Mendeley Desktop/Downloaded/Zhang, Qian - 2012 - Dual Contouring for domains with topology ambiguity.pdf:pdf},
-issn = {0045-7825},
-journal = {Computer Methods in Applied Mechanics and Engineering},
-keywords = {Dual Contouring,Saddle points,Tetrahedral mesh,Topology ambiguity,Tri-linear representation,Triangular mesh},
-pages = {34--45},
-publisher = {Elsevier B.V.},
-title = {{Dual Contouring for domains with topology ambiguity}},
-url = {http://dx.doi.org/10.1016/j.cma.2012.01.004},
-volume = {217-220},
-year = {2012}
+  Doi                      = {10.1016/j.cma.2012.01.004},
+  File                     = {:home/benjamin/.local/share/data/Mendeley Ltd./Mendeley Desktop/Downloaded/Zhang, Qian - 2012 - Dual Contouring for domains with topology ambiguity.pdf:pdf},
+  ISSN                     = {0045-7825},
+  Keywords                 = {Dual Contouring,Saddle points,Tetrahedral mesh,Topology ambiguity,Tri-linear representation,Triangular mesh},
+  Publisher                = {Elsevier B.V.},
+  Url                      = {http://dx.doi.org/10.1016/j.cma.2012.01.004}
 }
 
-@book{peters1994book,
-author = {J{\"o}rg Peters},
-title = {Constructing {$C^1$} Surfaces of Arbitrary Topology Using Biquadratic and Bicubic Splines},
-booktitle = {Designing Fair Curves and Surfaces},
-chapter = {11},
-pages = {277-293},
-doi = {10.1137/1.9781611971521.ch11},
-URL = {http://epubs.siam.org/doi/abs/10.1137/1.9781611971521.ch11},
-eprint = {http://epubs.siam.org/doi/pdf/10.1137/1.9781611971521.ch11}
-}
-
-@article{peters1992constructing,
-  title={Constructing {$C^1$} Surfaces of Arbitrary Topology Using Biquadratic and Bicubic Splines},
-  author={Peters, J{\"o}rg },
-  year={1992}
-}

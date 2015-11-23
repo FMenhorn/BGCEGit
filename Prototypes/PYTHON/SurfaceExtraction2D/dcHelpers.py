@@ -13,6 +13,13 @@ def export_as_csv(data,name):
             csvwriter.writerow(np.array(d))
 
 
+def is_inside(data, key):
+    c = True
+    if key in data:
+        c = data[key] > 0
+    return c
+
+
 # transforms data to matrix format with [X,Y,Z,VoxelData]
 def data_to_voxel(_data, res, dims):
     import numpy as np

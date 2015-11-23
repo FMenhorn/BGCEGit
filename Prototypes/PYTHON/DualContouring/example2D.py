@@ -22,8 +22,8 @@ for q in quads_out_dc['fine']:
     vtx = verts_out_dc['fine'][q]
     x = vtx[:,0]
     y = vtx[:,1]
-    plt.plot(x, y, 'b')
-    plt.plot(x, y, 'bo')
+    #plt.plot(x, y, 'b')
+    #plt.plot(x, y, 'bo')
 
 for q in quads_out_dc['coarse']:
     vtx = verts_out_dc['coarse'][q]
@@ -38,7 +38,7 @@ for v in manifold_verts_out_dc['coarse']:
     plt.plot(x, y,'kx')
 '''
 for key in fine_data:
-    if (key[0] % res_coarse == 0) and (key[1] % res_coarse == 0):
+    if (key[0] % res_fine == 0) and (key[1] % res_fine == 0):
         if fine_data[key] > 0: # outer point
             plt.plot(key[0],key[1],'b.')
         elif fine_data[key] < 0: # inner point

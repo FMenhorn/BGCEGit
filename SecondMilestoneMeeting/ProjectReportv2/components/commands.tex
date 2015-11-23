@@ -20,6 +20,7 @@
 \newcommand{\dx}{\text{d}x}
 \newcommand{\dt}{\text{d}t}
 \newcommand{\du}{\text{d}u}
+\newcommand{\where}{\text{where}}
 
 % norm
 \newcommand{\norm}[1]{\left\| #1 \right\|}
@@ -49,10 +50,43 @@
 %DOESN'T WORK,DON'T KNOW WHY \newcommand{\mativ}[16]{\left[ \begin{array}[h]{cccc} #1 & #2 & #3 & #4 \\ #5 & #6 & #7 & #8 \\ #9 & #10 & #11 & #12 \\ #13 & #14 & #15 & #16 \end{array} \right]}
 
 
-%-------------------------------------------------------------
-%-------------------------------------------------------------
 
 
+%-------------------------------------------------------------
+% some peters' nomenclature ----------------------------------
+\newcommand{\petersPatchPoint}{V}
+\newcommand{\petersPatchPoints}{\petersPatchPoint_x}
+\newcommand{\petersControlMesh}{M}
+\newcommand{\petersControlMeshVec}{\vec{\MakeLowercase{\petersControlMesh}}}
+\newcommand{\petersPatchPointVec}{\vec{\MakeLowercase{\petersPatchPoint}}}
+\newcommand{\petersPatchPointMatrix}{\MakeUppercase{\petersPatchPoint}}
+\newcommand{\petersControlPointCoefLetter}{c}
+\newcommand{\petersControlPointCoef}{\petersControlPointCoefLetter^{PS}}
+\newcommand{\petersControlPointCoefMatrix}{\MakeUppercase{\petersControlPointCoefLetter}^{PS}}
+\newcommand{\bezierPoint}{P}
+\newcommand{\bezierPointSet}{\bezierPoint_x}
+\newcommand{\bezierPointVec}{\vec{\bezierPoint}}
+\newcommand{\petersFaces}{F}
+\newcommand{\suchthat}{:}
+\newcommand{\centroidof}[1]{\vec{c}_{#1}}
+\newcommand{\verticesof}[1]{V_{#1}}
+\newcommand{\facesof}[1]{\petersFaces_{#1}}
+\newcommand{\lsDataPointLetter}{D}
+\newcommand{\lsDataPoint}{\vec{\MakeLowercase{\lsDataPointLetter}}}
+\newcommand{\lsDataPointMatrix}{\MakeUppercase{\lsDataPointLetter}}
+\newcommand{\lsControlPointLetter}{P}
+\newcommand{\lsControlPointMatrix}{\MakeUppercase{\lsControlPointLetter}}
+\newcommand{\lsControlPoint}{\vec{\MakeLowercase{\lsControlPointLetter}}}
+\newcommand{\lsControlPointCoef}{c}
+\newcommand{\lsControlPointCoefVec}{\vec{\lsControlPointCoef}}
+\newcommand{\lsControlPointCoefMatrix}{\MakeUppercase{\lsControlPointCoef}}
+
+\newcommand{\lsDataPointi}[1]{\lsDataPoint_{#1}}
+\newcommand{\lsControlPointi}[1]{\lsControlPoint_{#1}}
+\newcommand{\lsControlPointCoefi}[1]{\lsControlPointCoef_{#1}}
+
+
+\newcommand{\Bez}{B{\'e}zier }
 %-------------------------------------------------------------
 % some abreviations ------------------------------------------
 \newcommand{\Reg}{$^{\textregistered}$}
@@ -83,6 +117,17 @@
 	\begin{figure}[htbp]
 		\begin{center}
 			\includegraphics[width=#4\textwidth]{#1}
+		\end{center}
+		\vspace{-0.4cm}
+		\caption{#2}
+		\label{#3}
+	\end{figure}
+}
+
+\newcommand{\insertfigureMISSING}[4]{ % Filename, Caption, Label, Width percent of textwidth
+	\begin{figure}[htbp]
+		\begin{center}
+			\missingfigure{#1}
 		\end{center}
 		\vspace{-0.4cm}
 		\caption{#2}
@@ -130,9 +175,6 @@
 \newcommand{\code}[1]
  {\texttt{#1}}
 
-% comment that appears on the border - very practical !!!
-\newcommand{\comment}[1]{\marginpar{\raggedright \noindent \footnotesize {\sl #1} }}
-
 % page clearing
 \newcommand{\clearemptydoublepage}{%
   \ifthenelse{\boolean{@twoside}}{\newpage{\pagestyle{empty}\cleardoublepage}}%
@@ -144,3 +186,8 @@
 
 
 \newcommand{\etAl}{\emph{et al.}\mbox{ }}
+
+
+\newcommand{\tododone}[2][noinline]{\todo[#1, color=green!40]{\textit{#2}}}
+\newcommand{\todointern}[2][noinline]{\todo[#1, color=blue!40]{#2}}
+\newcommand{\todourgent}[2][noinline]{\todo[#1, color=red!40]{\textbf{#2}}}
