@@ -104,6 +104,12 @@ void VoxelIndexCalculator::removeDoubleIndices(
 	}
 }
 
+void VoxelIndexCalculator::calculateIndicesForWholeVector(std::vector<VoxelShape>& voxelShapeVector, const bool isElem) {
+	for(unsigned int i = 0; i < voxelShapeVector.size(); ++i){
+		this->calculateIndexForVoxelShape(voxelShapeVector[i], isElem);
+	}
+}
+
 void VoxelIndexCalculator::calculateIndexForVoxelShape(VoxelShape& voxelShape, bool isElem) {
 	int originVoxelX = 0;
 	int originVoxelY = 0;
@@ -131,7 +137,6 @@ void VoxelIndexCalculator::calculateIndexForVoxelShape(VoxelShape& voxelShape, b
 	nbX = isElem ? dimensions[0] : dimensions[0] + 1;
 	nbY = isElem ? dimensions[1] : dimensions[1] + 1;
 	nbZ = isElem ? dimensions[2] : dimensions[2] + 1;
-	std::cout << "originX: " << originX;
 	originVoxelX = originX * 1./voxelSizeX + 1;
 	originVoxelY = originY * 1./voxelSizeY + 1;
 	originVoxelZ = originZ * 1./voxelSizeZ + 1;

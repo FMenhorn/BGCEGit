@@ -11,12 +11,12 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <assert.h>
 
 #include <IGESControl_Reader.hxx>
 #include <TopoDS.hxx>
 #include <TopoDS_Face.hxx>
 #include <TopoDS_Solid.hxx>
-#include <TopTools_ListIteratorOfListOfShape.hxx>
 #include <STEPControl_StepModelType.hxx>
 #include <STEPControl_Writer.hxx>
 #include <STEPControl_Reader.hxx>
@@ -50,7 +50,10 @@ int main(int argc, char** argv){
 	std::string filePath = argv[1];
 	std::string fileName = argv[2];
 	double forceScalingFactor = atof(argv[3]);
+	std::cout << forceScalingFactor << std::endl;
+	assert(forceScalingFactor>0);
     int refinementLevel = atoi(argv[4]);
+    assert(refinementLevel>=0);
 
 	/**
 	 *  INPUT
@@ -85,11 +88,9 @@ int main(int argc, char** argv){
 	colorDetector.getActiveShapes(activeFacesList);
 
     /**
-     * VOXELIZE AND OUTPUT
+     * VOXELIZE
      */
-
     Voxelizer voxelizer;
-    TopTools_ListIteratorOfListOfShape shapeIterator;
 	VoxelShape voxelShape;
 	std::vector<std::vector<VoxelShape>> outputVoxelVector;
     VoxelIndexCalculator voxelIndexCalculator;
@@ -98,6 +99,7 @@ int main(int argc, char** argv){
     voxelizer.voxelize(fullShape, refinementLevel, voxelShape);
     voxelIndexCalculator.setDimensions(voxelShape.getVoxelDimension());
     voxelIndexCalculator.setOrigin(voxelShape.getOrigin());
+    voxelizer.setVoxelIndexCalculator(voxelIndexCalculator);
     voxelizer.fillVolume(voxelShape);
     voxelIndexCalculator.calculateIndexForVoxelShape(voxelShape, true);
 
@@ -105,51 +107,28 @@ int main(int argc, char** argv){
 	bodyVector.push_back(voxelShape);
     outputVoxelVector.push_back(bodyVector);
 
-    /**TODO: wrap size variable**/
-    int counter = 0;
 	/**Fixture Treatment**/
 	std::vector<VoxelShape> fixtureVector;
-	if(fixtureFacesList.getSize() > 0){
-		fixtureVector.resize(fixtureFacesList.getSize());
-		for(shapeIterator.Initialize(fixtureFacesList.getListOfShape()); shapeIterator.More(); shapeIterator.Next() ){
-			voxelizer.voxelize(shapeIterator.Value(), refinementLevel, fixtureVector[counter]);
-			std::cout << "FixtureIndices: " << std::endl;
-		    voxelIndexCalculator.calculateIndexForVoxelShape(fixtureVector[counter], false);
-			counter++;
-		}
-	}
+	fixtureVector.resize(fixtureFacesList.getSize());
+	voxelizer.voxelizeWholeVector(refinementLevel, false, fixtureFacesList, fixtureVector);
+	voxelIndexCalculator.calculateIndicesForWholeVector(fixtureVector, false);
     outputVoxelVector.push_back(fixtureVector);
 
-    counter = 0;
     /**Load Treatment**/
 	std::vector<VoxelShape> loadVector;
 	std::vector<VoxelShape> activeVector; /**Treat Loadelements as active cells aswell**/
 	activeVector.resize(loadFacesList.getSize()+activeFacesList.getSize());
-	if(loadFacesList.getSize() > 0){
-		loadVector.resize(loadFacesList.getSize());
-		for(shapeIterator.Initialize(loadFacesList.getListOfShape()); shapeIterator.More(); shapeIterator.Next() ){
-			voxelizer.voxelize(shapeIterator.Value(), refinementLevel, loadVector[counter]);
-			voxelizer.voxelize(shapeIterator.Value(), refinementLevel, activeVector[counter]);
-			std::cout << "LoadIndices: " << std::endl;
-			voxelIndexCalculator.calculateIndexForVoxelShape(loadVector[counter], false);
-			voxelIndexCalculator.calculateIndexForVoxelShape(activeVector[counter], true);
-			counter++;
-		}
-	}
+	loadVector.resize(loadFacesList.getSize());
+	voxelizer.voxelizeWholeVector(refinementLevel, false, loadFacesList, loadVector);
+	voxelIndexCalculator.calculateIndicesForWholeVector(loadVector, false);
+	voxelizer.voxelizeWholeVector(refinementLevel, true, loadFacesList, activeVector);
     outputVoxelVector.push_back(loadVector);
 
-    counter = loadFacesList.getSize();
     /**Active Treatment**/
 	//std::vector<VoxelShape> activeVector;
-	if(activeFacesList.getSize()>0){
-		activeVector.resize(activeFacesList.getSize());
-		for(shapeIterator.Initialize(activeFacesList.getListOfShape()); shapeIterator.More(); shapeIterator.Next() ){
-			voxelizer.voxelize(shapeIterator.Value(), refinementLevel, activeVector[counter]);
-			std::cout << "ActiveIndices: " << std::endl;
-			voxelIndexCalculator.calculateIndexForVoxelShape(activeVector[counter], true);
-			counter++;
-		}
-	}
+    activeVector.resize(activeFacesList.getSize());
+    voxelizer.voxelizeWholeVector(refinementLevel, true, activeFacesList, activeVector, loadFacesList.getSize());
+    voxelIndexCalculator.calculateIndicesForWholeVector(activeVector, true);
     outputVoxelVector.push_back(activeVector);
 
     VoxelShape passiveShape;
@@ -160,6 +139,9 @@ int main(int argc, char** argv){
 
     //voxelIndexCalculator.removeDoubleIndices(outputVoxelVector);
 
+    /**
+     * OUTPUT
+     */
     Writer_ToPy writerToPy;
     writerToPy.write("topy_"+fileName, outputVoxelVector, loadList);
 

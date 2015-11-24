@@ -17,6 +17,7 @@ public:
 	VoxelIndexCalculator();
 	virtual ~VoxelIndexCalculator();
 
+	void calculateIndicesForWholeVector(std::vector<VoxelShape>& voxelShapeVector, const bool isElem);
 	void calculateIndexForVoxelShape(VoxelShape& voxelShape, bool isElem);
 	void calculatePassiveIndexFromBody(VoxelShape& bodyVoxelShape, VoxelShape& passiveVoxelShape);
 	void removeDoubleIndices(std::vector<std::vector<VoxelShape>>& matrixVoxelShapes);

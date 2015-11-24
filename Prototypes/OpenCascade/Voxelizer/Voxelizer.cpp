@@ -13,8 +13,19 @@
 #include <Bnd_Box.hxx>
 #include <BRepBndLib.hxx>
 #include <Voxel_BoolDS.hxx>
-
+#include <TopTools_ListIteratorOfListOfShape.hxx>
 #include "../Helper/Helper.hpp"
+
+void Voxelizer::voxelizeWholeVector(const int refinementLevel, const bool isElem, const ListOfShape& listOfShapes, std::vector<VoxelShape>& voxelShapeVector, int counter) {
+	TopTools_ListIteratorOfListOfShape shapeIterator;
+	if(listOfShapes.getSize() > 0){
+		for(shapeIterator.Initialize(listOfShapes.getListOfShape()); shapeIterator.More(); shapeIterator.Next() ){
+			this->voxelize(shapeIterator.Value(), refinementLevel, voxelShapeVector[counter]);
+			//voxelIndexCalculator.calculateIndexForVoxelShape(voxelShapeVector[counter], isElem);
+			counter++;
+		}
+	}
+}
 
 void Voxelizer::voxelize(const TopoDS_Shape topoDSShape,const int refinementLevel, VoxelShape& voxelShape){
 
@@ -129,4 +140,9 @@ void Voxelizer::getPassiveVoxels(const VoxelShape bodyVoxelShape, VoxelShape& pa
 			}
 		}
 	}
+}
+
+void Voxelizer::setVoxelIndexCalculator(
+		const VoxelIndexCalculator& voxelIndexCalculator) {
+	this->voxelIndexCalculator = voxelIndexCalculator;
 }
