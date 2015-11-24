@@ -8,6 +8,11 @@
 #ifndef HELPER_HELPER_HPP_
 #define HELPER_HELPER_HPP_
 
+/**
+ * Well, returns the absolute value of x
+ * @param x
+ * @return
+ */
 static double absolut(double x){
 	return x< 0 ? -x : x;
 }

@@ -12,6 +12,9 @@
 #include "STEPCAFReader.hpp"
 #include "../ColorHandler/ColorHandler.hpp"
 
+/**
+ * Abstace Reader class
+ */
 class Reader {
 private:
 	std::string sourceFilePath;

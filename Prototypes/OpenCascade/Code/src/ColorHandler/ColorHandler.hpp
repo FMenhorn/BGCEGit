@@ -21,13 +21,13 @@
 #include <vector>
 
 #include "../DataWrappers/ListOfShape.hpp"
-/*
- *
+/**
+ * Class responsible from reading the color from the given input files and building shapes from them
  */
 class ColorHandler {
 public:
 	/**
-	 * Initializes the doc
+	 * Constructor. Initializes the doc which stores the color informations
 	 */
 	ColorHandler();
 	virtual ~ColorHandler();
@@ -45,7 +45,7 @@ public:
 	Handle_TDocStd_Document& getDocIges();
 
 	/**
-	 * Initializes the other members
+	 * Initializes the other members of the class
 	 */
 	void initializeMembers();
 
@@ -79,8 +79,16 @@ private:
     TopoDS_Shape shapeStep;
     TopoDS_Shape shapeIges;
 
+    /**
+     * called by initialize members
+     */
 	void buildShapesFromDocs();
 
+	/**
+	 * Build TopoDS_Shape from the information stored in doc
+	 * @param doc holds the information about the shape
+	 * @param shape is the shape built from the document
+	 */
     void buildShapeFromDoc(
     		const Handle_TDocStd_Document& 	doc,
     			  TopoDS_Shape& 			shape
@@ -101,15 +109,27 @@ private:
 			);
 
 	/**
-	 * Computes normal of the face
+	 * Computes inverted normal of the face
 	 */
     void computeInvertedNormal(
     		const TopoDS_Face& 	findNormalTo,
     			  gp_Vec& 		normal
 			);
 
+    /**
+     * Checks if member documents are valid
+     * @return
+     */
 	bool areDocumentsValid();
 
+	/**
+	 * Finds the faces colored with the color wantedColor by stepping through the faces from shapeStep/shapeIGES and the colors given in aDocIges
+	 * Apply color to force transformation here with color = [0,1) => force = (-0.5,0.5) if isLoadSeeked=true
+	 * @param wantedColor the color we are looking for
+	 * @param coloredFacesVector faces of color wantedColor are stored in here
+	 * @param colorVector colorVector is stored in here
+	 * @param isLoadSeeked are we seeking the load force
+	 */
 	void findColoredFaces(
 			const Quantity_Color& 					wantedColor,
 				  std::vector<TopoDS_Face>& 		coloredFacesVector,
@@ -117,6 +137,11 @@ private:
 			const bool 								isLoadSeeked
 			);
 
+	/**
+	 * Builds 3D cuboids with thickness 1 from faces using OpenCascade BRepPrimAPI_MakePrism
+	 * @param coloredFacesVector
+	 * @param listOfShapes
+	 */
 	void buildColoredFaces(
 			const std::vector<TopoDS_Face>& coloredFacesVector,
 				  ListOfShape& 				listOfShapes

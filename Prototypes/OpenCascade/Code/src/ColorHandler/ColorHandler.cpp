@@ -140,6 +140,9 @@ void ColorHandler::findColoredFaces(const Quantity_Color& wantedColor, std::vect
 				|| myColors->IsSet(faceIges, XCAFDoc_ColorCurv))
 		{
 			myColors->GetColor(faceIges, XCAFDoc_ColorGen, color);
+			//If we are not looking for a load, we just compare if the current face faceStep
+			//with color "color" has the color "wantedColor"
+			//If yes, we push the face in the vector
 			if (!isLoadSeeked){
 				if (color.Red() == wantedColor.Red()
 						&& color.Green() == wantedColor.Green()
@@ -149,6 +152,8 @@ void ColorHandler::findColoredFaces(const Quantity_Color& wantedColor, std::vect
 					std::cout << "ColorHandler::findColoredFaces: Color found: " << color.Red() << " " << color.Green() << " " << color.Blue() << std::endl;
 				}
 			}
+			//If we are looking for a load, then just store the face if it's color is not white
+			//Apply color to force transformation here with color = [0,1) => force = (-0.5,0.5)
 			else
 			{
 			if (color.Red() < 1

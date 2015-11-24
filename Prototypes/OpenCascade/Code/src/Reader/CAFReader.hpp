@@ -12,6 +12,9 @@
 #include <Handle_TDocStd_Document.hxx>
 #include <string>
 
+/**
+ * Abstract class
+ */
 class CAFReader{
 public:
 	CAFReader(){};

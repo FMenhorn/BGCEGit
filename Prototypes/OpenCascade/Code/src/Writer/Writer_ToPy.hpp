@@ -24,6 +24,9 @@
 #include "../DataWrappers/BodyPartsContainer.hpp"
 #include "../DataWrappers/VoxelShapesContainer.hpp"
 
+/**
+ * Writes ToPy output file .tpd
+ */
 class Writer_ToPy: public Writer{
 public:
     Writer_ToPy() : Writer(){};
@@ -33,13 +36,43 @@ public:
     bool write(std::string _filename, std::vector<std::vector<VoxelShape>> &voxelShape, std::vector<std::vector<double>>& forces);
 
 private:
-
+    /**
+     * Writes the header based on ToPy documentation
+     * @param outfile
+     * @param _filename
+     */
     void writeHeader(std::ofstream &outfile, std::string _filename);
+
+    /**
+     * Write some parameters based on ToPy documentations
+     * @param outfile
+     */
     void writeGreyScaleFilters(std::ofstream &outfile);
+
+    /**
+     * Write dimensions into the .tdp file
+     * @param outfile
+     * @param dimensions
+     */
     void writeDimensions(std::ofstream &outfile,std::vector<int> dimensions);
+
+    /**
+     * Writes the nodes, i.e. active elements, fixtures, loads, passive nodes based on the indices previously calculated
+     * and stored in voxelShape
+     * @param name
+     * @param outfile
+     * @param voxelShape
+     * @param dimensions
+     * @return
+     */
     std::vector<int> writeNodes(std::string name, std::ofstream &outfile,const std::vector<VoxelShape> &voxelShape, std::vector<int> dimensions); //later change to vector of shapes
 
+    /**
+     * Write the force which is applied on the loads
+     * @param outfile
+     * @param forces
+     * @param numberOfLoadVoxels
+     */
     void writeForces(std::ofstream &outfile, std::vector<std::vector<double>> &forces, std::vector<int> numberOfLoadVoxels);
-    int getIndex(int x, int y, int z, std::vector<int> dimensions);
 };
 #endif // _WRITER_TOPY_

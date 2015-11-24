@@ -140,8 +140,3 @@ void Voxelizer::getPassiveVoxels(const VoxelShape bodyVoxelShape, VoxelShape& pa
 		}
 	}
 }
-
-void Voxelizer::setVoxelIndexCalculator(
-		const VoxelIndexCalculator& voxelIndexCalculator) {
-	this->voxelIndexCalculator = voxelIndexCalculator;
-}

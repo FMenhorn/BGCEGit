@@ -152,7 +152,3 @@ void Writer_ToPy::writeForces(std::ofstream &outfile, std::vector<std::vector<do
 
 	outfile << "\n";
 }
-
-int Writer_ToPy::getIndex(int x, int y, int z, std::vector<int> dimensions){
-	return y + (dimensions[1]+1)*(x + (dimensions[0]+1) * z);
-}
