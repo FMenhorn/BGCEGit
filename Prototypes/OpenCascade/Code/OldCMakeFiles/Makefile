@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/src
+CMAKE_SOURCE_DIR = /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/src/build
+CMAKE_BINARY_DIR = /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -73,14 +73,14 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/src/build/CMakeFiles /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/src/build/CMakeFiles/progress.marks
-	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/src/build/CMakeFiles 0
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(CMAKE_COMMAND) -E cmake_progress_start /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code/CMakeFiles /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code/src/CMakeFiles/progress.marks
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(MAKE) -f CMakeFiles/Makefile2 src/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	$(MAKE) -f CMakeFiles/Makefile2 clean
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(MAKE) -f CMakeFiles/Makefile2 src/clean
 .PHONY : clean
 
 # The main clean target
@@ -89,43 +89,45 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	$(MAKE) -f CMakeFiles/Makefile2 preinstall
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(MAKE) -f CMakeFiles/Makefile2 src/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	$(MAKE) -f CMakeFiles/Makefile2 preinstall
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(MAKE) -f CMakeFiles/Makefile2 src/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	$(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
-#=============================================================================
-# Target rules for targets named CADToVoxel
+# Convenience name for target.
+src/CMakeFiles/CADToVoxel.dir/rule:
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/CADToVoxel.dir/rule
+.PHONY : src/CMakeFiles/CADToVoxel.dir/rule
 
-# Build rule for target.
-CADToVoxel: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 CADToVoxel
+# Convenience name for target.
+CADToVoxel: src/CMakeFiles/CADToVoxel.dir/rule
 .PHONY : CADToVoxel
 
 # fast build rule for target.
 CADToVoxel/fast:
-	$(MAKE) -f CMakeFiles/CADToVoxel.dir/build.make CMakeFiles/CADToVoxel.dir/build
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(MAKE) -f src/CMakeFiles/CADToVoxel.dir/build.make src/CMakeFiles/CADToVoxel.dir/build
 .PHONY : CADToVoxel/fast
 
-#=============================================================================
-# Target rules for targets named ColorDetectionTest
+# Convenience name for target.
+src/CMakeFiles/ColorDetectionTest.dir/rule:
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/ColorDetectionTest.dir/rule
+.PHONY : src/CMakeFiles/ColorDetectionTest.dir/rule
 
-# Build rule for target.
-ColorDetectionTest: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 ColorDetectionTest
+# Convenience name for target.
+ColorDetectionTest: src/CMakeFiles/ColorDetectionTest.dir/rule
 .PHONY : ColorDetectionTest
 
 # fast build rule for target.
 ColorDetectionTest/fast:
-	$(MAKE) -f CMakeFiles/ColorDetectionTest.dir/build.make CMakeFiles/ColorDetectionTest.dir/build
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(MAKE) -f src/CMakeFiles/ColorDetectionTest.dir/build.make src/CMakeFiles/ColorDetectionTest.dir/build
 .PHONY : ColorDetectionTest/fast
 
 CADToVoxel.o: CADToVoxel.cpp.o
@@ -133,7 +135,7 @@ CADToVoxel.o: CADToVoxel.cpp.o
 
 # target to build an object file
 CADToVoxel.cpp.o:
-	$(MAKE) -f CMakeFiles/CADToVoxel.dir/build.make CMakeFiles/CADToVoxel.dir/CADToVoxel.cpp.o
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(MAKE) -f src/CMakeFiles/CADToVoxel.dir/build.make src/CMakeFiles/CADToVoxel.dir/CADToVoxel.cpp.o
 .PHONY : CADToVoxel.cpp.o
 
 CADToVoxel.i: CADToVoxel.cpp.i
@@ -141,7 +143,7 @@ CADToVoxel.i: CADToVoxel.cpp.i
 
 # target to preprocess a source file
 CADToVoxel.cpp.i:
-	$(MAKE) -f CMakeFiles/CADToVoxel.dir/build.make CMakeFiles/CADToVoxel.dir/CADToVoxel.cpp.i
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(MAKE) -f src/CMakeFiles/CADToVoxel.dir/build.make src/CMakeFiles/CADToVoxel.dir/CADToVoxel.cpp.i
 .PHONY : CADToVoxel.cpp.i
 
 CADToVoxel.s: CADToVoxel.cpp.s
@@ -149,7 +151,7 @@ CADToVoxel.s: CADToVoxel.cpp.s
 
 # target to generate assembly for a file
 CADToVoxel.cpp.s:
-	$(MAKE) -f CMakeFiles/CADToVoxel.dir/build.make CMakeFiles/CADToVoxel.dir/CADToVoxel.cpp.s
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(MAKE) -f src/CMakeFiles/CADToVoxel.dir/build.make src/CMakeFiles/CADToVoxel.dir/CADToVoxel.cpp.s
 .PHONY : CADToVoxel.cpp.s
 
 ColorHandler/ColorHandler.o: ColorHandler/ColorHandler.cpp.o
@@ -157,7 +159,7 @@ ColorHandler/ColorHandler.o: ColorHandler/ColorHandler.cpp.o
 
 # target to build an object file
 ColorHandler/ColorHandler.cpp.o:
-	$(MAKE) -f CMakeFiles/CADToVoxel.dir/build.make CMakeFiles/CADToVoxel.dir/ColorHandler/ColorHandler.cpp.o
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(MAKE) -f src/CMakeFiles/CADToVoxel.dir/build.make src/CMakeFiles/CADToVoxel.dir/ColorHandler/ColorHandler.cpp.o
 .PHONY : ColorHandler/ColorHandler.cpp.o
 
 ColorHandler/ColorHandler.i: ColorHandler/ColorHandler.cpp.i
@@ -165,7 +167,7 @@ ColorHandler/ColorHandler.i: ColorHandler/ColorHandler.cpp.i
 
 # target to preprocess a source file
 ColorHandler/ColorHandler.cpp.i:
-	$(MAKE) -f CMakeFiles/CADToVoxel.dir/build.make CMakeFiles/CADToVoxel.dir/ColorHandler/ColorHandler.cpp.i
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(MAKE) -f src/CMakeFiles/CADToVoxel.dir/build.make src/CMakeFiles/CADToVoxel.dir/ColorHandler/ColorHandler.cpp.i
 .PHONY : ColorHandler/ColorHandler.cpp.i
 
 ColorHandler/ColorHandler.s: ColorHandler/ColorHandler.cpp.s
@@ -173,7 +175,7 @@ ColorHandler/ColorHandler.s: ColorHandler/ColorHandler.cpp.s
 
 # target to generate assembly for a file
 ColorHandler/ColorHandler.cpp.s:
-	$(MAKE) -f CMakeFiles/CADToVoxel.dir/build.make CMakeFiles/CADToVoxel.dir/ColorHandler/ColorHandler.cpp.s
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(MAKE) -f src/CMakeFiles/CADToVoxel.dir/build.make src/CMakeFiles/CADToVoxel.dir/ColorHandler/ColorHandler.cpp.s
 .PHONY : ColorHandler/ColorHandler.cpp.s
 
 DataWrappers/BodyPartsContainer.o: DataWrappers/BodyPartsContainer.cpp.o
@@ -181,7 +183,7 @@ DataWrappers/BodyPartsContainer.o: DataWrappers/BodyPartsContainer.cpp.o
 
 # target to build an object file
 DataWrappers/BodyPartsContainer.cpp.o:
-	$(MAKE) -f CMakeFiles/CADToVoxel.dir/build.make CMakeFiles/CADToVoxel.dir/DataWrappers/BodyPartsContainer.cpp.o
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(MAKE) -f src/CMakeFiles/CADToVoxel.dir/build.make src/CMakeFiles/CADToVoxel.dir/DataWrappers/BodyPartsContainer.cpp.o
 .PHONY : DataWrappers/BodyPartsContainer.cpp.o
 
 DataWrappers/BodyPartsContainer.i: DataWrappers/BodyPartsContainer.cpp.i
@@ -189,7 +191,7 @@ DataWrappers/BodyPartsContainer.i: DataWrappers/BodyPartsContainer.cpp.i
 
 # target to preprocess a source file
 DataWrappers/BodyPartsContainer.cpp.i:
-	$(MAKE) -f CMakeFiles/CADToVoxel.dir/build.make CMakeFiles/CADToVoxel.dir/DataWrappers/BodyPartsContainer.cpp.i
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(MAKE) -f src/CMakeFiles/CADToVoxel.dir/build.make src/CMakeFiles/CADToVoxel.dir/DataWrappers/BodyPartsContainer.cpp.i
 .PHONY : DataWrappers/BodyPartsContainer.cpp.i
 
 DataWrappers/BodyPartsContainer.s: DataWrappers/BodyPartsContainer.cpp.s
@@ -197,7 +199,7 @@ DataWrappers/BodyPartsContainer.s: DataWrappers/BodyPartsContainer.cpp.s
 
 # target to generate assembly for a file
 DataWrappers/BodyPartsContainer.cpp.s:
-	$(MAKE) -f CMakeFiles/CADToVoxel.dir/build.make CMakeFiles/CADToVoxel.dir/DataWrappers/BodyPartsContainer.cpp.s
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(MAKE) -f src/CMakeFiles/CADToVoxel.dir/build.make src/CMakeFiles/CADToVoxel.dir/DataWrappers/BodyPartsContainer.cpp.s
 .PHONY : DataWrappers/BodyPartsContainer.cpp.s
 
 DataWrappers/ListOfShape.o: DataWrappers/ListOfShape.cpp.o
@@ -205,7 +207,7 @@ DataWrappers/ListOfShape.o: DataWrappers/ListOfShape.cpp.o
 
 # target to build an object file
 DataWrappers/ListOfShape.cpp.o:
-	$(MAKE) -f CMakeFiles/CADToVoxel.dir/build.make CMakeFiles/CADToVoxel.dir/DataWrappers/ListOfShape.cpp.o
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(MAKE) -f src/CMakeFiles/CADToVoxel.dir/build.make src/CMakeFiles/CADToVoxel.dir/DataWrappers/ListOfShape.cpp.o
 .PHONY : DataWrappers/ListOfShape.cpp.o
 
 DataWrappers/ListOfShape.i: DataWrappers/ListOfShape.cpp.i
@@ -213,7 +215,7 @@ DataWrappers/ListOfShape.i: DataWrappers/ListOfShape.cpp.i
 
 # target to preprocess a source file
 DataWrappers/ListOfShape.cpp.i:
-	$(MAKE) -f CMakeFiles/CADToVoxel.dir/build.make CMakeFiles/CADToVoxel.dir/DataWrappers/ListOfShape.cpp.i
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(MAKE) -f src/CMakeFiles/CADToVoxel.dir/build.make src/CMakeFiles/CADToVoxel.dir/DataWrappers/ListOfShape.cpp.i
 .PHONY : DataWrappers/ListOfShape.cpp.i
 
 DataWrappers/ListOfShape.s: DataWrappers/ListOfShape.cpp.s
@@ -221,7 +223,7 @@ DataWrappers/ListOfShape.s: DataWrappers/ListOfShape.cpp.s
 
 # target to generate assembly for a file
 DataWrappers/ListOfShape.cpp.s:
-	$(MAKE) -f CMakeFiles/CADToVoxel.dir/build.make CMakeFiles/CADToVoxel.dir/DataWrappers/ListOfShape.cpp.s
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(MAKE) -f src/CMakeFiles/CADToVoxel.dir/build.make src/CMakeFiles/CADToVoxel.dir/DataWrappers/ListOfShape.cpp.s
 .PHONY : DataWrappers/ListOfShape.cpp.s
 
 DataWrappers/VoxelShapesContainer.o: DataWrappers/VoxelShapesContainer.cpp.o
@@ -229,7 +231,7 @@ DataWrappers/VoxelShapesContainer.o: DataWrappers/VoxelShapesContainer.cpp.o
 
 # target to build an object file
 DataWrappers/VoxelShapesContainer.cpp.o:
-	$(MAKE) -f CMakeFiles/CADToVoxel.dir/build.make CMakeFiles/CADToVoxel.dir/DataWrappers/VoxelShapesContainer.cpp.o
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(MAKE) -f src/CMakeFiles/CADToVoxel.dir/build.make src/CMakeFiles/CADToVoxel.dir/DataWrappers/VoxelShapesContainer.cpp.o
 .PHONY : DataWrappers/VoxelShapesContainer.cpp.o
 
 DataWrappers/VoxelShapesContainer.i: DataWrappers/VoxelShapesContainer.cpp.i
@@ -237,7 +239,7 @@ DataWrappers/VoxelShapesContainer.i: DataWrappers/VoxelShapesContainer.cpp.i
 
 # target to preprocess a source file
 DataWrappers/VoxelShapesContainer.cpp.i:
-	$(MAKE) -f CMakeFiles/CADToVoxel.dir/build.make CMakeFiles/CADToVoxel.dir/DataWrappers/VoxelShapesContainer.cpp.i
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(MAKE) -f src/CMakeFiles/CADToVoxel.dir/build.make src/CMakeFiles/CADToVoxel.dir/DataWrappers/VoxelShapesContainer.cpp.i
 .PHONY : DataWrappers/VoxelShapesContainer.cpp.i
 
 DataWrappers/VoxelShapesContainer.s: DataWrappers/VoxelShapesContainer.cpp.s
@@ -245,7 +247,7 @@ DataWrappers/VoxelShapesContainer.s: DataWrappers/VoxelShapesContainer.cpp.s
 
 # target to generate assembly for a file
 DataWrappers/VoxelShapesContainer.cpp.s:
-	$(MAKE) -f CMakeFiles/CADToVoxel.dir/build.make CMakeFiles/CADToVoxel.dir/DataWrappers/VoxelShapesContainer.cpp.s
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(MAKE) -f src/CMakeFiles/CADToVoxel.dir/build.make src/CMakeFiles/CADToVoxel.dir/DataWrappers/VoxelShapesContainer.cpp.s
 .PHONY : DataWrappers/VoxelShapesContainer.cpp.s
 
 Reader/IGESCAFReader.o: Reader/IGESCAFReader.cpp.o
@@ -253,7 +255,7 @@ Reader/IGESCAFReader.o: Reader/IGESCAFReader.cpp.o
 
 # target to build an object file
 Reader/IGESCAFReader.cpp.o:
-	$(MAKE) -f CMakeFiles/CADToVoxel.dir/build.make CMakeFiles/CADToVoxel.dir/Reader/IGESCAFReader.cpp.o
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(MAKE) -f src/CMakeFiles/CADToVoxel.dir/build.make src/CMakeFiles/CADToVoxel.dir/Reader/IGESCAFReader.cpp.o
 .PHONY : Reader/IGESCAFReader.cpp.o
 
 Reader/IGESCAFReader.i: Reader/IGESCAFReader.cpp.i
@@ -261,7 +263,7 @@ Reader/IGESCAFReader.i: Reader/IGESCAFReader.cpp.i
 
 # target to preprocess a source file
 Reader/IGESCAFReader.cpp.i:
-	$(MAKE) -f CMakeFiles/CADToVoxel.dir/build.make CMakeFiles/CADToVoxel.dir/Reader/IGESCAFReader.cpp.i
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(MAKE) -f src/CMakeFiles/CADToVoxel.dir/build.make src/CMakeFiles/CADToVoxel.dir/Reader/IGESCAFReader.cpp.i
 .PHONY : Reader/IGESCAFReader.cpp.i
 
 Reader/IGESCAFReader.s: Reader/IGESCAFReader.cpp.s
@@ -269,7 +271,7 @@ Reader/IGESCAFReader.s: Reader/IGESCAFReader.cpp.s
 
 # target to generate assembly for a file
 Reader/IGESCAFReader.cpp.s:
-	$(MAKE) -f CMakeFiles/CADToVoxel.dir/build.make CMakeFiles/CADToVoxel.dir/Reader/IGESCAFReader.cpp.s
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(MAKE) -f src/CMakeFiles/CADToVoxel.dir/build.make src/CMakeFiles/CADToVoxel.dir/Reader/IGESCAFReader.cpp.s
 .PHONY : Reader/IGESCAFReader.cpp.s
 
 Reader/Reader.o: Reader/Reader.cpp.o
@@ -277,7 +279,7 @@ Reader/Reader.o: Reader/Reader.cpp.o
 
 # target to build an object file
 Reader/Reader.cpp.o:
-	$(MAKE) -f CMakeFiles/CADToVoxel.dir/build.make CMakeFiles/CADToVoxel.dir/Reader/Reader.cpp.o
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(MAKE) -f src/CMakeFiles/CADToVoxel.dir/build.make src/CMakeFiles/CADToVoxel.dir/Reader/Reader.cpp.o
 .PHONY : Reader/Reader.cpp.o
 
 Reader/Reader.i: Reader/Reader.cpp.i
@@ -285,7 +287,7 @@ Reader/Reader.i: Reader/Reader.cpp.i
 
 # target to preprocess a source file
 Reader/Reader.cpp.i:
-	$(MAKE) -f CMakeFiles/CADToVoxel.dir/build.make CMakeFiles/CADToVoxel.dir/Reader/Reader.cpp.i
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(MAKE) -f src/CMakeFiles/CADToVoxel.dir/build.make src/CMakeFiles/CADToVoxel.dir/Reader/Reader.cpp.i
 .PHONY : Reader/Reader.cpp.i
 
 Reader/Reader.s: Reader/Reader.cpp.s
@@ -293,7 +295,7 @@ Reader/Reader.s: Reader/Reader.cpp.s
 
 # target to generate assembly for a file
 Reader/Reader.cpp.s:
-	$(MAKE) -f CMakeFiles/CADToVoxel.dir/build.make CMakeFiles/CADToVoxel.dir/Reader/Reader.cpp.s
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(MAKE) -f src/CMakeFiles/CADToVoxel.dir/build.make src/CMakeFiles/CADToVoxel.dir/Reader/Reader.cpp.s
 .PHONY : Reader/Reader.cpp.s
 
 Reader/STEPCAFReader.o: Reader/STEPCAFReader.cpp.o
@@ -301,7 +303,7 @@ Reader/STEPCAFReader.o: Reader/STEPCAFReader.cpp.o
 
 # target to build an object file
 Reader/STEPCAFReader.cpp.o:
-	$(MAKE) -f CMakeFiles/CADToVoxel.dir/build.make CMakeFiles/CADToVoxel.dir/Reader/STEPCAFReader.cpp.o
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(MAKE) -f src/CMakeFiles/CADToVoxel.dir/build.make src/CMakeFiles/CADToVoxel.dir/Reader/STEPCAFReader.cpp.o
 .PHONY : Reader/STEPCAFReader.cpp.o
 
 Reader/STEPCAFReader.i: Reader/STEPCAFReader.cpp.i
@@ -309,7 +311,7 @@ Reader/STEPCAFReader.i: Reader/STEPCAFReader.cpp.i
 
 # target to preprocess a source file
 Reader/STEPCAFReader.cpp.i:
-	$(MAKE) -f CMakeFiles/CADToVoxel.dir/build.make CMakeFiles/CADToVoxel.dir/Reader/STEPCAFReader.cpp.i
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(MAKE) -f src/CMakeFiles/CADToVoxel.dir/build.make src/CMakeFiles/CADToVoxel.dir/Reader/STEPCAFReader.cpp.i
 .PHONY : Reader/STEPCAFReader.cpp.i
 
 Reader/STEPCAFReader.s: Reader/STEPCAFReader.cpp.s
@@ -317,7 +319,7 @@ Reader/STEPCAFReader.s: Reader/STEPCAFReader.cpp.s
 
 # target to generate assembly for a file
 Reader/STEPCAFReader.cpp.s:
-	$(MAKE) -f CMakeFiles/CADToVoxel.dir/build.make CMakeFiles/CADToVoxel.dir/Reader/STEPCAFReader.cpp.s
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(MAKE) -f src/CMakeFiles/CADToVoxel.dir/build.make src/CMakeFiles/CADToVoxel.dir/Reader/STEPCAFReader.cpp.s
 .PHONY : Reader/STEPCAFReader.cpp.s
 
 Testing/TestColorDetection/ColorDetection.o: Testing/TestColorDetection/ColorDetection.cpp.o
@@ -325,7 +327,7 @@ Testing/TestColorDetection/ColorDetection.o: Testing/TestColorDetection/ColorDet
 
 # target to build an object file
 Testing/TestColorDetection/ColorDetection.cpp.o:
-	$(MAKE) -f CMakeFiles/ColorDetectionTest.dir/build.make CMakeFiles/ColorDetectionTest.dir/Testing/TestColorDetection/ColorDetection.cpp.o
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(MAKE) -f src/CMakeFiles/ColorDetectionTest.dir/build.make src/CMakeFiles/ColorDetectionTest.dir/Testing/TestColorDetection/ColorDetection.cpp.o
 .PHONY : Testing/TestColorDetection/ColorDetection.cpp.o
 
 Testing/TestColorDetection/ColorDetection.i: Testing/TestColorDetection/ColorDetection.cpp.i
@@ -333,7 +335,7 @@ Testing/TestColorDetection/ColorDetection.i: Testing/TestColorDetection/ColorDet
 
 # target to preprocess a source file
 Testing/TestColorDetection/ColorDetection.cpp.i:
-	$(MAKE) -f CMakeFiles/ColorDetectionTest.dir/build.make CMakeFiles/ColorDetectionTest.dir/Testing/TestColorDetection/ColorDetection.cpp.i
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(MAKE) -f src/CMakeFiles/ColorDetectionTest.dir/build.make src/CMakeFiles/ColorDetectionTest.dir/Testing/TestColorDetection/ColorDetection.cpp.i
 .PHONY : Testing/TestColorDetection/ColorDetection.cpp.i
 
 Testing/TestColorDetection/ColorDetection.s: Testing/TestColorDetection/ColorDetection.cpp.s
@@ -341,7 +343,7 @@ Testing/TestColorDetection/ColorDetection.s: Testing/TestColorDetection/ColorDet
 
 # target to generate assembly for a file
 Testing/TestColorDetection/ColorDetection.cpp.s:
-	$(MAKE) -f CMakeFiles/ColorDetectionTest.dir/build.make CMakeFiles/ColorDetectionTest.dir/Testing/TestColorDetection/ColorDetection.cpp.s
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(MAKE) -f src/CMakeFiles/ColorDetectionTest.dir/build.make src/CMakeFiles/ColorDetectionTest.dir/Testing/TestColorDetection/ColorDetection.cpp.s
 .PHONY : Testing/TestColorDetection/ColorDetection.cpp.s
 
 Voxelizer/VoxelIndexCalculator.o: Voxelizer/VoxelIndexCalculator.cpp.o
@@ -349,7 +351,7 @@ Voxelizer/VoxelIndexCalculator.o: Voxelizer/VoxelIndexCalculator.cpp.o
 
 # target to build an object file
 Voxelizer/VoxelIndexCalculator.cpp.o:
-	$(MAKE) -f CMakeFiles/CADToVoxel.dir/build.make CMakeFiles/CADToVoxel.dir/Voxelizer/VoxelIndexCalculator.cpp.o
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(MAKE) -f src/CMakeFiles/CADToVoxel.dir/build.make src/CMakeFiles/CADToVoxel.dir/Voxelizer/VoxelIndexCalculator.cpp.o
 .PHONY : Voxelizer/VoxelIndexCalculator.cpp.o
 
 Voxelizer/VoxelIndexCalculator.i: Voxelizer/VoxelIndexCalculator.cpp.i
@@ -357,7 +359,7 @@ Voxelizer/VoxelIndexCalculator.i: Voxelizer/VoxelIndexCalculator.cpp.i
 
 # target to preprocess a source file
 Voxelizer/VoxelIndexCalculator.cpp.i:
-	$(MAKE) -f CMakeFiles/CADToVoxel.dir/build.make CMakeFiles/CADToVoxel.dir/Voxelizer/VoxelIndexCalculator.cpp.i
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(MAKE) -f src/CMakeFiles/CADToVoxel.dir/build.make src/CMakeFiles/CADToVoxel.dir/Voxelizer/VoxelIndexCalculator.cpp.i
 .PHONY : Voxelizer/VoxelIndexCalculator.cpp.i
 
 Voxelizer/VoxelIndexCalculator.s: Voxelizer/VoxelIndexCalculator.cpp.s
@@ -365,7 +367,7 @@ Voxelizer/VoxelIndexCalculator.s: Voxelizer/VoxelIndexCalculator.cpp.s
 
 # target to generate assembly for a file
 Voxelizer/VoxelIndexCalculator.cpp.s:
-	$(MAKE) -f CMakeFiles/CADToVoxel.dir/build.make CMakeFiles/CADToVoxel.dir/Voxelizer/VoxelIndexCalculator.cpp.s
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(MAKE) -f src/CMakeFiles/CADToVoxel.dir/build.make src/CMakeFiles/CADToVoxel.dir/Voxelizer/VoxelIndexCalculator.cpp.s
 .PHONY : Voxelizer/VoxelIndexCalculator.cpp.s
 
 Voxelizer/VoxelShape.o: Voxelizer/VoxelShape.cpp.o
@@ -373,7 +375,7 @@ Voxelizer/VoxelShape.o: Voxelizer/VoxelShape.cpp.o
 
 # target to build an object file
 Voxelizer/VoxelShape.cpp.o:
-	$(MAKE) -f CMakeFiles/CADToVoxel.dir/build.make CMakeFiles/CADToVoxel.dir/Voxelizer/VoxelShape.cpp.o
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(MAKE) -f src/CMakeFiles/CADToVoxel.dir/build.make src/CMakeFiles/CADToVoxel.dir/Voxelizer/VoxelShape.cpp.o
 .PHONY : Voxelizer/VoxelShape.cpp.o
 
 Voxelizer/VoxelShape.i: Voxelizer/VoxelShape.cpp.i
@@ -381,7 +383,7 @@ Voxelizer/VoxelShape.i: Voxelizer/VoxelShape.cpp.i
 
 # target to preprocess a source file
 Voxelizer/VoxelShape.cpp.i:
-	$(MAKE) -f CMakeFiles/CADToVoxel.dir/build.make CMakeFiles/CADToVoxel.dir/Voxelizer/VoxelShape.cpp.i
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(MAKE) -f src/CMakeFiles/CADToVoxel.dir/build.make src/CMakeFiles/CADToVoxel.dir/Voxelizer/VoxelShape.cpp.i
 .PHONY : Voxelizer/VoxelShape.cpp.i
 
 Voxelizer/VoxelShape.s: Voxelizer/VoxelShape.cpp.s
@@ -389,7 +391,7 @@ Voxelizer/VoxelShape.s: Voxelizer/VoxelShape.cpp.s
 
 # target to generate assembly for a file
 Voxelizer/VoxelShape.cpp.s:
-	$(MAKE) -f CMakeFiles/CADToVoxel.dir/build.make CMakeFiles/CADToVoxel.dir/Voxelizer/VoxelShape.cpp.s
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(MAKE) -f src/CMakeFiles/CADToVoxel.dir/build.make src/CMakeFiles/CADToVoxel.dir/Voxelizer/VoxelShape.cpp.s
 .PHONY : Voxelizer/VoxelShape.cpp.s
 
 Voxelizer/Voxelizer.o: Voxelizer/Voxelizer.cpp.o
@@ -397,7 +399,7 @@ Voxelizer/Voxelizer.o: Voxelizer/Voxelizer.cpp.o
 
 # target to build an object file
 Voxelizer/Voxelizer.cpp.o:
-	$(MAKE) -f CMakeFiles/CADToVoxel.dir/build.make CMakeFiles/CADToVoxel.dir/Voxelizer/Voxelizer.cpp.o
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(MAKE) -f src/CMakeFiles/CADToVoxel.dir/build.make src/CMakeFiles/CADToVoxel.dir/Voxelizer/Voxelizer.cpp.o
 .PHONY : Voxelizer/Voxelizer.cpp.o
 
 Voxelizer/Voxelizer.i: Voxelizer/Voxelizer.cpp.i
@@ -405,7 +407,7 @@ Voxelizer/Voxelizer.i: Voxelizer/Voxelizer.cpp.i
 
 # target to preprocess a source file
 Voxelizer/Voxelizer.cpp.i:
-	$(MAKE) -f CMakeFiles/CADToVoxel.dir/build.make CMakeFiles/CADToVoxel.dir/Voxelizer/Voxelizer.cpp.i
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(MAKE) -f src/CMakeFiles/CADToVoxel.dir/build.make src/CMakeFiles/CADToVoxel.dir/Voxelizer/Voxelizer.cpp.i
 .PHONY : Voxelizer/Voxelizer.cpp.i
 
 Voxelizer/Voxelizer.s: Voxelizer/Voxelizer.cpp.s
@@ -413,7 +415,7 @@ Voxelizer/Voxelizer.s: Voxelizer/Voxelizer.cpp.s
 
 # target to generate assembly for a file
 Voxelizer/Voxelizer.cpp.s:
-	$(MAKE) -f CMakeFiles/CADToVoxel.dir/build.make CMakeFiles/CADToVoxel.dir/Voxelizer/Voxelizer.cpp.s
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(MAKE) -f src/CMakeFiles/CADToVoxel.dir/build.make src/CMakeFiles/CADToVoxel.dir/Voxelizer/Voxelizer.cpp.s
 .PHONY : Voxelizer/Voxelizer.cpp.s
 
 Writer/Writer_ToPy.o: Writer/Writer_ToPy.cpp.o
@@ -421,7 +423,7 @@ Writer/Writer_ToPy.o: Writer/Writer_ToPy.cpp.o
 
 # target to build an object file
 Writer/Writer_ToPy.cpp.o:
-	$(MAKE) -f CMakeFiles/CADToVoxel.dir/build.make CMakeFiles/CADToVoxel.dir/Writer/Writer_ToPy.cpp.o
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(MAKE) -f src/CMakeFiles/CADToVoxel.dir/build.make src/CMakeFiles/CADToVoxel.dir/Writer/Writer_ToPy.cpp.o
 .PHONY : Writer/Writer_ToPy.cpp.o
 
 Writer/Writer_ToPy.i: Writer/Writer_ToPy.cpp.i
@@ -429,7 +431,7 @@ Writer/Writer_ToPy.i: Writer/Writer_ToPy.cpp.i
 
 # target to preprocess a source file
 Writer/Writer_ToPy.cpp.i:
-	$(MAKE) -f CMakeFiles/CADToVoxel.dir/build.make CMakeFiles/CADToVoxel.dir/Writer/Writer_ToPy.cpp.i
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(MAKE) -f src/CMakeFiles/CADToVoxel.dir/build.make src/CMakeFiles/CADToVoxel.dir/Writer/Writer_ToPy.cpp.i
 .PHONY : Writer/Writer_ToPy.cpp.i
 
 Writer/Writer_ToPy.s: Writer/Writer_ToPy.cpp.s
@@ -437,7 +439,7 @@ Writer/Writer_ToPy.s: Writer/Writer_ToPy.cpp.s
 
 # target to generate assembly for a file
 Writer/Writer_ToPy.cpp.s:
-	$(MAKE) -f CMakeFiles/CADToVoxel.dir/build.make CMakeFiles/CADToVoxel.dir/Writer/Writer_ToPy.cpp.s
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(MAKE) -f src/CMakeFiles/CADToVoxel.dir/build.make src/CMakeFiles/CADToVoxel.dir/Writer/Writer_ToPy.cpp.s
 .PHONY : Writer/Writer_ToPy.cpp.s
 
 Writer/Writer_VTK.o: Writer/Writer_VTK.cpp.o
@@ -445,7 +447,7 @@ Writer/Writer_VTK.o: Writer/Writer_VTK.cpp.o
 
 # target to build an object file
 Writer/Writer_VTK.cpp.o:
-	$(MAKE) -f CMakeFiles/CADToVoxel.dir/build.make CMakeFiles/CADToVoxel.dir/Writer/Writer_VTK.cpp.o
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(MAKE) -f src/CMakeFiles/CADToVoxel.dir/build.make src/CMakeFiles/CADToVoxel.dir/Writer/Writer_VTK.cpp.o
 .PHONY : Writer/Writer_VTK.cpp.o
 
 Writer/Writer_VTK.i: Writer/Writer_VTK.cpp.i
@@ -453,7 +455,7 @@ Writer/Writer_VTK.i: Writer/Writer_VTK.cpp.i
 
 # target to preprocess a source file
 Writer/Writer_VTK.cpp.i:
-	$(MAKE) -f CMakeFiles/CADToVoxel.dir/build.make CMakeFiles/CADToVoxel.dir/Writer/Writer_VTK.cpp.i
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(MAKE) -f src/CMakeFiles/CADToVoxel.dir/build.make src/CMakeFiles/CADToVoxel.dir/Writer/Writer_VTK.cpp.i
 .PHONY : Writer/Writer_VTK.cpp.i
 
 Writer/Writer_VTK.s: Writer/Writer_VTK.cpp.s
@@ -461,7 +463,7 @@ Writer/Writer_VTK.s: Writer/Writer_VTK.cpp.s
 
 # target to generate assembly for a file
 Writer/Writer_VTK.cpp.s:
-	$(MAKE) -f CMakeFiles/CADToVoxel.dir/build.make CMakeFiles/CADToVoxel.dir/Writer/Writer_VTK.cpp.s
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(MAKE) -f src/CMakeFiles/CADToVoxel.dir/build.make src/CMakeFiles/CADToVoxel.dir/Writer/Writer_VTK.cpp.s
 .PHONY : Writer/Writer_VTK.cpp.s
 
 # Help Target
@@ -527,6 +529,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	$(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/Code && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

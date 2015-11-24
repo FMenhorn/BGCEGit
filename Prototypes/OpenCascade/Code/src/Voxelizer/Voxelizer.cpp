@@ -21,7 +21,6 @@ void Voxelizer::voxelizeWholeVector(const int refinementLevel, const bool isElem
 	if(listOfShapes.getSize() > 0){
 		for(shapeIterator.Initialize(listOfShapes.getListOfShape()); shapeIterator.More(); shapeIterator.Next() ){
 			this->voxelize(shapeIterator.Value(), refinementLevel, voxelShapeVector[counter]);
-			//voxelIndexCalculator.calculateIndexForVoxelShape(voxelShapeVector[counter], isElem);
 			counter++;
 		}
 	}

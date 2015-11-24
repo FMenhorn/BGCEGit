@@ -125,8 +125,6 @@ int main(int argc, char** argv){
     outputVoxelVector.push_back(loadVector);
 
     /**Active Treatment**/
-	//std::vector<VoxelShape> activeVector;
-    activeVector.resize(activeFacesList.getSize());
     voxelizer.voxelizeWholeVector(refinementLevel, true, activeFacesList, activeVector, loadFacesList.getSize());
     voxelIndexCalculator.calculateIndicesForWholeVector(activeVector, true);
     outputVoxelVector.push_back(activeVector);
