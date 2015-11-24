@@ -45,4 +45,42 @@ TKG3d
 TKPrim
 TKTopAlgo)
 
+# Build unit tests
+add_executable(UnitTest
+src/UnitTests/UnitTest.cpp
+src/Reader/Reader.cpp
+src/Reader/IGESCAFReader.cpp
+src/Reader/STEPCAFReader.cpp
+src/Voxelizer/Voxelizer.cpp
+src/Voxelizer/VoxelShape.cpp
+src/Voxelizer/VoxelIndexCalculator.cpp
+src/Writer/Writer_ToPy.cpp
+src/Writer/Writer_VTK.cpp
+src/ColorHandler/ColorHandler.cpp
+src/DataWrappers/ListOfShape.cpp
+src/DataWrappers/BodyPartsContainer.cpp
+src/DataWrappers/VoxelShapesContainer.cpp
+src/UnitTests/UnitTest_suite.cpp
+src/UnitTests/HelperTests/Helper_suite.cpp
+src/UnitTests/HelperTests/Helper_test.cpp)
+
+target_link_libraries(UnitTest
+TKTopAlgo
+TKBRep
+TKernel
+TKMath
+TKVoxel
+TKXSBase
+TKSTEP
+TKIGES
+TKXDEIGES
+TKXDESTEP
+TKXCAF
+TKLCAF
+TKOffset
+TKG3d
+TKPrim
+TKTopAlgo
+cppunit)
+
 #install(TARGETS CADToVoxel DESTINATION bin)
