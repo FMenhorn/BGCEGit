@@ -1,0 +1,38 @@
+[ToPy Problem Definition File v2007]
+
+PROB_TYPE:   comp
+PROB_NAME:   topyBP_CantiLeverWithLoadAtEndSmallerMovedLoad
+ETA:         0.4
+DOF_PN:      3
+VOL_FRAC:    0.15
+FILT_RAD:    1.5
+ELEM_K:      H8
+NUM_ITER:    100
+NUM_ELEM_X:  100
+NUM_ELEM_Y:  40
+NUM_ELEM_Z:  40
+
+# Grey-scale filter (GSF)
+P_FAC      : 1
+P_HOLD     : 15
+P_INCR     : 0.2
+P_CON      : 1
+P_MAX      : 3
+
+Q_FAC      : 1
+Q_HOLD     : 15
+Q_INCR     : 0.05
+Q_CON      : 1
+Q_MAX      : 5
+ACTV_ELEM: 
+PASV_ELEM: 
+FXTR_NODE_X: 
+FXTR_NODE_Y: 
+FXTR_NODE_Z: 
+LOAD_NODE_X: 
+LOAD_NODE_Y: 
+LOAD_NODE_Z: 
+LOAD_VALU_X: 0@0
+LOAD_VALU_Y: 0@0
+LOAD_VALU_Z: 0.992157@0
+
