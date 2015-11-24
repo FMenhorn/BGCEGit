@@ -109,14 +109,6 @@ S. Reiz, B. Rüth, E. Wannerberg, A. Yurova} %[displayed in footer]{displayed on
 \tableofcontents
 \end{frame}
 
-\AtBeginSection[]
-{
-  \begin{frame}
-  \frametitle{Contents}
-  \tableofcontents[currentsection]
-  \end{frame}
-}
-
 %-------------------------------------------------------
 \subsection{Motivation}
 \input{Sections/Motivation}
@@ -128,6 +120,14 @@ S. Reiz, B. Rüth, E. Wannerberg, A. Yurova} %[displayed in footer]{displayed on
 %-------------------------------------------------------
 \subsection{Organization}
 \input{Sections/Organization}
+
+\AtBeginSection[]
+{
+  \begin{frame}
+  \frametitle{Contents}
+  \tableofcontents[currentsection]
+  \end{frame}
+}
 
 %-------------------------------------------------------
 \section{Topology optimization}
