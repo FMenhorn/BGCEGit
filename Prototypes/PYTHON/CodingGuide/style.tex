@@ -19,17 +19,16 @@ In this we are going to collect coding style guidelines for our project
 
 \section{Functions and Variables}
 \begin{itemize}
-\item separate different words in variable names and function names with \verb+_+ (e.g. \verb+my_variable+ instead of \verb+myVariable+)
-\item only use lowercase for variable and function names
+\item Variablenames (CamelCase!): \verb+myVariable+
+\item variable and function name start with small letter: \texttt{void myFunc(), myDataType myVariable}
+\item class name starts with bigletter: \texttt{class MyClass}
 \end{itemize}
 
 \section{Object oriented programming}
 \begin{itemize}
-\item use camelcase for class names!
-\item start class names with uppercase (e.g. \verb+MyObject+ instead of \verb+my_object+)
 \item there is no way for defining private variables in python! the following convention is applied:
 \begin{itemize}
-\item variables starting with \verb+_+ or \verb+__+ (e.g. \verb+_private+ or \verb+__private+) should not be touched from outside
+\item variables starting with \verb+__+ (e.g. \verb+__myMember+) should not be touched from outside
 \item for variable modification and access add appropriate getters and setters
 \item from my personal experience and fails: \verb+_+ seems to me to mean something like protected and \verb+__+ derived. Also to the interpreter! This means, if you want to access variables from a base class via a derived class you have to be careful. See the following example:
 \begin{verbatim}
