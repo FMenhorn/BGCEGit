@@ -18,7 +18,7 @@ First we want to find a Bezier-curve $\vec{B}_n\left(u\right)$ of degree $n$ whi
 \end{equation}
 Minimizing the $L_2$-norm is equal to minimizing the functional:
 \begin{equation}
-F\left[\vec{B}_n\right ]=\int\limits_{u=0}^{u=1} \left(\vec{B}_n-\vec{s}_m\right)^2\du
+F\left[\vec{B}_n\right]=\int\limits_{u=0}^{u=1} \left(\vec{B}_n-\vec{s}_m\right)^2\du
 \end{equation}
 Using the variational principle we get the the system of linear equations:
 \begin{equation}
@@ -50,7 +50,7 @@ In order to fit a \Bez surface to a set of datapoints with fixed locations and p
 \end{equation} 
 where $\lsControlPointCoefi{i,j}(u,v)$ are the coefficients calculated on control point $\lsControlPointi{i,j}$ from the parameters $(u,v)$. Reindexing, realizing that the matrix indexing $i,j$ can be flattened to a vector index $p = 1,2,...,S=N\times M$ mapping to $i$ and $j$, we can express this as:
 \begin{equation}
-\lsDataPointi{k} = \sum\limits_{p=1}^{S} \lsControlPointCoefi{p}(u_k,v_k) \lsControlPointi{p} \overset{!}{=} \vec{\lsControlPointCoef}(u_k,v_k)\lsControlPointMatrix
+\lsDataPointi{k} = \sum\limits_{p=1}^{S} \lsControlPointCoefi{p}(u_k,v_k) \lsControlPointi{p} \equiv \vec{\lsControlPointCoef}(u_k,v_k)\lsControlPointMatrix
 \label{eqn:lsmatrix1}
 \end{equation} 
 where in the last equality, we've expressed the control points as a vector-matrix product, where the $S\times 3$ matrix $P$ has the $p^\text{th}$ row as the position of the $p^\text{th}$ control points as a 3D row-vector, and $\vec{\lsControlPointCoef}(u_k,v_k)$ is the row vector whose entries are the coefficients $\lsControlPointCoefi{p}(u_k,v_k)$ on the control points. Now, again realizing that for $Q$ datapoints $\lsDataPointi{k}$ we can view them as the columns in a $3\times Q$ matrix $\lsDataPointMatrix$, and create an analogous matrix $\lsControlPointCoefMatrix(\vec{u},\vec{v})$ with the $k^\text{th}$ containing the coefficients calculated from the parameters $(u_k,v_k)$ of datapoint $\lsDataPointi{k}$, resulting in the matrix equation:
@@ -77,7 +77,7 @@ One of the major drawbacks with the approach above is that it is typically very 
 \begin{equation}
 \lsControlPointi{p} = \sum\limits_{l} \petersControlPointCoef_{p,l} \petersPatchPointVec_l
 \end{equation} 
-with $\petersControlPointCoef_{p,l}$ being the coefficient for the $p^\text{th}$ \Bez control point on the $l^\text{th}$ refined control mesh vertex as obtained from Peters' scheme. Analogously to before in equations \ref{eqn:lsmatrix1} and \ref{eqn:lsmatrix2}, we can extend this to all \Bez control points on all patches, and cast it in a matrix form to obtain:
+with $\petersControlPointCoef_{p,l}$ being the coefficient for the $p^\text{th}$ \Bez control point on the $l^\text{th}$ refined control mesh vertex as obtained from Peters' scheme. Analogously to in equations \ref{eqn:lsmatrix1} and \ref{eqn:lsmatrix2}, we can extend this to all \Bez control points on all patches, and cast it in a matrix form to obtain:
 
 \begin{equation}
 \lsControlPointMatrix = \petersControlPointCoefMatrix\petersPatchPointMatrix
@@ -89,12 +89,11 @@ Finally, we can now substitute this into our equations \ref{eqn:lsmatrix2} and \
 \begin{equation}
 \lsDataPointMatrix = \lsControlPointCoefMatrix(\vec{u},\vec{v})\lsControlPointMatrix = \lsControlPointCoefMatrix(\vec{u},\vec{v})\petersControlPointCoefMatrix\petersPatchPointMatrix
 \end{equation}
-or minimize the least squares error:
+or minimize the least squares error for the only unknowns in this case, the positions of the refined control mesh vertices $\petersPatchPointMatrix$:
 \begin{equation}
 \norm{\lsDataPointMatrix - \left [\lsControlPointCoefMatrix(\vec{u},\vec{v})\petersControlPointCoefMatrix\right ]\petersPatchPointMatrix}^2
 \label{eqn:petersminimisation}
 \end{equation}
-for the only unknown now in this case, the positions of the refined control mesh vertices $\petersPatchPointMatrix$.
 
 To summarize, using the standard methods of minimisation of least-squares errors, we compute a set of points, which when used in Peters' scheme produces a surface with the smallest error to a set of datapoints. For this, we require the parametrisations of these datapoints on the surface to compute $\lsControlPointCoefMatrix(\vec{u},\vec{v})$, and in order to obtain $\petersControlPointCoefMatrix$, we also need to know how the patches connect with each other. 
 Worth noting is that both $\lsControlPointCoefMatrix(\vec{u},\vec{v})$ and $\petersControlPointCoefMatrix$ are, although likely very large for large amounts of datapoints, also very sparse, as the $\lsControlPointCoefMatrix(\vec{u},\vec{v})$ will only contain coefficients on one patch, and the algorithms for computing $\petersControlPointCoefMatrix$ only use information of a few vertices around the patch, resulting in the combined coefficient matrix $\lsControlPointCoefMatrix(\vec{u},\vec{v})\petersControlPointCoefMatrix$ also having high sparsity. Thus, the minimisation problem in \autoref{eqn:petersminimisation} will be able to use specialised, fast solvers for sparse systems.
