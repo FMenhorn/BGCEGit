@@ -97,6 +97,3 @@ or minimize the least squares error for the only unknowns in this case, the posi
 
 To summarize, using the standard methods of minimisation of least-squares errors, we compute a set of points, which when used in Peters' scheme produces a surface with the smallest error to a set of datapoints. For this, we require the parametrisations of these datapoints on the surface to compute $\lsControlPointCoefMatrix(\vec{u},\vec{v})$, and in order to obtain $\petersControlPointCoefMatrix$, we also need to know how the patches connect with each other. 
 Worth noting is that both $\lsControlPointCoefMatrix(\vec{u},\vec{v})$ and $\petersControlPointCoefMatrix$ are, although likely very large for large amounts of datapoints, also very sparse, as the $\lsControlPointCoefMatrix(\vec{u},\vec{v})$ will only contain coefficients on one patch, and the algorithms for computing $\petersControlPointCoefMatrix$ only use information of a few vertices around the patch, resulting in the combined coefficient matrix $\lsControlPointCoefMatrix(\vec{u},\vec{v})\petersControlPointCoefMatrix$ also having high sparsity. Thus, the minimisation problem in \autoref{eqn:petersminimisation} will be able to use specialised, fast solvers for sparse systems.
-
-
-\todourgent[inline]{more ugly lines... argh!!!}
