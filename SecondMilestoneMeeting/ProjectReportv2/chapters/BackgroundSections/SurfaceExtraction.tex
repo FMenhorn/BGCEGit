@@ -2,7 +2,7 @@
 \label{sec:surfaceBackg}
 A \emph{mesh-based geometry}, which is a representation of the object at a set of (connected) points, is typically needed to fit \ac{NURBS} and other curves to an optimized geometry. A voxel surface reconstruction is the necessary approach since the topology optimization process results in a volumetric representation of density in each voxel. 
 
-In order to produce the mesh-based geometry, the data can be represented by a contour at a value of a smooth function in space, that is, an isosurface. Below, we describe four \todointern{consistent?} methods that solve this problem, the \acl{MC}, the \acl{DC}, the \acl{DualMC} and the \acl{DualMT} method. This section is only intended for giving a brief overview over the different methods and the most important properties regarding our application. For more details we refer to \cite{Marching2006, Hermite2002, Nielson2004, Nielson2008}. 
+In order to produce the mesh-based geometry, the data can be represented by a contour at a value of a smooth function in space, that is, an isosurface. Below, we describe two methods that solve this problem, the \acl{MC} and the \acl{DC} method. This section is only intended for giving a brief overview over the different methods and the most important properties regarding our application. For more details we refer to \cite{Marching2006, Hermite2002}. 
 
 One should also note that surface reconstruction from voxel data --- what we are doing --- is a special case of surface reconstruction and should not be mixed up with other surface reconstruction classes\todointern{Benni: give example! Erik says in brackets!}. Voxel surface reconstruction works on datasets on Cartesian grids with either boolean inside-outside information or floating point values representing a certain quantity -- e.g. density -- on each gridpoint. The aim of voxel data surface reconstruction is to find the surface dividing the inside from the outside region (for boolean datasets) or denoting a certain isovalue (for floating point datasets). One application for voxel data surface reconstruction is the process of generating isosurfaces from computer tomography data for making certain structures visible.
 % subsection on Marching Cubes
@@ -10,6 +10,3 @@ One should also note that surface reconstruction from voxel data --- what we are
 
 % subsection on Dual Contouring
 \input{chapters/BackgroundSections/SurfaceExtractionSubsections/DualContouring}
-
-% subsection on Dual Marching Cubes
-\input{chapters/BackgroundSections/SurfaceExtractionSubsections/DualMarching}
