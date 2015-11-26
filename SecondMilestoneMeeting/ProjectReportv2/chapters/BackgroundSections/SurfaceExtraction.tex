@@ -1,6 +1,5 @@
 \section{Voxel data surface reconstruction}
 \label{sec:surfaceBackg}
-\tododone[inline]{Benni: Don't overuse acronyms}
 A \emph{mesh-based geometry}, which is a representation of the object at a set of (connected) points, is typically needed to fit \ac{NURBS} and other curves to an optimized geometry. A voxel surface reconstruction is the necessary approach since the topology optimization process results in a volumetric representation of density in each voxel. 
 
 In order to produce the mesh-based geometry, the data can be represented by a contour at a value of a smooth function in space, that is, an isosurface. Below, we describe four \todointern{consistent?} methods that solve this problem, the \acl{MC}, the \acl{DC}, the \acl{DualMC} and the \acl{DualMT} method. This section is only intended for giving a brief overview over the different methods and the most important properties regarding our application. For more details we refer to \cite{Marching2006, Hermite2002, Nielson2004, Nielson2008}. 

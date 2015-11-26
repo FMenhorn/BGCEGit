@@ -14,6 +14,7 @@ Of course this simple approach comes with some drawbacks:
 \item We cannot guarantee that the coarse and the fine scale have exactly the same topology. Small topological details of the fine scale, which do not exist on the coarse scale, are lost.\tododone{should we mention "small topological details" ? otherwise it looks like we are doing a very bad job}
 \item Both resolutions have to be chosen manually, since we do not have a criterion for evaluating the quality of the coarse scale surface reconstruction.
 \end{itemize}
+\todointern[inline]{refer to future work section for possible optimizations}
 \subsubsection{Projection of datapoints onto quads}
 \todointern[inline]{go through formulation again}
 Now that we have constructed a \ac{NURBS}-patch distribution we can estimate the parametrization of the datapoints on the fine scale by projecting the datapoints onto the patches: For this procedure we first have to find out onto which one of the patches one particular datapoint will be projected. Then we have to do the actual projection of the datapoint onto the quad: 

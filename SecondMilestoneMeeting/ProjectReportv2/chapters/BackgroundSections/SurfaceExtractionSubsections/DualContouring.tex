@@ -1,6 +1,6 @@
 \subsection{\Acl{DC}}
 \tododone[inline]{Proofreading of Benni \& JC}
-\todointern[inline]{generally longer, more explanatory captions}
+\todointern[inline]{generally longer, more explanatory captions for figures}
 \label{ssec:DC}
 The idea of \emph{dual algorithms}, to which \acf{DC} belongs, is similar to \ac{MC}. However, instead of generating polygon vertices on the edges of the cubes, this method locates them inside the cubes that have at least one edge which has vertex values both above and below the isovalue (\acs{SignChangingEdge}). The basic algorithm can be summarized in these two steps:
 \begin{enumerate}
@@ -18,29 +18,29 @@ The approach can be seen in \autoref{fig:bunny_MCDC}, with a similar \ac{MC} ill
 
 \subsubsection{Minimizing the \acl{QEF}}
 Now we want to find out where in the cube the ideal place for the vertex is located, and here different dual algorithms are distinguished. \Ac{DC} in particular generates a vertex positioned at the minimizer of a certain quadratic function. This function depends on the (interpolated) isosurface intersection points, as well as the gradient -- or just the normal of the isosurface -- at these points, both quantities represent the \acs{FirstOrderHermiteData} of the set.
-The \acl{QEF} is defined in \cite{Hermite2002} as follows:
+The \acl{QEF} defined in \cite{Hermite2002} is as follows:
 \begin{equation}
 \label{eq:QEF}
 E(x)= x^TA^TAx-2x^TA^Tb+b^Tb
 \end{equation}
 where the columns of the matrix \textit{A} are the  isosurface normals at the intersection points, and \textit{b} is a vector containing the scalar product of the normals and the intersection points. This system can be solved numerically, for example as proposed in \cite{Hermite2002} by computing the singular value decomposition of \textit{A} and forming the pseudo-inverse, truncating its small singular values. 
 The effect of considering the gradient for the calculation of the vertex is huge: \ac{DC} has the ability to represent sharp features like edges and corners.
-Computing the position of the new node by just taking the mean value of all the roots on the \acsp{SignChangingEdge} of one cube represent an easier approach, which does not rely on gradient information, but is also not able to represent sharp features. The resulting vertex is inside the cube, because it represents the average position of the nodes lying on edges of the cube.
+Computing the position of the new node by just taking the mean value of all the roots on the \acsp{SignChangingEdge} of one cube represent an easier approach, which does not rely on gradient information, but has the disadvantage that it is not able to represent sharp features. The resulting vertex is inside the cube, because it represents the average position of the nodes lying on edges of the cube.
 
 \subsubsection{Non-manifold surfaces}
 The risk to also obtain non-manifold surfaces represents one of the big drawbacks of \ac{DC}. A manifold surface is defined by the following topological property:
 \begin{quote}
 \emph{A $d$-dimensional contour is locally a \emph{manifold} if it is topologically equivalent to a $d$-dimensional disc.}\cite{Hermite2002}
 \end{quote}
-This means that for 2D data we only get a manifold isocontour, if each vertex is connected to exactly 2 edges. For 3D we only get a manifold isosurface, if each edge is at maximum shared by two \acp{quad}. Since the original method does not deal with this issue, extensions have been developed to solve this problem. Figure \ref{fig:manifold} shows one configuration creating a non-manifold surface for the basic method from \cite{Hermite2002} and its correct resolution by \cite{Schaefer2007}.
+This means that for 2D data we only get a manifold isocontour, if each vertex is connected to exactly 2 edges. For 3D we only get a manifold isosurface, if each edge is at maximum shared by two \acp{quad}. Since the original method does not deal with this issue, extensions have been developed to solve this problem. \autoref{fig:manifold} shows one configuration creating a non-manifold surface for the basic method from \cite{Hermite2002} and its correct resolution by \cite{Schaefer2007}.
 \todo[inline]{\ref{fig:manifold} put all subfigures into one line}
 
 \begin{figure}
 \begin{center}
 \includegraphics[width=.3 \textwidth]{Pictures/SurfaceReconstruction/ManifoldDC.png}
 \end{center}
-\label{fig:manifold}
 \caption{Comparison of contouring for Hermite data. (a) Cell with Hermite data on edges, (b) manifold contour from \acs{MC}, (c) non-manifold contour from \acs{DC}, (d) manifold contour from \acs{DualMC} (figure and description from \cite{Schaefer2007})}
+\label{fig:manifold}
 \end{figure}
 
 \subsubsection{Topology-safe adaptivity}
