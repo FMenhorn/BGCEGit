@@ -33,8 +33,47 @@ The risk to also obtain non-manifold surfaces represents one of the big drawback
 \emph{A $d$-dimensional contour is locally a \emph{manifold} if it is topologically equivalent to a $d$-dimensional disc.}\cite{Hermite2002}
 \end{quote}
 This means that for 2D data we only get a manifold isocontour, if each vertex is connected to exactly 2 edges. For 3D we only get a manifold isosurface, if each edge is at maximum shared by two \acp{quad}. Since the original method does not deal with this issue, extensions have been developed to solve this problem. \autoref{fig:manifold} shows one configuration creating a non-manifold surface for the basic method from \cite{Hermite2002} and its correct resolution by \cite{Schaefer2007}.
-\todo[inline]{\ref{fig:manifold} put all subfigures into one line}
 
+\begin{figure}
+\begin{center}
+\begin{subfigure}[t]{.2\textwidth}
+\begin{center}
+\includegraphics[width=\textwidth]{Pictures/SurfaceReconstruction/ManifoldDC1.png}
+\subcaption{Cell with Hermite data}
+\label{sfig:ManifoldDC1}
+\end{center}
+\end{subfigure}
+\qquad
+\begin{subfigure}[t]{.2\textwidth}
+\begin{center}
+\includegraphics[width=\textwidth]{Pictures/SurfaceReconstruction/ManifoldDC2.png}
+\subcaption{manifold contour from \acs{MC}}
+\label{sfig:ManifoldDC2}
+\end{center}
+\end{subfigure}
+\qquad
+\begin{subfigure}[t]{.2\textwidth}
+\begin{center}
+\includegraphics[width=\textwidth]{Pictures/SurfaceReconstruction/ManifoldDC3.png}
+\subcaption{non-manifold contour from \acs{DC}}
+\label{sfig:ManifoldDC3}
+\end{center}
+\end{subfigure}
+\qquad
+\begin{subfigure}[t]{.2\textwidth}
+\begin{center}
+\includegraphics[width=\textwidth]{Pictures/SurfaceReconstruction/ManifoldDC4.png}
+\subcaption{manifold contour}
+\label{sfig:ManifoldDC4}
+\end{center}
+\end{subfigure}
+\caption{Comparison of contouring for Hermite data \autoref{sfig:ManifoldDC1}. By comparing \autoref{sfig:ManifoldDC2} and \autoref{sfig:ManifoldDC3} one can see that \ac{DC} produces non-manifold surfaces under certain conditions, while \ac{MC} always produces manifold surfaces, but does not incorporate gradient information. Modifying \ac{DC} properly finally gives manifold surfaces in \autoref{sfig:ManifoldDC4}. Figures from \cite{Schaefer2007}}
+\label{fig:manifold}
+\end{center}
+\end{figure}
+
+
+\begin{comment}
 \begin{figure}
 \begin{center}
 \includegraphics[width=.3 \textwidth]{Pictures/SurfaceReconstruction/ManifoldDC.png}
@@ -42,6 +81,7 @@ This means that for 2D data we only get a manifold isocontour, if each vertex is
 \caption{Comparison of contouring for Hermite data. (a) Cell with Hermite data on edges, (b) manifold contour from \acs{MC}, (c) non-manifold contour from \acs{DC}, (d) manifold contour from \acs{DualMC} (figure and description from \cite{Schaefer2007})}
 \label{fig:manifold}
 \end{figure}
+\end{comment}
 
 \subsubsection{Topology-safe adaptivity}
 Usually having as few faces as possible is desirable for reasons like filesize and complexity of the mesh. But in its basic form \ac{DC} is working with uniformly distributed data and introduces vertices on a uniform grid. The reconstructed surface mesh has uniform resolution on the whole area and this results in huge files and a uniformly high resolution, if one wants to resolve fine features of the geometry. As a post processing step one could try to simplify the mesh, but especially for \ac{quad} meshes this is a very demanding -- sometimes even impossible -- task \cite{Puppo2010}.
