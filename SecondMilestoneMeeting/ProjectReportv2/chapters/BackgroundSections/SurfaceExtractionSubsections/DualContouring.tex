@@ -7,14 +7,38 @@ The idea of \emph{dual algorithms}, to which \acf{DC} belongs, is similar to \ac
 \item Locate the position of the vertex inside each cube which has at least one \ac{SignChangingEdge}.
 \item Join the vertices associated with four cubes sharing a common edge to form a \ac{quad}.
 \end{enumerate}
-The approach can be seen in \autoref{fig:bunny_MCDC}, with a similar \ac{MC} illustration for comparison.
+The approach can be seen in \autoref{fig:CompMCDC}, with a similar \ac{MC} illustration for comparison.
 
+\begin{figure}
+\begin{center}
+\begin{subfigure}{.45\textwidth}
+\begin{center}
+\includegraphics[width=.5\textwidth]{Pictures/SurfaceReconstruction/MC}
+\subcaption{\ac{MC} contour}
+\label{sfig:MC}
+\end{center}
+\end{subfigure}
+\begin{subfigure}{.45\textwidth}
+\begin{center}
+\includegraphics[width=.5\textwidth]{Pictures/SurfaceReconstruction/DC}
+\subcaption{\ac{DC} contour}
+\label{sfig:DC}
+\end{center}
+\end{subfigure}
+\caption{Comparision of \ac{MC} and \ac{DC} for identical datasets. The vertices are created on the edges of the cubes for \ac{MC} (\autoref{sfig:MC}) and inside the cubes for \ac{DC} (\autoref{sfig:DC}). Please note that the sharp feature in the top right cube can only be reconstructed by \ac{DC}. Figure from \cite{}.}
+\label{fig:CompMCDC}
+\end{center}
+\end{figure}
+\todourgent[inline,author=Benni]{Reference to \cite{Hermite2002} in \autoref{fig:CompMCDC} was wrong! Fix this -> JC}
+
+\begin{comment}
 \begin{figure}
 \centering
    \includegraphics[width=.5\textwidth]{Pictures/bunny_MC.pdf}
    \caption{\textit{Left:} The famous Stanford Bunny, a popular computer graphics test object, here after application of \ac{MC}. \textit{Right:} Main difference between \ac{MC} and \ac{DC}.  Figures taken from \cite{Hermite2002}. }
    \label{fig:bunny_MCDC}
 \end{figure}
+\end{comment}
 
 \subsubsection{Minimizing the \acl{QEF}}
 Now we want to find out where in the cube the ideal place for the vertex is located, and here different dual algorithms are distinguished. \Ac{DC} in particular generates a vertex positioned at the minimizer of a certain quadratic function. This function depends on the (interpolated) isosurface intersection points, as well as the gradient -- or just the normal of the isosurface -- at these points, both quantities represent the \acs{FirstOrderHermiteData} of the set.

@@ -37,11 +37,8 @@ Our procedure has the following steps:
 \item All non-manifold edges are split into two manifold edges with only two \acp{quad} connected to them.
 \item The members of each pair of manifold edges are moved into opposite directions. 
 \end{enumerate}
-The directions in which we are moving the resulting manifold edges can be determined by estimating the gradient at the position of the former non-manifold edge. Please note that we can only estimate the gradient if additional information in the middle of the faces penetrated by non-manifold edges is available. Otherwise it is not possible to resolve the ambiguity in a proper way and therefore we cannot eliminate the non-manifold edge. 
-\todointern[inline]{add a picture for explanation!}
-\tododone[inline]{I dont understand this sentence Benni}
-
-We illustrate the procedure for a 2D example in \autoref{fig:manifoldResolution2D}. Please note that for the 3D case additional patterns occur and not only the \acp{quad} which are connected to the whole non-manifold edge have to be considered, but also the \acp{quad} connected to only one vertex of the edge. This also implies the introduction of new \acp{quad} at other locations (\autoref{fig:manifoldPatterns3D}).
+We illustrate the procedure of remeshing for a 2D example in \autoref{fig:manifoldResolution2D}. 
+In 3D we do not have non-manifold vertices, but edges, which have to be split and moved. Please note that for the 3D case additional patterns occur. In 3D not only the \acp{quad} which are connected to the whole non-manifold edge have to be considered, but also the \acp{quad} connected to only one vertex of the edge. This also implies the introduction of new \acp{quad} at other locations. For an overview over some of the possible patterns in 3D see \autoref{fig:manifoldPatterns3D}.
 
 \begin{figure}
 \begin{center}
@@ -56,7 +53,7 @@ We illustrate the procedure for a 2D example in \autoref{fig:manifoldResolution2
 \subcaption{contour after remeshing}
 \end{subfigure}
 \end{center}
-\caption{Illustration of the remeshing process. Blue dots denote outside voxels, red dots inside voxels, crosses denote voxels considered for resolving ambiguities}
+\caption{Illustration of the remeshing process. Blue dots denote outside voxels, red dots inside voxels and crosses voxels considered for resolving ambiguities. We first split the non-manifold vertex into two vertices and then move them into opposite directions. The direction is determined from the gradient at the datapoint with the cross, which goes in the direction of the blue dots (from inside to outside). Please note that we can only estimate the gradient if additional information in the middle of the cube, which is containing the non-manifold vertex, is available. Otherwise it is not possible to resolve the ambiguity in a proper way and therefore we cannot eliminate the non-manifold vertex.}
 \label{fig:manifoldResolution2D}
 \end{figure}
 
@@ -103,7 +100,7 @@ We illustrate the procedure for a 2D example in \autoref{fig:manifoldResolution2
 \includegraphics[height = .17\textheight, width = .5\textwidth,keepaspectratio]{Pictures/SurfaceReconstruction/3DManifoldOIRes}
 \end{subfigure}
 \end{center}
-\caption{Different patterns before (left) and after (right) remeshing. Depending on the neighbourhood of the non-manifold edge different patterns are applied. A non-manifold edge is connected to outside-outside (1.row), inside-inside (2.row), two other manifold edges (3.row), inside and another manifold edge (4.row), inside-outside (5.row). Please note that this figure does not cover all possible patterns.}
+\caption{Different patterns before (left) and after (right) remeshing. Depending on the neighbourhood of the non-manifold edge (red) different patterns are applied. The edge is always divided into to edges which are then moved into different directions. A non-manifold edge is connected to outside-outside (1.row), inside-inside (2.row), two other manifold edges (3.row), inside and another manifold edge (4.row), inside-outside (5.row). In the first and last row just splitting the edge is not sufficient, but additionaly new \acp{quad} have to be introduced. Please note that this figure does not cover all possible patterns.}
 \label{fig:manifoldPatterns3D}
 \end{figure}
 
