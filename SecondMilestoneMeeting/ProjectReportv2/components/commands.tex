@@ -63,12 +63,17 @@
 \newcommand{\petersControlMeshVec}{\vec{\MakeLowercase{\petersControlMesh}}}
 \newcommand{\petersPatchPointVec}{\vec{\MakeLowercase{\petersPatchPoint}}}
 \newcommand{\petersPatchPointMatrix}{\MakeUppercase{\petersPatchPoint}}
+\newcommand{\petersLocalPatchPointLetter}{B}
+\newcommand{\petersLocalPatchPoint}{\vec{\petersLocalPatchPointLetter}^{\petersControlMesh}}
+\newcommand{\petersLocalPatchPointIndices}[1]{\petersLocalPatchPoint_{#1}}
 \newcommand{\petersControlPointCoefLetter}{c}
 \newcommand{\petersControlPointCoef}{\petersControlPointCoefLetter^{PS}}
 \newcommand{\petersControlPointCoefMatrix}{\MakeUppercase{\petersControlPointCoefLetter}^{PS}}
 \newcommand{\bezierPoint}{P}
 \newcommand{\bezierPointSet}{\bezierPoint_x}
 \newcommand{\bezierPointVec}{\vec{\bezierPoint}}
+\newcommand{\petersLocalBezPoint}{\vec{\petersLocalPatchPointLetter}^{\text{B{\'e}z}}}
+\newcommand{\petersLocalBezPointIndices}[1]{\petersLocalBezPoint_{#1}}
 \newcommand{\petersFaces}{F}
 \newcommand{\suchthat}{;}
 \newcommand{\centroidof}[1]{\vec{c}_{#1}}
