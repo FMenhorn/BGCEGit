@@ -36,9 +36,44 @@ In this step, we create one B{\'e}zier patch for every vertex in the double refi
 
 To begin with, we can recognize that each original quad now has a $4 \times 4$ grid of vertices, where the $4$ vertices along each original quad edge match the $4$ vertices on the neighbouring quad (see \autoref{fig:petersSubDivide}b). From this, we see that most of the cells will be locally in a regular grid, in the sense that it can be seen as the center grid point in a $3\times3$ $2$-dimensional structured grid.% have $8$ local neighbours ($4$ along the edges of the double refined quads, and $4$ along the diagonals of the doubly refined quads). 
 
-This $3\times3$ grid, we can now interpret as the control points for a biquadratic (that is, second-order) tensor product B-spline surface (meaning with uniform knots), which we can then extend to include all the points that are also locally in a regular grid (and their neighbours in the $3\times3$ grid). This results in a $C^1$ continous surface around all vertices where the mesh is locally regular.
+Taking one such point $\petersLocalPatchPointIndices{0,0}$, and its neighbours $\petersLocalPatchPointIndices{i,j}$, where $i,j \in \left \lbrace-1,0,1\right \rbrace$, we can now interpret them as the control points for a biquadratic (that is, second-order) tensor product B-spline surface (meaning with uniform knots). This we can then extend to include all the points that are also locally in a regular grid (and their neighbours in their own local $3\times3$ grid). This results in a $C^1$ continous surface around all vertices where the mesh is locally regular.
 %For those cells, we can now create biquadratic tensor splines that meet $G^1$ along the edges and corners; that is, the tensor product of one quadratic spline in one of the regular mesh directions and one in the other.
-As presented in \cite{peters1992constructing}, this surface can also be represented as a biquadratic \Bez patch for each vertex (see \autoref{fig:petersSubDivide}c for the patch structure). The $3\times3$ \Bez control points will then be at the average position of the center vertex and each of the $3\times3$ local grid vertices, meaning the center \Bez control point will be the center grid point itself.
+Now, this surface can also be represented by a network of a biquadratic tensor product \Bez surface patches (see \autoref{fig:petersSubDivide}c for the patch structure). This means, around a vertex $\petersLocalPatchPointIndices{0,0}$, we create \Bez surface, with $3\times3$ control points for each patch, that we choose to call $\petersLocalBezPointIndices{i,j}$ ($i,j \in \left \lbrace-1,0,1\right \rbrace$). If we do this, the $3\times3$ \Bez control points $\petersLocalBezPointIndices{i,j}$ will lie at positions in-between the center vertex $\petersLocalPatchPointIndices{0,0}$ and the $3\times3$ local grid vertices $\petersLocalPatchPointIndices{i,j}$, as shown in \cite{peters1992constructing}:
+\begin{equation}
+\petersLocalBezPointIndices{i,j} = \frac{1}{4}\left(\petersLocalPatchPointIndices{i,j} + \petersLocalPatchPointIndices{i,0} + \petersLocalPatchPointIndices{0,j} + \petersLocalPatchPointIndices{0,0}\right)
+\end{equation}
+or, writing it out explicitly for $i,j \in \left \lbrace0,1\right \rbrace$,
+
+\begin{align*}
+\petersLocalBezPointIndices{1,1} =& \frac{1}{4}\left(\petersLocalPatchPointIndices{1,1} + \petersLocalPatchPointIndices{1,0} + \petersLocalPatchPointIndices{0,1} + \petersLocalPatchPointIndices{0,0}\right) \\
+\petersLocalBezPointIndices{1,0} =& \frac{1}{2}\left(\petersLocalPatchPointIndices{1,0} + \petersLocalPatchPointIndices{0,0}\right) \\
+\petersLocalBezPointIndices{0,1} =& \frac{1}{2}\left(\petersLocalPatchPointIndices{0,1} + \petersLocalPatchPointIndices{0,0}\right) \\
+\petersLocalBezPointIndices{0,0} =& \petersLocalPatchPointIndices{0,0}
+\end{align*}
+
+\begin{figure}
+\begin{center}
+\begin{subfigure}{.45\textwidth}
+\begin{center}
+\includegraphics[height=0.8\textwidth]{Pictures/NURBS/bezier_points.jpg}
+\subcaption{Different points on a quad.}
+\label{subfig:peterspoints}
+\end{center}
+\end{subfigure}
+\begin{subfigure}{.45\textwidth}
+\begin{center}
+\includegraphics[height=0.8\textwidth]{Pictures/NURBS/bspline_patches.pdf}
+\subcaption{Smoothly connected \Bez patches.}
+\label{subfig:smoothsurf}
+\end{center}
+\end{subfigure}
+\caption{(\subref{subfig:peterspoints}): The different points used in Peter's scheme. For the quad in the picture with vertices in $\petersControlMesh$, the refined mesh vertices in $\petersPatchPoints$ created by two Doo-Sabin refinements are marked out with crosses. The extent of each of their \Bez surface patches is also marked on the quad with dotted lines (see \autoref{fig:petersSubDivide}b,c for comparison). Additionally, for the center upper-right vertex, the tensor product \Bez surface points $\petersLocalBezPointIndices{i,j}$ are marked with red circles, with the corresponding refined mesh points $\petersLocalPatchPointIndices{i,j}$ being the crosses on the neighbouring patches. (\subref{subfig:smoothsurf}): The resulting smoothly connected surface after creating \Bez surface patches. For visibility, two quads have been cut-out, although the surface is part of a bigger figure. The refined points in $\petersPatchPoints$ are again marked with crosses.}
+\label{fig:petersDiags}
+\end{center}
+\end{figure}
+
+\todointern[inline,author=erik]{Benni, think about pictures we talked about. I am using macro $\petersLocalPatchPointIndices{i,j}$ for the local points in the refined mesh on the quad, and $\petersLocalBezPointIndices{i,j}$ for the \Bez points.}
+The different types of points are illustrated in \autoref{subfig:peterspoints}.
 
 
 %as following (see [\todointern[inline]{ref to figure with names on points, EckHoppe or Peters}] for nomenclature):
@@ -58,7 +93,7 @@ However, we can still create a \Bez patch which connects smoothly to the locally
 We then evaluate how the surface position and normal direction depends on the \Bez control points along all edges of the patches. In order to have a smooth connection, we want these to match, and thus, we can produce constraints for the positions of the \Bez control points.
 Since the surfaces are defined at each point as linear combinations of the \Bez control points (which in turn are linear combinations of the vertices in the doubly refined mesh $\petersControlMeshDobRef$), the constraints result in an underdetermined system of linear equations for all the \Bez control points on the bicubic \Bez patches on the vertices in the doubly refined mesh $\petersControlMeshDobRef$.
 
-As the resulting formulae for the locations of the \Bez control points are rather lengthy and complex, we refer to the original paper (ref. \cite{peters1992constructing}) for a solution which produces nice-looking, smoothly connected surfaces. Here, it is also proven that the surfaces have an overall $G^1$ connectivity.
+As the resulting formulae for the locations of the \Bez control points are rather lengthy and complex, we refer to the original paper (ref. \cite{peters1992constructing}) for a solution which produces nice-looking, smoothly connected surfaces. Here, it is also proven that the surfaces have an overall $G^1$ connectivity. A cut-out sample can be seen in \autoref{subfig:smoothsurf}.
 \todointern[inline]{insert points in appendix}
 
 To summarize, Peters' scheme is a mathematical algorithm for creating biquadratic and bicubic \Bez patches that join with $G^1$ continuity, from a mesh of polygons. Firstly, a set of refined mesh points is created on each polygon. Then, \Bez control points defining the patches are created as linear combinations of the vertices in this refined mesh. The $G^1$ continuity results from the interpretation of the refined mesh as a regular biquadratic tensor product B-spline surface, and where this is not possible, bicubic \Bez patches are constrained to join smoothly to the surrounding biquadratic patches.
