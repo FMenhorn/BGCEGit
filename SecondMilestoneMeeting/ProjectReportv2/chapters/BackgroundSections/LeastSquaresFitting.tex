@@ -10,7 +10,7 @@ In order to make a surface adhere as closely as possible to our desired form, so
 \tododone[inline]{is this really nurbs? well maybe. Probably stuff the Peters' Scheme fitting in here and remove some other parts}
 In order to represent a given line or surface by Bezier curves or surfaces respectively, just as with NURBS, one has to solve a fitting problem. The goal of it is to fit in a parametric curve to the set of given data points. In the case of interest, the given set of points is a mesh, obtained from surface contouring.
 \subsubsection{Fitting problem: Parametric curves}
-\todourgent[inline]{this section goes to Anna}
+\todourgent[inline,author=Anna]{this section goes away, we explain this in 'Fitting Problem: Parametric Surfaces' anyway. Just give some Least Squares refs there.}
 \todointern{we don't want to do something in the background section, thats implementation! -> Passive style!}
 First we want to find a Bezier-curve $\vec{B}_n\left(u\right)$ of degree $n$ which is approximating a given spline $\vec{s}_m\left(u\right)$ defined by $m$ points in an optimal way. For this purpose we want to minimize the $L_2$-error. This leads to the minimization problem:
 \begin{equation}
