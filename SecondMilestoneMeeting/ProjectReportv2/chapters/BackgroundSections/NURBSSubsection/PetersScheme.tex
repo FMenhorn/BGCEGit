@@ -45,10 +45,10 @@ Now, this surface can also be represented by a network of a biquadratic tensor p
 or, writing it out explicitly for $i,j \in \left \lbrace0,1\right \rbrace$,
 
 \begin{align*}
-\petersLocalBezPointIndices{1,1} =& \frac{1}{4}\left(\petersLocalPatchPointIndices{1,1} + \petersLocalPatchPointIndices{1,0} + \petersLocalPatchPointIndices{0,1} + \petersLocalPatchPointIndices{0,0}\right) \\
-\petersLocalBezPointIndices{1,0} =& \frac{1}{2}\left(\petersLocalPatchPointIndices{1,0} + \petersLocalPatchPointIndices{0,0}\right) \\
-\petersLocalBezPointIndices{0,1} =& \frac{1}{2}\left(\petersLocalPatchPointIndices{0,1} + \petersLocalPatchPointIndices{0,0}\right) \\
-\petersLocalBezPointIndices{0,0} =& \petersLocalPatchPointIndices{0,0}
+\petersLocalBezPointIndices{1,1} =&\, \frac{1}{4}\left(\petersLocalPatchPointIndices{1,1} + \petersLocalPatchPointIndices{1,0} + \petersLocalPatchPointIndices{0,1} + \petersLocalPatchPointIndices{0,0}\right) \\
+\petersLocalBezPointIndices{1,0} =&\, \frac{1}{2}\left(\petersLocalPatchPointIndices{1,0} + \petersLocalPatchPointIndices{0,0}\right) \\
+\petersLocalBezPointIndices{0,1} =&\, \frac{1}{2}\left(\petersLocalPatchPointIndices{0,1} + \petersLocalPatchPointIndices{0,0}\right) \\
+\petersLocalBezPointIndices{0,0} =&\, \petersLocalPatchPointIndices{0,0}
 \end{align*}
 
 \begin{figure}
@@ -82,12 +82,12 @@ The different types of points are illustrated in \autoref{subfig:peterspoints}.
 %
 %\end{equation}
 %%
-\todointern[inline]{For final version: math formulae for \Bez points from regular mesh points}
+\tododone[inline]{For final version: math formulae for \Bez points from regular mesh points}
 
 The exceptions that cannot be placed in a regular mesh are now the points residing on the corners of the original quads. 
 Here, any number of quads may be meeting.
 %This comes from the fact that at quad corners, we may have any number of quads meeting, starting from 3. 
-\todointern{possible example fig?} For $n$ quads sharing a corner vertex, the refinement steps will create a polygon with $n$ sides, as mentioned above. If $n\neq4$, the vertices of these corner polygons cannot be placed in a locally regular mesh, and we cannot apply the previous technique. 
+\tododone{possible example fig?} For $n$ quads sharing a corner vertex, the refinement steps will create a polygon with $n$ sides, as mentioned above. If $n\neq4$, the vertices of these corner polygons cannot be placed in a locally regular mesh, and we cannot apply the previous technique -- see for example the upper-left corner of \autoref{fig:petersSubDivide}b.
 
 However, we can still create a \Bez patch which connects smoothly to the locally regular points. To do this, we create a bicubic \Bez patch (of polynomial order 3 one higher than around the regular points, meaning it has $4\times4$ control points) for every vertex in the corner polygon.
 We then evaluate how the surface position and normal direction depends on the \Bez control points along all edges of the patches. In order to have a smooth connection, we want these to match, and thus, we can produce constraints for the positions of the \Bez control points.
