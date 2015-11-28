@@ -42,14 +42,29 @@ Now, this surface can also be represented by a network of a biquadratic tensor p
 \begin{equation}
 \petersLocalBezPointIndices{i,j} = \frac{1}{4}\left(\petersLocalPatchPointIndices{i,j} + \petersLocalPatchPointIndices{i,0} + \petersLocalPatchPointIndices{0,j} + \petersLocalPatchPointIndices{0,0}\right)
 \end{equation}
-or, writing it out explicitly for $i,j \in \left \lbrace0,1\right \rbrace$,
+or, writing it out explicitly for $i,j \in \left \lbrace-1,0,1\right \rbrace$,
 
+\begin{scriptsize}
 \begin{align*}
-\petersLocalBezPointIndices{1,1} =&\, \frac{1}{4}\left(\petersLocalPatchPointIndices{1,1} + \petersLocalPatchPointIndices{1,0} + \petersLocalPatchPointIndices{0,1} + \petersLocalPatchPointIndices{0,0}\right) \\
-\petersLocalBezPointIndices{1,0} =&\, \frac{1}{2}\left(\petersLocalPatchPointIndices{1,0} + \petersLocalPatchPointIndices{0,0}\right) \\
-\petersLocalBezPointIndices{0,1} =&\, \frac{1}{2}\left(\petersLocalPatchPointIndices{0,1} + \petersLocalPatchPointIndices{0,0}\right) \\
+\petersLocalBezPointIndices{-1,1} =&\, \frac{1}{4}\left(\petersLocalPatchPointIndices{-1,1} + \petersLocalPatchPointIndices{-1,0} + \petersLocalPatchPointIndices{0,1} + \petersLocalPatchPointIndices{0,0}\right)
+&
+\petersLocalBezPointIndices{0,1} =&\, \frac{1}{2}\left(\petersLocalPatchPointIndices{0,1} + \petersLocalPatchPointIndices{0,0}\right)
+&
+\petersLocalBezPointIndices{1,1} =&\, \frac{1}{4}\left(\petersLocalPatchPointIndices{1,1} + \petersLocalPatchPointIndices{1,0} + \petersLocalPatchPointIndices{0,1} + \petersLocalPatchPointIndices{0,0}\right)
+\\
+\petersLocalBezPointIndices{-1,0} =&\, \frac{1}{2}\left(\petersLocalPatchPointIndices{-1,0} +  \petersLocalPatchPointIndices{0,0}\right) 
+&
 \petersLocalBezPointIndices{0,0} =&\, \petersLocalPatchPointIndices{0,0}
+&
+\petersLocalBezPointIndices{1,0} =&\, \frac{1}{2}\left(\petersLocalPatchPointIndices{1,0} + \petersLocalPatchPointIndices{0,0}\right)
+\\
+\petersLocalBezPointIndices{-1,-1} =&\, \frac{1}{4}\left(\petersLocalPatchPointIndices{-1,-1} + \petersLocalPatchPointIndices{-1,0} + \petersLocalPatchPointIndices{0,-1} + \petersLocalPatchPointIndices{0,0}\right) 
+&
+\petersLocalBezPointIndices{0,-1} =&\, \frac{1}{2}\left(\petersLocalPatchPointIndices{0,-1} + \petersLocalPatchPointIndices{0,0}\right)
+&
+\petersLocalBezPointIndices{1,-1} =&\, \frac{1}{4}\left(\petersLocalPatchPointIndices{1,-1} + \petersLocalPatchPointIndices{1,0} + \petersLocalPatchPointIndices{0,-1} + \petersLocalPatchPointIndices{0,0}\right)
 \end{align*}
+\end{scriptsize}
 
 \begin{figure}
 \begin{center}
@@ -73,7 +88,6 @@ or, writing it out explicitly for $i,j \in \left \lbrace0,1\right \rbrace$,
 \end{center}
 \end{figure}
 
-\todointern[inline,author=erik]{Benni, think about pictures we talked about. I am using macro $\petersLocalPatchPointIndices{i,j}$ for the local points in the refined mesh on the quad, and $\petersLocalBezPointIndices{i,j}$ for the \Bez points.}
 The different types of points are illustrated in \autoref{subfig:peterspoints}.
 
 
