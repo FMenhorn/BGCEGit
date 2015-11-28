@@ -24,6 +24,8 @@ The topology optimization library ToPy works with ToPy Problem Definition files 
 \item After reaching the domain bounds the numbering continues with the next neighboring row in x-direction.
 \item after finishing the first "plate" the numbering continues with the next neighboring layer in z-direction.
 \end{itemize}
+As a side note a twist regarding the coordinate systems is introduced internally by the program: The coordinate system flips the Y-coordinate and interchanges the X and Z coordinate. 
+
 Here, also the motivation of the integrated CAD topology optimization tool becomes clear: performing a topology optimization using ToPy is quite cumbersome for the user. An integrated work flow automatizing the steps will remove many hurdles for using topology optimization techniques in a design process.  
 
 Topy Problem Definition files are created invoking the bash script \lstinline|CADTopOpt.sh| (see section \ref{sec: FaceExtraction}). As one can see in the UML diagram \ref{fig: umlCADToVoxel} the main file \lstinline|CADToVoxel| invokes a function \lstinline|write|, which creates a ToPy input file ({\it.tpd}). The functionality is implemented in a class \lstinline|Writer_ToPy|.
