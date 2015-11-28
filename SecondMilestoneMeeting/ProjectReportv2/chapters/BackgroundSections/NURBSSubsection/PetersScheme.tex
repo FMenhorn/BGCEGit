@@ -53,21 +53,22 @@ or, writing it out explicitly for $i,j \in \left \lbrace0,1\right \rbrace$,
 
 \begin{figure}
 \begin{center}
-\begin{subfigure}{.45\textwidth}
+\begin{subfigure}[b]{.49\textwidth}
 \begin{center}
-\includegraphics[height=0.8\textwidth]{Pictures/NURBS/bezier_points.pdf}
+\includegraphics[width=.9\textwidth]{Pictures/NURBS/bezier_points.pdf}
 \subcaption{Different points on a quad.}
 \label{subfig:peterspoints}
 \end{center}
 \end{subfigure}
-\begin{subfigure}{.45\textwidth}
+~
+\begin{subfigure}[b]{.49\textwidth}
 \begin{center}
-\includegraphics[height=0.8\textwidth]{Pictures/NURBS/bspline_patches.pdf}
+\includegraphics[height=\textwidth]{Pictures/NURBS/bspline_patches.pdf}
 \subcaption{Smoothly connected \Bez patches.}
 \label{subfig:smoothsurf}
 \end{center}
 \end{subfigure}
-\caption{(\subref{subfig:peterspoints}): The different points used in Peter's scheme. For the quad in the picture with vertices $A,B,C,D$ in $\petersControlMesh$, the refined mesh vertices in $\petersPatchPoints$ created by two Doo-Sabin refinements are marked out with crosses. The extent of each of their \Bez surface patches is also marked on the quad with dotted lines (see \autoref{fig:petersSubDivide}b,c for comparison). Additionally, for highlighted patch, the tensor product \Bez surface points $\petersLocalBezPointIndices{i,j}$ are marked with red circles, with the corresponding refined mesh points $\petersLocalPatchPointIndices{i,j}$ being the green crosses. (\subref{subfig:smoothsurf}): The resulting smoothly connected surface after creating \Bez surface patches. For visibility, two quads have been cut-out, although the surface is part of a bigger figure. The refined points in $\petersPatchPoints$ are again marked with crosses.}
+\caption{(\subref{subfig:peterspoints}): The different points used in Peter's scheme. For the quad in the picture with vertices $A,B,C,D$ in $\petersControlMesh$, the refined mesh vertices in $\petersPatchPoints$ created by two Doo-Sabin refinements are marked out with crosses. The extent of each of their \Bez surface patches is also marked on the quad with dotted lines (see \autoref{fig:petersSubDivide}b,c for comparison). Additionally, for the highlighted patch, the tensor product \Bez surface points $\petersLocalBezPointIndices{i,j}$ are marked with red circles, with the corresponding refined mesh points $\petersLocalPatchPointIndices{i,j}$ being the green crosses. (\subref{subfig:smoothsurf}): The resulting smoothly connected surface after creating \Bez surface patches. For visibility, two quads have been cut-out, although the surface is part of a bigger figure. The refined points in $\petersPatchPoints$ are again marked with crosses.}
 \label{fig:petersDiags}
 \end{center}
 \end{figure}
