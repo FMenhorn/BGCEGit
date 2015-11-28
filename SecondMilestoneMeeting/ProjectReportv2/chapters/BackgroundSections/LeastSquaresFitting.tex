@@ -1,7 +1,7 @@
 \section{Least-squares fitting of parametrized surfaces}
 \label{sec:LSQfitting}
 \tododone[inline]{Erik: define section}
-In order to make a surface adhere as closely as possible to our desired form, some fitting is usually required. This typically involves varying some parameters in order to minimize some error. As minimizing the error squared of a function -- for example distance between a calculated point and its desired location -- is an important building block in many practical applications, extensive literature can be found regarding this, especially when the function depends linearly on its input. The field that treats this topic is called \emph{linear least-squares fitting}, and in this section, some selected subtopics relevant to the fitting of \acs{NURBS} is treated.
+In order to make a surface adhere as closely as possible to our desired form, some fitting is usually required. This typically involves varying some parameters in order to minimize some error. As minimizing the error squared of a function -- for example distance between a calculated point and its desired location -- is an important building block in many practical applications, extensive literature can be found regarding this, especially when the function depends linearly on its input (ex. (\cite{becker2011advanced})). The field that treats this topic is called \emph{linear least-squares fitting}, and in this section, some selected subtopics relevant to the fitting of \acs{NURBS} is treated.
 
 %\begin{itemize}
 %\item Possibly that this can used to fit the location of these "patch points" to a set of datapoints by minimusing a least-squares error 
@@ -9,39 +9,7 @@ In order to make a surface adhere as closely as possible to our desired form, so
 
 \subsection{Fitting problem}
 \tododone[inline]{is this really nurbs? well maybe. Probably stuff the Peters' Scheme fitting in here and remove some other parts}
-In order to represent a given line or surface by Bezier curves or surfaces respectively, just as with NURBS, one has to solve a fitting problem. The goal of it is to fit in a parametric curve to the set of given data points. In the case of interest, the given set of points is a mesh, obtained from surface contouring.
-\subsubsection{Fitting problem: Parametric curves}
-\todourgent[inline,author=Anna]{this section goes away, we explain this in 'Fitting Problem: Parametric Surfaces' anyway. Just give some Least Squares refs there.}
-\todointern{we don't want to do something in the background section, thats implementation! -> Passive style!}
-First we want to find a Bezier-curve $\vec{B}_n\left(u\right)$ of degree $n$ which is approximating a given spline $\vec{s}_m\left(u\right)$ defined by $m$ points in an optimal way. For this purpose we want to minimize the $L_2$-error. This leads to the minimization problem:
-\begin{equation}
-\text{find\ } \underset{\vec{B}_n\in \mathbb{B}_n}{\min} \Ltwonorm{\vec{B}_n-\vec{s}_m}.
-\end{equation}
-Minimizing the $L_2$-norm is equal to minimizing the functional:
-\begin{equation}
-F\left[\vec{B}_n\right]=\int\limits_{u=0}^{u=1} \left(\vec{B}_n-\vec{s}_m\right)^2\du
-\end{equation}
-Using the variational principle we get the the system of linear equations:
-\begin{equation}
-A a = b
-\end{equation}
-where $A$ is the matrix of pair-wise scalar products of basis functions (Bernstein polynomials), $b$ is the vector of scalar products of the given spline $s_{m}$ and basis functions and $a$ is a required vector of coefficients for Bezier curve representation.
-
-\tododone[inline]{why (least squares) here and not above? is this consistent?}
-Although the approach used above shows good results, it appears to be computationally very intensive. Analogously, one could reduce the original problem to a \emph{regression problem}, which allows us to reduce computational costs. Also, to improve the locality of our solution, from now on we use NURBS basis functions with weights $\omega_{j} = 1$ instead of Bezier curves. For this purpose, we adopted an algorithm, provided in \cite{becker2011advanced}:
-
-Let $X^{0}$ be the $n \times 2$ matrix of the given set of points, $N^{p}$ the basis functions of degree $p$ ($n \times (n+p)$ matrix, where $n$ is the number of points), and $P^{0}$ the control points ($(n+p) \times 2$ matrix).
-
-The original problem can be written as:
-\begin{equation}
-X_{i}^{0} = \sum\limits_{j=1}^{n+p} P_{j}^{0} N_{i,j}^{p}, \quad i \in \{1,..,n\}
-\end{equation}
-Or, in short:
-\begin{equation}
-X^{0} = N^{p} P^{0}
-\end{equation}
-The above system needs to be solved for the unknown $P^{0}$. This can be done numerically, for example through singular value decomposition. 
-%part of implementation
+In order to represent a given line or surface by Bezier curves or surfaces respectively, just as with NURBS, one has to solve a fitting problem (\cite{becker2011advanced}). The goal of it is to fit in a parametric curve to the set of given data points. In the case of interest, the given set of points is a mesh, obtained from surface contouring.
 
 \subsubsection{Fitting Problem: Parametric surfaces}
 \todointern[inline]{insert stuff here, what's described in Peters' Scheme, will see where it fits}
