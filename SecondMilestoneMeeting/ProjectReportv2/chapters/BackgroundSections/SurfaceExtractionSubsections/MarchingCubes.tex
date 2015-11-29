@@ -10,7 +10,7 @@ The \acf{MC} method \cite{Marching2006} takes as an input a set of scalar functi
 \end{figure}
 \todourgent[inline,author=Benni]{Reference to \cite{Hermite2002} in \autoref{fig:bunny} was wrong! Fix this -> JC}
 
-\subsubsection{The \acl{MC} cases}
+\subsubsection{The \acl{MC} Cases}
 Since there are 8 vertices on each cube, either above or below the isovalue (with equality falling to one of these categories), $2^8=256$ possible polygon configurations exist. However, many of these can be constructed by rotating or reflecting other polygons. Therefore 15 base cases which represent all the surface polygons of the \acl{MC} are sufficient to take into consideration. \autoref{fig:MC_basecase} shows how these base cases look like, we can notice that they are composed of triangles. 
 
 \begin{figure}
@@ -20,5 +20,5 @@ Since there are 8 vertices on each cube, either above or below the isovalue (wit
    \label{fig:MC_basecase}
 \end{figure}
 
-\subsubsection{Cracks and ambiguities}
+\subsubsection{Cracks and Ambiguities}
 The original algorithm presents two main problems. Firstly, it guarantees neither correctness nor topological consistency, which means that holes may appear on the surface due to inaccurate base case selection. The second problem is ambiguity, which appears when two base cases are possible and the algorithm chooses the incorrect one, or cannot decide on one. There are many extended \ac{MC} algorithms that tackle the problems of the original one, getting rid of the ambiguities and providing correctness (see for example \cite{ExtendedMC}).

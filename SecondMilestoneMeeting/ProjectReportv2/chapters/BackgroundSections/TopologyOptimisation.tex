@@ -11,7 +11,7 @@
 As one can already imagine by this short list of optimization goals, topology optimization has a wide field of possible applications. Hence, it has become a well established technology used by engineers in the fields of aeronautics, civil, materials, mechanical and structural optimization. Furthermore, due to the rising significance of additive manufacturing techniques in industry, the realisation of complex optimized designs is now much easier \cite{Yang1995}.
 For the rest of this section, and the rest of the document, we will concentrate on the \emph{Minimum compliance} problem. Note however, that almost all parts in the \emph{CAD-Integrated Topology Optimization} tool could just as well be applied to any other topology optimization problem. 
 
-\subsection{Minimum compliance: Problem formulation}
+\subsection{Minimum Compliance: Problem Formulation}
 \label{subsec:TopOpTheory}
 \begin{figure}
 \centering
@@ -23,7 +23,7 @@ In order to constrain the resulting structure as little as possible, the formula
 
 The formulation allows the problem to be cast as finding a displacement field $u$ and a stiffness tensor field $E$ that is in equilibrium with the applied loads, and that minimizes the external work done by these external loads do to reach that equilibrium. 
 
-\subsection{Physical and mathematical simplifications}
+\subsection{Physical and Mathematical Simplifications}
 To turn this into a more tractable mathematical problem, a few physical assumptions are also typically made: the material be isotropic and linearly elastic. From the assumptions of isotropy and linear elasticity of the material, the stiffness field becomes a constant of the material, defined where there is material in the domain.
 
 The problem is also easy to cast into a weak form. First of all, we compute the integrated internal virtual work and external work. The former is the work of deforming the elastic material from equilibrium by an admissible displacement. The latter is done by the loads and forces to bring out this displacement. Having computed these, we set them equal to one another in order to conserve energy. As a result we obtain an equation that relates the equilibrium displacement, stiffness tensor, and the forces and loads. We then cast this into the weak form, which can be solved using Finite Element Methods (FEM). These can also incorporate the calculation of the external work done.
@@ -33,7 +33,7 @@ As described in the previous section, we aim to minimise the external work done 
 
 In order to still obtain topologies where material is predominant in certain areas --- of densities one, with the rest being empty at densities close to zero --- a "penalty" is applied to the intermediate values. This is effected by raising the density to a power $> 1$ in the elastic energy calculation, but not in the volume calculation. That way, an intermediate density value provides less elastic support, but still "costs" as much volume, and will thus be suboptimal. 
 
-\subsection{Solution and implementation}
+\subsection{Solution and Implementation}
 \begin{figure}
 \centering
 \includegraphics[width=0.6\textwidth]{Pictures/TopOp/Sigmund_cantilever2d.png}

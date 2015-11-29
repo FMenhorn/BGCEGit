@@ -1,8 +1,8 @@
-\subsection{Surface reconstruction}
+\subsection{Surface Reconstruction}
 \label{ssec:reconstruction}
 In \autoref{sec:surfaceBackg} different surface reconstruction schemes have been introduced. In the following we want to discuss our choice for an appropriate surface reconstruction scheme and explain necessary modifications to it.
 
-\subsubsection{Discussion on surface reconstruction schemes}
+\subsubsection{Discussion on Surface Reconstruction Schemes}
 \tododone[inline]{proofreading Benni\& JC}
 Since the surface reconstruction is just an intermediate step before our final \ac{NURBS} fitting procedure, it is not sufficient to only produce a good surface approximation of our optimized topology, but additional constraints have to be kept in mind:
 \begin{enumerate}
@@ -11,7 +11,7 @@ Since the surface reconstruction is just an intermediate step before our final \
 \end{enumerate}
 The first requirement is met by \ac{DC}, while the second one is only met by \ac{MC}. We decided to use the \ac{DC} method, because already the basic version of it creates \acp{quad}, while \ac{MC} creates a mesh of triangles, which can only be changed into a mesh of \acp{quad} by considerably increasing the number of faces.
 
-\subsubsection{Our implementation of \ac{DC}}
+\subsubsection{Our Implementation of Dual Contouring}
 \tododone[inline]{proofreading Benni\& JC}
 We used the open-source language PYTHON \cite{Python} for the implementation of \ac{DC}. Compared to the version described in \cite{Hermite2002} we applied some simplifications:
 \begin{itemize}
@@ -27,7 +27,7 @@ This leads to the following modified \ac{DC} scheme:
 \end{enumerate}
 So far our procedure generates \ac{quad} surfaces for boolean datasets on uniform Cartesian grids. But like for the original \ac{DC} algorithm we cannot guarantee that those surfaces are manifold.
 
-\subsubsection{Obtaining manifold surfaces}
+\subsubsection{Obtaining Manifold Surfaces}
 %\todointernal[inline]{proofreading!}
 Since we want to deduce a first estimate for the topology of the \ac{NURBS} surface output of our \ac{CADTopOpt} tool, non-manifold surfaces cannot be accepted\footnote{Surfaces consisting of smoothly connected \ac{NURBS} \acp{patch} are always manifold surfaces. Therefore we cannot start with a non-manifold surface and assume we will end up with a manifold surface.}. We implemented a remeshing procedure for generating manifold surfaces out of non-manifold surfaces.
 

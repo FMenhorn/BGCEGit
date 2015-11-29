@@ -8,7 +8,7 @@
 \label{fig: freeCAD}
 \end{figure}
 
-As pointed out in the \ref{sec:CADbackg}, STEP and IGES files can store color information for each face. This is the attribute that is used to specify the identity of the face. When analysing a structural problem, a designer typically needs to provide information on four parameters:
+As pointed out in the \ref{sec:CADbackg}, STEP and IGES files can store color information for each face. This is the attribute that is used to specify the identity of the face, and can be modified using standard CAD design software such as FreeCAD (see \ref{freeCAD}). When analysing a structural problem, a designer typically needs to provide information on four parameters:
 
 \begin{itemize}
 	\item \textbf{Fixture faces}: These faces of the geometry are meant to be fixed in space, and undergo zero displacement. These faces are colored absolute red, i.e. if the color space of red ranges in {$[0, 255]$}, then the face is assigned the extremum $255$. The blue and green color components are set to $0$. Thus, the color array is set to $(255, 0, 0)$

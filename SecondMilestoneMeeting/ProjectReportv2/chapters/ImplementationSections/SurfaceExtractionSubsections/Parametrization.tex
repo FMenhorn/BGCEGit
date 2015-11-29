@@ -1,4 +1,4 @@
-\subsection{Parametrization of datapoints}
+\subsection{Parametrization of Datapoints}
 \label{ssec:parametrization}
 \todointern[inline]{proofreading!}
 In addition to the reconstructed surface we need the following information for the least squares fit: 
@@ -16,7 +16,7 @@ Of course this simple approach comes with drawbacks:
 \item Both resolutions have to be chosen manually, since we do not have a criterion for evaluating the quality of the coarse scale surface reconstruction.
 \end{itemize}
 These drawbacks are especially bad for complex surfaces -- like the output of topology optimization -- where the topological details mentioned above are not an exception, but the default case. Solving to these problems by improving our surface extraction scheme are considered in \autoref{sec:Future}.
-\subsubsection{Projection of datapoints onto quads}
+\subsubsection{Projection of Datapoints onto Quads}
 \todointern[inline]{go through formulation again}
 Now that we have constructed a \ac{NURBS}-patch distribution we can estimate the parametrization of the datapoints on the fine scale by projecting the datapoints onto the patches: For this procedure we first have to find out onto which one of the patches one particular datapoint will be projected. Then we have to do the actual projection of the datapoint onto the quad: 
 \begin{itemize}

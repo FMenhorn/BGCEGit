@@ -1,4 +1,4 @@
-\section{Least-squares fitting of parametrized surfaces}
+\section{Least-squares Fitting of Parametrized Surfaces}
 \label{sec:LSQfitting}
 \tododone[inline]{Erik: define section}
 In order to make a surface adhere as closely as possible to our desired form, some fitting is usually required. This typically involves varying some parameters in order to minimize some error. As minimizing the error squared of a function -- for example distance between a calculated point and its desired location -- is an important building block in many practical applications, extensive literature can be found regarding this, especially when the function depends linearly on its input (ex. (\cite{becker2011advanced})). The field that treats this topic is called \emph{linear least-squares fitting}, and in this section, some selected subtopics relevant to the fitting of \acs{NURBS} is treated.
@@ -7,11 +7,11 @@ In order to make a surface adhere as closely as possible to our desired form, so
 %\item Possibly that this can used to fit the location of these "patch points" to a set of datapoints by minimusing a least-squares error 
 %\end{itemize}
 
-\subsection{Fitting problem}
+\subsection{Fitting Problem}
 \tododone[inline]{is this really nurbs? well maybe. Probably stuff the Peters' Scheme fitting in here and remove some other parts}
 In order to represent a given line or surface by Bezier curves or surfaces respectively, just as with NURBS, one has to solve a fitting problem (\cite{becker2011advanced}). The goal of it is to fit in a parametric curve to the set of given data points. In the case of interest, the given set of points is a mesh, obtained from surface contouring.
 
-\subsubsection{Fitting Problem: Parametric surfaces}
+\subsubsection{Fitting Problem: Parametric Surfaces}
 \todointern[inline]{insert stuff here, what's described in Peters' Scheme, will see where it fits}
 In order to fit a \Bez surface to a set of datapoints with fixed locations and parameters on this surface, we can use an approach similar to the approach above. The base of the approach is making use of the way a point with specific parameters is mapped by either the Bernstein polynomials (\Bez curves) or the B--spline basis functions (NURBS) to a linear combination on the control points. That is, from the parameters $(u,v)$ of each data point on the surface, we get a set of coefficients on the control points that define the surface. Expressing this as a sum, we have for the point $\lsDataPointi{k}$ with the parameters $(u_k,v_k)$ on the surface defined by the $N \times M$ control points $\lsControlPointi{i,j}$:
 \begin{equation}
@@ -40,7 +40,7 @@ However, this requires that there be a solution, which typically relies on the s
 \end{equation}
 This again is a central problem in computing, and can be solved by many standard libraries with excellent performance.
 
-\subsubsection{Fitting Problem: Peters' scheme}
+\subsubsection{Fitting Problem: Peters' Scheme}
 \label{subsub:petersleastsq}
 One of the major drawbacks with the approach above is that it is typically very complicated to impose smoothness constraints on structures of multiple patches, something that is essential for representing more complicated geometries. One of the ways of avoiding this is to use an existing scheme for creating a smooth surface, such as the scheme of Peters \cite{peters1992constructing,eck1996automatic}, which we introduced in \autoref{subsec:peters}. Here, we create smoothly connected square \Bez patches by letting their control points be linear combinations of vertices in a refined control mesh $\petersPatchPoints$, and ensure smoothness by the way that we calculate these coefficients on the vertices in $\petersPatchPoints$, using the imformation we have on their local positions in the mesh to make sure which neighbouring vertices they should be infulenced by. Once more, we can express this mathematically with relative simplicity, again letting $\lsControlPointi{p}$ denote the $p^\text{th}$ control point, and $\petersPatchPointVec_l$ being the $l^\text{th}$ refined control mesh vertex:
 \begin{equation}
