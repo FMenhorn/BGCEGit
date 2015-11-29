@@ -28,8 +28,6 @@ Thus, in every refinement step on an $n$--gon, $n$ vertices are created, giving 
 	\caption{The subdivision step in Peter's scheme. a): A quad in the original mesh, with edges and vertices marked out. Note that there are 5 edges connecting the top-left corner, making this a non-regular mesh corner. b): The mesh resulting from two Doo-Sabin subdivisions. The mesh is regular, except for around the original mesh corners with other than 4 edges. In the case of the top-left corner, the 5 edges result in a pentagon. c): The resulting \Bez patch structure. The surface is at least $G^1$ continous everywhere. Figure from \cite{eck1996automatic}.}
 	\label{fig:petersSubDivide}
 \end{figure}
-\todointern[inline]{\autoref{fig:petersSubDivide}: maybe decide together what to write for where we take the pictures/figures? (ref: Arash's comment - valid point) maybe Source: [x]? I think "figure from" doesn't fit everywhere, unfortunately.}
-
 
 \subsubsection{Bezier Patch Creation}
 In this step, we create one B{\'e}zier patch for every vertex in the double refined mesh $\petersControlMeshDobRef$. 
@@ -38,41 +36,56 @@ To begin with, we can recognize that each original quad now has a $4 \times 4$ g
 
 Taking one such point $\petersLocalPatchPointIndices{0,0}$, and its neighbours $\petersLocalPatchPointIndices{i,j}$, where $i,j \in \left \lbrace-1,0,1\right \rbrace$, we can now interpret them as the control points for a biquadratic (that is, second-order) tensor product B-spline surface (meaning with uniform knots). This we can then extend to include all the points that are also locally in a regular grid (and their neighbours in their own local $3\times3$ grid). This results in a $C^1$ continous surface around all vertices where the mesh is locally regular.
 %For those cells, we can now create biquadratic tensor splines that meet $G^1$ along the edges and corners; that is, the tensor product of one quadratic spline in one of the regular mesh directions and one in the other.
-Now, this surface can also be represented by a network of a biquadratic tensor product \Bez surface patches (see \autoref{fig:petersSubDivide}c for the patch structure). This means, around a vertex $\petersLocalPatchPointIndices{0,0}$, we create \Bez surface, with $3\times3$ control points for each patch, that we choose to call $\petersLocalBezPointIndices{i,j}$ ($i,j \in \left \lbrace-1,0,1\right \rbrace$). If we do this, the $3\times3$ \Bez control points $\petersLocalBezPointIndices{i,j}$ will lie at positions in-between the center vertex $\petersLocalPatchPointIndices{0,0}$ and the $3\times3$ local grid vertices $\petersLocalPatchPointIndices{i,j}$, as shown in \cite{peters1992constructing}:
+Now, this surface can also be represented by a network of a biquadratic tensor product \Bez surface patches (see \autoref{fig:petersSubDivide}c for the patch structure). This means, around a vertex $\petersLocalPatchPointIndices{0,0}$, we create \Bez surface, with $3\times3$ control points for each patch, that we choose to call $\petersLocalBezPointIndices{i,j}$ ($i,j \in \left \lbrace{-1},0,1\right \rbrace$). If we do this, the $3\times3$ \Bez control points $\petersLocalBezPointIndices{i,j}$ will lie at positions in-between the center vertex $\petersLocalPatchPointIndices{0,0}$ and the $3\times3$ local grid vertices $\petersLocalPatchPointIndices{i,j}$, as shown in \cite{peters1992constructing}:
 \begin{equation}
 \petersLocalBezPointIndices{i,j} = \frac{1}{4}\left(\petersLocalPatchPointIndices{i,j} + \petersLocalPatchPointIndices{i,0} + \petersLocalPatchPointIndices{0,j} + \petersLocalPatchPointIndices{0,0}\right)
 \end{equation}
-or, writing it out explicitly for $i,j \in \left \lbrace0,1\right \rbrace$,
+or, writing it out explicitly for $i,j \in \left \lbrace{-1},0,1\right \rbrace$,
 
+\begin{scriptsize}
 \begin{align*}
-\petersLocalBezPointIndices{1,1} =&\, \frac{1}{4}\left(\petersLocalPatchPointIndices{1,1} + \petersLocalPatchPointIndices{1,0} + \petersLocalPatchPointIndices{0,1} + \petersLocalPatchPointIndices{0,0}\right) \\
-\petersLocalBezPointIndices{1,0} =&\, \frac{1}{2}\left(\petersLocalPatchPointIndices{1,0} + \petersLocalPatchPointIndices{0,0}\right) \\
-\petersLocalBezPointIndices{0,1} =&\, \frac{1}{2}\left(\petersLocalPatchPointIndices{0,1} + \petersLocalPatchPointIndices{0,0}\right) \\
-\petersLocalBezPointIndices{0,0} =&\, \petersLocalPatchPointIndices{0,0}
+\petersLocalBezPointIndices{{-1},1\phantom{-}} =&\, \frac{1}{4}\left(\petersLocalPatchPointIndices{{-1},1} + \petersLocalPatchPointIndices{{-1},0} + \petersLocalPatchPointIndices{0,1} + \petersLocalPatchPointIndices{0,0}\right)
+&
+\petersLocalBezPointIndices{0,1\phantom{-}} =&\, \frac{1}{2}\left(\petersLocalPatchPointIndices{0,1} + \petersLocalPatchPointIndices{0,0}\right)
+&
+\petersLocalBezPointIndices{1,1\phantom{-}} =&\, \frac{1}{4}\left(\petersLocalPatchPointIndices{1,1} + \petersLocalPatchPointIndices{1,0} + \petersLocalPatchPointIndices{0,1} + \petersLocalPatchPointIndices{0,0}\right)
+\\
+\petersLocalBezPointIndices{{-1},0\phantom{-}} =&\, \frac{1}{2}\left(\petersLocalPatchPointIndices{{-1},0} +  \petersLocalPatchPointIndices{0,0}\right) 
+&
+\petersLocalBezPointIndices{0,0\phantom{-}} =&\,\phantom{\frac{1}{2}\Bigl(} \petersLocalPatchPointIndices{0,0}\phantom{\Bigr)}
+&
+\petersLocalBezPointIndices{1,0\phantom{-}} =&\, \frac{1}{2}\left(\petersLocalPatchPointIndices{1,0} + \petersLocalPatchPointIndices{0,0}\right)
+\\
+\petersLocalBezPointIndices{{-1},{-1}} =&\, \frac{1}{4}\left(\petersLocalPatchPointIndices{{-1},{-1}} + \petersLocalPatchPointIndices{{-1},0} + \petersLocalPatchPointIndices{0,{-1}} + \petersLocalPatchPointIndices{0,0}\right) 
+&
+\petersLocalBezPointIndices{0,{-1}} =&\, \frac{1}{2}\left(\petersLocalPatchPointIndices{0,{-1}} + \petersLocalPatchPointIndices{0,0}\right)
+&
+\petersLocalBezPointIndices{1,{-1}} =&\, \frac{1}{4}\left(\petersLocalPatchPointIndices{1,{-1}} + \petersLocalPatchPointIndices{1,0} + \petersLocalPatchPointIndices{0,{-1}} + \petersLocalPatchPointIndices{0,0}\right)
 \end{align*}
+\end{scriptsize}
 
 \begin{figure}
 \begin{center}
-\begin{subfigure}{.45\textwidth}
+\begin{subfigure}[b]{.49\textwidth}
 \begin{center}
-\includegraphics[height=0.8\textwidth]{Pictures/NURBS/bezier_points.pdf}
+\includegraphics[width=.9\textwidth]{Pictures/NURBS/bezier_points.pdf}
 \subcaption{Different points on a quad.}
 \label{subfig:peterspoints}
 \end{center}
 \end{subfigure}
-\begin{subfigure}{.45\textwidth}
+~
+\begin{subfigure}[b]{.49\textwidth}
 \begin{center}
-\includegraphics[height=0.8\textwidth]{Pictures/NURBS/bspline_patches.pdf}
+\includegraphics[height=\textwidth]{Pictures/NURBS/bspline_patches.pdf}
 \subcaption{Smoothly connected \Bez patches.}
 \label{subfig:smoothsurf}
 \end{center}
 \end{subfigure}
-\caption{(\subref{subfig:peterspoints}): The different points used in Peter's scheme. For the quad in the picture with vertices in $\petersControlMesh$, the refined mesh vertices in $\petersPatchPoints$ created by two Doo-Sabin refinements are marked out with crosses. The extent of each of their \Bez surface patches is also marked on the quad with dotted lines (see \autoref{fig:petersSubDivide}b,c for comparison). Additionally, for the center upper-right vertex, the tensor product \Bez surface points $\petersLocalBezPointIndices{i,j}$ are marked with red circles, with the corresponding refined mesh points $\petersLocalPatchPointIndices{i,j}$ being the crosses on the neighbouring patches. (\subref{subfig:smoothsurf}): The resulting smoothly connected surface after creating \Bez surface patches. For visibility, two quads have been cut-out, although the surface is part of a bigger figure. The refined points in $\petersPatchPoints$ are again marked with crosses.}
+\caption{(\subref{subfig:peterspoints}): The different points used in Peter's scheme. For the quad in the picture with vertices $A,B,C,D$ in $\petersControlMesh$, the refined mesh vertices in $\petersPatchPoints$ created by two Doo-Sabin refinements are marked out with crosses. The extent of each of their \Bez surface patches is also marked on the quad with dotted lines (see \autoref{fig:petersSubDivide}b,c for comparison). Additionally, for the highlighted patch, the tensor product \Bez surface points $\petersLocalBezPointIndices{i,j}$ are marked with red circles, with the corresponding refined mesh points $\petersLocalPatchPointIndices{i,j}$ being the green crosses. (\subref{subfig:smoothsurf}): The resulting smoothly connected surface after creating \Bez surface patches. For visibility, two quads have been cut-out, although the surface is part of a bigger figure. The refined points in $\petersPatchPoints$ are again marked with crosses.}
 \label{fig:petersDiags}
 \end{center}
 \end{figure}
 
-\todointern[inline,author=erik]{Benni, think about pictures we talked about. I am using macro $\petersLocalPatchPointIndices{i,j}$ for the local points in the refined mesh on the quad, and $\petersLocalBezPointIndices{i,j}$ for the \Bez points.}
 The different types of points are illustrated in \autoref{subfig:peterspoints}.
 
 
