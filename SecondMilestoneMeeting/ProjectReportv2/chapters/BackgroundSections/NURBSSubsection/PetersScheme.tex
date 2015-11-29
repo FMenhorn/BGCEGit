@@ -36,31 +36,31 @@ To begin with, we can recognize that each original quad now has a $4 \times 4$ g
 
 Taking one such point $\petersLocalPatchPointIndices{0,0}$, and its neighbours $\petersLocalPatchPointIndices{i,j}$, where $i,j \in \left \lbrace-1,0,1\right \rbrace$, we can now interpret them as the control points for a biquadratic (that is, second-order) tensor product B-spline surface (meaning with uniform knots). This we can then extend to include all the points that are also locally in a regular grid (and their neighbours in their own local $3\times3$ grid). This results in a $C^1$ continous surface around all vertices where the mesh is locally regular.
 %For those cells, we can now create biquadratic tensor splines that meet $G^1$ along the edges and corners; that is, the tensor product of one quadratic spline in one of the regular mesh directions and one in the other.
-Now, this surface can also be represented by a network of a biquadratic tensor product \Bez surface patches (see \autoref{fig:petersSubDivide}c for the patch structure). This means, around a vertex $\petersLocalPatchPointIndices{0,0}$, we create \Bez surface, with $3\times3$ control points for each patch, that we choose to call $\petersLocalBezPointIndices{i,j}$ ($i,j \in \left \lbrace-1,0,1\right \rbrace$). If we do this, the $3\times3$ \Bez control points $\petersLocalBezPointIndices{i,j}$ will lie at positions in-between the center vertex $\petersLocalPatchPointIndices{0,0}$ and the $3\times3$ local grid vertices $\petersLocalPatchPointIndices{i,j}$, as shown in \cite{peters1992constructing}:
+Now, this surface can also be represented by a network of a biquadratic tensor product \Bez surface patches (see \autoref{fig:petersSubDivide}c for the patch structure). This means, around a vertex $\petersLocalPatchPointIndices{0,0}$, we create \Bez surface, with $3\times3$ control points for each patch, that we choose to call $\petersLocalBezPointIndices{i,j}$ ($i,j \in \left \lbrace{-1},0,1\right \rbrace$). If we do this, the $3\times3$ \Bez control points $\petersLocalBezPointIndices{i,j}$ will lie at positions in-between the center vertex $\petersLocalPatchPointIndices{0,0}$ and the $3\times3$ local grid vertices $\petersLocalPatchPointIndices{i,j}$, as shown in \cite{peters1992constructing}:
 \begin{equation}
 \petersLocalBezPointIndices{i,j} = \frac{1}{4}\left(\petersLocalPatchPointIndices{i,j} + \petersLocalPatchPointIndices{i,0} + \petersLocalPatchPointIndices{0,j} + \petersLocalPatchPointIndices{0,0}\right)
 \end{equation}
-or, writing it out explicitly for $i,j \in \left \lbrace-1,0,1\right \rbrace$,
+or, writing it out explicitly for $i,j \in \left \lbrace{-1},0,1\right \rbrace$,
 
 \begin{scriptsize}
 \begin{align*}
-\petersLocalBezPointIndices{-1,1} =&\, \frac{1}{4}\left(\petersLocalPatchPointIndices{-1,1} + \petersLocalPatchPointIndices{-1,0} + \petersLocalPatchPointIndices{0,1} + \petersLocalPatchPointIndices{0,0}\right)
+\petersLocalBezPointIndices{{-1},1\phantom{-}} =&\, \frac{1}{4}\left(\petersLocalPatchPointIndices{{-1},1} + \petersLocalPatchPointIndices{{-1},0} + \petersLocalPatchPointIndices{0,1} + \petersLocalPatchPointIndices{0,0}\right)
 &
-\petersLocalBezPointIndices{0,1} =&\, \frac{1}{2}\left(\petersLocalPatchPointIndices{0,1} + \petersLocalPatchPointIndices{0,0}\right)
+\petersLocalBezPointIndices{0,1\phantom{-}} =&\, \frac{1}{2}\left(\petersLocalPatchPointIndices{0,1} + \petersLocalPatchPointIndices{0,0}\right)
 &
-\petersLocalBezPointIndices{1,1} =&\, \frac{1}{4}\left(\petersLocalPatchPointIndices{1,1} + \petersLocalPatchPointIndices{1,0} + \petersLocalPatchPointIndices{0,1} + \petersLocalPatchPointIndices{0,0}\right)
+\petersLocalBezPointIndices{1,1\phantom{-}} =&\, \frac{1}{4}\left(\petersLocalPatchPointIndices{1,1} + \petersLocalPatchPointIndices{1,0} + \petersLocalPatchPointIndices{0,1} + \petersLocalPatchPointIndices{0,0}\right)
 \\
-\petersLocalBezPointIndices{-1,0} =&\, \frac{1}{2}\left(\petersLocalPatchPointIndices{-1,0} +  \petersLocalPatchPointIndices{0,0}\right) 
+\petersLocalBezPointIndices{{-1},0\phantom{-}} =&\, \frac{1}{2}\left(\petersLocalPatchPointIndices{{-1},0} +  \petersLocalPatchPointIndices{0,0}\right) 
 &
-\petersLocalBezPointIndices{0,0} =&\, \petersLocalPatchPointIndices{0,0}
+\petersLocalBezPointIndices{0,0\phantom{-}} =&\,\phantom{\frac{1}{2}\Bigl(} \petersLocalPatchPointIndices{0,0}\phantom{\Bigr)}
 &
-\petersLocalBezPointIndices{1,0} =&\, \frac{1}{2}\left(\petersLocalPatchPointIndices{1,0} + \petersLocalPatchPointIndices{0,0}\right)
+\petersLocalBezPointIndices{1,0\phantom{-}} =&\, \frac{1}{2}\left(\petersLocalPatchPointIndices{1,0} + \petersLocalPatchPointIndices{0,0}\right)
 \\
-\petersLocalBezPointIndices{-1,-1} =&\, \frac{1}{4}\left(\petersLocalPatchPointIndices{-1,-1} + \petersLocalPatchPointIndices{-1,0} + \petersLocalPatchPointIndices{0,-1} + \petersLocalPatchPointIndices{0,0}\right) 
+\petersLocalBezPointIndices{{-1},{-1}} =&\, \frac{1}{4}\left(\petersLocalPatchPointIndices{{-1},{-1}} + \petersLocalPatchPointIndices{{-1},0} + \petersLocalPatchPointIndices{0,{-1}} + \petersLocalPatchPointIndices{0,0}\right) 
 &
-\petersLocalBezPointIndices{0,-1} =&\, \frac{1}{2}\left(\petersLocalPatchPointIndices{0,-1} + \petersLocalPatchPointIndices{0,0}\right)
+\petersLocalBezPointIndices{0,{-1}} =&\, \frac{1}{2}\left(\petersLocalPatchPointIndices{0,{-1}} + \petersLocalPatchPointIndices{0,0}\right)
 &
-\petersLocalBezPointIndices{1,-1} =&\, \frac{1}{4}\left(\petersLocalPatchPointIndices{1,-1} + \petersLocalPatchPointIndices{1,0} + \petersLocalPatchPointIndices{0,-1} + \petersLocalPatchPointIndices{0,0}\right)
+\petersLocalBezPointIndices{1,{-1}} =&\, \frac{1}{4}\left(\petersLocalPatchPointIndices{1,{-1}} + \petersLocalPatchPointIndices{1,0} + \petersLocalPatchPointIndices{0,{-1}} + \petersLocalPatchPointIndices{0,0}\right)
 \end{align*}
 \end{scriptsize}
 
