@@ -9,13 +9,13 @@ Depending on the discipline, different requirements are set on the virtual model
 This section presents the relevant geometrical and computational aspects of \ac{CAD} for the project; for a more thorough introduction we refer the reader to \cite{sarcarCAD}.
 
 \subsection{Geometry Representations}
-\todointern[inline]{Saumitra: Repetitive use of names, review}
+\tododone[inline]{Saumitra: Repetitive use of names, review}
 In general, two different ways of describing a geometry are used: a \acf{CSG} or a \acf{BREP}. Other approaches, such as a complete voxelised geometry are not common due to extensive memory consumption.
 \subsubsection{Constructive Solid Geometry}
 \begin{figure}
 \centering
 \includegraphics[width=0.5\textwidth]{Pictures/Csg_tree.png}
-\caption{\ac{CSG} object tree. The picture shows the construction of a complex object from a cube, a sphere, and a set of cylinders. Figure taken from \cite{WikipediaCSG}.}
+\caption{\ac{CSG} object tree. The picture shows the construction of a complex object from a cube, a sphere, and a set of cylinders. Figure from \cite{WikipediaCSG}.}
 \label{fig:csg_tree}
 \end{figure}
 The core idea in this format is to start from a set of primitives, e.g. spheres, cylinders and/or cubes. Basic Boolean operations link these primitives towards a complex geometry, as illustrated in \autoref{fig:csg_tree}.
@@ -28,7 +28,7 @@ Furthermore, holes in the body are made possible by saving the surface normal of
 By the boundary representation arbitrary geometries can be created. While the data sizes are commonly larger than in \ac{CSG} representation, \ac{BREP} files are usually easier to work with. One also has to keep in mind, that non-physical geometries can result from \ac{BREP} formats through a non-closed surface.
 
 \subsubsection{Voxel Raster}
-A very straightforward approach is to store a geometry shape as a regular grid of cubes, so called voxels. In the core, a raster of cubes is placed on the shape, and for each of the voxels the material information is saved. One can imagine that there are various alternatives: a boolean voxel grid, a grid with respective mass densities or saving arbitrary additional information to each voxel. As mentioned before, this representation is not common in CAD systems due to massive memory needs. However, modifications of the representation are a more common which mostly deal with saving the shape surface in voxels as treated in \cite{CohenOr1995} or OctTree representations.  
+A very straightforward approach is to store a geometry shape as a regular grid of cubes, so called voxels. In the core, a raster of cubes is placed on the shape, and for each of the voxels the material information is saved. One can imagine that there are various alternatives: a boolean voxel grid, a grid with respective mass densities or saving arbitrary additional information to each voxel. As mentioned before, this representation is not common in CAD systems due to massive memory needs. However, modifications of the representation are more common which mostly deal with saving the shape surface in voxels as treated in \cite{CohenOr1995} or OctTree representations.  
 
 \subsection{Data Exchange Interfaces}
 \ac{CAD} software programs usually use their own data formats; in order to exchange models standardized interface formats have been developed. Geometric models are compressed to certain geometry descriptions; transferring additional information, such as material properties or manufacturing information, is in general a difficult task and in some exchange file formats even prohibited. A few common exchange file types are described below, as also compared in \cite{STL}.
