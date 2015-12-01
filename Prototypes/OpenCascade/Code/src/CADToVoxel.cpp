@@ -99,7 +99,6 @@ int main(int argc, char** argv){
     voxelizer.voxelize(fullShape, refinementLevel, voxelShape);
     voxelIndexCalculator.setDimensions(voxelShape.getVoxelDimension());
     voxelIndexCalculator.setOrigin(voxelShape.getOrigin());
-    voxelizer.setVoxelIndexCalculator(voxelIndexCalculator);
     voxelizer.fillVolume(voxelShape);
     voxelIndexCalculator.calculateIndexForVoxelShape(voxelShape, true);
 
