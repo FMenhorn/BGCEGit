@@ -9,15 +9,15 @@ Currently, Once the user has created their input geometry and saved it as STEP a
 
 The bash script basically invokes \lstinline|CADToVoxel| that parses the geometry, sorts out the faces based on their type, voxelizes the assembly, and writes the input for the topology optimizer. The script then calls the topology optimizer with this file as input. Once optimised, the script requests an extracted surface from the density voxel grid from the dual contouring algorithm. 
 
-It is worth noting, that as of the second milestone an integrated pipeling is available from the geometry input to the surface extraction through dual contouring. Connection with the next part of the pipeline is the objective for the third phase.
+%It is worth noting, that as of the second milestone an integrated pipeling is available from the geometry input to the surface extraction through dual contouring. Connection with the next part of the pipeline is the objective for the third phase.
 
 Here is an explanation of how the faces are extracted from the CAD input and how they are categorised based on the color:
 
 \begin{enumerate}
 	\item An instance of \lstinline|Reader| is created with the CAD source directory and file name as input. \lstinline|Reader| wraps the OpenCascade classes for reading STEP and IGES files into a single class, reads the two files, and holds them in two handles.
 	\item The \lstinline|ColorHandler| class takes over the handles from \lstinline|Reader|. \lstinline|ColorHandler| provides methods, each of which returns a list of faces (see Figure \ref{umlCADToVoxel}). Depending on which method is called the returned list contains groups of fixtures, loads, passive faces, or all faces of the body.
-	\item Each of the methods mentioned above internally calls the hidden function \lstinline|findColoredFaces(..)|. This method takes as input a color, and returns all faces that match it. It also takes as input a boolean variable \lstinline|isLoadSeeked| - if true, then the function returns all faces with load on them, and also a vector of the corresponding loads.
+	\item Each of the methods mentioned above internally calls the hidden function \lstinline|findColoredFaces()|. This method takes as input a color, and returns all faces that match it. It also takes as input a boolean variable \lstinline|isLoadSeeked| - if true, then the function returns all faces with load on them, and also a vector of the corresponding loads.
 	\item The load vector is then scaled with respect to the scaling factor provided as input by the user.
 \end{enumerate}
 
-Once these face lists are available, they can each be voxelized.
+Once these face lists are available, they can be voxelized.

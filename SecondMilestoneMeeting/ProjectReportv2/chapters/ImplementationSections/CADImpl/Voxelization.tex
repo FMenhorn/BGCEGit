@@ -3,7 +3,8 @@
 
 \tododone[inline]{Severin: Describe the voxelization process. Explain concept of refinement.}
 %what is voxelisation
-As pointed out in section \ref{sec:TopOpt} a very common formulation of topology optimization deals with regions that are specified as filled or empty. The minimum compliance problem is then solved on a discretized grid; the most common one is a volume raster in the form of cubes - so called voxels. Since ToPy requires a voxel grid in their input format, the next step is to render the geometry with a 3D raster of voxels.  
+
+As it is pointed out in section \ref{sec:TopOpt}, a very common formulation of topology optimization deals with regions that are specified as filled or empty. The minimum compliance problem is then solved on a discretized grid; the most common one is a volume raster in the form of cubes - so called voxels. Since ToPy requires a voxel grid in their input format, the next step is to render the geometry with a 3D raster of voxels.
 
 As described in the previous section, the geometry shape and faces for each boundary condition type, are stored in OpenCascade through the internal data type \lstinline|TopoDSShape|. As one can see in the UML Diagram \ref{fig: umlCADToVoxel} the \lstinline|voxelise| function is called internally by \lstinline|CADTOVoxel| -- for the shape and each faces separately. The voxelisation is then performed as follows: 
 \begin{enumerate}

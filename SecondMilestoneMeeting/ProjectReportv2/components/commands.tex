@@ -54,20 +54,28 @@
 
 %-------------------------------------------------------------
 % some peters' nomenclature ----------------------------------
+\renewcommand{\vec}[1]{\mathbf{#1}}
 \newcommand{\petersPatchPoint}{V}
 \newcommand{\petersPatchPoints}{\petersPatchPoint_x}
 \newcommand{\petersControlMesh}{M}
+\newcommand{\petersControlMeshRef}{\petersControlMesh_{ref}}
+\newcommand{\petersControlMeshDobRef}{\petersControlMesh_{2ref}}
 \newcommand{\petersControlMeshVec}{\vec{\MakeLowercase{\petersControlMesh}}}
 \newcommand{\petersPatchPointVec}{\vec{\MakeLowercase{\petersPatchPoint}}}
 \newcommand{\petersPatchPointMatrix}{\MakeUppercase{\petersPatchPoint}}
+\newcommand{\petersLocalPatchPointLetter}{B}
+\newcommand{\petersLocalPatchPoint}{\vec{\petersLocalPatchPointLetter}^{\petersControlMesh}}
+\newcommand{\petersLocalPatchPointIndices}[1]{\petersLocalPatchPoint_{#1}}
 \newcommand{\petersControlPointCoefLetter}{c}
 \newcommand{\petersControlPointCoef}{\petersControlPointCoefLetter^{PS}}
 \newcommand{\petersControlPointCoefMatrix}{\MakeUppercase{\petersControlPointCoefLetter}^{PS}}
 \newcommand{\bezierPoint}{P}
 \newcommand{\bezierPointSet}{\bezierPoint_x}
 \newcommand{\bezierPointVec}{\vec{\bezierPoint}}
+\newcommand{\petersLocalBezPoint}{\vec{\petersLocalPatchPointLetter}^{\text{B{\'e}z}}}
+\newcommand{\petersLocalBezPointIndices}[1]{\petersLocalBezPoint_{#1}}
 \newcommand{\petersFaces}{F}
-\newcommand{\suchthat}{:}
+\newcommand{\suchthat}{;}
 \newcommand{\centroidof}[1]{\vec{c}_{#1}}
 \newcommand{\verticesof}[1]{V_{#1}}
 \newcommand{\facesof}[1]{\petersFaces_{#1}}
@@ -190,4 +198,5 @@
 
 \newcommand{\tododone}[2][noinline]{\todo[#1, color=green!40]{\textit{#2}}}
 \newcommand{\todointern}[2][noinline]{\todo[#1, color=blue!40]{#2}}
+\newcommand{\todointernal}{\todointern}
 \newcommand{\todourgent}[2][noinline]{\todo[#1, color=red!40]{\textbf{#2}}}

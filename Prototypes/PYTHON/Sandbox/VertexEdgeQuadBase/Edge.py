@@ -7,7 +7,7 @@ class Edge:
         self.id = _id
         self.vertices = [_vertex1, _vertex2]
         for vertex in self.vertices:
-            vertex.add_quad(self)
+            vertex.add_edge(self)
 
         self.quads = []
 

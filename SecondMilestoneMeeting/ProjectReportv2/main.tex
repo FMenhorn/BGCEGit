@@ -16,9 +16,9 @@
 %% Draft document mode (with todos, no pictures just bounding box)
 %\documentclass[draft,11pt,a4paper,bibtotoc,idxtotoc,headsepline,footsepline,footexclude,DIV13,oneside]{scrbook}
 %% Final document mode (no todos, with pictures)
-\documentclass[final,11pt,a4paper,bibtotoc,idxtotoc,headsepline,footsepline,footexclude,DIV13,oneside]{scrbook}
+%\documentclass[final,11pt,a4paper,bibtotoc,idxtotoc,headsepline,footsepline,footexclude,DIV13,oneside]{scrbook}
 %% Intermediate document mode (todos and pictures)
-%s\documentclass[11pt,a4paper,bibtotoc,idxtotoc,headsepline,footsepline,footexclude,DIV13,oneside]{scrbook}
+\documentclass[11pt,a4paper,bibtotoc,idxtotoc,headsepline,footsepline,footexclude,DIV13,oneside]{scrbook}
 
 %\usepackage{epstopdf}
 % KOMA-Optionen:
@@ -64,42 +64,43 @@
 
 	\mainmatter
 	
-		\todointern[inline]{Bennis task: Number figures w.r.t subsection: 2.11 should be 2.4.1}
-		\todointern[inline]{Bennis task:
-remove ugly lines at end of sections}		
+	\tododone[inline]{Saumi: Make ALL captions consistent: capitalize all nouns!}
+	\tododone[inline]{Saumi: Make ALL figure refs consistent. Figure from [...]}
+				
 		% ---------------------------------------------------------------------------
 		%
 		%Introduction 
 		%
- ---------------------------------------------------------------------------
+ 		%---------------------------------------------------------------------------
 		\input{chapters/Introduction}
 		
- ---------------------------------------------------------------------------
+ 		%---------------------------------------------------------------------------
 		%
 		% and Background Theory
 		%
- ---------------------------------------------------------------------------
+		%---------------------------------------------------------------------------
 		\input{chapters/Background}
 		
- ---------------------------------------------------------------------------
+ 		%---------------------------------------------------------------------------
 		%
 		% Implementation 
 		%
---------------------------------------------------------------------------
+		%--------------------------------------------------------------------------
 		\input{chapters/Implementation}
 		
- ---------------------------------------------------------------------------
+ 		%---------------------------------------------------------------------------
 		%
 		% Summary and discussion 
 		%
- -------------------------------------------------------------------------
-		\input{chapters/Discussion}
-		 ---------------------------------------------------------------------------
+ 		%-------------------------------------------------------------------------
+		%\input{chapters/Discussion}
+		
+		%---------------------------------------------------------------------------
 		%
 		% Appendix
 		%
- ---------------------------------------------------------------------------
-%		\chapter{Appendix}
+ 		%---------------------------------------------------------------------------
+		%\chapter{Appendix}
 	%	\addcontentsline{toc}{part}{Appendix}
 %		\appendix 
 		
