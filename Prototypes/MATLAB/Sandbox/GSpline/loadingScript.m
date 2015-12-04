@@ -5,8 +5,8 @@ parametersString = 'param.csv';
 dataPointsString = 'verts_fine.csv';
 quadsString = 'quads_coarse.csv';
 verticesString = 'matlabData.mat';
-baseFolder = 'TorusData/BGCE/';
-subFolder = 'Cantilever_Out/';
+baseFolder = 'TorusData/';
+subFolder = 'torussssss/';
 folder = strcat(baseFolder,subFolder);
 
 data_parameters = strcat(folder,parametersString);
