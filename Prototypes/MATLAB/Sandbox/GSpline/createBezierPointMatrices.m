@@ -15,6 +15,7 @@ biquadtraticMatrix = zeros(12*9*number_of_quads,3);
 biquadraticIndices = zeros(12*number_of_quads,9);
 bicubicMatrix = zeros(4*16*number_of_quads,3);
 bicubicIndices = zeros(4*number_of_quads,16);
+tempBiquadBezierMatrix = zeros(3,3,3);
 
 getLinearIndexing = @(i,j,width) i + (j-1)*width;
 hold on;
@@ -44,11 +45,21 @@ for q = 1:number_of_quads
                 counterBic = counterBic + 1;
             else
                 neighbourMask = get3x3ControlPointIndexMask(quad_list,quad_control_point_indices,q,[i,j]);
+                
+                for jPatch = 1:3
+                    for iPatch = 1:3
+                        
+                        tempBiquadBezierMatrix(:,iPatch,jPatch) = control_points(neighbourMask(iPatch,jPatch),:);
+                    end
+                end
+                
+                tempBiquadBezierMatrix = getBiquadraticPatch(tempBiquadBezierMatrix);
+                
                 for jPatch = 1:3
                     for iPatch = 1:3
                         currentIndex = (counterBiq -1)*9 + getLinearIndexing(iPatch,jPatch,3);
                         
-                        biquadtraticMatrix(currentIndex,:) = control_points(neighbourMask(iPatch,jPatch),:);
+                        biquadtraticMatrix(currentIndex,:) = tempBiquadBezierMatrix(:,iPatch,jPatch);
                         biquadraticIndices(counterBiq,getLinearIndexing(iPatch,jPatch,3)) = currentIndex;
                     end
                 end
