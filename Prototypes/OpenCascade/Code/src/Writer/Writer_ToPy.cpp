@@ -51,7 +51,7 @@ void Writer_ToPy::writeHeader(std::ofstream &outfile, std::string outputName){
 	outfile << "ETA:         0.4\n";
 	outfile << "DOF_PN:      3\n";
 	outfile << "VOL_FRAC:    0.15\n";
-	outfile << "FILT_RAD:    1.5\n";
+	outfile << "FILT_RAD:    2.5\n";
 	outfile << "ELEM_K:      H8\n";
 	outfile << "NUM_ITER:    100\n";
 }
