@@ -14,21 +14,22 @@ In this we are going to collect coding style guidelines for our project
 \section{General Style}
 \begin{itemize}
 \item follow PyCharm style (PEP8)
+\item See: \url{https://www.python.org/dev/peps/pep-0008/}
 \item use meaningful names in any case! No abbreviations without a comment
 \end{itemize}
 
 \section{Functions and Variables}
 \begin{itemize}
-\item Variablenames (CamelCase!): \verb+myVariable+
-\item variable and function name start with small letter: \texttt{void myFunc(), myDataType myVariable}
-\item class name starts with bigletter: \texttt{class MyClass}
+\item Variablenames: \verb+my_variable+
+\item variable and function name start with small letter: \texttt{void my\_func(), my\_data\_type my\_variable}
+\item class name starts with bigletter in Camelcase: \texttt{class MyClass}
 \end{itemize}
 
 \section{Object oriented programming}
 \begin{itemize}
 \item there is no way for defining private variables in python! the following convention is applied:
 \begin{itemize}
-\item variables starting with \verb+__+ (e.g. \verb+__myMember+) should not be touched from outside
+\item variables starting with \verb+__+ (e.g. \verb+__my_member+) should not be touched from outside
 \item for variable modification and access add appropriate getters and setters
 \item from my personal experience and fails: \verb+_+ seems to me to mean something like protected and \verb+__+ derived. Also to the interpreter! This means, if you want to access variables from a base class via a derived class you have to be careful. See the following example:
 \begin{verbatim}

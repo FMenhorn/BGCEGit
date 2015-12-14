@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of plotQuadOrQuadsWithHairs</title>
+  <meta name="keywords" content="plotQuadOrQuadsWithHairs">
+  <meta name="description" content="% script to create model torus quads">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">GSpline</a> &gt; plotQuadOrQuadsWithHairs.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for GSpline&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>plotQuadOrQuadsWithHairs
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>% script to create model torus quads</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">% script to create model torus quads</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="createGlobalControlMeshCoefs.html" class="code" title="function coefsMatrix = createGlobalControlMeshCoefs(parameterCoordinates,quad_list,AVertexList,B1VertexList,B2VertexList,CVertexList,quad_control_point_indices)">createGlobalControlMeshCoefs</a>	takes, for N datapoints, an array parameterCoordinates[Nx3](for every</li><li><a href="createTorusParams.html" class="code" title="">createTorusParams</a>	% create a set of ideal data complying to the stuff</li><li><a href="getPatchPointsOnQuad.html" class="code" title="function quadPoints = getPatchPointsOnQuad(quad_lists, quad_vertices, quad_index, figure_handle)">getPatchPointsOnQuad</a>	--------------------------------</li><li><a href="loadingTorus.html" class="code" title="">loadingTorus</a>	% script for loading data and preformatting the indices for matlab</li><li><a href="plotLinesOnQuad.html" class="code" title="function figure_handle = plotLinesOnQuad(quad_list, quad_vertices, quad_index, figure_handle)">plotLinesOnQuad</a>	</li><li><a href="plotPatchPointsOnQuad.html" class="code" title="function figure_handle = plotPatchPointsOnQuad(quad_list, quad_vertices, quad_index, figure_handle)">plotPatchPointsOnQuad</a>	--------------------------------</li><li><a href="plotPatchesOnQuad.html" class="code" title="function plotHandle = plotPatchesOnQuad(quad_list,AVertexList,B1VertexList,B2VertexList,CVertexList,quad_control_point_indices,control_points,quad_index,patch_list,plotHandle)">plotPatchesOnQuad</a>	</li><li><a href="shiftToRegularPointsFormat.html" class="code" title="function verticesInRegularPointsFormat = shiftToRegularPointsFormat(regularPoints,verticesInIndexFormat)">shiftToRegularPointsFormat</a>	</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">%% script to create model torus quads</span>
+0002 clear all
+0003 close all
+0004 quadsToPlot = [1 4];
+0005 
+0006 
+0007 <span class="comment">%create data</span>
+0008 <a href="createTorusParams.html" class="code" title="">createTorusParams</a>;
+0009 <a href="loadingTorus.html" class="code" title="">loadingTorus</a>;
+0010 coefs = <a href="createGlobalControlMeshCoefs.html" class="code" title="function coefsMatrix = createGlobalControlMeshCoefs(parameterCoordinates,quad_list,AVertexList,B1VertexList,B2VertexList,CVertexList,quad_control_point_indices)">createGlobalControlMeshCoefs</a>(parameters,quads_Torus,newA,newB1,newB2,newC,regularPoints);
+0011 vertices = coefs\torus_verts_fine; 
+0012 numQuads = size(regularPoints,1);
+0013 
+0014 
+0015 
+0016 <span class="comment">%plot</span>
+0017 fig_handle = figure(<span class="string">'Name'</span>, <span class="string">'Plot with hairs'</span>);
+0018 
+0019 quads_patchvertices = zeros(3,numQuads,16);
+0020 <span class="keyword">for</span> i = 1:numQuads
+0021     temp_patchvertices = <a href="getPatchPointsOnQuad.html" class="code" title="function quadPoints = getPatchPointsOnQuad(quad_lists, quad_vertices, quad_index, figure_handle)">getPatchPointsOnQuad</a>(quads_Torus,createdQuadVerts,i,fig_handle);
+0022     <span class="keyword">for</span> j = 1:4
+0023         <span class="keyword">for</span> k = 1:4
+0024             quads_patchvertices(:,i,k + (j-1)*4) = temp_patchvertices(:,k,j);
+0025         <span class="keyword">end</span>
+0026     <span class="keyword">end</span>
+0027 <span class="keyword">end</span>
+0028 
+0029 regular_quadpoints = <a href="shiftToRegularPointsFormat.html" class="code" title="function verticesInRegularPointsFormat = shiftToRegularPointsFormat(regularPoints,verticesInIndexFormat)">shiftToRegularPointsFormat</a>(regularPoints,quads_patchvertices);
+0030 axis off
+0031 <span class="keyword">for</span> i = 1:length(quadsToPlot)
+0032     <span class="comment">%plotAllHairsOnQuad(quads_Torus,createdQuadVerts,createdPoints,parameters,i,fig_handle);</span>
+0033 <span class="comment">%     plotOneQuadWhole(quads_Torus,newA,newB1,newB2,newC,regularPoints,vertices,i,fig_handle);</span>
+0034     <a href="plotLinesOnQuad.html" class="code" title="function figure_handle = plotLinesOnQuad(quad_list, quad_vertices, quad_index, figure_handle)">plotLinesOnQuad</a>(quads_Torus,createdQuadVerts,quadsToPlot(i),fig_handle);
+0035     <a href="plotPatchPointsOnQuad.html" class="code" title="function figure_handle = plotPatchPointsOnQuad(quad_list, quad_vertices, quad_index, figure_handle)">plotPatchPointsOnQuad</a>(quads_Torus,createdQuadVerts,quadsToPlot(i),fig_handle);
+0036     <a href="plotPatchesOnQuad.html" class="code" title="function plotHandle = plotPatchesOnQuad(quad_list,AVertexList,B1VertexList,B2VertexList,CVertexList,quad_control_point_indices,control_points,quad_index,patch_list,plotHandle)">plotPatchesOnQuad</a>(quads_Torus,newA,newB1,newB2,newC,regularPoints,regular_quadpoints,quadsToPlot(i),1:16,fig_handle);
+0037     
+0038     
+0039     <span class="comment">%------------------------</span>
+0040     <span class="comment">%ADDED FOR ANNA'S PURPOSES</span>
+0041     <span class="comment">%plotQuad(quads_Torus,createdQuadVerts,i,fig_handle);</span>
+0042     <span class="comment">%[figure_dummy, patch_points] =  plotPatchPointsOnQuad(quads_Torus,createdQuadVerts,i,fig_handle);</span>
+0043     <span class="comment">%hold on</span>
+0044     <span class="comment">%bezier_points = getBiquadraticPatch(patch_points);</span>
+0045     <span class="comment">%plotPoints(bezier_points);</span>
+0046     <span class="comment">%-------------------------</span>
+0047 <span class="keyword">end</span>
+0048</pre></div>
+<hr><address>Generated on Thu 10-Dec-2015 17:05:22 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>
