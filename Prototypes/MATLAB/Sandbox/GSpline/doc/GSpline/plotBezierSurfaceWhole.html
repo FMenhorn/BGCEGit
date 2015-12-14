@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of plotBezierSurfaceWhole</title>
+  <meta name="keywords" content="plotBezierSurfaceWhole">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">GSpline</a> &gt; plotBezierSurfaceWhole.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for GSpline&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>plotBezierSurfaceWhole
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function plotHandle = plotBezierSurfaceWhole(quad_list,AVertexList,B1VertexList,B2VertexList,CVertexList,quad_control_point_indices,control_points) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="bezier.html" class="code" title="function [x,y,z] = bezier(P,h)">bezier</a>	BEZIER Returns x,y,z values of a 3D bezier-curve with the given control points P and</li><li><a href="get3x3ControlPointIndexMask.html" class="code" title="function indexMask = get3x3ControlPointIndexMask(quad_list, quad_control_point_indices, quad_index, localIndexXY)">get3x3ControlPointIndexMask</a>	</li><li><a href="getBicubicPatchIndex.html" class="code" title="function bezierPoints = getBicubicPatchIndex(ind, As, Bs, Cs)">getBicubicPatchIndex</a>	nomenclature following that of paper of Eck, Hoppe (Automatic</li><li><a href="getBiquadraticPatch.html" class="code" title="function bezierPoints = getBiquadraticPatch(controlPoints)">getBiquadraticPatch</a>	given a 3x3 3-dim array of points, where the first dimension is (x,y,z)</li><li><a href="getExtraOrdCornerIndexMask.html" class="code" title="function indexMask = getExtraOrdCornerIndexMask(quad_list,AVertexList,B1VertexList,B2VertexList,CVertexList,quad_control_point_indices,quad_index,whichCorner)">getExtraOrdCornerIndexMask</a>	</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="runningScript.html" class="code" title="">runningScript</a>	</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function plotHandle = plotBezierSurfaceWhole(quad_list,AVertexList,B1VertexList,B2VertexList,CVertexList,quad_control_point_indices,control_points)</a>
+0002 
+0003 whichCornerList = [1,4;2,3];
+0004 
+0005 one4toone2 = @(i) (i-1)/3 + 1;
+0006 
+0007 whichCornerFun = @(i,j) whichCornerList(one4toone2(i),one4toone2(j));
+0008 
+0009 controlVertices = zeros(3,3,3);
+0010 
+0011 
+0012 plotHandle = figure(<span class="string">'Name'</span>, <span class="string">'Bezier surface plot'</span>);
+0013 hold on;
+0014 <span class="keyword">for</span> q = 1:size(quad_list,1)
+0015     <span class="keyword">for</span> j = 1:4
+0016         <span class="keyword">for</span> i = 1:4
+0017     
+0018             <span class="keyword">if</span> ([i,j]==1 | [i,j] == 4)
+0019                 whichCorner = whichCornerFun(i,j);
+0020                 indexMask = <a href="getExtraOrdCornerIndexMask.html" class="code" title="function indexMask = getExtraOrdCornerIndexMask(quad_list,AVertexList,B1VertexList,B2VertexList,CVertexList,quad_control_point_indices,quad_index,whichCorner)">getExtraOrdCornerIndexMask</a>(quad_list,AVertexList,B1VertexList,B2VertexList,CVertexList,quad_control_point_indices,q,whichCorner);
+0021                 numberOfEdges = size(indexMask,2);
+0022                 As =  control_points(indexMask(1,:),:)';
+0023                 B1s =  control_points(indexMask(2,:),:)';
+0024                 B2s =  control_points(indexMask(3,:),:)';
+0025                 Cs =  control_points(indexMask(4,:),:)';
+0026                 Bs = cat(2,reshape(B1s,3,1,numberOfEdges),reshape(B2s,3,1,numberOfEdges));
+0027                 patch = <a href="getBicubicPatchIndex.html" class="code" title="function bezierPoints = getBicubicPatchIndex(ind, As, Bs, Cs)">getBicubicPatchIndex</a>(1,As,Bs,Cs);
+0028                 <span class="comment">%     patch(:,3,3) = rot(pi)*patch(:,3,3);</span>
+0029                 [xx,yy,zz]=<a href="bezier.html" class="code" title="function [x,y,z] = bezier(P,h)">bezier</a>(patch,0.1);
+0030                 surf(xx,yy,zz)
+0031                 
+0032                 
+0033             <span class="keyword">else</span>
+0034                 neighbourMask = <a href="get3x3ControlPointIndexMask.html" class="code" title="function indexMask = get3x3ControlPointIndexMask(quad_list, quad_control_point_indices, quad_index, localIndexXY)">get3x3ControlPointIndexMask</a>(quad_list,quad_control_point_indices,q,[i,j]);
+0035                 <span class="keyword">for</span> bezierJ = 1:3
+0036                     <span class="keyword">for</span> bezierI = 1:3
+0037                         controlVertices(:,bezierI,bezierJ) = control_points(neighbourMask(bezierI,bezierJ),:);
+0038                     <span class="keyword">end</span>
+0039                 <span class="keyword">end</span>
+0040                 
+0041                 APatch = <a href="getBiquadraticPatch.html" class="code" title="function bezierPoints = getBiquadraticPatch(controlPoints)">getBiquadraticPatch</a>(controlVertices);
+0042                 <span class="comment">%     patch(:,3,3) = rot(pi)*patch(:,3,3);</span>
+0043                 [xx,yy,zz]=<a href="bezier.html" class="code" title="function [x,y,z] = bezier(P,h)">bezier</a>(APatch,0.1);
+0044                 surf(xx,yy,zz)
+0045                 
+0046                 
+0047                 
+0048             <span class="keyword">end</span>
+0049             
+0050             
+0051             
+0052         <span class="keyword">end</span>
+0053     <span class="keyword">end</span>
+0054     
+0055 <span class="keyword">end</span>
+0056 
+0057 
+0058 
+0059 
+0060 
+0061 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Thu 10-Dec-2015 17:05:22 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

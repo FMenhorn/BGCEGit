@@ -1,0 +1,157 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ExtraOrdTorusTest</title>
+  <meta name="keywords" content="ExtraOrdTorusTest">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">GSpline</a> &gt; ExtraOrdTorusTest.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for GSpline&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>ExtraOrdTorusTest
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="bezier.html" class="code" title="function [x,y,z] = bezier(P,h)">bezier</a>	BEZIER Returns x,y,z values of a 3D bezier-curve with the given control points P and</li><li><a href="createBicubicCoefMatrices.html" class="code" title="function [Acoefs, B1coefs, B2coefs, Ccoefs] = createBicubicCoefMatrices(num_of_quads)">createBicubicCoefMatrices</a>	% createBicubicCoefMatrices</li><li><a href="createExtraOrdCoefsMatrix.html" class="code" title="function coefsMatrix = createExtraOrdCoefsMatrix(parameterCoordinates,coefs_raw)">createExtraOrdCoefsMatrix</a>	</li><li><a href="getBicubicPatchIndex.html" class="code" title="function bezierPoints = getBicubicPatchIndex(ind, As, Bs, Cs)">getBicubicPatchIndex</a>	nomenclature following that of paper of Eck, Hoppe (Automatic</li><li><a href="getBiquadraticPatch.html" class="code" title="function bezierPoints = getBiquadraticPatch(controlPoints)">getBiquadraticPatch</a>	given a 3x3 3-dim array of points, where the first dimension is (x,y,z)</li><li><a href="plotPoints.html" class="code" title="function tempMatrix = plotPoints(points)">plotPoints</a>	</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 
+0002 numPoints = 20;
+0003 
+0004 polParams = rand(numPoints,1);
+0005 torParams = rand(numPoints,1);
+0006 
+0007 minorRads =  (2   +rand(numPoints,1) ).*(1+0.1.*cos(2*pi*3.*torParams));
+0008 majorRadis = 9 .*(1+0.05.*sin(2*pi*3.*torParams));
+0009 
+0010 torusPointY = @(majorRad,minorRad,torAngle,polAngle) sin(torAngle).*(majorRad + cos(polAngle).*minorRad);
+0011 torusPointX = @(majorRad,minorRad,torAngle,polAngle) cos(torAngle).*(majorRad + cos(polAngle).*minorRad);
+0012 torusPointZ = @(majorRad,minorRad,torAngle,polAngle) sin(polAngle).*minorRad;
+0013 
+0014 torPerturbations = 1 + 0.1.*sin(torParams*2*pi);
+0015 polPerturbations = 1 + 0.1.*sin(polParams*2*pi);
+0016 
+0017 torParamsPerturbed = torParams .* torPerturbations;
+0018 polParamsPerturbed = polParams .* polPerturbations;
+0019 
+0020 pointsX = torusPointX(majorRadis, minorRads, torParamsPerturbed*2*pi, polParamsPerturbed*2*pi);
+0021 pointsY = torusPointY(majorRadis, minorRads, torParamsPerturbed*2*pi, polParamsPerturbed*2*pi);
+0022 pointsZ = torusPointZ(majorRadis, minorRads, torParamsPerturbed*2*pi, polParamsPerturbed*2*pi);
+0023 
+0024 figure;
+0025 scatter3(pointsX,pointsY,pointsZ);
+0026 
+0027 mod_index = @(i,modul) mod(i-1,modul) + 1;
+0028 m = 4;
+0029 <span class="comment">%create coefs template once</span>
+0030 [Acoefs, B1coefs, B2coefs, Ccoefs] = <a href="createBicubicCoefMatrices.html" class="code" title="function [Acoefs, B1coefs, B2coefs, Ccoefs] = createBicubicCoefMatrices(num_of_quads)">createBicubicCoefMatrices</a>(m);
+0031 coefs_raw = cat(1, reshape(Acoefs,1,m,4,4),reshape(B1coefs,1,m,4,4),reshape(B2coefs,1,m,4,4),reshape(Ccoefs,1,m,4,4));
+0032 
+0033 
+0034 <span class="comment">%create coefficients matrix</span>
+0035 paramCoords = [torParams , polParams];
+0036 coefsThreeDMatrix = <a href="createExtraOrdCoefsMatrix.html" class="code" title="function coefsMatrix = createExtraOrdCoefsMatrix(parameterCoordinates,coefs_raw)">createExtraOrdCoefsMatrix</a>(paramCoords,coefs_raw);
+0037 
+0038 <span class="comment">% make it in matrix-vector form</span>
+0039 dataPoints = [pointsX, pointsY, pointsZ];
+0040 domainM = size(coefsThreeDMatrix,2)-2;
+0041 domainN = size(coefsThreeDMatrix,3)-2;
+0042 
+0043 numCols = (domainM) * (domainN);
+0044 coefsTwoDMatrix = zeros (numPoints,numCols);
+0045 
+0046 reducedMod = @ (i,size) mod(i-1,size)+1;
+0047 
+0048 localIndex = @(i,j,iwidth,jwidth) (reducedMod(j-1,jwidth)-1) * iwidth + reducedMod(i-1,iwidth);
+0049 
+0050 
+0051 <span class="keyword">for</span> j = 1:domainN+2
+0052     <span class="keyword">for</span> i = 1:domainM+2
+0053         loc_ind = localIndex(i,j,domainM,domainN);
+0054         <span class="keyword">for</span> p = 1:numPoints
+0055             coefsTwoDMatrix(p,loc_ind) = <span class="keyword">...</span>
+0056                 coefsTwoDMatrix(p,loc_ind) + coefsThreeDMatrix(p,i,j);
+0057         <span class="keyword">end</span>
+0058     <span class="keyword">end</span>
+0059 <span class="keyword">end</span>
+0060 
+0061 bezierControlPoints = coefsTwoDMatrix\dataPoints;
+0062 
+0063 petersPoints = zeros(3,domainM+2,domainN+2);
+0064 <span class="keyword">for</span> i = 1:domainM+2
+0065     <span class="keyword">for</span> j = 1:domainN+2
+0066         petersPoints(:,i,j) = bezierControlPoints(localIndex(i,j,domainM,domainN),:);
+0067     <span class="keyword">end</span>
+0068 <span class="keyword">end</span>
+0069 figure;
+0070 <a href="plotPoints.html" class="code" title="function tempMatrix = plotPoints(points)">plotPoints</a>(petersPoints);
+0071 hold on;
+0072 plot3(pointsX,pointsY,pointsZ,<span class="string">'ro'</span>);
+0073 
+0074 biQuadPatch = zeros(3,3,3);
+0075 biCubePatch = zeros(3,4,4);
+0076 whichQuadrant = [[3;4] , [2;1]];
+0077 AInds = [[5;5],   [2;5],    [2;2],    [5;2]];
+0078 B1Inds = [[5;4],  [3;5],    [2;3],   [ 4;2]];
+0079 B2Inds = [[4;5],  [2;4],    [3;2],   [ 5;3]];
+0080 CInds = [[4;4],   [3;4],   [ 3;3],   [ 4;3]];
+0081 
+0082 As = zeros(3,4);
+0083 Bs = zeros(3,2,4);
+0084 Cs = zeros(3,4);
+0085 shifted_indices = @(ind,modul) mod_index((0:(modul-1)) + ind,modul);
+0086 
+0087 <span class="keyword">for</span> j = 2:(domainN+1)
+0088     <span class="keyword">for</span> i = 2:(domainM+1)
+0089         <span class="keyword">if</span>(((i ~= 3) &amp;&amp; (i~= 4)) || ((j ~= 3) &amp;&amp; (j ~= 4)))
+0090             neighbours = petersPoints(:,(i-1):(i+1),(j-1):(j+1));
+0091             biQuadPatch = <a href="getBiquadraticPatch.html" class="code" title="function bezierPoints = getBiquadraticPatch(controlPoints)">getBiquadraticPatch</a>(neighbours);
+0092             <a href="plotPoints.html" class="code" title="function tempMatrix = plotPoints(points)">plotPoints</a>(biQuadPatch);
+0093             [x,y,z] = <a href="bezier.html" class="code" title="function [x,y,z] = bezier(P,h)">bezier</a>(biQuadPatch,0.1);
+0094             surf(x,y,z);
+0095         <span class="keyword">else</span>
+0096             quadr = whichQuadrant(i-2,j-2);
+0097             indShift = shifted_indices(quadr,4);
+0098             As(:,1) = petersPoints(:,AInds(1,indShift(1)),AInds(2,indShift(1)));
+0099             <span class="keyword">for</span> k = 1:4
+0100                 Bs(:,1,k) = petersPoints(:,B1Inds(1,indShift(k)),B1Inds(2,indShift(k)));
+0101                 Bs(:,2,k) = petersPoints(:,B2Inds(1,indShift(k)),B2Inds(2,indShift(k)));
+0102                 Cs(:,k) = petersPoints(:,CInds(1,indShift(k)),CInds(2,indShift(k)));
+0103             <span class="keyword">end</span>
+0104             biCubePatch = <a href="getBicubicPatchIndex.html" class="code" title="function bezierPoints = getBicubicPatchIndex(ind, As, Bs, Cs)">getBicubicPatchIndex</a>(1,As,Bs,Cs);
+0105             <a href="plotPoints.html" class="code" title="function tempMatrix = plotPoints(points)">plotPoints</a>(biCubePatch);
+0106             [x,y,z] = <a href="bezier.html" class="code" title="function [x,y,z] = bezier(P,h)">bezier</a>(biCubePatch,0.05);
+0107             surf(x,y,z);
+0108         <span class="keyword">end</span>        
+0109     <span class="keyword">end</span>
+0110 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Thu 10-Dec-2015 17:05:22 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

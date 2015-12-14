@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of plotDataPoints</title>
+  <meta name="keywords" content="plotDataPoints">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">GSpline</a> &gt; plotDataPoints.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for GSpline&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>plotDataPoints
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 
+0002 quad_list = quads_Torus;
+0003 quad_control_points = regularPoints;
+0004 quad_vertex_points = torus_verts_coarse;
+0005 dataPoints = newPoints;
+0006 parameterPoints = newParams;
+0007 APoints = A;
+0008 B1Points = B1;
+0009 B2Points = B2;
+0010 CPoints = C;
+0011 coef_matrix = coefs;
+0012 numParameters = size(dataPoints,1);
+0013 color_inactive_control_point = [0.8,.8,.8];
+0014 color_inactive_vertex_point = [0.4,.4,.4];
+0015 hold on;
+0016 
+0017 <span class="keyword">for</span> index = 1:length(quad_control_points(:));
+0018     thisPoint = getVertexOnQuad(quad_list,quad_vertex_points,quad_control_points,quad_control_points(index));
+0019     scatter3(thisPoint(1),thisPoint(2),thisPoint(3),<span class="string">'MarkerEdgeColor'</span>,color_inactive_control_point);
+0020     
+0021 <span class="keyword">end</span>
+0022 <span class="keyword">for</span> index = 1:size(quad_vertex_points,1);
+0023     thisPoint = quad_vertex_points(index,:);
+0024     scatter3(thisPoint(1),thisPoint(2),thisPoint(3),<span class="string">'MarkerEdgeColor'</span>,color_inactive_vertex_point);
+0025     
+0026 <span class="keyword">end</span>
+0027 pause
+0028 
+0029 <span class="keyword">for</span> p = 1:numParameters
+0030     quad_index = parameterPoints(p,1);
+0031     thisQuadVertices = quad_vertex_points(quad_list(quad_index,:),:);
+0032     theDataPoint = dataPoints(p,:);
+0033     scatter3(theDataPoint(:,1),theDataPoint(:,2),theDataPoint(:,3),<span class="keyword">...</span>
+0034         <span class="string">'MarkerEdgeColor'</span>,<span class="string">'r'</span>);
+0035     
+0036     scatter3(thisQuadVertices(:,1),thisQuadVertices(:,2),thisQuadVertices(:,3),<span class="keyword">...</span>
+0037         <span class="string">'MarkerEdgeColor'</span>,[0.0 .5 .0]);
+0038 
+0039     theVertexPoints = find(coef_matrix(p,:));
+0040     
+0041     <span class="keyword">for</span> i = 1:length(theVertexPoints)
+0042         pointColor = 1-coef_matrix(p,theVertexPoints(i));
+0043         theVertexPoint = getVertexOnQuad(quad_list,quad_vertex_points,quad_control_points,theVertexPoints(i));
+0044         scatter3(theVertexPoint(:,1),theVertexPoint(:,2),theVertexPoint(:,3),<span class="keyword">...</span>
+0045         <span class="string">'MarkerEdgeColor'</span>,[pointColor/2 pointColor/2 1],<span class="keyword">...</span>
+0046         <span class="string">'MarkerFaceColor'</span>,[pointColor/2 pointColor/2 1]);
+0047     <span class="keyword">end</span>
+0048     pause
+0049     
+0050     scatter3(theDataPoint(:,1),theDataPoint(:,2),theDataPoint(:,3),<span class="keyword">...</span>
+0051         <span class="string">'MarkerEdgeColor'</span>,[1 1 1]);
+0052     <span class="keyword">for</span> i = 1:length(theVertexPoints)
+0053         theVertexPoint = getVertexOnQuad(quad_list,quad_vertex_points,quad_control_points,theVertexPoints(i));
+0054         scatter3(theVertexPoint(:,1),theVertexPoint(:,2),theVertexPoint(:,3),<span class="keyword">...</span>
+0055         <span class="string">'MarkerEdgeColor'</span>,color_inactive_control_point,<span class="keyword">...</span>
+0056         <span class="string">'MarkerFaceColor'</span>,[1 1 1]);
+0057     <span class="keyword">end</span>
+0058      scatter3(thisQuadVertices(:,1),thisQuadVertices(:,2),thisQuadVertices(:,3),<span class="keyword">...</span>
+0059         <span class="string">'MarkerEdgeColor'</span>,color_inactive_vertex_point);
+0060 <span class="comment">%     pause;</span>
+0061 <span class="comment">%     scatter3(thisQuadVertices(:,1),thisQuadVertices(:,2),thisQuadVertices(:,3),...</span>
+0062 <span class="comment">%         'MarkerEdgeColor','b',...</span>
+0063 <span class="comment">%         'MarkerFaceColor','b');</span>
+0064 <span class="comment">%     scatter3(thisQuadsDataPoint(:,1),thisQuadsDataPoint(:,2),thisQuadsDataPoint(:,3),...</span>
+0065 <span class="comment">%         'MarkerEdgeColor','b');</span>
+0066 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Thu 10-Dec-2015 17:05:22 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

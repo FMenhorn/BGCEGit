@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of createTorusParams</title>
+  <meta name="keywords" content="createTorusParams">
+  <meta name="description" content="% create a set of ideal data complying to the stuff">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">GSpline</a> &gt; createTorusParams.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for GSpline&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>createTorusParams
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>% create a set of ideal data complying to the stuff</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">% create a set of ideal data complying to the stuff</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="plotQuadOrQuadsWithHairs.html" class="code" title="">plotQuadOrQuadsWithHairs</a>	% script to create model torus quads</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">%% create a set of ideal data complying to the stuff</span>
+0002 
+0003 <span class="comment">%num datapoints in toroidal and poloidal directions</span>
+0004 numPoints1D = 31;
+0005 
+0006 stepSize = 1/(numPoints1D);
+0007 
+0008 
+0009 <span class="comment">% polParams = 0:stepSize:(1-stepSize);</span>
+0010 <span class="comment">% torParams = 0:stepSize:(1-stepSize);</span>
+0011 [polParams,torParams] = meshgrid(0:stepSize:(1-stepSize));
+0012 
+0013 <span class="comment">%generate datapoints on a torus</span>
+0014 minorRad = 1;
+0015 majorRad = 2;
+0016 
+0017 <span class="comment">%minor and major radius vectors</span>
+0018 minorRads = minorRad*(1+0.0.*cos(2*pi*6.*torParams(:)));<span class="comment">%.*(1 + 0.0*rand(numPoints1D,1));</span>
+0019 majorRadis = majorRad.*(1+0.0.*sin(2*pi*3.*torParams(:)));
+0020 
+0021 <span class="comment">%x y z vectors on torus: functions</span>
+0022 torusPointY = @(majorRadius,minorRadius,torAngle,polAngle) sin(torAngle).*(majorRadius + cos(polAngle).*minorRadius);
+0023 torusPointX = @(majorRadius,minorRadius,torAngle,polAngle) cos(torAngle).*(majorRadius + cos(polAngle).*minorRadius);
+0024 torusPointZ = @(majorRadius,minorRadius,torAngle,polAngle) sin(polAngle).*minorRadius;
+0025 
+0026 torPerturbations = 1 + 0.0.*sin(torParams(:)*2*pi);
+0027 polPerturbations = 1 + 0.0.*sin(polParams(:)*2*pi);
+0028 
+0029 torParamsPerturbed = torParams(:) .* torPerturbations;
+0030 polParamsPerturbed = polParams(:) .* polPerturbations;
+0031 
+0032 <span class="comment">%x y z vectors on torus: data</span>
+0033 pointsX = torusPointX(majorRadis, minorRads, torParamsPerturbed*2*pi, polParamsPerturbed*2*pi);
+0034 pointsY = torusPointY(majorRadis, minorRads, torParamsPerturbed*2*pi, polParamsPerturbed*2*pi);
+0035 pointsZ = torusPointZ(majorRadis, minorRads, torParamsPerturbed*2*pi, polParamsPerturbed*2*pi);
+0036 
+0037 <span class="comment">%num of patches per dimension (need to number the vertices of the quads</span>
+0038 <span class="comment">%manually though if you change!)</span>
+0039 patches1D = 3;
+0040 
+0041 whichPatch = [floor(patches1D.*torParams(:)),floor(patches1D.*polParams(:))];
+0042 localCoords = [patches1D.*torParams(:), patches1D.*polParams(:)] - whichPatch;
+0043 linearPatchNumber = whichPatch(:,1) + patches1D.*whichPatch(:,2);
+0044 
+0045 createdParams = [linearPatchNumber,localCoords];
+0046 createdPoints = [pointsX,pointsY,pointsZ];
+0047 createdQuads = <span class="keyword">...</span>
+0048    [0 1 4 3;<span class="keyword">...</span>
+0049     1 2 5 4;<span class="keyword">...</span>
+0050     2 0 3 5;<span class="keyword">...</span>
+0051     3 4 7 6;<span class="keyword">...</span>
+0052     4 5 8 7;<span class="keyword">...</span>
+0053     5 3 6 8;<span class="keyword">...</span>
+0054     6 7 1 0;<span class="keyword">...</span>
+0055     7 8 2 1;<span class="keyword">...</span>
+0056     8 6 0 2];
+0057 
+0058 whichQuadY = @(i) floor(i/patches1D);
+0059 whichQuadX = @(i) i-patches1D*whichQuadY(i);
+0060 createdQuadVerts = zeros(patches1D,3);
+0061 <span class="keyword">for</span> torI = 0:patches1D-1
+0062     <span class="keyword">for</span> polI = 0:patches1D-1
+0063         createdQuadVerts(patches1D*polI + torI + 1,:) = [torusPointX(majorRad,minorRad,torI*2*pi/patches1D,polI*2*pi/patches1D),<span class="keyword">...</span>
+0064             torusPointY(majorRad,minorRad,torI*2*pi/patches1D,polI*2*pi/patches1D),<span class="keyword">...</span>
+0065             torusPointZ(majorRad,minorRad,torI*2*pi/patches1D,polI*2*pi/patches1D)];
+0066     <span class="keyword">end</span>
+0067 <span class="keyword">end</span>
+0068 
+0069 <span class="comment">% lin_interp = @(u,vec1,vec2)  vec1 * (2*u-1) + (1-u) * vec2;</span>
+0070 
+0071 
+0072 
+0073 
+0074 
+0075</pre></div>
+<hr><address>Generated on Thu 10-Dec-2015 17:05:22 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

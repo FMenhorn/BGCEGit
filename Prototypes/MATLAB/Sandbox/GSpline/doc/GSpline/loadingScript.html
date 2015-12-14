@@ -1,0 +1,145 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of loadingScript</title>
+  <meta name="keywords" content="loadingScript">
+  <meta name="description" content="% script for loading data and preformatting the indices for matlab">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">GSpline</a> &gt; loadingScript.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for GSpline&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>loadingScript
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>% script for loading data and preformatting the indices for matlab</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">% script for loading data and preformatting the indices for matlab</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="scaleAwayParameters.html" class="code" title="function [scaledParams,throwndata] = scaleAwayParameters(unscaledParams,datapoints)">scaleAwayParameters</a>	</li><li><a href="sortAB1B2VIndices.html" class="code" title="function [newA,newB1,newB2,newC] = sortAB1B2VIndices(oldA,oldB1,oldB2,oldC)">sortAB1B2VIndices</a>	</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="runningScript.html" class="code" title="">runningScript</a>	</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">%% script for loading data and preformatting the indices for matlab</span>
+0002 
+0003 <span class="comment">%% PART 1: JUST DEFINING A LOT OF NAMES FOR LATER (ignore if you want)</span>
+0004 parametersString = <span class="string">'param.csv'</span>;
+0005 dataPointsString = <span class="string">'verts_fine.csv'</span>;
+0006 quadsString = <span class="string">'quads_coarse.csv'</span>;
+0007 verticesString = <span class="string">'matlabData.mat'</span>;
+0008 baseFolder = <span class="string">'TorusData/'</span>;
+0009 subFolder = <span class="string">'torussssss/'</span>;
+0010 folder = strcat(baseFolder,subFolder);
+0011 
+0012 data_parameters = strcat(folder,parametersString);
+0013 data_datapoints = strcat(folder,dataPointsString);
+0014 data_quads = strcat(folder,quadsString);
+0015 data_vertices = strcat(folder,verticesString);
+0016 
+0017 
+0018 
+0019 data_given_parameters = <span class="string">'TestData/params_DCTorus.csv'</span>;
+0020 data_made_parameters = <span class="string">'TestData/parameters.csv'</span>;
+0021 data_given_parameters_new = <span class="string">'../../../PYTHON/Sandbox/SurfaceFitting/Cantilever_data/parameters.csv'</span>;
+0022 data_given_sphere_parameters = <span class="string">'../../../PYTHON/Sandbox/SurfaceFitting/Sphere_data/sphere_parameters.csv'</span>;
+0023 data_parameters_torus_new = <span class="string">'TorusData/newTorus/param.csv'</span>;
+0024 data_parameters_torus_new_unscaled = <span class="string">'TorusData/uncroppedTorus/param.csv'</span>;
+0025 data_parameters_torus_newdatavers = <span class="string">'TorusData/Doubletorus_Data/param.csv'</span>;
+0026 data_parameters_torus_finer = <span class="string">'TorusData/Torus_Data/param.csv'</span>;
+0027 
+0028 
+0029 
+0030 
+0031 data_given_datapoints = <span class="string">'TestData/torus_verts_fine.csv'</span>;
+0032 data_given_datapoints_new = <span class="string">'../../../PYTHON/Sandbox/SurfaceFitting/Cantilever_data/torus_verts_fine.csv'</span>;
+0033 data_made_datapoints = <span class="string">'TestData/torus_datapoints.csv'</span>;
+0034 data_given_sphere_datapoints = <span class="string">'../../../PYTHON/Sandbox/SurfaceFitting/Sphere_data/sphere_verts_fine.csv'</span>;
+0035 data_datapoints_torus_new = <span class="string">'TorusData/newTorus/verts_fine.csv'</span>;
+0036 data_datapoints_torus_new_unscaled = <span class="string">'TorusData/uncroppedTorus/verts_fine.csv'</span>;
+0037 data_datapoints_torus_newdatavers = <span class="string">'TorusData/Doubletorus_Data/verts_fine.csv'</span>;
+0038 data_datapoints_torus_finer = <span class="string">'TorusData/Torus_Data/verts_fine.csv'</span>;
+0039 
+0040 
+0041 data_given_torus_quads = <span class="string">'TestData/quads_Torus_erik.csv'</span>;
+0042 data_given_torus_quads_new = <span class="string">'../../../PYTHON/Sandbox/SurfaceFitting/Cantilever_data/quads_Torus_erik.csv'</span>;
+0043 data_made_torus_quads = <span class="string">'TestData/quads_Torus.csv'</span>;
+0044 data_given_sphere_quads = <span class="string">'../../../PYTHON/Sandbox/SurfaceFitting/Sphere_data/sphere_quads_coarse.csv'</span>;
+0045 data_quads_torus_new = <span class="string">'TorusData/newTorus/quads_coarse.csv'</span>;
+0046 data_quads_torus_new_unscaled = <span class="string">'TorusData/uncroppedTorus/quads_coarse.csv'</span>;
+0047 data_quads_torus_newdatavers = <span class="string">'TorusData/Doubletorus_Data/quads_coarse.csv'</span>;
+0048 data_quads_torus_finer = <span class="string">'TorusData/Torus_Data/quads_coarse.csv'</span>;
+0049 
+0050 data_given_torus_vertices = <span class="string">'TestData/torus_point_data_bak.mat'</span>;
+0051 data_given_torus_vertices_new = <span class="string">'../../../PYTHON/Sandbox/SurfaceFitting/Resolution2/torus_point_data_bak.mat'</span>;
+0052 data_made_torus_vertices = <span class="string">'TestData/torus_point_data.mat'</span>;
+0053 data_given_sphere_vertices = <span class="string">'../../../PYTHON/Sandbox/DooSabin/torus_point_data.mat'</span>;
+0054 data_vertices_torus_new = <span class="string">'TorusData/newTorus/matlabData.mat'</span>;
+0055 data_vertices_torus_new_unscaled = <span class="string">'TorusData/uncroppedTorus/matlabData.mat'</span>;
+0056 data_vertices_torus_newdatavers = <span class="string">'TorusData/Doubletorus_Data/matlabData.mat'</span>;
+0057 data_vertices_torus_finer = <span class="string">'TorusData/Torus_Data/matlabData.mat'</span>;
+0058 
+0059 <span class="comment">%% PART 2: Actually loading the data, using the previous strings as file names.</span>
+0060 
+0061 <span class="comment">%a): load quad csv-file (indices of the vertices of all quads in a Nx4</span>
+0062 <span class="comment">%array</span>
+0063 quads_Torus = load(data_quads);
+0064 
+0065 <span class="comment">%b): load .mat file with DooSabin information for indexing of the patch</span>
+0066 <span class="comment">%points</span>
+0067 load(data_vertices);
+0068 
+0069 <span class="comment">%c) load parameters csv-file with Mx3 array of [quad index],[u],[v] for</span>
+0070 <span class="comment">%ever datapoint (fine grid point)</span>
+0071 parameters = load(data_parameters);
+0072 
+0073 <span class="comment">%d) load the datapoint (fine grid point) locations as a Mx3 array of</span>
+0074 <span class="comment">%[x],[y],[z]</span>
+0075 torus_verts_fine = load(data_datapoints);
+0076 
+0077 
+0078 <span class="comment">%% PART 3: Preprocess to change from Python to Matlab indexing etc.</span>
+0079 
+0080 <span class="comment">%a): Throw away any datapoints which are outside the parameter range [0,1]</span>
+0081 <span class="comment">%since these cause trouble. (+ Scale the resulting ones so that max and min</span>
+0082 <span class="comment">%param values are 1 and 0 repspectively in both u and v)</span>
+0083 [parameters,torus_verts_fine] = <a href="scaleAwayParameters.html" class="code" title="function [scaledParams,throwndata] = scaleAwayParameters(unscaledParams,datapoints)">scaleAwayParameters</a>(parameters,torus_verts_fine);
+0084 
+0085 <span class="comment">%b): Reindex</span>
+0086 A = A + 1;
+0087 B1 = B1 + 1;
+0088 B2 = B2 + 1;
+0089 C = C + 1;
+0090 
+0091 <span class="comment">%c): Sort the A, B1, B2 and C so that the second index corresponds to the</span>
+0092 <span class="comment">%same quad for all arrays and stuff</span>
+0093 [newA,newB1,newB2,newC] = <a href="sortAB1B2VIndices.html" class="code" title="function [newA,newB1,newB2,newC] = sortAB1B2VIndices(oldA,oldB1,oldB2,oldC)">sortAB1B2VIndices</a>(A,B1,B2,C);
+0094 
+0095 <span class="comment">%d): Final reindexing</span>
+0096 parameters(:,1) = parameters(:,1) + 1;
+0097 quads_Torus = quads_Torus + 1;
+0098 regularPoints = regularPoints + 1;</pre></div>
+<hr><address>Generated on Thu 10-Dec-2015 17:05:22 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

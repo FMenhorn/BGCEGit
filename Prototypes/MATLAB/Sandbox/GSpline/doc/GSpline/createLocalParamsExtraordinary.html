@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of createLocalParamsExtraordinary</title>
+  <meta name="keywords" content="createLocalParamsExtraordinary">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">GSpline</a> &gt; createLocalParamsExtraordinary.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for GSpline&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>createLocalParamsExtraordinary
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ localParams, nearWhich, whichPatch ] = createLocalParamsExtraordinary(global_quad_params) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="createGlobalControlMeshCoefs.html" class="code" title="function coefsMatrix = createGlobalControlMeshCoefs(parameterCoordinates,quad_list,AVertexList,B1VertexList,B2VertexList,CVertexList,quad_control_point_indices)">createGlobalControlMeshCoefs</a>	takes, for N datapoints, an array parameterCoordinates[Nx3](for every</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ localParams, nearWhich, whichPatch ] = createLocalParamsExtraordinary(global_quad_params)</a>
+0002 <span class="comment">%</span>
+0003 nearWhich = -1; <span class="comment">%default error!</span>
+0004 whichPatch = floor(global_quad_params*4);
+0005 whichPatch(whichPatch &gt; 3.5) = 3; <span class="comment">% cap at 4 - can get 5 otherwise</span>
+0006 shifted_scaled_coords = global_quad_params*4 - whichPatch;
+0007 shifted_scaled_coords(global_quad_params &gt;= 1) = 1; <span class="comment">%so param 1 doesn't give 0)</span>
+0008 
+0009 whichPatch = whichPatch + 1;
+0010 localParams = shifted_scaled_coords;
+0011 <span class="keyword">if</span>(global_quad_params(1) &lt;= 0.25)
+0012     <span class="keyword">if</span>(global_quad_params(2) &lt;= 0.25)
+0013         <span class="comment">%bottom-left. Need to rotate by 180 degrees, but u stays u-dir and v</span>
+0014         <span class="comment">%stays v-dir</span>
+0015         coordinatesReversed = 1 - shifted_scaled_coords;
+0016         localParams = [coordinatesReversed(1), coordinatesReversed(2)];
+0017         nearWhich = 1;
+0018     <span class="keyword">elseif</span> (global_quad_params(2) &gt;= 0.75)
+0019         <span class="comment">%upper-left corner. Local u is global v, and local v is global 1-u.</span>
+0020         localParams = [shifted_scaled_coords(2), 1-shifted_scaled_coords(1)];
+0021         nearWhich = 4;        
+0022     <span class="keyword">end</span>  
+0023 <span class="keyword">elseif</span>(global_quad_params(1) &gt;= 0.75)
+0024     <span class="keyword">if</span>(global_quad_params(2) &lt;= 0.25)
+0025         <span class="comment">%bottom-right. Local u is global 1-v, local v is u.</span>
+0026         localParams = [1-shifted_scaled_coords(2), shifted_scaled_coords(1)];
+0027         nearWhich = 2;
+0028     <span class="keyword">elseif</span>(global_quad_params(2) &gt;= 0.75)
+0029         <span class="comment">%upper-right. NO SWITCHIES!!!!</span>
+0030         localParams = shifted_scaled_coords;
+0031         nearWhich = 3;
+0032     <span class="keyword">end</span>
+0033 <span class="keyword">else</span>
+0034     <span class="keyword">while</span>((whichPatch == 1) | (whichPatch == 4)) <span class="comment">% both are 1/4! we're in a corner! error</span>
+0035         warning(<span class="string">'thingy thought we were in a corner when we weren&quot;t, so shifting. in createLocalParamsExtraordinary.m'</span>)
+0036         <span class="comment">%should be really close to next patch, so try</span>
+0037         moved_params = global_quad_params - 0.5;
+0038         [~,closestCoordToMid] = min(abs(moved_params));
+0039         <span class="comment">%move the coordinate, and adjust param to edge</span>
+0040         whichPatch(closestCoordToMid) = whichPatch(closestCoordToMid) - sign(moved_params(closestCoordToMid));
+0041         localParams(closestCoordToMid) = moved_params(closestCoordToMid) &lt; 0;
+0042     <span class="keyword">end</span>    
+0043 <span class="keyword">end</span>
+0044 
+0045 
+0046</pre></div>
+<hr><address>Generated on Thu 10-Dec-2015 17:05:22 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

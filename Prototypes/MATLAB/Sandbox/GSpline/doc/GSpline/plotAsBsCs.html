@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of plotAsBsCs</title>
+  <meta name="keywords" content="plotAsBsCs">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">GSpline</a> &gt; plotAsBsCs.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for GSpline&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>plotAsBsCs
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="getNumOfEdgesMeetingMatlab.html" class="code" title="function [ numOfEdgesMeeting ] = getNumOfEdgesMeetingMatlab( neighbour_matrix, orig_vertex_id_matlab )">getNumOfEdgesMeetingMatlab</a>	GETNUMOFEDGESMEETING Summary of this function goes here</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 
+0002 
+0003 mod_index = @(i,modul) mod(i-1,modul) + 1;
+0004 
+0005 quad_list = quads_Torus;
+0006 quad_control_points = regularPoints;
+0007 quad_vertex_points = torus_verts_coarse;
+0008 dataPoints = newPoints;
+0009 parameterPoints = newParams;
+0010 APoints = newA;
+0011 B1Points = newB1;
+0012 B2Points = newB2;
+0013 CPoints = newC;
+0014 
+0015 numQuads = size(quad_list,1);
+0016 
+0017 scatter3(quad_vertex_points(:,1),quad_vertex_points(:,2),quad_vertex_points(:,3),<span class="keyword">...</span>
+0018         <span class="string">'MarkerEdgeColor'</span>,<span class="string">'k'</span>);
+0019 hold on;
+0020 
+0021 <span class="keyword">for</span> q = 1:numQuads
+0022     thisQuadVertices = quad_vertex_points(quad_list(q,:),:);
+0023     thisQuadsVertexIndices = quad_list(q,:);
+0024     thisQuadsDataPoints = dataPoints(parameterPoints(:,1) == q,:);
+0025     hold on;
+0026     scatter3(thisQuadVertices(:,1),thisQuadVertices(:,2),thisQuadVertices(:,3),<span class="keyword">...</span>
+0027         <span class="string">'MarkerEdgeColor'</span>,<span class="string">'r'</span>);
+0028     <span class="keyword">for</span> i = 1:4
+0029         
+0030         thisVertexIndex = thisQuadsVertexIndices(i);
+0031         scatter3(quad_vertex_points(thisVertexIndex,1),quad_vertex_points(thisVertexIndex,2),quad_vertex_points(thisVertexIndex,3),<span class="keyword">...</span>
+0032         <span class="string">'MarkerEdgeColor'</span>,<span class="string">'r'</span>,<span class="keyword">...</span>
+0033         <span class="string">'MarkerFaceColor'</span>,<span class="string">'r'</span>);
+0034         thisQuadLocalIndex = find(APoints(thisVertexIndex,:,2) == q);
+0035         scatter3(thisQuadVertices(i,1),thisQuadVertices(i,2),thisQuadVertices(i,3));
+0036         m = <a href="getNumOfEdgesMeetingMatlab.html" class="code" title="function [ numOfEdgesMeeting ] = getNumOfEdgesMeetingMatlab( neighbour_matrix, orig_vertex_id_matlab )">getNumOfEdgesMeetingMatlab</a>(APoints,thisVertexIndex);
+0037         <span class="keyword">for</span> k = 1:m
+0038             
+0039             
+0040             currentAPoint = getVertexOnQuad(<span class="keyword">...</span>
+0041                 quad_list,quad_vertex_points,quad_control_points,APoints(thisVertexIndex,mod_index(thisQuadLocalIndex-1+k,m),1));
+0042             currentB1Point = getVertexOnQuad(<span class="keyword">...</span>
+0043                 quad_list,quad_vertex_points,quad_control_points,B1Points(thisVertexIndex,mod_index(thisQuadLocalIndex-1+k,m),1));
+0044             currentB2Point = getVertexOnQuad(<span class="keyword">...</span>
+0045                 quad_list,quad_vertex_points,quad_control_points,B2Points(thisVertexIndex,mod_index(thisQuadLocalIndex-1+k,m),1));
+0046             currentCPoint = getVertexOnQuad(<span class="keyword">...</span>
+0047                 quad_list,quad_vertex_points,quad_control_points,CPoints(thisVertexIndex,mod_index(thisQuadLocalIndex-1+k,m),1));
+0048             scatter3(currentAPoint(:,1),currentAPoint(:,2),currentAPoint(:,3),<span class="string">'MarkerEdgeColor'</span>,<span class="string">'g'</span>);
+0049             scatter3(currentB1Point(:,1),currentB1Point(:,2),currentB1Point(:,3),<span class="string">'MarkerEdgeColor'</span>,[1,0,1]);
+0050             scatter3(currentB2Point(:,1),currentB2Point(:,2),currentB2Point(:,3),<span class="string">'MarkerEdgeColor'</span>,<span class="string">'y'</span>);
+0051             scatter3(currentCPoint(:,1),currentCPoint(:,2),currentCPoint(:,3),<span class="string">'MarkerEdgeColor'</span>,[0,.75,.75]);
+0052             pause;
+0053             scatter3(currentAPoint(:,1),currentAPoint(:,2),currentAPoint(:,3),<span class="string">'MarkerEdgeColor'</span>,<span class="string">'b'</span>);
+0054             scatter3(currentB1Point(:,1),currentB1Point(:,2),currentB1Point(:,3),<span class="string">'MarkerEdgeColor'</span>,<span class="string">'b'</span>);
+0055             scatter3(currentB2Point(:,1),currentB2Point(:,2),currentB2Point(:,3),<span class="string">'MarkerEdgeColor'</span>,<span class="string">'b'</span>);
+0056             scatter3(currentCPoint(:,1),currentCPoint(:,2),currentCPoint(:,3),<span class="string">'MarkerEdgeColor'</span>,<span class="string">'b'</span>);
+0057             
+0058         <span class="keyword">end</span>
+0059         scatter3(quad_vertex_points(thisVertexIndex,1),quad_vertex_points(thisVertexIndex,2),quad_vertex_points(thisVertexIndex,3),<span class="keyword">...</span>
+0060         <span class="string">'MarkerEdgeColor'</span>,<span class="string">'b'</span>,<span class="keyword">...</span>
+0061         <span class="string">'MarkerFaceColor'</span>,<span class="string">'b'</span>);
+0062         
+0063         
+0064     <span class="keyword">end</span>
+0065     scatter3(thisQuadVertices(:,1),thisQuadVertices(:,2),thisQuadVertices(:,3),<span class="keyword">...</span>
+0066         <span class="string">'MarkerEdgeColor'</span>,<span class="string">'b'</span>);
+0067 <span class="comment">%     scatter3(thisQuadsDataPoints(:,1),thisQuadsDataPoints(:,2),thisQuadsDataPoints(:,3),...</span>
+0068 <span class="comment">%         'MarkerEdgeColor','r');</span>
+0069 <span class="comment">%     pause;</span>
+0070 <span class="comment">%     scatter3(thisQuadVertices(:,1),thisQuadVertices(:,2),thisQuadVertices(:,3),...</span>
+0071 <span class="comment">%         'MarkerEdgeColor','b',...</span>
+0072 <span class="comment">%         'MarkerFaceColor','b');</span>
+0073 <span class="comment">%     scatter3(thisQuadsDataPoints(:,1),thisQuadsDataPoints(:,2),thisQuadsDataPoints(:,3),...</span>
+0074 <span class="comment">%         'MarkerEdgeColor','b');</span>
+0075 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Thu 10-Dec-2015 17:05:22 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

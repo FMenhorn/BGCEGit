@@ -1,0 +1,69 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of petersPlot</title>
+  <meta name="keywords" content="petersPlot">
+  <meta name="description" content="% Peter's scheme plot">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">GSpline</a> &gt; petersPlot.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for GSpline&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>petersPlot
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>% Peter's scheme plot</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function handle = petersPlot(points,stepsize) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">% Peter's scheme plot
+ Plot of a mesh using peter's scheme</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="bezier.html" class="code" title="function [x,y,z] = bezier(P,h)">bezier</a>	BEZIER Returns x,y,z values of a 3D bezier-curve with the given control points P and</li><li><a href="getBiquadraticPatch.html" class="code" title="function bezierPoints = getBiquadraticPatch(controlPoints)">getBiquadraticPatch</a>	given a 3x3 3-dim array of points, where the first dimension is (x,y,z)</li><li><a href="plotPoints.html" class="code" title="function tempMatrix = plotPoints(points)">plotPoints</a>	</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="torusPointsScript.html" class="code" title="">torusPointsScript</a>	</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function handle = petersPlot(points,stepsize)</a>
+0002 
+0003 <span class="comment">%% Peter's scheme plot</span>
+0004 <span class="comment">% Plot of a mesh using peter's scheme</span>
+0005 
+0006 m = size(points,2);
+0007 n = size(points,3);
+0008 
+0009 handle = figure(<span class="string">'Name'</span>, <span class="string">'Peters plot'</span>);
+0010 <a href="plotPoints.html" class="code" title="function tempMatrix = plotPoints(points)">plotPoints</a>(points);
+0011 hold on
+0012 
+0013 <span class="keyword">for</span> j = 2:(n-1)
+0014     <span class="keyword">for</span> i = 2:(m-1)
+0015         neighbours = points(:,(i-1):(i+1),(j-1):(j+1));
+0016         bezierPoints = <a href="getBiquadraticPatch.html" class="code" title="function bezierPoints = getBiquadraticPatch(controlPoints)">getBiquadraticPatch</a>(neighbours);
+0017         <a href="plotPoints.html" class="code" title="function tempMatrix = plotPoints(points)">plotPoints</a>(bezierPoints);
+0018         [x,y,z] = <a href="bezier.html" class="code" title="function [x,y,z] = bezier(P,h)">bezier</a>(bezierPoints,stepsize);
+0019         surf(x,y,z);
+0020     <span class="keyword">end</span>
+0021 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Thu 10-Dec-2015 17:05:22 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

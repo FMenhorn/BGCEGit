@@ -1,0 +1,66 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of projectOnQuadrant</title>
+  <meta name="keywords" content="projectOnQuadrant">
+  <meta name="description" content="QUADRANTS:">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">GSpline</a> &gt; projectOnQuadrant.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for GSpline&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>projectOnQuadrant
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>QUADRANTS:</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function localCoords = projectOnQuadrant(localCoords_in, quadrant) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> QUADRANTS:
+ 2 | 1
+ --+--
+ 3 | 4</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="createExtraOrdCoefsMatrix.html" class="code" title="function coefsMatrix = createExtraOrdCoefsMatrix(parameterCoordinates,coefs_raw)">createExtraOrdCoefsMatrix</a>	</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function localCoords = projectOnQuadrant(localCoords_in, quadrant)</a>
+0002 <span class="comment">% QUADRANTS:</span>
+0003 <span class="comment">% 2 | 1</span>
+0004 <span class="comment">% --+--</span>
+0005 <span class="comment">% 3 | 4</span>
+0006 
+0007 rot  =@(angle)<span class="keyword">...</span>
+0008     [   cos(angle), -sin(angle); <span class="keyword">...</span>
+0009         sin(angle),  cos(angle)];
+0010 angle = -(quadrant-3) * pi/2;
+0011 
+0012 aroundOrigin = localCoords_in - 0.5;
+0013 
+0014 rotatedAroundOrigin = rot(angle) * [aroundOrigin(1); aroundOrigin(2)];
+0015 
+0016 localCoords = rotatedAroundOrigin + 0.5;</pre></div>
+<hr><address>Generated on Thu 10-Dec-2015 17:05:22 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

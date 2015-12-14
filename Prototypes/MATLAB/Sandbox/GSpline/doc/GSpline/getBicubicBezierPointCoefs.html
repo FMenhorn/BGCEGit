@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of getBicubicBezierPointCoefs</title>
+  <meta name="keywords" content="getBicubicBezierPointCoefs">
+  <meta name="description" content="Spits out an mx4 matrix of the coefficients on the neighbouring (and">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">GSpline</a> &gt; getBicubicBezierPointCoefs.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for GSpline&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>getBicubicBezierPointCoefs
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Spits out an mx4 matrix of the coefficients on the neighbouring (and</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function coefsMatrix = getBicubicBezierPointCoefs(localParams, coefs_raw) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Spits out an mx4 matrix of the coefficients on the neighbouring (and 
+ central) vertex points to that in the center of the patch, for a point 
+ with the local parameters localParams on the patch. The first column is
+ the A coef, the second the B1 coefs, the third the B2 coefs, and the
+ fourth the C coefs.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="bernstein.html" class="code" title="function [ B ] = bernstein( i,n,t )">bernstein</a>	BERNSTEIN calculates i-th bernstein polynomial of degree n at t.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="createExtraOrdCoefsMatrix.html" class="code" title="function coefsMatrix = createExtraOrdCoefsMatrix(parameterCoordinates,coefs_raw)">createExtraOrdCoefsMatrix</a>	</li><li><a href="createGlobalControlMeshCoefs.html" class="code" title="function coefsMatrix = createGlobalControlMeshCoefs(parameterCoordinates,quad_list,AVertexList,B1VertexList,B2VertexList,CVertexList,quad_control_point_indices)">createGlobalControlMeshCoefs</a>	takes, for N datapoints, an array parameterCoordinates[Nx3](for every</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function coefsMatrix = getBicubicBezierPointCoefs(localParams, coefs_raw)</a>
+0002 <span class="comment">% Spits out an mx4 matrix of the coefficients on the neighbouring (and</span>
+0003 <span class="comment">% central) vertex points to that in the center of the patch, for a point</span>
+0004 <span class="comment">% with the local parameters localParams on the patch. The first column is</span>
+0005 <span class="comment">% the A coef, the second the B1 coefs, the third the B2 coefs, and the</span>
+0006 <span class="comment">% fourth the C coefs.</span>
+0007 
+0008 m = size(coefs_raw, 2);
+0009 coefsMatrix = zeros(4,m);
+0010 
+0011 <span class="keyword">for</span> j = 1:4
+0012     <span class="keyword">for</span> i = 1:4
+0013         <span class="comment">% -1 since matlab uses indices from 1-4 instead of 0-3 and the</span>
+0014         <span class="comment">% bernstein degree is ^3</span>
+0015         controlPointCoef = <a href="bernstein.html" class="code" title="function [ B ] = bernstein( i,n,t )">bernstein</a>(i-1,3,localParams(1)) * <a href="bernstein.html" class="code" title="function [ B ] = bernstein( i,n,t )">bernstein</a>(j-1,3,localParams(2));
+0016         <span class="keyword">for</span> l = 1:m
+0017             <span class="keyword">for</span> k = 1:4
+0018                 coefsMatrix(k,l) = coefsMatrix(k,l) + coefs_raw(k,l,i,j) * controlPointCoef;
+0019             <span class="keyword">end</span>
+0020         <span class="keyword">end</span>
+0021     <span class="keyword">end</span>
+0022 <span class="keyword">end</span>
+0023 
+0024 
+0025 
+0026 
+0027 
+0028 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Thu 10-Dec-2015 17:05:22 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>
