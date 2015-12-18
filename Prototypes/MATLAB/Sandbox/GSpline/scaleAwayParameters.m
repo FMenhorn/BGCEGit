@@ -18,10 +18,12 @@ for i = 1:length(quad_ids)
     
     uscale = umax - umin;
     vscale = vmax - vmin;
-    
-    scaledParams(scaledParams(:,1) == quad_ids(i),2) = (scaledParams(scaledParams(:,1) == quad_ids(i),2) - umin)/uscale;
-    scaledParams(scaledParams(:,1) == quad_ids(i),3) = (scaledParams(scaledParams(:,1) == quad_ids(i),3) - vmin)/vscale;
-    
+    if(uscale)
+        scaledParams(scaledParams(:,1) == quad_ids(i),2) = (scaledParams(scaledParams(:,1) == quad_ids(i),2) - umin)/uscale;
+    end
+    if(vscale)
+        scaledParams(scaledParams(:,1) == quad_ids(i),3) = (scaledParams(scaledParams(:,1) == quad_ids(i),3) - vmin)/vscale;
+    end
     
     
 end
