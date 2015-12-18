@@ -1,12 +1,12 @@
 %% script for loading data and preformatting the indices for matlab
 
 %% PART 1: JUST DEFINING A LOT OF NAMES FOR LATER (ignore if you want)
-parametersString = 'param.csv';
-dataPointsString = 'verts_fine.csv';
-quadsString = 'quads_coarse.csv';
-verticesString = 'matlabData.mat';
-baseFolder = 'TorusData/';
-subFolder = 'torussssss/';
+parametersString = 'parameters.csv';
+dataPointsString = 'cantilever_verts_fine.csv';
+quadsString = 'cantilever_quads_coarse.csv';
+verticesString = 'cantilever.mat';
+baseFolder = './';
+subFolder = 'Cantilever_try/';
 folder = strcat(baseFolder,subFolder);
 
 data_parameters = strcat(folder,parametersString);
@@ -77,16 +77,10 @@ torus_verts_fine = load(data_datapoints);
 
 %% PART 3: Preprocess to change from Python to Matlab indexing etc.
 
-%a): Throw away any datapoints which are NaN or outside the parameter range [0,1]
+%a): Throw away any datapoints which are outside the parameter range [0,1]
 %since these cause trouble. (+ Scale the resulting ones so that max and min
 %param values are 1 and 0 repspectively in both u and v)
-OK_row_indices = ~isnan(parameters(:,2) + parameters(:,3) + torus_verts_fine*ones(3,1));
-
-parameters = parameters(OK_row_indices,:);
-torus_verts_fine = torus_verts_fine(OK_row_indices,:);
-
 [parameters,torus_verts_fine] = scaleAwayParameters(parameters,torus_verts_fine);
-
 %b): Reindex 
 A = A + 1;
 B1 = B1 + 1;
