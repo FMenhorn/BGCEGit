@@ -1,0 +1,10 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  runningScript -> createGlobalControlMeshCoefs;
+  runningScript -> loadingScript;
+  runningScript -> plotBezierSurfaceWhole;
+
+  createGlobalControlMeshCoefs [URL="GSpline/createGlobalControlMeshCoefs.html"];
+  loadingScript [URL="GSpline/loadingScript.html"];
+  plotBezierSurfaceWhole [URL="GSpline/plotBezierSurfaceWhole.html"];
+}

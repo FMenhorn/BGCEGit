@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of torusPointsScript</title>
+  <meta name="keywords" content="torusPointsScript">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">GSpline</a> &gt; torusPointsScript.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for GSpline&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>torusPointsScript
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="createCoefsMatrix.html" class="code" title="function coefsMatrix = createCoefsMatrix(parameterCoordinates)">createCoefsMatrix</a>	</li><li><a href="petersPlot.html" class="code" title="function handle = petersPlot(points,stepsize)">petersPlot</a>	% Peter's scheme plot</li><li><a href="plotPoints.html" class="code" title="function tempMatrix = plotPoints(points)">plotPoints</a>	</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 
+0002 numPoints = 800;
+0003 
+0004 polParams = rand(numPoints,1);
+0005 torParams = rand(numPoints,1);
+0006 
+0007 minorRads = (1+0.3.*cos(2*pi*6.*torParams)).*(2 + 0.1*rand(numPoints,1));
+0008 majorRadis = 9.*(1+0.3.*sin(2*pi*3.*torParams));
+0009 
+0010 torusPointY = @(majorRad,minorRad,torAngle,polAngle) sin(torAngle).*(majorRad + cos(polAngle).*minorRad);
+0011 torusPointX = @(majorRad,minorRad,torAngle,polAngle) cos(torAngle).*(majorRad + cos(polAngle).*minorRad);
+0012 torusPointZ = @(majorRad,minorRad,torAngle,polAngle) sin(polAngle).*minorRad;
+0013 
+0014 torPerturbations = 1 + 0.01.*sin(torParams*2*pi);
+0015 polPerturbations = 1 + 0.01.*sin(polParams*2*pi);
+0016 
+0017 torParamsPerturbed = torParams .* torPerturbations;
+0018 polParamsPerturbed = polParams .* polPerturbations;
+0019 
+0020 pointsX = torusPointX(majorRadis, minorRads, torParamsPerturbed*2*pi, polParamsPerturbed*2*pi);
+0021 pointsY = torusPointY(majorRadis, minorRads, torParamsPerturbed*2*pi, polParamsPerturbed*2*pi);
+0022 pointsZ = torusPointZ(majorRadis, minorRads, torParamsPerturbed*2*pi, polParamsPerturbed*2*pi);
+0023 
+0024 figure;
+0025 scatter3(pointsX,pointsY,pointsZ);
+0026 
+0027 <span class="comment">%create coefficients matrix</span>
+0028 paramCoords = [torParams , polParams];
+0029 coefsThreeDMatrix = <a href="createCoefsMatrix.html" class="code" title="function coefsMatrix = createCoefsMatrix(parameterCoordinates)">createCoefsMatrix</a>(paramCoords);
+0030 
+0031 <span class="comment">% make it in matrix-vector form</span>
+0032 dataPoints = [pointsX, pointsY, pointsZ];
+0033 domainM = size(coefsThreeDMatrix,2)-2;
+0034 domainN = size(coefsThreeDMatrix,3)-2;
+0035 
+0036 numCols = (domainM) * (domainN);
+0037 coefsTwoDMatrix = zeros (numPoints,numCols);
+0038 
+0039 reducedMod = @ (i,size) mod(i-1,size)+1;
+0040 
+0041 localIndex = @(i,j,iwidth,jwidth) (reducedMod(j-1,jwidth)-1) * iwidth + reducedMod(i-1,iwidth);
+0042 
+0043 
+0044 <span class="keyword">for</span> j = 1:domainN+2
+0045     <span class="keyword">for</span> i = 1:domainM+2
+0046         loc_ind = localIndex(i,j,domainM,domainN);
+0047         <span class="keyword">for</span> p = 1:numPoints
+0048             coefsTwoDMatrix(p,loc_ind) = <span class="keyword">...</span>
+0049                 coefsTwoDMatrix(p,loc_ind) + coefsThreeDMatrix(p,i,j);
+0050         <span class="keyword">end</span>
+0051     <span class="keyword">end</span>
+0052 <span class="keyword">end</span>
+0053 
+0054 bezierControlPoints = coefsTwoDMatrix\dataPoints;
+0055 
+0056 petersPoints = zeros(3,domainM+2,domainN+2);
+0057 <span class="keyword">for</span> i = 1:domainM+2
+0058     <span class="keyword">for</span> j = 1:domainN+2
+0059         petersPoints(:,i,j) = bezierControlPoints(localIndex(i,j,domainM,domainN),:);
+0060     <span class="keyword">end</span>
+0061 <span class="keyword">end</span>
+0062 figure;
+0063 <a href="plotPoints.html" class="code" title="function tempMatrix = plotPoints(points)">plotPoints</a>(petersPoints);
+0064 hold on;
+0065 plot3(pointsX,pointsY,pointsZ,<span class="string">'ro'</span>);
+0066 
+0067 <a href="petersPlot.html" class="code" title="function handle = petersPlot(points,stepsize)">petersPlot</a>(petersPoints,0.05);</pre></div>
+<hr><address>Generated on Thu 10-Dec-2015 17:05:22 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

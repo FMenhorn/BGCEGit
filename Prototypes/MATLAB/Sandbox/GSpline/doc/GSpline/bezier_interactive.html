@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of bezier_interactive</title>
+  <meta name="keywords" content="bezier_interactive">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">GSpline</a> &gt; bezier_interactive.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for GSpline&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>bezier_interactive
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="bezier.html" class="code" title="function [x,y,z] = bezier(P,h)">bezier</a>	BEZIER Returns x,y,z values of a 3D bezier-curve with the given control points P and</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 P=[];
+0002 h=[];
+0003 near_h=[];
+0004 figure(1)
+0005 axis([-1 1 -1 1 -1 1])
+0006 hold on
+0007 <span class="keyword">while</span>(true)
+0008     <span class="keyword">if</span>(size(P,2) == 0)
+0009         P=[P,ginput(1)'];
+0010     <span class="keyword">end</span>
+0011     N=ginput(1)';
+0012     near_i=dsearchn(P',N');
+0013     <span class="keyword">if</span>(norm(P(:,near_i)-N)&lt;.05);        
+0014         <span class="keyword">while</span>(norm(P(:,near_i)-N)&lt;.05)
+0015             near_i=dsearchn(P',N');
+0016             delete(near_h);
+0017             near_h=plot3(P(1,near_i),P(2,near_i),P(3,near_i),<span class="string">'ko'</span>,<span class="string">'MarkerSize'</span>,10,<span class="string">'MarkerFaceColor'</span>,<span class="string">'g'</span>);
+0018             N=ginput(1)';            
+0019         <span class="keyword">end</span>
+0020         P(:,near_i)=N;
+0021     <span class="keyword">else</span>
+0022         P=[P,N];
+0023     <span class="keyword">end</span>
+0024     
+0025     delete(h);
+0026     [x,y,z]=<a href="bezier.html" class="code" title="function [x,y,z] = bezier(P,h)">bezier</a>(P,.001);
+0027     h=plot3(x,y,z,<span class="string">'k-'</span>,P(1,:),P(2,:),P(3,:),<span class="string">'kx'</span>); 
+0028     delete(near_h)
+0029 <span class="keyword">end</span>
+0030 hold off</pre></div>
+<hr><address>Generated on Thu 10-Dec-2015 17:05:22 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

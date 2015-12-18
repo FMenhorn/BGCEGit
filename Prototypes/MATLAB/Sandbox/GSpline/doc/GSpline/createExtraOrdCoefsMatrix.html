@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of createExtraOrdCoefsMatrix</title>
+  <meta name="keywords" content="createExtraOrdCoefsMatrix">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">GSpline</a> &gt; createExtraOrdCoefsMatrix.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for GSpline&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>createExtraOrdCoefsMatrix
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function coefsMatrix = createExtraOrdCoefsMatrix(parameterCoordinates,coefs_raw) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="getBezierPointCoefs.html" class="code" title="function coefsMatrix = getBezierPointCoefs(localParams)">getBezierPointCoefs</a>	Spits out a 3x3 matrix of the coefficients on the neighbouring (and</li><li><a href="getBicubicBezierPointCoefs.html" class="code" title="function coefsMatrix = getBicubicBezierPointCoefs(localParams, coefs_raw)">getBicubicBezierPointCoefs</a>	Spits out an mx4 matrix of the coefficients on the neighbouring (and</li><li><a href="projectOnQuadrant.html" class="code" title="function localCoords = projectOnQuadrant(localCoords_in, quadrant)">projectOnQuadrant</a>	QUADRANTS:</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="ExtraOrdTorusTest.html" class="code" title="">ExtraOrdTorusTest</a>	</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function coefsMatrix = createExtraOrdCoefsMatrix(parameterCoordinates,coefs_raw)</a>
+0002 
+0003 domainM = 4;
+0004 domainN = 4;
+0005 
+0006 <span class="comment">% takes parameterCoordinates[Nx2](on a patch that spans over [0,1] with 4x4</span>
+0007 <span class="comment">% local bezier patches) and computes the coefficient matrix for each of</span>
+0008 <span class="comment">% these as a Nx6x6 matrix (where the first and last columns/rows are the</span>
+0009 <span class="comment">% neighbouring points)</span>
+0010 
+0011 <span class="comment">% The coefficients for the extraordinary case are created from</span>
+0012 <span class="comment">% the coefficients between each A,B and C vertex point and the</span>
+0013 <span class="comment">% corresponding bicubic Bezier patch point, which is multiplied by the</span>
+0014 <span class="comment">% weight the related bezier polynomial. This is obtained by mapping the</span>
+0015 <span class="comment">% quad parameters to that of the local patch by an translation and scaling,</span>
+0016 <span class="comment">% plus a rotation to orient the parameters in orientation to the</span>
+0017 <span class="comment">% extraordinary corner.</span>
+0018 
+0019 
+0020 mod_index = @(i,modul) mod(i-1,modul) + 1;
+0021 <span class="comment">% rot = @(angle)[cos(angle),-sin(angle),0;sin(angle),cos(angle),0;0,0,1];</span>
+0022 
+0023 shifted_indices = @(ind,modul) mod_index((0:(modul-1)) + ind,modul);
+0024 
+0025 <span class="comment">% Cyclic arays with the indices of the extraordinary vertex points.</span>
+0026 AInds = [[5;5],   [2;5],    [2;2],    [5;2]];
+0027 B1Inds = [[5;4],   [3;5],   [ 2;3],   [ 4;2]];
+0028 B2Inds = [[4;5],   [2;4],   [ 3;2],   [ 5;3]];
+0029 CInds = [[4;4],   [3;4],   [ 3;3],   [ 4;3]];
+0030 
+0031 
+0032 <span class="comment">% Indexing around the extraordinary corner for deciding on how to rotate</span>
+0033 <span class="comment">% the parameters</span>
+0034 whichQuadrant = [[3;4] , [2;1]];
+0035 
+0036 
+0037 N = size(parameterCoordinates,1);
+0038 coefsMatrix = zeros(N,domainM+2,domainN+2);
+0039 
+0040 <span class="keyword">for</span> p = 1:N
+0041     scaledCoords = [(domainM*parameterCoordinates(p,1)), (domainN*parameterCoordinates(p,2))];
+0042     whichPatch = floor(scaledCoords);
+0043     localCoords = scaledCoords - <span class="keyword">...</span>
+0044         whichPatch;
+0045     i = whichPatch(1) + 1;
+0046     j = whichPatch(2) + 1;
+0047     <span class="keyword">if</span>(((i ~= 2) &amp;&amp; (i~= 3)) || ((j ~= 2) &amp;&amp; (j ~= 3)))
+0048         coefsMatrix(p,i:(i+2),j:(j+2)) = <a href="getBezierPointCoefs.html" class="code" title="function coefsMatrix = getBezierPointCoefs(localParams)">getBezierPointCoefs</a>(localCoords);
+0049     <span class="keyword">else</span>
+0050         quadr = whichQuadrant(i-1,j-1);
+0051         localCoordsRot = <a href="projectOnQuadrant.html" class="code" title="function localCoords = projectOnQuadrant(localCoords_in, quadrant)">projectOnQuadrant</a>(localCoords,quadr);
+0052         coefsTemp = <a href="getBicubicBezierPointCoefs.html" class="code" title="function coefsMatrix = getBicubicBezierPointCoefs(localParams, coefs_raw)">getBicubicBezierPointCoefs</a>(localCoordsRot,coefs_raw);
+0053         indShift = shifted_indices(quadr,4);
+0054         <span class="keyword">for</span> anotherIndex = 1:length(indShift)
+0055             coefsMatrix(p,AInds(1,indShift(anotherIndex)),AInds(2,indShift(anotherIndex))) = coefsTemp(1,anotherIndex);
+0056             coefsMatrix(p,B1Inds(1,indShift(anotherIndex)),B1Inds(2,indShift(anotherIndex))) = coefsTemp(2,anotherIndex);
+0057             coefsMatrix(p,B2Inds(1,indShift(anotherIndex)),B2Inds(2,indShift(anotherIndex))) = coefsTemp(3,anotherIndex);
+0058             coefsMatrix(p,CInds(1,indShift(anotherIndex)), CInds(2,indShift(anotherIndex))) = coefsTemp(4,anotherIndex);
+0059         <span class="keyword">end</span>
+0060     <span class="keyword">end</span>
+0061     
+0062     
+0063 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Thu 10-Dec-2015 17:05:22 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of getNeighbourSharedEdge</title>
+  <meta name="keywords" content="getNeighbourSharedEdge">
+  <meta name="description" content="dirOne = [-0.5, 0.5, 0.5,-0.5];">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">GSpline</a> &gt; getNeighbourSharedEdge.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for GSpline&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>getNeighbourSharedEdge
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>dirOne = [-0.5, 0.5, 0.5,-0.5];</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function quadIndex = getNeighbourSharedEdge(quads,selfIndex,ver1,ver2) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> dirOne = [-0.5, 0.5, 0.5,-0.5];
+ dirTwo = [-0.5,-0.5, 0.5, 0.5];</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="get3x3ControlPointIndexMask.html" class="code" title="function indexMask = get3x3ControlPointIndexMask(quad_list, quad_control_point_indices, quad_index, localIndexXY)">get3x3ControlPointIndexMask</a>	</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function quadIndex = getNeighbourSharedEdge(quads,selfIndex,ver1,ver2)</a>
+0002 
+0003 <span class="comment">% dirOne = [-0.5, 0.5, 0.5,-0.5];</span>
+0004 <span class="comment">% dirTwo = [-0.5,-0.5, 0.5, 0.5];</span>
+0005 
+0006 [hasVer1,~] = find(quads == ver1);
+0007 [hasVer2,~] = find(quads(hasVer1,:) == ver2);
+0008 
+0009 hasBoth = hasVer1(hasVer2);
+0010 
+0011 quadIndex = hasBoth(hasBoth ~= selfIndex);
+0012 <span class="comment">%</span>
+0013 <span class="comment">% verOneIndex = find(quadri == ver1);</span>
+0014 <span class="comment">% verTwoIndex = find(quadri == ver2);</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% verOneLocal = [dirOne(verOneIndex), dirTwo(verOneIndex)];</span>
+0017 <span class="comment">% verTwoLocal = [dirOne(verTwoIndex), dirTwo(verTwoIndex)];</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% directionToGo = verTwoLocal - verOneLocal;</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% cellLocalIndex = verOneLocal + cellNumber*directionToGo;</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">% cellIndex = quadIndices(cellLocalIndex(1),cellLocalIndex(2));</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">%</span>
+0026 
+0027 
+0028 
+0029 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Thu 10-Dec-2015 17:05:22 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

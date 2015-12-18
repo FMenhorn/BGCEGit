@@ -1,0 +1,57 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of getNumOfEdgesMeetingMatlab</title>
+  <meta name="keywords" content="getNumOfEdgesMeetingMatlab">
+  <meta name="description" content="GETNUMOFEDGESMEETING Summary of this function goes here">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">GSpline</a> &gt; getNumOfEdgesMeetingMatlab.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for GSpline&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>getNumOfEdgesMeetingMatlab
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>GETNUMOFEDGESMEETING Summary of this function goes here</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ numOfEdgesMeeting ] = getNumOfEdgesMeetingMatlab( neighbour_matrix, orig_vertex_id_matlab ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">GETNUMOFEDGESMEETING Summary of this function goes here
+   Detailed explanation goes here</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="checkB1B2OrientationReversal.html" class="code" title="function isNotCounterClockwise = checkB1B2OrientationReversal(B1,B2,quad_list,quad_index,vertex_index)">checkB1B2OrientationReversal</a>	check if the B1 in the quad to the right lies along the same edge as the</li><li><a href="createGlobalControlMeshCoefs.html" class="code" title="function coefsMatrix = createGlobalControlMeshCoefs(parameterCoordinates,quad_list,AVertexList,B1VertexList,B2VertexList,CVertexList,quad_control_point_indices)">createGlobalControlMeshCoefs</a>	takes, for N datapoints, an array parameterCoordinates[Nx3](for every</li><li><a href="getExtraOrdCornerIndexMask.html" class="code" title="function indexMask = getExtraOrdCornerIndexMask(quad_list,AVertexList,B1VertexList,B2VertexList,CVertexList,quad_control_point_indices,quad_index,whichCorner)">getExtraOrdCornerIndexMask</a>	</li><li><a href="plotAsBsCs.html" class="code" title="">plotAsBsCs</a>	</li><li><a href="rotateB2Matlab.html" class="code" title="function newB2 = rotateB2Matlab(oldB2)">rotateB2Matlab</a>	</li><li><a href="rotateB2fromB1.html" class="code" title="function newB2 = rotateB2fromB1(B1,oldB2)">rotateB2fromB1</a>	</li><li><a href="sortAB1B2VIndices.html" class="code" title="function [newA,newB1,newB2,newC] = sortAB1B2VIndices(oldA,oldB1,oldB2,oldC)">sortAB1B2VIndices</a>	</li><li><a href="sortB1B2Indices.html" class="code" title="function [newB1,newB2] = sortB1B2Indices(oldB1,oldB2)">sortB1B2Indices</a>	</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ numOfEdgesMeeting ] = getNumOfEdgesMeetingMatlab( neighbour_matrix, orig_vertex_id_matlab )</a>
+0002 <span class="comment">%GETNUMOFEDGESMEETING Summary of this function goes here</span>
+0003 <span class="comment">%   Detailed explanation goes here</span>
+0004 
+0005 numOfEdgesMeeting = sum(neighbour_matrix(orig_vertex_id_matlab,:,1) ~= 0);
+0006 
+0007 
+0008 <span class="keyword">end</span>
+0009</pre></div>
+<hr><address>Generated on Thu 10-Dec-2015 17:05:22 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>
