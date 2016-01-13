@@ -29,8 +29,12 @@ plotBezierSurfaceWhole(quads_Torus,newA,newB1,newB2,newC,regularPoints,otherVert
 
 % Create matrices for exporting the patches (note - indexing in matlab
 % format)
-% [biqPatchPoints,biqIndices,bicPatchPoints,bicIndices] = createBezierPointMatrices(quads_Torus,newA,newB1,newB2,newC,regularPoints,vertices);
+% [biqPatchPoints,biqIndices,bicPatchPoints,bicIndices] = createBezierPointMatrices(quads_Torus,newA,newB1,newB2,newC,regularPoints,otherVertices);
 % csvwrite('biquadraticPatchPoints.csv',biqPatchPoints);
 % csvwrite('biquadraticPatchIndices.csv',biqIndices);
 % csvwrite('bicubicPatchPoints.csv',bicPatchPoints);
 % csvwrite('bicubicPatchIndices.csv',bicIndices);
+ 
+%  [NURBSMatrix,NURBSIndices] = createNURBSMatrices(quads_Torus,newA,newB1,newB2,newC,regularPoints,otherVertices);
+%  csvwrite('NURBSPatchPoints.csv',NURBSMatrix);
+%  csvwrite('NURBSPatchIndices.csv',NURBSIndices);
