@@ -29,7 +29,7 @@ def parse_all_from_folder(folder_path):
 
 def get_vertices(patch_ids, vertex_list):
     vertices = []
-    for v_id in patch:
+    for v_id in patch_ids:
         v_id = v_id - 1 # MATLAB indexing -> PYTHON indexing!!!
         vertices.append(vertex_list[v_id])
     return vertices
@@ -45,6 +45,7 @@ def generate_bezier_patch(degree, vertices):
             v = vertices[k]
             control_point = FreeCAD.Vector(v[0],v[1],v[2])
             patch.setPole(i+1,j+1,control_point)
+            #Part.show(Part.Vertex(control_point))
 
     Part.show(patch.toShape())
 
@@ -52,7 +53,7 @@ def generate_bezier_patch(degree, vertices):
 doc = FreeCAD.newDocument("tmp")
 print "Document created"
 
-bq_idx, bq_pts, bc_idx, bc_pts = parse_all_from_folder('CAD_IGES_Export_data')
+bq_idx, bq_pts, bc_idx, bc_pts = parse_all_from_folder('./TorusFairBezier')
 print "Stuff parsed"
 
 deg = 2
@@ -63,6 +64,7 @@ for patch in bq_idx:
 print "biquadratic patches plotted"
 
 deg = 3
+patch=bc_idx
 for patch in bc_idx:
     vertices = get_vertices(patch, bc_pts)
     generate_bezier_patch(deg, vertices)
@@ -71,5 +73,5 @@ print "bicubic patches plotted"
 
 __objs__ = FreeCAD.getDocument("tmp").findObjects()
 
-Import.export(__objs__, "./optimizedTopo.step")
+Import.export(__objs__, "./FairTorus.step")
 print ".step exported"
