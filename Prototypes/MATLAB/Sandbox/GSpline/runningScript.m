@@ -31,13 +31,13 @@ disp('Systems solved. Plotting?')
 % format)
 % [biqPatchPoints,biqIndices,bicPatchPoints,bicIndices] = createBezierPointMatrices(quads_Torus,newA,newB1,newB2,newC,regularPoints,otherVertices);
 % csvwrite('biquadraticPatchPoints.csv',biqPatchPoints);
-% csvwrite('biquadraticPatchIndices.csv',biqIndices);
+% dlmwrite('biquadraticPatchIndices.csv',biqIndices,'precision',9);
 % csvwrite('bicubicPatchPoints.csv',bicPatchPoints);
-% csvwrite('bicubicPatchIndices.csv',bicIndices);
+% dlmwrite('bicubicPatchIndices.csv',bicIndices,'precision',9);
 
 % use either NURBS with just the necessary ones, or all patches of raised 
 % degree 
 % [NURBSMatrix,NURBSIndices] = createNURBSMatrices(quads_Torus,newA,newB1,newB2,newC,regularPoints,otherVertices);
 % [NURBSMatrix,NURBSIndices] = createNURBSMatricesAllraised(quads_Torus,newA,newB1,newB2,newC,regularPoints,otherVertices);
 % csvwrite('NURBSPatchPoints.csv',NURBSMatrix);
-% csvwrite('NURBSPatchIndices.csv',NURBSIndices);
+% dlmwrite('NURBSPatchIndices.csv',NURBSIndices,'precision',9);
