@@ -10,18 +10,15 @@ At the top of the scripts one can configure them (Currently only NURBS script.) 
 The following two ```.csv``` files have to be supplied for running the script:
 
 - **All points:** 
-
     ```NURBSPatchPoints.csv``` a csv file with ```#Pts``` lines and ```3``` columns. Each point (line) is given in cartesian coordinates.
     
     
 - **All patches:** 
-
     ```NURBSPatchPoints.csv``` a csv file with ```#Patches``` lines and ```#Pts per patch``` columns. Each patch (line) is defined by references to the corresponding line in ```NURBSPatchPoints.csv``` (in MATLAB indexing, starting with 1) 
 
 Some valid configurations are given below:
 
 - **All Bezier patches merged into one NURBS patch with minimal number of control points:**
-
     ```python
     knots = [0, 0, 0, 0, .25, 0.25, 0.5, 0.5, 0.5, 0.75, .75, 1, 1, 1, 1]
     degree = 3
@@ -29,7 +26,6 @@ Some valid configurations are given below:
     ```
 
 - **All Bezier patches merged into one NURBS patch with degree raised to three:***
-
     ```python
     knots = [0, 0, 0, 0, .25, 0.25, 0.25, 0.5, 0.5, 0.5, 0.75, 0.75, .75, 1, 1, 1, 1]
     degree = 3
@@ -37,7 +33,6 @@ Some valid configurations are given below:
     ```
     
 - **All Control points connected via bilinear patches:**
-
     ```python
     n_nodes = 11 or 13 or something different    
     knots = [0, 0/n_nodes, 1/n_nodes, ... n_nodes-1/n_nodes, n_nodes/n_nodes, 1]    
