@@ -46,6 +46,9 @@ class Quadtree:
         i = int(data_pos[1] >= middle_pos[1])
         return i, j
 
+
+
+
     def add_data(self, data):
         if self.is_inside(data): # if data is inside this quadtree, it is added.
             if self.is_leaf():
