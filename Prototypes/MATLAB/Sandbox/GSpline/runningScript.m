@@ -24,17 +24,20 @@ disp('Small matrix solved, trying big...')
 otherVertices = joinedCoefs\joinedVerts;
 
 
-disp('Systems solved. Plotting')
-plotBezierSurfaceWhole(quads_Torus,newA,newB1,newB2,newC,regularPoints,otherVertices);
+disp('Systems solved. Plotting?')
+% plotBezierSurfaceWhole(quads_Torus,newA,newB1,newB2,newC,regularPoints,otherVertices);
 
 % Create matrices for exporting the patches (note - indexing in matlab
 % format)
 % [biqPatchPoints,biqIndices,bicPatchPoints,bicIndices] = createBezierPointMatrices(quads_Torus,newA,newB1,newB2,newC,regularPoints,otherVertices);
 % csvwrite('biquadraticPatchPoints.csv',biqPatchPoints);
-% csvwrite('biquadraticPatchIndices.csv',biqIndices);
+% dlmwrite('biquadraticPatchIndices.csv',biqIndices,'precision',9);
 % csvwrite('bicubicPatchPoints.csv',bicPatchPoints);
-% csvwrite('bicubicPatchIndices.csv',bicIndices);
- 
-%  [NURBSMatrix,NURBSIndices] = createNURBSMatrices(quads_Torus,newA,newB1,newB2,newC,regularPoints,otherVertices);
-%  csvwrite('NURBSPatchPoints.csv',NURBSMatrix);
-%  csvwrite('NURBSPatchIndices.csv',NURBSIndices);
+% dlmwrite('bicubicPatchIndices.csv',bicIndices,'precision',9);
+
+% use either NURBS with just the necessary ones, or all patches of raised 
+% degree 
+% [NURBSMatrix,NURBSIndices] = createNURBSMatrices(quads_Torus,newA,newB1,newB2,newC,regularPoints,otherVertices);
+% [NURBSMatrix,NURBSIndices] = createNURBSMatricesAllraised(quads_Torus,newA,newB1,newB2,newC,regularPoints,otherVertices);
+% csvwrite('NURBSPatchPoints.csv',NURBSMatrix);
+% dlmwrite('NURBSPatchIndices.csv',NURBSIndices,'precision',9);

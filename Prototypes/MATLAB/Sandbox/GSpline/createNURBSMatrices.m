@@ -5,6 +5,7 @@ whichCornerList = [1,4;2,3];
 one4toone2 = @(i) (i-1)/3 + 1;
 
 whichCornerFun = @(i,j) whichCornerList(one4toone2(i),one4toone2(j));
+
 % 
 % controlVertices = zeros(3,3,3);
 
@@ -19,6 +20,8 @@ tempBiquadBezierMatrix = zeros(3,3,3);
 
 NURBSMatrix = zeros(11*11*number_of_quads,3);
 NURBSIndices = zeros(number_of_quads,11*11);
+
+
 
 getLinearIndexing = @(i,j,width) i + (j-1)*width;
 % hold on;
@@ -37,6 +40,12 @@ for q = 1:number_of_quads
                 Bs = cat(2,reshape(B1s,3,1,numberOfEdges),reshape(B2s,3,1,numberOfEdges));
                 patch = getBicubicPatchIndex(1,As,Bs,Cs);
                 %     patch(:,3,3) = rot(pi)*patch(:,3,3);
+                
+                %shift the points to lie in the same order as the nurbs
+                %patch: corner 3 is in the correct orientation, the next
+                %(corner 4) needs to be rotated one 90deg rotation
+                %clockwise, the next another one clockwise etc... 
+                patch = rotateMatrixStructure(patch,whichCorner-3);
                 
                 addToIndexI = ((i==4) * 7);
                 addToIndexJ = ((j==4) * 7);
