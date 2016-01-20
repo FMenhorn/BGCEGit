@@ -2,20 +2,26 @@ __author__ = 'erik + jc'
 
 
 class Edge:
-    def __init__(self, _id, _vertex1, _vertex2):
+    def __init__(self, id, vertex1, vertex2):
 
-        self.id = _id
-        self.vertices = [_vertex1, _vertex2]
-        for vertex in self.vertices:
+        self._id = id
+        self._vertices = set([vertex1, vertex2])
+        for vertex in self._vertices:
             vertex.add_edge(self)
 
-        self.quads = []
+        self._quads = set()
 
     def add_quad(self, quad):
-        self.quads.append(quad)
+        self._quads.add(quad)
 
     def get_vertices(self):
-        return self.vertices
+        return self._vertices
 
     def get_quads(self):
-        return self.quads
+        return self._quads
+
+    def number_quads(self):
+        """
+        :return: number of quads connected to this edge (should always be equal to 2!)
+        """
+        return len(self._quads)
