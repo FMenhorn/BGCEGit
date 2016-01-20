@@ -14,13 +14,13 @@ for the length of the knot vector, the following rule has to hold:
 n_knots = n_nodes + deg + 1
 n_nodes has to be chosen such that it matches with the given number of control nodes per patch in the input files
 """
-input_folder = "./TorusFairNURBS"
-output_file_name = "./FairTorusNURBS.step"
+input_folder = "./CantileverFairNURBSRaised"
+output_file_name = "./FairCantileverNURBSRaised.step"
 plot_control_points = False
 
-knots = [0, 0, 0, 0, .25, 0.25, 0.5, 0.5, 0.5, 0.75, .75, 1, 1, 1, 1]
+knots = [0, 0, 0, 0, 0.25, 0.25, 0.25, 0.5, 0.5, 0.5, 0.75, 0.75, 0.75, 1, 1, 1, 1]
 degree = 3
-n_nodes = 11
+n_nodes = 13
 assert (knots.__len__() == n_nodes + degree + 1)
 """
 configuration done
