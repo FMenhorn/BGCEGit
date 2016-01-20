@@ -97,8 +97,8 @@ def createBicubicCoefMatrices(num_of_quads):
                 B1coefs[k][2][2] -= ((-1) ** i) * (num_of_quads - i) * h_three_coefs_result[j] * 2 / num_of_quads
                 B2coefs[k][2][2] -= ((-1) ** i) * (num_of_quads - i) * h_three_coefs_result[j] * 2 / num_of_quads
 
-    return {'Acoefs': Acoefs, 'B1coefs': B1coefs, 'B2coefs': B2coefs, 'Ccoefs': Ccoefs}
-    # return [Acoefs, B1coefs, B2coefs, Ccoefs]
+    # return {'Acoefs': Acoefs, 'B1coefs': B1coefs, 'B2coefs': B2coefs, 'Ccoefs': Ccoefs}
+    return [Acoefs, B1coefs, B2coefs, Ccoefs]
 
 
 def shiftReverse(ind, modul):
