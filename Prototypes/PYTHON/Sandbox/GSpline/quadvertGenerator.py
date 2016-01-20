@@ -7,14 +7,16 @@ from Quad import Quad
 
 
 def quad_vert_generator():
-    #_verts = np.array(np.genfromtxt('Data/Cantilever/cantilever_verts_coarse.csv', delimiter=';'))
-    #_quads = np.array(np.genfromtxt('Data/Cantilever/cantilever_quads_coarse.csv', delimiter=';'))
-    #_parameters = np.genfromtxt('Data/Cantilever/parameters.csv', delimiter=';')
 
-    _verts = np.array(np.genfromtxt('Data/Torus/torus_verts_coarse.csv', delimiter=';'))
-    _quads = np.array(np.genfromtxt('Data/Torus/torus_quads_coarse.csv', delimiter=';'))
-    _fine_verts = np.array(np.genfromtxt('Data/Torus/torus_verts_fine.csv', delimiter=';'))
-    _parameters = np.genfromtxt('Data/Torus/parameters.csv', delimiter=';')
+    #_verts = np.array(np.genfromtxt('Data/Torus/torus_verts_coarse.csv', delimiter=';'))
+    #_quads = np.array(np.genfromtxt('Data/Torus/torus_quads_coarse.csv', delimiter=';'))
+    #_fine_verts = np.array(np.genfromtxt('Data/Torus/torus_verts_fine.csv', delimiter=';'))
+    #_parameters = np.genfromtxt('Data/Torus/parameters.csv', delimiter=';')
+
+    _verts = np.array(np.genfromtxt('Data/Torus_minimal/vers_torusminimal.csv', delimiter=';'))
+    _quads = np.array(np.genfromtxt('Data/Torus_minimal/quads_torusminimal.csv', delimiter=';'))
+    _fine_verts = np.array(np.genfromtxt('Data/Torus_minimal/torus_datapoints.csv', delimiter=';'))
+    _parameters = np.genfromtxt('Data/Torus_minimal/parameters.csv', delimiter=';')
 
     # Create vertices
     vertex_list = []
