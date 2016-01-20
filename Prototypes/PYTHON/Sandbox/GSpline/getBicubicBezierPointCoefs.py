@@ -5,8 +5,8 @@ import scipy.io as sio
 def getBicubicBezierPointCoefs(localParams, coefs_raw):
     '''
 
-    :param localParams:
-    :param coefs_raw:
+    :param localParams: 4-D matrix of some data ;) e.g. (4x4x4x4)
+    :param coefs_raw: 7x7 matrix of some data ;)
     :return: mx4 matrix of the coefficients on the neighbouring (and central) vertex points to that in the center of the patch, for a point with the local parameters localParams on the patch. The first column is the A coef, the second the B1 coefs, the third the B2 coefs, and the fourth the C coefs.
     '''
 
