@@ -31,14 +31,13 @@ def sortAB1B2VIndices(oldA,oldB1,oldB2,oldC):
     assert type(oldB2) is np.ndarray
     assert type(oldC) is np.ndarray
 
-    newB1 = np.zeros(oldB1.shape)
-    newB2 = np.zeros(oldB2.shape)
-    newA = np.zeros(oldA.shape)
-    newC = np.zeros(oldC.shape)
+    newB1 = -1*np.ones(oldB1.shape)
+    newB2 = -1*np.ones(oldB2.shape)
+    newA = -1*np.ones(oldA.shape)
+    newC = -1*np.ones(oldC.shape)
 
     for i in range(oldB2.shape[0]):
         m = getNumOfEdges(oldB2,i)
-        print m
         indicesLocB1 = np.zeros(m,dtype=int)
         indicesLocB2 = np.zeros(m,dtype=int)
         indicesLocA = np.zeros(m,dtype=int)
@@ -48,7 +47,8 @@ def sortAB1B2VIndices(oldA,oldB1,oldB2,oldC):
         BB2 = np.reshape(oldB2[i,0:m,2:4],[m,2])
         idontcare,B1Indices,B2Indices = mimic_matlab_row_intersect(BB1,BB2) #todo hopefully this is right...
 
-        nextIndex = 1
+
+        nextIndex = 0
         for local_quad_index in range(m):
             current_quad = B2Indices[nextIndex]
             neighbour = B1Indices[nextIndex]
@@ -57,9 +57,9 @@ def sortAB1B2VIndices(oldA,oldB1,oldB2,oldC):
             neighbourB2Index = np.where(oldB2[i,0:m,1] == neighbourQuad)[0][0]
             neighbourCIndex = np.where(oldC[i,0:m,1] == neighbourQuad)[0][0]
             nextIndex = np.where(B2Indices == neighbourB2Index)[0][0]
-            indicesLocA[local_quad_index] = int(neighbourAIndex)
-            indicesLocB1[local_quad_index] = int(neighbour)
-            indicesLocC[local_quad_index] = int(neighbourCIndex)
+            indicesLocA[(local_quad_index+1)%m] = int(neighbourAIndex)
+            indicesLocB1[(local_quad_index+1)%m] = int(neighbour)
+            indicesLocC[(local_quad_index+1)%m]= int(neighbourCIndex)
             indicesLocB2[local_quad_index] = current_quad
 
         newA[i,0:m,:] = oldA[i,indicesLocA,:]

@@ -1,6 +1,7 @@
 import numpy as np
 import math
 import scipy.io as sio
+from bernsteinFramework import *
 
 def getBezierPointCoefs(localParams):
     '''
@@ -49,27 +50,6 @@ def getBiquadraticPatchCoefs(i,j):
 
 
 
-#### Testing
-def bincoeff(k, n):
-    # calculates binomial coefficient: n!
-    # n and k are scalars
-
-    assert n >= k, "n has to be greater or equal to k!"
-    assert n >= 0 and k >= 0, "n and k both have to be positive!"
-
-    b = math.factorial(n) / math.factorial(k) / math.factorial(n - k)
-
-    return b
-
-def bernstein(i, n, t):
-    # Calculates the i-th bernstein polynomial of degree n at t
-    # i, n ,t are numpy arrays
-    # Formula: bincoeff(n,i) * t^i * (1-t)^(n-i)
-
-    t_power_i = np.power(t, i)
-    t_power_n_i = np.power(np.ones((t.size,)) - t, n - i)
-    B = np.multiply(np.multiply(bincoeff(i, n), t_power_i), t_power_n_i)
-    return B
 
 
 getBezierPointCoefs(np.ones((3,3)))

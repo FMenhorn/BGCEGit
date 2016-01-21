@@ -13,7 +13,7 @@ def createLocalParamsExtraordinary(global_quad_params):
 
     #TODO: raise Exception("what is nearWhich??? -> decrement it because of MATLAB idx")
 
-    whichPatch = whichPatch + 1
+    #whichPatch = whichPatch + 1
     localParams = shifted_scaled_coords
     if global_quad_params[0] <= 0.25:
         if global_quad_params[1] <= 0.25:
@@ -21,24 +21,24 @@ def createLocalParamsExtraordinary(global_quad_params):
             # stays v-dir
             coordinatesReversed = 1 - shifted_scaled_coords
             localParams = [coordinatesReversed[0], coordinatesReversed[1]]
-            nearWhich = 1
+            nearWhich = 0
         elif global_quad_params[1] >= 0.75:
             # upper-left corner. Local u is global v, and local v is global 1-u.
             localParams = [shifted_scaled_coords[1], 1 - shifted_scaled_coords[0]]
-            nearWhich = 4
+            nearWhich = 3
 
     elif global_quad_params[0] >= 0.75:
         if global_quad_params[1] <= 0.25:
             # bottom-right. Local u is global 1-v, local v is u.
             localParams = [1 - shifted_scaled_coords[1], shifted_scaled_coords[0]]
-            nearWhich = 2
+            nearWhich = 1
         elif global_quad_params[1] >= 0.75:
             # upper-right. NO SWITCHIES!!!!
             localParams = shifted_scaled_coords
-            nearWhich = 3
+            nearWhich = 2
 
     else:
-        while (whichPatch == 1).all() or (whichPatch == 4).all():  # both are 1/4! we're in a corner! error
+        while (whichPatch == 0).all() or (whichPatch == 3).all():  # both are 1/4! we're in a corner! error
             raise Exception(
                 'thingy thought we were in a corner when we weren"t, so shifting. in createLocalParamsExtraordinary.m')
             # should be really close to next patch, so try

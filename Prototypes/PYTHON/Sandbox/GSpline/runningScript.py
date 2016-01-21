@@ -74,17 +74,23 @@ def createGlobalControlMeshCoefs(parameterCoordinates, quad_list, AVertexList, B
         if whichCorner != -1:
 
             cornerVertexIndex = quad_list[quad_index, whichCorner]
-            # TODO: Change to Objects in here
+
             numberOfEdges = getNumOfEdges( AVertexList, cornerVertexIndex)
+            #TODO: Check output PROBLEM!
             indexMask = getExtraOrdCornerIndexMask(quad_list, AVertexList, B1VertexList, B2VertexList, CVertexList,
                                                    quad_control_point_indices, quad_index, whichCorner)
-            # TODO: numberOfEges - 1 ??
-            coefsRawTemp[0, 0:numberOfEdges, :, :] = ACoefsRaw[numberOfEdges-1, 1:numberOfEdges, :, :]
-            coefsRawTemp[1, 0:numberOfEdges, :, :] = B1CoefsRaw[numberOfEdges-1, 1:numberOfEdges, :, :]
-            coefsRawTemp[2, 0:numberOfEdges, :, :] = B2CoefsRaw[numberOfEdges-1, 1:numberOfEdges, :, :]
-            coefsRawTemp[3, 0:numberOfEdges, :, :] = CCoefsRaw[numberOfEdges-1, 1:numberOfEdges, :, :]
+
+
+
+            coefsRawTemp[0, 0:numberOfEdges, :, :] = ACoefsRaw[numberOfEdges-1, 0:numberOfEdges, :, :]
+            coefsRawTemp[1, 0:numberOfEdges, :, :] = B1CoefsRaw[numberOfEdges-1, 0:numberOfEdges, :, :]
+            coefsRawTemp[2, 0:numberOfEdges, :, :] = B2CoefsRaw[numberOfEdges-1, 0:numberOfEdges, :, :]
+            coefsRawTemp[3, 0:numberOfEdges, :, :] = CCoefsRaw[numberOfEdges-1, 0:numberOfEdges, :, :]
+
 
             patchCoefsMatrix = getBicubicBezierPointCoefs(localCoords, coefsRawTemp[:, 0:numberOfEdges, :, :])
+            print "mask %d", indexMask
+
             coefsMatrix[p, indexMask[:]] = patchCoefsMatrix[:]
 
         else:
@@ -124,8 +130,7 @@ regularPoints= mat_contents["regularPoints"]#.astype(int)
 
 [parameters, fine_vertices] = scaleAwayParameters(parameters, fine_vertices)
 [newA, newB1, newB2, newC] = sortAB1B2VIndices(A, B1, B2, C)
-print newA, newB1, newB2, newC
-quit()
+
 
 print "Loaded data. Creating matrices"
 coefs = createGlobalControlMeshCoefs(parameters, quads, newA, newB1, newB2, newC, regularPoints)

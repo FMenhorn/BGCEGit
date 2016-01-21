@@ -20,15 +20,16 @@ def checkB1B2OrientationReversal(B1,B2,quad_list,quad_index,vertex_index):
     print type(vertex_index)
     assert type(vertex_index) is np.int32
 
-    print B1.shape
+
     vertex_index = int(vertex_index)
-    print type(vertex_index)
-    B1s_this_vertex = np.reshape(B1[vertex_index,:,:],B1.shape[1:3])
-    B2s_this_vertex = np.reshape(B2[vertex_index,:,:],B2.shape[1:3])
+
 
     numberOfEdges = getNumOfEdges(B1,vertex_index)
 
     quadNumberLocal = np.where(B1[vertex_index,:,1] == quad_index)[0][0]
+
+    print B2[vertex_index,quadNumberLocal,2:4]
+    #quit()
     B1EdgeFromB1 = np.reshape(B1[vertex_index,quadNumberLocal,2:4],2)
     shouldBeSameAsB1Edge = np.reshape(B2[vertex_index,(quadNumberLocal - 1)%numberOfEdges,2:4], 2)
     isB1IfReversed = np.reshape(B2[vertex_index,(quadNumberLocal + 1)%numberOfEdges,2:4],2)
