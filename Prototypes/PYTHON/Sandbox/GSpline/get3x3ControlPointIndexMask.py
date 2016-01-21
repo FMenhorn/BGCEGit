@@ -64,8 +64,8 @@ def get3x3ControlPointIndexMask(quad_list, quad_control_point_indices, quad_inde
                                            cellNumbers=range((localX-1),(localX+1)+1))
         maskMaxY = 1
 
-    for j in range(maskMinY,maskMaxY+1):
-        for i in range(maskMinX,maskMaxX+1):
+    for j in range(maskMinY,maskMaxY):
+        for i in range(maskMinX,maskMaxX):
             local_control_point_index = local_control_point_indices[localX-2+i,localY-2+j]
             indexMask[i,j] = quad_control_point_indices[quad_index,local_control_point_index]
 

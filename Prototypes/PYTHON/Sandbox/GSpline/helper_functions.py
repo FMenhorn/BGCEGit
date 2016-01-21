@@ -1,7 +1,7 @@
 import numpy as np
 
 def getNumOfEdges(neighbour_matrix, orig_vertex_id):
-    numOfEdgesMeeting = np.sum(neighbour_matrix[orig_vertex_id,:,0] != 0)
+    numOfEdgesMeeting = np.sum(neighbour_matrix[orig_vertex_id,:,0] != -1)
 
     return numOfEdgesMeeting
 

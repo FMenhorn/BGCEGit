@@ -75,7 +75,7 @@ def createGlobalControlMeshCoefs(parameterCoordinates, quad_list, AVertexList, B
 
             cornerVertexIndex = quad_list[quad_index, whichCorner]
             # TODO: Change to Objects in here
-            numberOfEdges = getNumOfEdges[ AVertexList, cornerVertexIndex]
+            numberOfEdges = getNumOfEdges( AVertexList, cornerVertexIndex)
             indexMask = getExtraOrdCornerIndexMask(quad_list, AVertexList, B1VertexList, B2VertexList, CVertexList,
                                                    quad_control_point_indices, quad_index, whichCorner)
             # TODO: numberOfEges - 1 ??
@@ -103,20 +103,20 @@ def createGlobalControlMeshCoefs(parameterCoordinates, quad_list, AVertexList, B
 #####MAIN CODE######
 # Initialization
 parameters = np.genfromtxt('Data/Cantilever_try/parameters.csv', delimiter=';')
-quads = np.array(np.genfromtxt('Data/Cantilever_try/cantilever_quads_coarse.csv', delimiter=';'))
+quads = np.array(np.genfromtxt('Data/Cantilever_try/cantilever_quads_coarse.csv', delimiter=';'), dtype=int)
 vertices = np.array(np.genfromtxt('Data/Cantilever_try/cantilever_verts_coarse.csv', delimiter=';'))
 fine_vertices = np.array(np.genfromtxt('Data/Cantilever_try/cantilever_verts_fine.csv', delimiter=';'))
 
 
 mat_contents = sio.loadmat('Data/Cantilever_try/cantilever.mat')
 
-A = mat_contents["A"]
-B1 = mat_contents["B1"]
-B2 = mat_contents["B2"]
-C = mat_contents["C"]
-regularPoints= mat_contents["regularPoints"]
-print "hello"
-getNumOfEdges(A,5)
+A = mat_contents["A"]#.astype(int)
+B1 = mat_contents["B1"]#.astype(int)
+B2 = mat_contents["B2"]#.astype(int)
+C = mat_contents["C"]##.astype(int)
+regularPoints= mat_contents["regularPoints"]#.astype(int)
+
+
 # Preprocessing
 # Throw away any datapoints which are NaN or outside the parameter range [0,1]
 # since these cause trouble. (+ Scale the resulting ones so that max and min
@@ -124,6 +124,8 @@ getNumOfEdges(A,5)
 
 [parameters, fine_vertices] = scaleAwayParameters(parameters, fine_vertices)
 [newA, newB1, newB2, newC] = sortAB1B2VIndices(A, B1, B2, C)
+print newA, newB1, newB2, newC
+quit()
 
 print "Loaded data. Creating matrices"
 coefs = createGlobalControlMeshCoefs(parameters, quads, newA, newB1, newB2, newC, regularPoints)
