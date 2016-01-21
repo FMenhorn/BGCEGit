@@ -11,7 +11,7 @@ def createLocalParamsExtraordinary(global_quad_params):
     shifted_scaled_coords = global_quad_params * 4 - whichPatch
     shifted_scaled_coords[global_quad_params >= 1] = 1  # so param 1 doesn't give 0)
 
-    raise Exception("what is nearWhich??? -> decrement it because of MATLAB idx")
+    #TODO: raise Exception("what is nearWhich??? -> decrement it because of MATLAB idx")
 
     whichPatch = whichPatch + 1
     localParams = shifted_scaled_coords

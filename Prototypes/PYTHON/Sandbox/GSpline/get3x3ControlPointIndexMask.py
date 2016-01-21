@@ -7,7 +7,9 @@ def get3x3ControlPointIndexMask(quad_list, quad_control_point_indices, quad_inde
 
     assert type(quad_list) is np.ndarray
     assert type(quad_control_point_indices) is np.ndarray
-    assert type(quad_index) is np.ndarray
+    print quad_index
+    assert type(quad_index) is int
+    print localIndexXY
     assert type(localIndexXY) is np.ndarray
 
     indexMask = np.zeros([3,3])
