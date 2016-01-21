@@ -1,0 +1,73 @@
+% The titlepage for the CAMP report document.
+% Included by MAIN.TEX
+
+
+%--------------------------------------------------
+% The title page
+%--------------------------------------------------
+
+% correct BCOR - undo at the end !!!
+\def\bcorcor{0.15cm}
+\addtolength{\hoffset}{\bcorcor}
+
+\thispagestyle{empty}
+
+ \vspace{10mm}
+\begin{center}
+	       %\oTUM{4cm}
+	       \includegraphics[width=4cm]{styles/tum_logo.png}
+	   
+	   \vspace{5mm}     
+	   \huge Bavarian Graduate School of Computational Engineering \\%Honours project\\ 
+	   \vspace{0.5cm}
+	 \large Technische Universit{\"a}t M{\"u}nchen\\
+        
+	\end{center}
+		
+
+\vspace{10mm}
+\begin{center}
+
+   {\Large \doctype}
+
+  \vspace{10mm}
+  
+  {\LARGE \title}\\
+  
+  
+  \vspace{10mm}
+  
+  
+  %{\LARGE  \titleGer}\\
+  
+  
+  %\vspace{10mm}
+
+    %\hfill
+    \begin{tabular}{ll}
+	   \Large Authors:     & \Large Saumitra Joshi, \\[2mm] 
+	    &\Large Juan Carlos Medina, \\[2mm] 
+	    &\Large Friedrich Menhorn, \\[2mm] 
+	    &\Large Severin Reiz, \\[2mm] 
+	    &\Large Benjamin R{\"u}th, \\[2mm] 
+	    &\Large Erik Wannerberg, \\[2mm]
+	    &\Large Anna Yurova \\[2mm] 
+%	   \Large $\mathrm{1^{st}}$ examiner:    & \Large Prof. Dr. However Wasit \\[2mm]				
+%	   \Large $\mathrm{2^{nd}}$ examiner:    & \Large Prof. Dr. However Wasit \\[2mm]
+	   \Large Advisors:    & \Large Arash Bakhtiari (TUM), \\[2mm]
+	   &\Large Dirk Hartmann (Siemens AG), \\[2mm] 
+	   &\Large Utz Wever (Siemens AG) \\[2mm]
+%	   \Large Thesis handed in on:       & \Large August 15, 2006
+	 \end{tabular}
+	 
+	 \vspace{5mm}
+	 
+
+   \hspace{0.4cm}\includegraphics[width=14cm]{styles/sccs_os2.pdf}
+
+   
+
+\end{center}
+
+% undo BCOR correction
+\addtolength{\hoffset}{\bcorcor}

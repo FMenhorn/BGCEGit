@@ -1,0 +1,127 @@
+ % The main file for CAMP reports
+ % Don't put any content in here. 
+ % Don't even include content files by using \input or \inlcude. 
+ % Put your content to TEXT.TEX or include it there using \input.
+ % Uses:
+ %		SETTINGS.TEX		contains the settings for this document
+ %		COMMANDS.TEX		contains commands which can be used while writing
+ %		INFO.TEX			contains the author, title and so on for the cover
+ %		COVER.TEX			formats the front cover of the document
+ %		ABSTRACT.TEX		contains the abstract to be included (if needed)
+ %		TEXT.TEX			contains the actual content of the document
+ %		BIB.BIB				containt the BibTeX entries for the document
+ 
+
+
+%% Draft document mode (with todos, no pictures just bounding box)
+%\documentclass[draft,11pt,a4paper,bibtotoc,idxtotoc,headsepline,footsepline,footexclude,DIV13,oneside]{scrbook}
+%% Final document mode (no todos, with pictures)
+%\documentclass[final,11pt,a4paper,bibtotoc,idxtotoc,headsepline,footsepline,footexclude,DIV13,oneside]{scrbook}
+%% Intermediate document mode (todos and pictures)
+\documentclass[11pt,a4paper,bibtotoc,idxtotoc,headsepline,footsepline,footexclude,DIV13,oneside]{scrbook}
+
+%\usepackage{epstopdf}
+% KOMA-Optionen:
+%  bibtotoc: include bibliography in table of contents
+%  idxtotoc: include index in table of contents
+%  headsepline: use horizontalline under heading
+%  BCOR: binding correcion (Bindungskorrektur) (e.g.: BCOR5mm)
+%  DIV: Number of sheet sections (used for layout) (e.g.: DIV12) 
+
+
+
+% include title and author information for the cover
+\input{components/info}
+
+% include settings
+\input{components/settings}
+
+% include commands
+\input{components/commands}
+
+% include acronyms and glossary
+\input{components/acronyms}
+
+\makeglossary
+
+\begin{document}
+
+	\frontmatter
+	
+	\input{components/titlepage}
+	
+	\input{components/preface}
+	
+	%\input{components/disclaimer}
+	
+	\input{components/acknowledgements}
+	
+	%\input{components/abstract}
+	\listoftodos
+	\tableofcontents
+  	%outline and overview
+
+	\mainmatter
+
+	\chapter{ToPy}
+	\section{Prerequisites}
+	For installing Topy, we need some additional software beforehand.
+	\begin{itemize}
+	\item Python ($>$2.7)
+	\item Numpy (Usually provided by Python distribution)
+	\item Pyvtk:
+		\begin{itemize}
+		\item sudo apt-get install python-pip
+		\item sudo pip install pyvtk
+		\end{itemize}
+	\item Pysparse:
+		\begin{itemize}
+		\item git clone git:://pysparse.git.sourceforge.net/gitroot/pysparse/pysparse/
+		\item cd pysparse
+		\item sudo python setup.py install		
+		\end{itemize}
+	\end{itemize}
+	Furthermore, since by default the output .vtk files from Topy are binary, we need to change them to ascii. Hence, in the Topy source file \texttt{core/visualization.py} in the method \texttt{{\_}write{\_}legace{\_}vtu(x, fname)} (line 160), change in line 194 \texttt{binary} to \texttt{ascii}.
+	
+	\section{Install ToPy}
+	Finally, we can install Topy by calling \\
+	\texttt{sudo python setup.py install} \\
+	in the root directory of Topy.
+
+	\section{Test Installation}
+	Enter one of the folders in examples (e.g. examples/cantilever) and execute a Topy test run by \\
+	\texttt{python optimize.py <example.tpd-file>}\\
+	
+	\chapter{OpenCascade}
+	\section{Install OpenCascade}
+	We use the OpenCascade not from the official webpage but from the Git repository:
+	\begin{itemize}
+	\item git clone git://github.com/tpaviot/oce.git
+	\item cd oce
+	\item mkdir build
+	\item cmake ..
+	\item make 
+	\item sudo make install
+	\end{itemize}
+	In the make step, one can use the \texttt{-jx} parameter where x is the number of processor to build in parallel. These steps are in accord with the installation guide on the git page itself. One can also use the cmake-gui to change some of the build configuration if need be (e.g. include OpenMP support).
+	\section{Test Installation}
+	Test the installation by calling \\
+	\texttt{make test}\\
+	They should all be successful.
+	
+	\chapter{CADTOPCAD}
+	\section{Prerequisites}
+	\begin{itemize}
+	\item Topy
+	\item OpenCascade
+	\item CPPUnit:
+		\begin{itemize}
+		\item sudo apt-get install lib-cppunitdev
+		\end{itemize}
+	\end{itemize}
+
+  	\clearemptydoublepage
+	
+ 
+\end{document}
+
