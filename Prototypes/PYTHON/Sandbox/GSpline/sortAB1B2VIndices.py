@@ -1,4 +1,5 @@
 import numpy as np
+from helper_functions import getNumOfEdges
 
 def sortAB1B2VIndices(oldA,oldB1,oldB2,oldC):
 
@@ -7,7 +8,6 @@ def sortAB1B2VIndices(oldA,oldB1,oldB2,oldC):
         M2_dict = {tuple(M2[i,:]):i for i in range(M2.shape[0])}
 
         keys = M1_dict.viewkeys() & M2_dict.viewkeys()
-        print keys
         MM = []
         for key in keys:
             MM.append(list(key))
@@ -26,20 +26,23 @@ def sortAB1B2VIndices(oldA,oldB1,oldB2,oldC):
 
         return MM, M1_ids, M2_ids
 
+    assert type(oldA) is np.ndarray
+    assert type(oldB1) is np.ndarray
+    assert type(oldB2) is np.ndarray
+    assert type(oldC) is np.ndarray
 
-    mod_index = lambda i, modul: (i-1)%modul + 1
-    shifted_indices = lambda ind, modul: mod_index(np.array(range(modul)) + ind,modul)
     newB1 = np.zeros(oldB1.shape)
     newB2 = np.zeros(oldB2.shape)
     newA = np.zeros(oldA.shape)
     newC = np.zeros(oldC.shape)
 
-    for i in range(oldB2.shape[0])
-        m = getNumOfEdgesMeetingMatlab(oldB2,i)
-        indicesLocB1 = np.zeros[1,m]
-        indicesLocB2 = np.zeros[1,m]
-        indicesLocA = np.zeros[1,m]
-        indicesLocC = np.zeros[1,m]
+    for i in range(oldB2.shape[0]):
+        m = getNumOfEdges(oldB2,i)
+        print m
+        indicesLocB1 = np.zeros(m,dtype=int)
+        indicesLocB2 = np.zeros(m,dtype=int)
+        indicesLocA = np.zeros(m,dtype=int)
+        indicesLocC = np.zeros(m,dtype=int)
 
         BB1 = np.reshape(oldB1[i,0:m,2:4],[m,2])
         BB2 = np.reshape(oldB2[i,0:m,2:4],[m,2])
@@ -54,9 +57,9 @@ def sortAB1B2VIndices(oldA,oldB1,oldB2,oldC):
             neighbourB2Index = np.where(oldB2[i,0:m,1] == neighbourQuad)[0][0]
             neighbourCIndex = np.where(oldC[i,0:m,1] == neighbourQuad)[0][0]
             nextIndex = np.where(B2Indices == neighbourB2Index)[0][0]
-            indicesLocA[mod_index(local_quad_index+1,m)] = neighbourAIndex
-            indicesLocB1[mod_index(local_quad_index+1,m)] = neighbour
-            indicesLocC[mod_index(local_quad_index+1,m)] = neighbourCIndex
+            indicesLocA[local_quad_index] = int(neighbourAIndex)
+            indicesLocB1[local_quad_index] = int(neighbour)
+            indicesLocC[local_quad_index] = int(neighbourCIndex)
             indicesLocB2[local_quad_index] = current_quad
 
         newA[i,0:m,:] = oldA[i,indicesLocA,:]
@@ -65,3 +68,23 @@ def sortAB1B2VIndices(oldA,oldB1,oldB2,oldC):
         newC[i,0:m,:] = oldC[i,indicesLocC,:]
 
     return newA,newB1,newB2,newC
+
+#TESTING
+import scipy.io as sio
+#####MAIN CODE######
+# Initialization
+parameters = np.genfromtxt('Data/Cantilever_try/parameters.csv', delimiter=';')
+quads = np.array(np.genfromtxt('Data/Cantilever_try/cantilever_quads_coarse.csv', delimiter=';'))
+vertices = np.array(np.genfromtxt('Data/Cantilever_try/cantilever_verts_coarse.csv', delimiter=';'))
+fine_vertices = np.array(np.genfromtxt('Data/Cantilever_try/cantilever_verts_fine.csv', delimiter=';'))
+
+
+mat_contents = sio.loadmat('Data/Cantilever_try/cantilever.mat')
+
+A = np.array(mat_contents["A"])
+B1 = np.array(mat_contents["B1"])
+B2 = np.array(mat_contents["B2"])
+C = np.array(mat_contents["C"])
+
+print sortAB1B2VIndices(A, B1, B2, C)
+
