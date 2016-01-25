@@ -42,7 +42,7 @@ def getExtraOrdCornerIndexMask(quad_list,AVertexList,B1VertexList,B2VertexList,C
     CIndices = CVertexList[cornerVertexIndex,aroundcorner_indices,0]
 
     print "b1indices %d", AIndices  #TODO! Third column is not working
-    quit()
+    #quit()
 
     indexMask = np.array([AIndices[:].reshape(4),
                           B1Indices[:].reshape(4),
