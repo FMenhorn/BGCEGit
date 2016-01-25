@@ -1,27 +1,27 @@
 __author__ = 'juan'
 
 import numpy as np
-from Vertex import Vertex
+from Vertex import Vertex, FineVertex
 from Edge import Edge
 from Quad import Quad
 
 
 def quad_vert_generator():
 
-    #_verts = np.array(np.genfromtxt('Data/Torus/torus_verts_coarse.csv', delimiter=';'))
-    #_quads = np.array(np.genfromtxt('Data/Torus/torus_quads_coarse.csv', delimiter=';'))
-    #_fine_verts = np.array(np.genfromtxt('Data/Torus/torus_verts_fine.csv', delimiter=';'))
-    #_parameters = np.genfromtxt('Data/Torus/parameters.csv', delimiter=';')
+    _verts = np.array(np.genfromtxt('Data/Torus/torus_verts_coarse.csv', delimiter=';'))
+    _quads = np.array(np.genfromtxt('Data/Torus/torus_quads_coarse.csv', delimiter=';'))
+    _fine_verts = np.array(np.genfromtxt('Data/Torus/torus_verts_fine.csv', delimiter=';'))
+    _parameters = np.genfromtxt('Data/Torus/parameters.csv', delimiter=';')
 
-    _verts = np.array(np.genfromtxt('Data/Torus_minimal/vers_torusminimal.csv', delimiter=';'))
-    _quads = np.array(np.genfromtxt('Data/Torus_minimal/quads_torusminimal.csv', delimiter=';'))
-    _fine_verts = np.array(np.genfromtxt('Data/Torus_minimal/torus_datapoints.csv', delimiter=';'))
-    _parameters = np.genfromtxt('Data/Torus_minimal/parameters.csv', delimiter=';')
+    #_verts = np.array(np.genfromtxt('Data/Torus_minimal/vers_torusminimal.csv', delimiter=';'))
+    #_quads = np.array(np.genfromtxt('Data/Torus_minimal/quads_torusminimal.csv', delimiter=';'))
+    #_fine_verts = np.array(np.genfromtxt('Data/Torus_minimal/torus_datapoints.csv', delimiter=';'))
+    #_parameters = np.genfromtxt('Data/Torus_minimal/parameters.csv', delimiter=';')
 
     # Create vertices
     vertex_list = []
     for i in range(_verts.shape[0]):
-        vertex_list.append(Vertex(_id=i, _x=_verts[i, 0], _y=_verts[i, 1], _z=_verts[i, 2]))
+        vertex_list.append(Vertex(id=i, x=_verts[i, 0], y=_verts[i, 1], z=_verts[i, 2]))
 
     # Creating edges
     edge_dict = {}
@@ -49,7 +49,7 @@ def quad_vert_generator():
         e3 = tuple(sorted((_quads[i, 2], _quads[i, 3])))
         e4 = tuple(sorted((_quads[i, 3], _quads[i, 0])))
         quad_list.append(Quad(i, vertex_list[a], vertex_list[b], vertex_list[c], vertex_list[d],
-                             edge_dict[e1], edge_dict[e2], edge_dict[e3], edge_dict[e4]))
+                         edge_dict[e1], edge_dict[e2], edge_dict[e3], edge_dict[e4]))
 
     # Errasing hanging nodes
     for i in range(vertex_list.__len__()):
@@ -69,13 +69,18 @@ def quad_vert_generator():
     for e in edge_dict:
         if edge_dict[e].get_quads().__len__() > 2:
             print e
+    # Create fine vertices
+    fine_vertex_list = []
 
-    # Create parameterList
-    parameter_list = []
-    for i in range(_parameters.shape[0]):
-        parameter_list.append([quad_list[int(_parameters[i, 0])], _parameters[i, 1], _parameters[i, 2]])
+    for i in range(_fine_verts.shape[0]):
+        fine_vertex_list.append(FineVertex(id=i, x=_fine_verts[i, 0], y=_fine_verts[i, 1], z=_fine_verts[i, 2],
+                                u=_parameters[i, 1], v=_parameters[i, 2], quad=quad_list[int(_parameters[i, 0])]))
 
-    return new_vertex_list, quad_list, parameter_list, _fine_verts
+    #parameter_list = []
+    #for i in range(_parameters.shape[0]):
+    #    parameter_list.append([quad_list[int(_parameters[i, 0])], _parameters[i, 1], _parameters[i, 2]])
+
+    return new_vertex_list, quad_list, fine_vertex_list
 
 
 
