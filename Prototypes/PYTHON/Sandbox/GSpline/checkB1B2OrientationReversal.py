@@ -18,8 +18,6 @@ def checkB1B2OrientationReversal(B1,B2,quad_list,quad_index,vertex_index):
 
 
     print type(vertex_index)
-    assert type(vertex_index) is np.int32
-
 
     vertex_index = int(vertex_index)
 
