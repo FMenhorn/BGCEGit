@@ -76,12 +76,13 @@
 		\end{itemize}
 	\item Pysparse:
 		\begin{itemize}
+		\item Since pip does not work we use:
 		\item git clone git:://pysparse.git.sourceforge.net/gitroot/pysparse/pysparse/
 		\item cd pysparse
 		\item sudo python setup.py install		
 		\end{itemize}
 	\end{itemize}
-	Furthermore, since by default the output .vtk files from Topy are binary, we need to change them to ascii. Hence, in the Topy source file \texttt{core/visualization.py} in the method \texttt{{\_}write{\_}legace{\_}vtu(x, fname)} (line 160), change in line 194 \texttt{binary} to \texttt{ascii}.
+	Furthermore, since by default the output .vtk files from Topy are binary, we need to change them to ascii. Hence, in the Topy source file \texttt{core/visualization.py} in the method \texttt{{\_}write{\_}legace{\_}vtu(x, fname)} (line 160), change in line 194 \texttt{binary} to \texttt{ascii}. \todo{Code picture}
 	
 	\section{Install ToPy}
 	Finally, we can install Topy by calling \\
@@ -90,7 +91,7 @@
 
 	\section{Test Installation}
 	Enter one of the folders in examples (e.g. examples/cantilever) and execute a Topy test run by \\
-	\texttt{python optimize.py <example.tpd-file>}\\
+	\texttt{python optimize.py <example.tpd-file>} \todo{Output picture}\\
 	
 	\chapter{OpenCascade}
 	\section{Install OpenCascade}
@@ -99,14 +100,14 @@
 	\item git clone git://github.com/tpaviot/oce.git
 	\item cd oce
 	\item mkdir build
-	\item cmake ..
-	\item make 
-	\item sudo make install
+	\item cmake .. \todo{Output picture}
+	\item make \todo{Output picture}
+	\item sudo make install \todo{Output picture} 
 	\end{itemize}
-	In the make step, one can use the \texttt{-jx} parameter where x is the number of processor to build in parallel. These steps are in accord with the installation guide on the git page itself. One can also use the cmake-gui to change some of the build configuration if need be (e.g. include OpenMP support).
-	\section{Test Installation}
+	In the make step, one can use the \texttt{-jx} parameter where x is the number of processor to build in parallel. These steps are in accord with the installation guide on the git page itself. One can also use the cmake-gui \todo{Output picture} to change some of the build configuration if need be (e.g. include OpenMP support).
+	\section{Installation Test}
 	Test the installation by calling \\
-	\texttt{make test}\\
+	\texttt{make test} \todo{Output picture}\\
 	They should all be successful.
 	
 	\chapter{CADTOPCAD}
