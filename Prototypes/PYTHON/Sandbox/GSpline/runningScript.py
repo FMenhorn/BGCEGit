@@ -131,7 +131,6 @@ regularPoints= mat_contents["regularPoints"]#.astype(int)
 [parameters, fine_vertices] = scaleAwayParameters(parameters, fine_vertices)
 [newA, newB1, newB2, newC] = sortAB1B2VIndices(A, B1, B2, C)
 
-
 print "Loaded data. Creating matrices"
 coefs = createGlobalControlMeshCoefs(parameters, quads, newA, newB1, newB2, newC, regularPoints)
 print "Done. Matrices created"

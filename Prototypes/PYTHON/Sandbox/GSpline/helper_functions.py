@@ -52,7 +52,7 @@ def checkB1B2OrientationReversal(B1,B2,quad_list,quad_index,vertex_index):
     :return: a Bool?
     """
 
-    mod_index = lambda i, modul: (i-1)%modul + 1
+    mod_index = lambda i, modul: (i)%modul
 
     B1s_this_vertex = np.reshape(B1[vertex_index,:,:],[B1.shape[1:3]])
     B2s_this_vertex = np.reshape(B2[vertex_index,:,:],[B2.shape[1:3]])

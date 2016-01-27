@@ -11,7 +11,7 @@ def getExtraOrdCornerIndexMask(quad_list,AVertexList,B1VertexList,B2VertexList,C
 
 
     # TODO: Understand and change code
-    mod_index = lambda i, modul: (i)%modul + 1
+    mod_index = lambda i, modul: (i)%modul
     shifted_indices = lambda ind, modul: mod_index(np.array(range(modul)) + ind,modul)
     reverse_shifted_indices = lambda ind, modul: mod_index(np.arange(modul,0,-1) + ind,modul)
 
@@ -42,12 +42,19 @@ def getExtraOrdCornerIndexMask(quad_list,AVertexList,B1VertexList,B2VertexList,C
     AIndices = AVertexList[cornerVertexIndex,aroundcorner_indices,0]
     CIndices = CVertexList[cornerVertexIndex,aroundcorner_indices,0]
 
-    print "b1indices %d", AIndices  #TODO! Third column is not working
-    #quit()
+    print "AVertexList[0][0][0] %d", AVertexList[0][0][0]
 
-    indexMask = np.array([AIndices[:].reshape(4),
-                          B1Indices[:].reshape(4),
-                          B2Indices[:].reshape(4),
-                          CIndices[:].reshape(4)],dtype=int)
+    print "cornerVertexIndex: ", cornerVertexIndex
+    print "aroundcorner_indices: ", aroundcorner_indices
+
+    print "AIndices %d", AIndices
+    print "B1Indices %d", B1Indices
+    print "B2Indices %d", B2Indices  #TODO! Third column is not working
+    print "CIndices %d", CIndices
+
+    indexMask = np.array([AIndices[:].reshape([1, 4]),
+                          B1Indices[:].reshape([1, 4]),
+                          B2Indices[:].reshape([1, 4]),
+                          CIndices[:].reshape([1, 4])], dtype=int)
 
     return indexMask
