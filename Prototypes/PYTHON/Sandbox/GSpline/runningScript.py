@@ -91,7 +91,13 @@ def createGlobalControlMeshCoefs(parameterCoordinates, quad_list, AVertexList, B
             patchCoefsMatrix = getBicubicBezierPointCoefs(localCoords, coefsRawTemp[:, 0:numberOfEdges, :, :])
             print "mask %d", indexMask
 
-            coefsMatrix[p, indexMask[:]] = patchCoefsMatrix[:]
+            print "p ", p
+
+            print "coefsMatrix[p][indexMask[:]] ", coefsMatrix[p][indexMask[:]]
+            print "patchCoefsMatrix[:] ", patchCoefsMatrix[:]
+
+            coefsMatrix[p][indexMask[:]] = patchCoefsMatrix[:]
+
 
         else:
 
