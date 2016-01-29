@@ -1,12 +1,12 @@
 # ported from MATLAB/Sandbox/GSpline/checkB1B2OrientationReversal.m
 
 import numpy as np
-from helper_functions import getNumOfEdges
+from helper_functions import get_num_edges_meeting
 
 def checkB1B2OrientationReversal(B1,B2,quad_list,quad_index,vertex_index):
     """
     check if the B1 in the quad to the right lies along the same edge as the
-    %B2 in the current quad.
+    B2 in the current quad.
 
     :param B1:
     :param B2:
@@ -15,19 +15,12 @@ def checkB1B2OrientationReversal(B1,B2,quad_list,quad_index,vertex_index):
     :param vertex_index:
     :return: a Bool?
     """
-
-
-    print type(vertex_index)
-
     vertex_index = int(vertex_index)
 
-
-    numberOfEdges = getNumOfEdges(B1,vertex_index)
+    numberOfEdges = get_num_edges_meeting(B1, vertex_index)
 
     quadNumberLocal = np.where(B1[vertex_index,:,1] == quad_index)[0][0]
 
-    print B2[vertex_index,quadNumberLocal,2:4]
-    #quit()
     B1EdgeFromB1 = np.reshape(B1[vertex_index,quadNumberLocal,2:4],2)
     shouldBeSameAsB1Edge = np.reshape(B2[vertex_index,(quadNumberLocal - 1)%numberOfEdges,2:4], 2)
     isB1IfReversed = np.reshape(B2[vertex_index,(quadNumberLocal + 1)%numberOfEdges,2:4],2)
@@ -45,12 +38,7 @@ def checkB1B2OrientationReversal(B1,B2,quad_list,quad_index,vertex_index):
     """
     shouldBeB1Edge = thisQuad_cornerVertices[[whichQuadCorner,(whichQuadCorner+1)%4]]
     shouldBeB2Edge = thisQuad_cornerVertices[[whichQuadCorner, (whichQuadCorner-1)%4]]
-    print "shouldBeB2Edge"
-    print shouldBeB2Edge
-    print "B2EdgeFromB2"
-    print B2EdgeFromB2
-    print len(np.intersect1d(B2EdgeFromB2,shouldBeB2Edge))
-    print B1[vertex_index,:,:]
+
     if len(np.intersect1d(B1EdgeFromB1,shouldBeB1Edge)) == 2 and \
         len(np.intersect1d(B2EdgeFromB2,shouldBeB2Edge)) == 2:
 

@@ -60,24 +60,3 @@ def bezier(P, h):
             x = x + np.multiply(bernstein(i, n, u), bernstein(j, m, v)) * P[0, i, j]
             y = y + np.multiply(bernstein(i, n, u), bernstein(j, m, v)) * P[1, i, j]
             z = z + np.multiply(bernstein(i, n, u), bernstein(j, m, v)) * P[2, i, j]
-
-
-
-
-
-# TESTING
-# binomial
-_n = np.array([5, 8, 5])
-_k = np.array([2, 3, 4])
-_t = np.ones((3,))
-_b = bincoeff_array(_k, _n)
-print _b
-# bernstein
-_n = 5
-_k = 3
-_t= np.array([3,5])
-_B = bernstein(_k, _n, _t)
-print _B
-# bezier
-_h = 0.1
-_P = np.array([[ ],[],[]])

@@ -9,12 +9,12 @@ def getPetersControlPointCoefs(bezierCoefs,coefs_raw):
     '''
     m=coefs_raw.shape[1];
     n=coefs_raw.shape[0];
-    coefsMatrix = np.zeros((n,m))
+    coefs_matrix = np.zeros((n,m))
     for j in range(n):
         for i in range (n):
             controlPointCoef = bezierCoefs(i,j);
             for l in range (m):
                 for k in range (n):
-                    coefsMatrix[k,l] += coefs_raw[k,l,i,j]*controlPointCoef
+                    coefs_matrix[k,l] += coefs_raw[k,l,i,j]*controlPointCoef
 
-    return coefsMatrix
+    return coefs_matrix

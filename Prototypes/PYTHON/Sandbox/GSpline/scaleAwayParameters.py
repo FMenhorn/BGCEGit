@@ -51,5 +51,3 @@ A = np.array(mat_contents["A"])
 B1 = np.array(mat_contents["B1"])
 B2 = np.array(mat_contents["B2"])
 C = np.array(mat_contents["C"])
-
-print scaleAwayParameters(parameters, fine_vertices)

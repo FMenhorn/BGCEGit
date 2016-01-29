@@ -9,7 +9,6 @@ import scipy.io
 
 
 def dc_to_peter(vertex_list, quad_list):
-    verts = []
 
     quads = []
 
@@ -26,7 +25,6 @@ def dc_to_peter(vertex_list, quad_list):
     listOfVertices = []
     for i in range(len(verts)):
         listOfVertices.append(Vertex(i, verts[i]))
-
 
     for i in range(faces.shape[0]):
         face_vertices = [listOfVertices[faces[i].astype(int)[j]] for j in range(len(faces[i]))]

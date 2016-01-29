@@ -21,12 +21,3 @@ def getBicubicBezierPointCoefs(localParams, coefs_raw):
                 for k in range (4):
                     coefsMatrix[k,l] += coefs_raw[k,l,i,j]* controlPointCoef
     return coefsMatrix
-
-
-
-
-"""
-mat_contents=sio.loadmat('MatlabTestingData/getBicubicBezierPointCoefs.mat')
-oct_a = mat_contents['coefsRawTemp']
-getBicubicBezierPointCoefs(np.ones((7,7)),oct_a)
-"""
