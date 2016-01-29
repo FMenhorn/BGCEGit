@@ -1,8 +1,9 @@
-from quad import Quad
+from quad_DooSabin import Shape_DooSabin
+from Edge import Edge
 from mpl_toolkits.mplot3d import Axes3D
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 from DooSabin import DooSabin
-from vertex import Vertex
+from vertex_DooSabin import Vertex_DooSabin
 import numpy as np
 import matplotlib.pyplot as plt
 import scipy.io
@@ -11,13 +12,13 @@ import argparse
 
 
 __author__ = 'anna'
-parser=argparse.ArgumentParser(
-    description='''First argument: the file with quads information, second argument: the file with verts information; third argument: the name of the output file WITHOUT EXTENSION. The output always stored in .mat format''')
-parser.add_argument('quads', type=str, help='quads')
-parser.add_argument('verts', type=str, help='verts')
-parser.add_argument('output_name', type=str, help='output_name')
+#parser=argparse.ArgumentParser(
+#    description='''First argument: the file with quads information, second argument: the file with verts information; third argument: the name of the output file WITHOUT EXTENSION. The output always stored in .mat format''')
+#parser.add_argument('quads', type=str, help='quads')
+#parser.add_argument('verts', type=str, help='verts')
+#parser.add_argument('output_name', type=str, help='output_name')
 
-args = parser.parse_args()
+#args = parser.parse_args()
 # def FaceVerts(face, verts):
 #     #print(face)
 #     vtx = []
@@ -25,35 +26,45 @@ args = parser.parse_args()
 #         #print(verts[face[i]])
 #         vtx.append(verts[face[i]])
 #     return vtx
-quads_file = args.quads
-verts_file = args.verts
-output_file_name = args.output_name
+#quads_file = args.quads
+#verts_file = args.verts
+#output_file_name = args.output_name
 # print(quads_file)
 # print(verts_file)
 # print(output_file_name)
 #print("Hello!")
+output_file_name = "test"
 
 
 # faces = np.array(np.genfromtxt('quads_Torus.csv', delimiter=';'))
 # verts = np.array(np.genfromtxt('vers_Torus.csv', delimiter=';'))
-faces = np.array(np.genfromtxt(quads_file, delimiter=';'))
-verts = np.array(np.genfromtxt(verts_file, delimiter=';'))
+#faces = np.array(np.genfromtxt(quads_file, delimiter=';'))
+#verts = np.array(np.genfromtxt(verts_file, delimiter=';'))
 #faces = np.array(np.genfromtxt('sphere_quads_coarse.csv', delimiter=';'))
 #verts = np.array(np.genfromtxt('sphere_verts_coarse.csv', delimiter=';'))
 
 
-#faces = np.array([[0, 1 , 2, 3], [1, 5, 6, 2], [0, 1, 5, 4], [3, 2, 6, 7], [0, 3, 7, 4], [4, 5, 6, 7]])
-#verts = np.array([[0.0, 0.0, 0.0], [1.0, 0.0, 0.0], [1.0, 0.0, 1.0], [0.0, 0.0, 1.0], [0.0, 1.0, 0.0], [1.0, 1.0, 0.0], [1.0, 1.0, 1.0], [0.0, 1.0, 1.0]])
+faces = np.array([[0, 1, 2, 3], [1, 5, 6, 2], [0, 1, 5, 4], [3, 2, 6, 7], [0, 3, 7, 4], [4, 5, 6, 7]])
+verts = np.array([[0.0, 0.0, 0.0], [1.0, 0.0, 0.0], [1.0, 0.0, 1.0], [0.0, 0.0, 1.0], [0.0, 1.0, 0.0], [1.0, 1.0, 0.0], [1.0, 1.0, 1.0], [0.0, 1.0, 1.0]])
 quads = [None]*faces.shape[0]
 
 listOfVertices = []
 for i in range(len(verts)):
-    listOfVertices.append(Vertex(i, verts[i]))
+    listOfVertices.append(Vertex_DooSabin(i, verts[i][0], verts[i][1], verts[i][2]))
 
 
 for i in range(faces.shape[0]):
+    # vertex1 = listOfVertices[faces[i].astype(int)[0]]
+    # vertex2 = listOfVertices[faces[i].astype(int)[1]]
+    # vertex3 = listOfVertices[faces[i].astype(int)[2]]
+    # vertex4 = listOfVertices[faces[i].astype(int)[3]]
+    #
+    # edge1 = Edge(4 * i, vertex1, vertex2)
+    # edge2 = Edge(4 * i + 1, vertex2, vertex3)
+    # edge3 = Edge(4 * i + 2, vertex3, vertex4)
+    # edge4 = Edge(4 * i + 3, vertex4, vertex1)
     face_vertices = [listOfVertices[faces[i].astype(int)[j]] for j in range(len(faces[i]))]
-    quads[i] = Quad(i, face_vertices)
+    quads[i] = Shape_DooSabin(i, face_vertices)
 
     for vertex in face_vertices:
         vertex.addNeighbouringFace(quads[i])
@@ -66,23 +77,12 @@ for i in range(faces.shape[0]):
 fig = plt.figure()
 ax = Axes3D(fig)
 ax.set_aspect('equal')
-x = []
-y = []
-z = []
+# x = []
+# y = []
+# z = []
 #print(quads[0].ordered_refined_vertices)
-edge_orientation_check = [0, 1, 2, 3]
-#for vertex in quads[2].ordered_refined_vertices:
-for ind in edge_orientation_check:
-            x.append(quads[2].ordered_refined_vertices[ind].coordinates[0])
-            y.append(quads[2].ordered_refined_vertices[ind].coordinates[1])
-            z.append(quads[2].ordered_refined_vertices[ind].coordinates[2])
-x.append(quads[2].vertices[0].coordinates[0])
-y.append(quads[2].vertices[0].coordinates[1])
-z.append(quads[2].vertices[0].coordinates[2])
 
-x.append(quads[2].vertices[1].coordinates[0])
-y.append(quads[2].vertices[1].coordinates[1])
-z.append(quads[2].vertices[1].coordinates[2])
+#for vertex in quads[2].ordered_refined_vertices:
 
 # k = 5
 # x.append(listOfVertices[k].coordinates[0])
@@ -120,18 +120,19 @@ z.append(quads[2].vertices[1].coordinates[2])
 #     y.append(listOfVertices[k].C[i][1].coordinates[1])
 #     z.append(listOfVertices[k].C[i][1].coordinates[2])
 
-ax.scatter(x,y,z, color = 'r')
+#ax.scatter(x,y,z, color = 'r')
 #x = []
 #y = []
 #z = []
 for face in faces_refined1:
     #print face.quad_id
    # print(face.ordered_refined_vertices)
-    n = len(face.vertices)
+    n = len(face._vertices)
     # print(face.vertices)
-    x = [face.vertices[i].coordinates[0] for i in range(n)]
-    y = [face.vertices[i].coordinates[1] for i in range(n)]
-    z = [face.vertices[i].coordinates[2] for i in range(n)]
+   # print(face._vertices)
+    x = [face._vertices[i]._coordinates[0] for i in range(n)]
+    y = [face._vertices[i]._coordinates[1] for i in range(n)]
+    z = [face._vertices[i]._coordinates[2] for i in range(n)]
     vtx = [zip(x,y,z)]
     poly = Poly3DCollection(vtx, alpha = 0.2)
     poly.set_color('b')
@@ -159,21 +160,21 @@ for face in faces_refined1:
 #         z.append(vertex.C[i][1].coordinates[2])
 #
 # ax.scatter(x,y,z, color = 'b')
-vertices =listOfVertices
-x = []
-y = []
-z = []
+# vertices =listOfVertices
+# x = []
+# y = []
+# z = []
 # for j in range(len(vertices)):
 #     for i in range(len(vertices[j].B2)):
 #         x.append(vertices[j].B1[i][1].coordinates[0])
 #         y.append(vertices[j].B1[i][1].coordinates[1])
 #         z.append(vertices[j].B1[i][1].coordinates[2])
 
-ax.scatter(x,y,z, color = 'r')
-
-x = []
-y = []
-z = []
+# ax.scatter(x,y,z, color = 'r')
+#
+# x = []
+# y = []
+# z = []
 
 # for j in range(len(vertices)):
 #     for i in range(len(vertices[j].B2)):
@@ -185,11 +186,11 @@ z = []
 #         #else:
 #         # print(vertex.coordinates)
 
-ax.scatter(x,y,z, color = 'g')
-
-x = []
-y = []
-z = []
+# ax.scatter(x,y,z, color = 'g')
+#
+# x = []
+# y = []
+# z = []
 # for j in range(1, len(vertices), 3):
 #    x.append(vertices[j].coordinates[0])
 #    y.append(vertices[j].coordinates[1])
@@ -202,23 +203,23 @@ nonExtraordinaryPoints = -1*np.ones((len(quads), 16))
 vertC = -1*np.ones((len(verts), 7, 2))
 
 for i in range(len(quads)):
-    nonExtraordinaryPoints[i] = [quads[i].ordered_refined_vertices[j].id for j in range(16)]
+    nonExtraordinaryPoints[i] = [quads[i].ordered_refined_vertices[j]._id for j in range(16)]
 
 
 for i in range(len(listOfVertices)):
     for j in range(len(listOfVertices[i].A)):
-        vertA[i][j][0] = listOfVertices[i].A[j][1].id
-        vertA[i][j][1] = listOfVertices[i].A[j][1].parentOrigGrid.quad_id
-        vertB1[i][j][0] = listOfVertices[i].B1[j][1].id
-        vertB1[i][j][1] = listOfVertices[i].B1[j][1].parentOrigGrid.quad_id
-        vertB1[i][j][2] = listOfVertices[i].B1[j][2][0].id
-        vertB1[i][j][3] = listOfVertices[i].B1[j][2][1].id
-        vertB2[i][j][0] = listOfVertices[i].B2[j][1].id
-        vertB2[i][j][1] = listOfVertices[i].B2[j][1].parentOrigGrid.quad_id
-        vertB2[i][j][2] = listOfVertices[i].B2[j][2][0].id
-        vertB2[i][j][3] = listOfVertices[i].B2[j][2][1].id
-        vertC[i][j][0] = listOfVertices[i].C[j][1].id
-        vertC[i][j][1] = listOfVertices[i].C[j][1].parentOrigGrid.quad_id
+        vertA[i][j][0] = listOfVertices[i].A[j][1]._id
+        vertA[i][j][1] = listOfVertices[i].A[j][1].parentOrigGrid._id
+        vertB1[i][j][0] = listOfVertices[i].B1[j][1]._id
+        vertB1[i][j][1] = listOfVertices[i].B1[j][1].parentOrigGrid._id
+        vertB1[i][j][2] = listOfVertices[i].B1[j][2][0]._id
+        vertB1[i][j][3] = listOfVertices[i].B1[j][2][1]._id
+        vertB2[i][j][0] = listOfVertices[i].B2[j][1]._id
+        vertB2[i][j][1] = listOfVertices[i].B2[j][1].parentOrigGrid._id
+        vertB2[i][j][2] = listOfVertices[i].B2[j][2][0]._id
+        vertB2[i][j][3] = listOfVertices[i].B2[j][2][1]._id
+        vertC[i][j][0] = listOfVertices[i].C[j][1]._id
+        vertC[i][j][1] = listOfVertices[i].C[j][1].parentOrigGrid._id
 
 # Specify the filename of the .mat file
 #matfile = 'torus_point_data.mat'
@@ -241,7 +242,7 @@ assert np.all(vertA == matdata['A'])
 
 
 
-ax.scatter(x,y,z, color = 'b')
+#ax.scatter(x,y,z, color = 'b')
 ax.set_xlim3d(-1, 2)
 ax.set_ylim3d(-1, 2)
 ax.set_zlim3d(-1, 2)
