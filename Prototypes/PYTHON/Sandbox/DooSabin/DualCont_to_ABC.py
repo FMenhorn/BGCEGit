@@ -59,6 +59,8 @@ for i in range(faces.shape[0]):
 fig = plt.figure()
 ax = Axes3D(fig)
 ax.set_aspect('equal')
+
+#Dead code for visualization. Might be needed for debugging
 # x = []
 # y = []
 # z = []
@@ -187,7 +189,7 @@ vertC = -1*np.ones((len(verts), 7, 2))
 for i in range(len(quads)):
     nonExtraordinaryPoints[i] = [quads[i].ordered_refined_vertices[j]._id for j in range(16)]
 
-
+#necessary arrays
 for i in range(len(listOfVertices)):
     for j in range(len(listOfVertices[i].A)):
         vertA[i][j][0] = listOfVertices[i].A[j][1]._id
@@ -205,6 +207,7 @@ for i in range(len(listOfVertices)):
 
 # Specify the filename of the .mat file
 #matfile = 'torus_point_data.mat'
+#matfile will not be needed for python implementation
 matfile = output_file_name+'.mat'
 
 
