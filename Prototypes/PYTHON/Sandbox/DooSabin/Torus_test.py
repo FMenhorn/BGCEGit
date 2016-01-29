@@ -12,40 +12,31 @@ import argparse
 
 
 __author__ = 'anna'
-#parser=argparse.ArgumentParser(
-#    description='''First argument: the file with quads information, second argument: the file with verts information; third argument: the name of the output file WITHOUT EXTENSION. The output always stored in .mat format''')
-#parser.add_argument('quads', type=str, help='quads')
-#parser.add_argument('verts', type=str, help='verts')
-#parser.add_argument('output_name', type=str, help='output_name')
+parser=argparse.ArgumentParser(
+    description='''First argument: the file with quads information, second argument: the file with verts information; third argument: the name of the output file WITHOUT EXTENSION. The output always stored in .mat format''')
+parser.add_argument('quads', type=str, help='quads')
+parser.add_argument('verts', type=str, help='verts')
+parser.add_argument('output_name', type=str, help='output_name')
 
-#args = parser.parse_args()
-# def FaceVerts(face, verts):
-#     #print(face)
-#     vtx = []
-#     for i in range(len(face)):
-#         #print(verts[face[i]])
-#         vtx.append(verts[face[i]])
-#     return vtx
-#quads_file = args.quads
-#verts_file = args.verts
-#output_file_name = args.output_name
-# print(quads_file)
-# print(verts_file)
-# print(output_file_name)
-#print("Hello!")
-output_file_name = "test"
+args = parser.parse_args()
+
+quads_file = args.quads
+verts_file = args.verts
+output_file_name = args.output_name
+
+#output_file_name = "test"
 
 
 # faces = np.array(np.genfromtxt('quads_Torus.csv', delimiter=';'))
 # verts = np.array(np.genfromtxt('vers_Torus.csv', delimiter=';'))
-#faces = np.array(np.genfromtxt(quads_file, delimiter=';'))
-#verts = np.array(np.genfromtxt(verts_file, delimiter=';'))
+faces = np.array(np.genfromtxt(quads_file, delimiter=';'))
+verts = np.array(np.genfromtxt(verts_file, delimiter=';'))
 #faces = np.array(np.genfromtxt('sphere_quads_coarse.csv', delimiter=';'))
 #verts = np.array(np.genfromtxt('sphere_verts_coarse.csv', delimiter=';'))
 
 
-faces = np.array([[0, 1, 2, 3], [1, 5, 6, 2], [0, 1, 5, 4], [3, 2, 6, 7], [0, 3, 7, 4], [4, 5, 6, 7]])
-verts = np.array([[0.0, 0.0, 0.0], [1.0, 0.0, 0.0], [1.0, 0.0, 1.0], [0.0, 0.0, 1.0], [0.0, 1.0, 0.0], [1.0, 1.0, 0.0], [1.0, 1.0, 1.0], [0.0, 1.0, 1.0]])
+#faces = np.array([[0, 1, 2, 3], [1, 5, 6, 2], [0, 1, 5, 4], [3, 2, 6, 7], [0, 3, 7, 4], [4, 5, 6, 7]])
+#verts = np.array([[0.0, 0.0, 0.0], [1.0, 0.0, 0.0], [1.0, 0.0, 1.0], [0.0, 0.0, 1.0], [0.0, 1.0, 0.0], [1.0, 1.0, 0.0], [1.0, 1.0, 1.0], [0.0, 1.0, 1.0]])
 quads = [None]*faces.shape[0]
 
 listOfVertices = []
@@ -54,15 +45,6 @@ for i in range(len(verts)):
 
 
 for i in range(faces.shape[0]):
-    # vertex1 = listOfVertices[faces[i].astype(int)[0]]
-    # vertex2 = listOfVertices[faces[i].astype(int)[1]]
-    # vertex3 = listOfVertices[faces[i].astype(int)[2]]
-    # vertex4 = listOfVertices[faces[i].astype(int)[3]]
-    #
-    # edge1 = Edge(4 * i, vertex1, vertex2)
-    # edge2 = Edge(4 * i + 1, vertex2, vertex3)
-    # edge3 = Edge(4 * i + 2, vertex3, vertex4)
-    # edge4 = Edge(4 * i + 3, vertex4, vertex1)
     face_vertices = [listOfVertices[faces[i].astype(int)[j]] for j in range(len(faces[i]))]
     quads[i] = Shape_DooSabin(i, face_vertices)
 
