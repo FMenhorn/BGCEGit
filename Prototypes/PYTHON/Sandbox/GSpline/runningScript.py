@@ -112,8 +112,8 @@ def solve_least_squares_problem(A, b):
     x = 3 * [None]
     for i in range(3): # todo scipy does not support least squares with b.shape = (N,3), but only with (N,1) -> Here one computes the QR three times instead of one time! OPTIMIZE!!!
         b_red = np.array(b[:,i])
-        print "least squares %d out of 3..." % (i+1)
-        ret = lin.lsqr(A, b_red)
+        print "\n\n### least squares %d out of 3...\n" % (i+1)
+        ret = lin.lsmr(A, b_red, show=True)
         print "done."
         x[i] = ret[0]
 
@@ -177,7 +177,7 @@ joined_coefs = sp.vstack([sparse_coefs, fairnessWeight * sparse_fair_coefs])
 print "joined_coefs.shape = "+str(joined_coefs.shape)
 print "Done."
 
-READ_INPUT_FILE = True
+READ_INPUT_FILE = False
 
 if READ_INPUT_FILE:
     print "Reading input file for skipping infinitely long least squares computation..."
@@ -192,7 +192,6 @@ else:
     print "Least squares..."
     vertices = solve_least_squares_problem(joined_coefs, joined_verts)
     print "Done."
-
     with open('vertices.csv', 'wb') as csvfile:
         csvwriter = csv.writer(csvfile, delimiter=',',
                                quotechar='|', quoting=csv.QUOTE_MINIMAL)
