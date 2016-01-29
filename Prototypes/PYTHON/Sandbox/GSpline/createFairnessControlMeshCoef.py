@@ -1,5 +1,18 @@
 import numpy as np
+
+from get3x3ControlPointIndexMask import get3x3ControlPointIndexMask
+from getBezierPointCoefs import getBiquadraticPatchCoefs
 from createBicubicCoefMatrices import createBicubicCoefMatrices
+from getExtraOrdCornerIndexMask import getExtraOrdCornerIndexMask
+from getPetersControlPointCoefs import getPetersControlPointCoefs
+
+def one4toone2(i):
+    return (i - 1) / 3
+
+
+def whichCornerFun(i, j, whichCornerList):
+    return whichCornerList[one4toone2(i)][one4toone2(j)]
+
 
 def createFairnessControlMeshCoefs(quad_list, AVertexList, B1VertexList, B2VertexList, CVertexList,
                                    quad_control_point_indices):
@@ -10,10 +23,7 @@ def createFairnessControlMeshCoefs(quad_list, AVertexList, B1VertexList, B2Verte
     """
     N = quad_control_point_indices.shape[0] * quad_control_point_indices.shape[1] * 3
     M = quad_control_point_indices.shape[0] * quad_control_point_indices.shape[1]
-    print quad_control_point_indices.shape[1]
-    print N
-    print M
-    coefsMAtrix = np.zeros((N, M))
+    coefsMatrix = np.zeros((N, M))
 
     """
     precalculate the coefficients between all the vertex control points and
@@ -23,40 +33,46 @@ def createFairnessControlMeshCoefs(quad_list, AVertexList, B1VertexList, B2Verte
     first coord, bezier point second coord)
     """
 
-    # extraOrdinaryCoefsRaw = np.zeros((7,4,7,4,4))
+    ordinaryCoefsRaw = np.zeros((3,3,3,3))
     ACoefsRaw = np.zeros((7, 7, 4, 4))
     B1CoefsRaw = np.zeros((7, 7, 4, 4))
     B2CoefsRaw = np.zeros((7, 7, 4, 4))
     CCoefsRaw = np.zeros((7, 7, 4, 4))
 
     for i in range(2, 7):
-        ACoefsRaw[i, 0:i, :, :], B1CoefsRaw[i, 0:i, :, :], B2CoefsRaw[i, 0:i, :, :], CCoefsRaw[i, 0:i, :,
-                                                                                     :] = createBicubicCoefMatrices(i)
+        ACoefsRaw[i, 0:i, :, :], \
+        B1CoefsRaw[i, 0:i, :, :], \
+        B2CoefsRaw[i, 0:i, :, :], \
+        CCoefsRaw[i, 0:i, :, :] = createBicubicCoefMatrices(i)
+
     for bezierI in range(3):
         for bezierJ in range(3):
-            ordinaryCoefsRaw[:, :, bezierI, bezierJ] = getBiquadraticPatchCoefs[bezierI, bezierJ]
+            ordinaryCoefsRaw[:, :, bezierI, bezierJ] = getBiquadraticPatchCoefs(bezierI, bezierJ)
 
     coefsRawTemp = np.zeros((4, 7, 4, 4))
 
-    uu2mat = np.array([[2.0, 2.0, 2.0], [-4.0, -4.0, -4.0], [2.0, 2.0, 2.0]]) / 3
+    uu2mat = np.array([[2.0, 2.0, 2.0], [-4.0, -4.0, -4.0], [2.0, 2.0, 2.0]]) / 3.0
     vv2mat = np.transpose(uu2mat)
     uv2mat = np.array([[1.0, 0.0, -1.0], [0.0, 0.0, 0.0], [-1.0, 0.0, 1.0]])
     uu3mat = np.array(
-            [[3.0, 3.0, 3.0, 3.0], [-3.0, -3.0, -3.0, -3.0], [-3.0, -3.0, -3.0, -3.0], [3.0, 3.0, 3.0, 3.0]]) / 3
+            [[3.0, 3.0, 3.0, 3.0], [-3.0, -3.0, -3.0, -3.0], [-3.0, -3.0, -3.0, -3.0], [3.0, 3.0, 3.0, 3.0]]) / 4.0
     vv3mat = np.transpose(uu3mat)
     uv3mat = np.array([[1.0, 0.0, 0.0, -1.0], [0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0], [-1.0, 0.0, 0.0, 1.0]])
 
-    biqBezCoefs = np.concatenate((uu2mat, 2 * uv2mat, vv2mat), axis=2);
-    bicBezCoefs = np.concatenate((uu3mat, 2 * uv3mat, vv3mat), axis=2);
+    biqBezCoefs = np.array([uu2mat, 2.0 * uv2mat, vv2mat])
+    bicBezCoefs = np.array([uu3mat, 2.0 * uv3mat, vv3mat])
 
-    whichCornerList = np.array([[1, 4], [2, 3]])
+    whichCornerList = np.array([[0, 3], [1, 2]])
 
-    p = 1
+    p = 0
+    print "Main Loop Fairness Coeffs"
     for q in range(quad_list.shape[0]):
+        if q%100 == 0:
+            print "processing quad %d of %d..." % (q, quad_list.shape[0])
         for j in range(4):
             for i in range(4):
-                if i == 1 and j == 1 or i == 4 and j == 4:
-                    whichCorner = whichCornerFun(i, j)
+                if (i == 0 or i == 3) and (j == 0 or j == 3):  # bicubic patches
+                    whichCorner = whichCornerFun(i, j, whichCornerList)
                     indexMask = getExtraOrdCornerIndexMask(quad_list, AVertexList, B1VertexList, B2VertexList,
                                                            CVertexList, quad_control_point_indices, q, whichCorner)
                     numberOfEdges = indexMask.shape[2]
@@ -67,27 +83,23 @@ def createFairnessControlMeshCoefs(quad_list, AVertexList, B1VertexList, B2Verte
                     coefsRawTemp[3, 0:numberOfEdges, :, :] = CCoefsRaw[numberOfEdges - 1, 0:numberOfEdges, :, :]
 
                     for matType in range(3):
-                        bezier_points = np.squeeze(bicBezCoefs[:, :, matType])  # squeeze
-                        patchCoefsMAtrix = getPetersControlPointCoefs(bezier_points,
+                        bezier_points = np.squeeze(bicBezCoefs[matType, :, :])  # squeeze
+                        patchCoefsMatrix = getPetersControlPointCoefs(bezier_points,
                                                                       coefsRawTemp[:, 0:numberOfEdges - 1, :, :])
                         coefsMatrix[p][indexMask[:]] = patchCoefsMatrix[:]
-                        p = p + 1
-                else:
+                        p += 1
+
+                else:  # biquadratic patches
                     neighbourMask = get3x3ControlPointIndexMask(quad_list=quad_list,
                                                                 quad_control_point_indices=quad_control_point_indices,
                                                                 quad_index=q,
                                                                 localIndexXY=np.array([i, j]))  # correct??
 
                     for matType in range(3):
-                        bezier_points = np.squeeze(bicBezCoefs[:, :, matType])
-                        ordinaryPatchCoefsMAtrix = getPetersControlPointCoefs(bezier_points, coefsRawTemp)
+                        bezier_points = np.squeeze(biqBezCoefs[matType, :, :])
+                        ordinaryPatchCoefsMAtrix = getPetersControlPointCoefs(bezier_points,
+                                                                              ordinaryCoefsRaw)
                         coefsMatrix[p][indexMask[:]] = patchCoefsMatrix[:]
                         p = p + 1
 
-
-def one4toone2(i):
-    return (i - 1) / 3
-
-
-def whichCornerFun(i, j, whichCornerList):
-    return whichCornerList[one4toone2(i)][one4toone2(j)]
+    return coefsMatrix

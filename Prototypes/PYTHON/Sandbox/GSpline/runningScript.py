@@ -1,7 +1,11 @@
 import scipy.io as sio
 import numpy as np
+import scipy
 import scipy.sparse as sp
+import scipy.sparse.linalg as lin
+import csv
 
+from createFairnessControlMeshCoef import createFairnessControlMeshCoefs
 from quadvertGenerator import quad_vert_generator
 from helper_functions import get_num_edges_meeting
 from createBicubicCoefMatrices import createBicubicCoefMatrices
@@ -60,7 +64,7 @@ def createGlobalControlMeshCoefs(parameterCoordinates, quad_list, AVertexList, B
     print "Main Loop Coeffs"
     for p in range(N):
         if p%100 == 0:
-            print "processing quad %d of %d..." % (p, N)
+            print "processing point %d of %d..." % (p, N)
         #check if on a corner patch : if both coords are outside [0.25,0.75]
         quadParameters = parameterCoordinates[p, 1:3]
         quad_index = int(parameterCoordinates[p, 0])
@@ -101,13 +105,19 @@ def createGlobalControlMeshCoefs(parameterCoordinates, quad_list, AVertexList, B
 
 
 def solve_least_squares_problem(A, b):
-    print "A: shape"+str(A.shape) # todo transform to sparse least squares using csr-format for the matrix
-    print A
-    print "b: shape "+str(b.shape)
-    print b
-    x, residuals, rank, singular_values = np.linalg.lstsq(A, b)
-    print "residuals:"
-    print residuals
+    print "A.shape"+str(A.shape) # todo transform to sparse least squares using csr-format for the matrix
+    #print A
+    print "b.shape "+str(b.shape)
+    #print b
+    x = 3 * [None]
+    for i in range(3): # todo scipy does not support least squares with b.shape = (N,3), but only with (N,1) -> Here one computes the QR three times instead of one time! OPTIMIZE!!!
+        b_red = np.array(b[:,i])
+        print "least squares %d out of 3..." % (i+1)
+        ret = lin.lsqr(A, b_red)
+        print "done."
+        x[i] = ret[0]
+
+    x = scipy.array(x).T
     print "x: shape "+str(x.shape)
     print x
     return x
@@ -144,24 +154,40 @@ print "Preprocessing of input data..."
 print "Done."
 
 print "### Peters' Scheme ###"
+print "fine_vertices.shape = "+str(fine_vertices.shape)
+print "Calculating coefs."
 coefs = createGlobalControlMeshCoefs(parameters, quads, newA, newB1, newB2, newC, regularPoints)
-
-## Sparsify ?! Leave out for now
-
-## concatenate matrices with fairness funcional stuff
-# joinedCoefs= ...
-# joinedVerts= ...
-#
-
-print "Least squares..."
-vertices = solve_least_squares_problem(coefs, fine_vertices)
+print "coefs.shape = "+str(coefs.shape)
+print "Done."
+print "Calculating fair coefs."
+fair_coefs = createFairnessControlMeshCoefs(quads, newA, newB1, newB2, newC, regularPoints)
+print "fair_coefs.shape = "+str(fair_coefs.shape)
 print "Done."
 
-print "small matrix solved, trying big ..."
-# otherVertices = np.linalg.lstsq(joinedCoefs,joinedVerts)
+print "Sparsify..."
+sparse_coefs = sp.csr_matrix(coefs)
+sparse_fair_coefs = sp.csr_matrix(fair_coefs)
+print "Done."
+
+print "Concatenating matrices."
+fairnessWeight = 2.0
+joined_verts = sp.vstack([scipy.array(fine_vertices), scipy.zeros([fair_coefs.shape[0], 3])]).todense()
+print "joined_verts.shape = "+str(joined_verts.shape)
+joined_coefs = sp.vstack([sparse_coefs, fairnessWeight * sparse_fair_coefs])
+print "joined_coefs.shape = "+str(joined_coefs.shape)
+print "Done."
+
+print "Least squares..."
+vertices = solve_least_squares_problem(joined_coefs, joined_verts)
+print "Done."
+
+with open('vertices.csv', 'wb') as csvfile:
+    csvwriter = csv.writer(csvfile, delimiter=',',
+                           quotechar='|', quoting=csv.QUOTE_MINIMAL)
+    for v in vertices:
+        csvwriter.writerow(v[:])
 
 #plotBezierSurfaceWhole(quads, newA, newB1, newB2, newC, regularPoints, vertices)
-
 
 #[biqPatchPoints,biqIndices,bicPatchPoints,bicIndices] = createBezierPointMatrices(quads_Torus,newA,newB1,newB2,newC,regularPoints,otherVertices);
 #csvwrite('biquadraticPatchPoints.csv',biqPatchPoints);
