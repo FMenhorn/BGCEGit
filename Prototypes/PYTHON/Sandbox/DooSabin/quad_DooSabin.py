@@ -1,5 +1,5 @@
 import numpy as np
-__author__ = 'benjamin'
+__author__ = 'anna'
 from Quad import Shape
 
 
