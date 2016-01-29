@@ -1,0 +1,20 @@
+import numpy as np
+
+def getPetersControlPointCoefs(bezierCoefs,coefs_raw):
+    '''
+
+    :param bezierCoefs: Bezier points
+    :param coefs_raw: bezier-to-control-point coefficients
+    :return: Spits out an nxm matrix of the coefficients on the neighbouring (and central) vertex points to that in the center of the patch, for the bezier points specified in the input and the bezier-to-control-point coefficients in coefs_raw.
+    '''
+    m=coefs_raw.shape[1];
+    n=coefs_raw.shape[0];
+    coefsMatrix = np.zeros((n,m))
+    for j in range(n):
+        for i in range (n):
+            controlPointCoef = bezierCoefs(i,j);
+            for l in range (m):
+                for k in range (n):
+                    coefsMatrix[k,l] += coefs_raw[k,l,i,j]*controlPointCoef
+
+    return coefsMatrix
