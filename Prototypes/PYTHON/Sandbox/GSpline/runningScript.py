@@ -11,7 +11,8 @@ from getBicubicBezierPointCoefs import getBicubicBezierPointCoefs
 from getExtraOrdCornerIndexMask import getExtraOrdCornerIndexMask
 from sortAB1B2VIndices import sortAB1B2VIndices
 from scaleAwayParameters import scaleAwayParameters
-
+from plotBezierSurfaceWhole import plotBezierSurfaceWhole
+import csv
 
 
 vertices, quads, fine_vertices = quad_vert_generator()
@@ -142,12 +143,31 @@ coefs = createGlobalControlMeshCoefs(parameters, quads, newA, newB1, newB2, newC
 print "Done. Matrices created"
 
 
+## Sparsify ?! Leave out for now
+
+## concatenate matrices with fairness funcional stuff
+# joinedCoefs= ...
+# joinedVerts= ...
+#
+
+print coefs.shape
+print fine_vertices.shape
+vertices=np.linalg.lstsq(coefs,fine_vertices) # least square here right?
+print "small matrix solved, trying big ..."
+# otherVertices = np.linalg.lstsq(joinedCoefs,joinedVerts)
+print "Plotting doesn't work yet..."
+#plotBezierSurfaceWhole(quads, newA, newB1, newB2, newC, regularPoints, vertices)
 
 
+#[biqPatchPoints,biqIndices,bicPatchPoints,bicIndices] = createBezierPointMatrices(quads_Torus,newA,newB1,newB2,newC,regularPoints,otherVertices);
+#csvwrite('biquadraticPatchPoints.csv',biqPatchPoints);
+#csvwrite('biquadraticPatchIndices.csv',biqIndices);
+#csvwrite('bicubicPatchPoints.csv',bicPatchPoints);
+#csvwrite('bicubicPatchIndices.csv',bicIndices);
 
-
-
-
+#[NURBSMatrix,NURBSIndices] = createNURBSMatrices(quads_Torus,newA,newB1,newB2,newC,regularPoints,otherVertices);
+#csvwrite('NURBSPatchPoints.csv',NURBSMatrix);
+#csvwrite('NURBSPatchIndices.csv',NURBSIndices);
 
 
 

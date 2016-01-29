@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import math
+from get3x3ControlPointIndexMask import get3x3ControlPointIndexMask
 
 def plotBezierSurfaceWhole(quad_list,
                            AVertexList,
@@ -21,17 +22,17 @@ def plotBezierSurfaceWhole(quad_list,
     :return: plotHandle: Plot handle
     """
 
-    whichCornerList = [[1, 4], [2, 3]]
+    whichCornerList = [[1, 4], [2, 3]] # Comment Sev: Has to be -1'ed? indexing
 
     controlVertices = np.zeros((3, 3, 3))
 
-    plotHandle = plt.figure('Name', 'Bezier Surface Plot')
+    plotHandle = plt.figure() # (name='Bezier Surface Plot')
     plt.hold(True)
 
     for q in range(1, len(quad_list)):
         for j in range(1, 4):
             for i in range(1, 4):
-                if ([i, j] == 1) || ([i,j] == 4):
+                if ([i, j] == 1 or [i,j] == 4):
                     whichCorner = whichCornerFun(i, j, whichCornerList)
                     indexMask = getExtraOrdCornerIndexMask(quad_list, AVertexList, B1VertexList,
                                                            B2VertexList, CVertexList, quad_control_point_indices,
@@ -47,6 +48,7 @@ def plotBezierSurfaceWhole(quad_list,
                     [xx,yy,zz] = bezier(patch, 0.1)
                     plt.surf(xx, yy, zz)
                 else:
+                    print
                     neighbourMask = get3x3ControlPointIndexMask(quad_list, quad_control_point_indices, q, [i,j])
                     for bezierJ in range(0, 2):
                         for bezierI in range(0, 2):
