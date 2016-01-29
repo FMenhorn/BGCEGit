@@ -1,5 +1,6 @@
 import scipy.io as sio
 import numpy as np
+import scipy.sparse as sp
 
 from quadvertGenerator import quad_vert_generator
 from helper_functions import get_num_edges_meeting
@@ -98,6 +99,20 @@ def createGlobalControlMeshCoefs(parameterCoordinates, quad_list, AVertexList, B
 
     return coefsMatrix
 
+
+def solve_least_squares_problem(A, b):
+    print "A: shape"+str(A.shape) # todo transform to sparse least squares using csr-format for the matrix
+    print A
+    print "b: shape "+str(b.shape)
+    print b
+    x, residuals, rank, singular_values = np.linalg.lstsq(A, b)
+    print "residuals:"
+    print residuals
+    print "x: shape "+str(x.shape)
+    print x
+    return x
+
+
 #####MAIN CODE######
 print "### Initialization ###"
 print "Reading csv input..."
@@ -139,7 +154,7 @@ coefs = createGlobalControlMeshCoefs(parameters, quads, newA, newB1, newB2, newC
 #
 
 print "Least squares..."
-vertices=np.linalg.lstsq(coefs, fine_vertices)
+vertices = solve_least_squares_problem(coefs, fine_vertices)
 print "Done."
 
 print "small matrix solved, trying big ..."
