@@ -19,7 +19,13 @@
 %\documentclass[final,11pt,a4paper,bibtotoc,idxtotoc,headsepline,footsepline,footexclude,DIV13,oneside]{scrbook}
 %% Intermediate document mode (todos and pictures)
 \documentclass[11pt,a4paper,bibtotoc,idxtotoc,headsepline,footsepline,footexclude,DIV13,oneside]{scrbook}
-
+\usepackage{listings}
+\lstset{basicstyle=\ttfamily,
+  showstringspaces=false,
+  commentstyle=\color{red},
+  keywordstyle=\color{blue}
+}
+\usepackage[document]{ragged2e}
 %\usepackage{epstopdf}
 % KOMA-Optionen:
 %  bibtotoc: include bibliography in table of contents
@@ -54,7 +60,7 @@
 	
 	%\input{components/disclaimer}
 	
-	\input{components/acknowledgements}
+	%\input{components/acknowledgements}
 	
 	%\input{components/abstract}
 	\listoftodos
@@ -62,65 +68,167 @@
   	%outline and overview
 
 	\mainmatter
+	
+	\chapter{Introduction}
+	\label{intro}
+	In this document we provide a complete guide on how to install and use CADTOPCAD tool on Linux.
 
 	\chapter{ToPy}
+	\label{Topy}
+	In our tool we use ToPy (\href{https://github.com/williamhunter/topy}{https://github.com/williamhunter/topy}) for topology optimization. 
 	\section{Prerequisites}
-	For installing Topy, we need some additional software beforehand.
+	\label{ToPy:sec1}
+	In order to install ToPy, make sure that the following software is installed on your computer:
 	\begin{itemize}
-	\item Python ($>$2.7)
-	\item Numpy (Usually provided by Python distribution)
-	\item Pyvtk:
-		\begin{itemize}
-		\item sudo apt-get install python-pip
-		\item sudo pip install pyvtk
-		\end{itemize}
-	\item Pysparse:
-		\begin{itemize}
-		\item Since pip does not work we use:
-		\item git clone git:://pysparse.git.sourceforge.net/gitroot/pysparse/pysparse/
-		\item cd pysparse
-		\item sudo python setup.py install		
-		\end{itemize}
+	\item Python (version $>$ 2.7)
+	\item NumPy (Usually provided by Python distribution)
+	\item PyVTK tool (\href{https://pypi.python.org/pypi/PyVTK}{https://pypi.python.org/pypi/PyVTK}) 
+	\item Pysparse library(\href{http://pysparse.sourceforge.net/}{http://pysparse.sourceforge.net/})
 	\end{itemize}
-	Furthermore, since by default the output .vtk files from Topy are binary, we need to change them to ascii. Hence, in the Topy source file \texttt{core/visualization.py} in the method \texttt{{\_}write{\_}legace{\_}vtu(x, fname)} (line 160), change in line 194 \texttt{binary} to \texttt{ascii}. \todo{Code picture}
+	Here are some recommendation for the installation of the above mentioned tools/libraries.
 	
-	\section{Install ToPy}
-	Finally, we can install Topy by calling \\
-	\texttt{sudo python setup.py install} \\
-	in the root directory of Topy.
+	To install PyVTK tool, please run the following commands in your terminal:
+\begin{lstlisting}[language=bash]
+sudo apt-get install python-pip
+sudo pip install pyvtk
+\end{lstlisting}	
+	%\end{flushleft}
+	
+	
+	The installation of the Pysparse library is a little bit more cumbersome, since the pip-installation (like in the previous case) fails most of the times. So, here we provide an alternative way of installing Pysparse from the \textit{.git} repository.
+	
+	To install Pysparse, make sure that \textit{git} (\href{https://git-scm.com/}{url}) is installed on your computer and then run the following commands in your terminal:
+\begin{lstlisting}[language=bash]
+git clone git:://pysparse.git.sourceforge.net/gitroot/pysparse/pysparse/
+\item cd pysparse
+\item sudo python setup.py install	
+\end{lstlisting}	
+	
+	Furthermore, for CADTOPCAD it is necessary to have an output in the \textit{ascii} format. By default the output \textit{.vtk} files from ToPy are binary, so we need to change them to \textit{ascii}. In order to do that, please perform the following actions:
+	\begin{itemize}
+ 		\item Open the ToPy source file \texttt{core/visualization.py}
+ 		\item Go to the method \texttt{{\_}write{\_}legace{\_}vtu(x, fname)} (line 160)
+ 		\item Change in line 194 \texttt{binary} to \texttt{ascii} (see pic. \ref{fig:ToPy_CodeChange})
+	\end{itemize} 
+	\begin{figure}
+	\centering
+	\includegraphics[scale=0.5]{img/ToPy_CodeChange.png}
+	\caption{Changing of the output type of ToPy to ascii}
+	\label{fig:ToPy_CodeChange}
+	\end{figure}
+	
 
-	\section{Test Installation}
-	Enter one of the folders in examples (e.g. examples/cantilever) and execute a Topy test run by \\
-	\texttt{python optimize.py <example.tpd-file>} \todo{Output picture}\\
-	
-	\chapter{OpenCascade}
-	\section{Install OpenCascade}
-	We do not use OpenCascade from the official webpage but from the Git repository:
+	\section{Install ToPy}
+	If all the tools specified in the section \ref{ToPy:sec1} are installed, we can now proceed to the installation of ToPy itself. For that download ToPy from \href{https://github.com/williamhunter/topy}{https://github.com/williamhunter/topy} \todo{Did we clone it from git or downloaded it?} and run the following command from the root directory of ToPy:
+\begin{lstlisting}[language=bash]
+sudo python setup.py install
+\end{lstlisting}	
+	\begin{figure}
+	\centering
+	\includegraphics[scale=0.2]{img/ToPy_ExampleRun.png}
+	\caption{ToPy test}
+	\label{fig:ToPy_test}
+	\end{figure}
+
+
+	\section{Test ToPy}
+	In order to test whether the installation of ToPy was completed successfully it is possible to run some test cases provided in \textit{examples} folder. For that, do the following:
 	\begin{itemize}
-	\item git clone git://github.com/tpaviot/oce.git
-	\item cd oce
-	\item mkdir build
-	\item cd build
-	\item cmake .. \todo{Output picture}
-	\item make \todo{Output picture}
-	\item sudo make install \todo{Output picture} 
+	\item Enter one of the folders in examples (e.g. examples/cantilever)
+	\item Execute a ToPy test run by running the following command in your terminal:
+\begin{lstlisting}[language=bash]
+python optimize.py <example.tpd-file>
+\end{lstlisting}	
 	\end{itemize}
-	In the make step, one can use the \texttt{-jx} parameter where x is the number of processor to build in parallel. These steps are in accord with the installation guide on the git page itself. One can also use the cmake-gui \todo{Output picture} to change some of the build configuration if need be (e.g. include OpenMP support).
-	\section{Installation Test}
-	Test the installation by calling \\
-	\texttt{make test} \todo{Output picture}\\
-	They should all be successful.
 	
-	\chapter{CADTOPCAD}
-	\section{Prerequisites}
-	\begin{itemize}
-	\item Topy
-	\item OpenCascade
-	\item CPPUnit:
-		\begin{itemize}
-		\item sudo apt-get install lib-cppunitdev
-		\end{itemize}
+The output should look as showed on a picture \ref{fig:ToPy_test}.
+
+
+\chapter{OpenCascade}
+\label{OpenCascade}
+OpenCascade (\href{http://www.opencascade.com/}{http://www.opencascade.com/}) is a... \todo{maybe add a short description}
+\section{Install OpenCascade}
+For technical reasons, we do not use OpenCascade from the official webpage, but from the \textit{.git} repository. 
+\begin{figure}
+\centering
+\includegraphics[scale=0.2]{img/OC_Build5.png}
+\caption{Building OpenCascade}
+\label{fig:OC_build}
+\end{figure}
+\begin{figure}
+\centering
+\includegraphics[scale=0.3]{img/OC_CMake2.png}
+\caption{OpenCascade installation: cmake}
+\label{fig:OC_cmake}
+\end{figure}
+To install OpenCascade this way, make sure that textit{git} (\href{https://git-scm.com/}{url}) is installed on your computer and then run the following commands in your terminal:
+\begin{itemize}
+\item \begin{lstlisting}[language=bash]
+git clone git://github.com/tpaviot/oce.git
+cd oce
+mkdir build
+cd build
+\end{lstlisting}
+	
+\item 
+\begin{lstlisting}[language=bash]
+cmake .. 
+\end{lstlisting}	
+Sample output: see Pic. \ref{fig:OC_build}
+\item 
+\begin{lstlisting}[language=bash]
+make .. 
+\end{lstlisting}	
+Sample output: see Pic. \ref{fig:OC_cmake}
+\item 
+\begin{lstlisting}[language=bash]
+sudo make install .. 
+\end{lstlisting}	
+Sample output: see Pic. \ref{fig:OC_install}
+\end{itemize}
+
+\begin{figure}
+\centering
+\includegraphics[scale=0.3]{img/OC_Install2.png}
+\caption{OpenCascade installation}
+\label{fig:OC_install}
+\end{figure}
+	In the make step, one can use the \texttt{-jx} parameter, where $x$ is the number of processors, to build in parallel. That allows to speed up the installation process These steps are in accord with the installation guide on the git page itself. One can also use the CMake-GUI (see Pic. \ref{fig:CMake_GUI}) to change some of the build configuration if need be (e.g. include OpenMP support).
+	
+\begin{figure}
+\centering
+\includegraphics[scale=0.5]{img/CMake_GUI.png}
+\caption{CMake graphical interface}
+\label{fig:CMake_GUI}
+\end{figure}
+\section{Test OpenCascade}
+\begin{figure}
+\centering
+\includegraphics[scale=0.2]{img/OC_Test2.png}
+\caption{OpenCascade test}
+\label{fig:OC_test}
+\end{figure}
+In order to test whether the installation of OpenCascade was completed successfully it is possible to run a test provided by OpenCascade. 
+
+For that, run the following command from your terminal:
+\begin{lstlisting}[language=bash]
+make test
+\end{lstlisting}
+All performed tests should be successful (See Pic. \ref{fig:OC_test})
+
+
+\chapter{CADTOPCAD}
+\section{Prerequisites}
+In order to install CADTOPCAD the following tools should be installed on your computer:
+\begin{itemize}
+	\item Topy (see Sec. \ref{Topy})
+	\item OpenCascade (see Sec. \ref{OpenCascade})
+	\item (\href{http://cppunit.sourceforge.net/doc/cvs/cppunit_cookbook.html}{CPPUnit})
 	\end{itemize}
+In order to install CPPUnit run the following command from you terminal:
+\begin{lstlisting}[language=bash]
+sudo apt-get install lib-cppunitdev
+\end{lstlisting}
 
   	\clearemptydoublepage
 	
