@@ -177,15 +177,27 @@ joined_coefs = sp.vstack([sparse_coefs, fairnessWeight * sparse_fair_coefs])
 print "joined_coefs.shape = "+str(joined_coefs.shape)
 print "Done."
 
-print "Least squares..."
-vertices = solve_least_squares_problem(joined_coefs, joined_verts)
-print "Done."
+READ_INPUT_FILE = True
 
-with open('vertices.csv', 'wb') as csvfile:
-    csvwriter = csv.writer(csvfile, delimiter=',',
-                           quotechar='|', quoting=csv.QUOTE_MINIMAL)
-    for v in vertices:
-        csvwriter.writerow(v[:])
+if READ_INPUT_FILE:
+    print "Reading input file for skipping infinitely long least squares computation..."
+    vertices = []
+    with open('vertices.csv', 'rb') as csvfile:
+        csvreader = csv.reader(csvfile, delimiter=',', quotechar='|')
+        for row in csvreader:
+            vertices.append(row)
+        vertices = scipy.array(vertices)
+    print "Done."
+else:
+    print "Least squares..."
+    vertices = solve_least_squares_problem(joined_coefs, joined_verts)
+    print "Done."
+
+    with open('vertices.csv', 'wb') as csvfile:
+        csvwriter = csv.writer(csvfile, delimiter=',',
+                               quotechar='|', quoting=csv.QUOTE_MINIMAL)
+        for v in vertices:
+            csvwriter.writerow(v[:])
 
 #plotBezierSurfaceWhole(quads, newA, newB1, newB2, newC, regularPoints, vertices)
 
@@ -198,7 +210,3 @@ with open('vertices.csv', 'wb') as csvfile:
 #[NURBSMatrix,NURBSIndices] = createNURBSMatrices(quads_Torus,newA,newB1,newB2,newC,regularPoints,otherVertices);
 #csvwrite('NURBSPatchPoints.csv',NURBSMatrix);
 #csvwrite('NURBSPatchIndices.csv',NURBSIndices);
-
-
-
-
