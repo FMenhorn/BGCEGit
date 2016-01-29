@@ -14,13 +14,13 @@ for the length of the knot vector, the following rule has to hold:
 n_knots = n_nodes + deg + 1
 n_nodes has to be chosen such that it matches with the given number of control nodes per patch in the input files
 """
-input_folder = "./TorusFairNURBS"
-output_file_name = "./TorusFairNURBS.step"
+input_folder = "./TorusFairNURBSRaised"
+output_file_name = "./TorusFairNURBSRaised.step"
 plot_control_points = False
 
-knots = [0, 0, 0, 0, 0.25, 0.25, 0.25, 0.5, 0.75, 0.75, 0.75, 1, 1, 1, 1]
+knots = [0, 0, 0, 0, 0.25, 0.25, 0.25, 0.5, 0.5, 0.5, 0.75, 0.75, 0.75, 1, 1, 1, 1]
 degree = 3
-n_nodes = 11
+n_nodes = 13
 assert (knots.__len__() == n_nodes + degree + 1)
 """
 configuration done
@@ -90,7 +90,7 @@ def generate_bspline_patch(vertices):
     patch = Part.BSplineSurface()
     patch.increaseDegree(degree_u, degree_v)
 
-    for i in range(4, len(knot_u)-4):	
+    for i in range(4, len(knot_u)-4):
         patch.insertUKnot(knot_u[i], 1, 0) # todo why is the second argument equal to 1? If anyone could explain = awesome
     for i in range(4, len(knot_v)-4):
         patch.insertVKnot(knot_v[i], 1, 0) # todo why is the second argument equal to 1? If anyone could explain = awesome
