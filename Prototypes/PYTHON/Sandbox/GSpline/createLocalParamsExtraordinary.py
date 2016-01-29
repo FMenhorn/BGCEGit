@@ -11,9 +11,6 @@ def createLocalParamsExtraordinary(global_quad_params):
     shifted_scaled_coords = global_quad_params * 4 - whichPatch
     shifted_scaled_coords[global_quad_params >= 1] = 1  # so param 1 doesn't give 0)
 
-    #TODO: raise Exception("what is nearWhich??? -> decrement it because of MATLAB idx")
-
-    #whichPatch = whichPatch + 1
     localParams = shifted_scaled_coords
     if global_quad_params[0] <= 0.25:
         if global_quad_params[1] <= 0.25:
@@ -41,11 +38,5 @@ def createLocalParamsExtraordinary(global_quad_params):
         while (whichPatch == 0).all() or (whichPatch == 3).all():  # both are 1/4! we're in a corner! error
             raise Exception(
                 'thingy thought we were in a corner when we weren"t, so shifting. in createLocalParamsExtraordinary.m')
-            # should be really close to next patch, so try
-            moved_params = global_quad_params - 0.5
-            closestCoordToMid = np.argmin(abs(moved_params))
-            # move the coordinate, and adjust param to edge
-            whichPatch[closestCoordToMid] = whichPatch[closestCoordToMid] - sign(moved_params[closestCoordToMid])
-            localParams[closestCoordToMid] = moved_params[closestCoordToMid] < 0
 
     return localParams, nearWhich, whichPatch

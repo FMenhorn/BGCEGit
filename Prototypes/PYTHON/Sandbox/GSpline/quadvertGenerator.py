@@ -51,7 +51,7 @@ def quad_vert_generator():
         quad_list.append(Quad(i, vertex_list[a], vertex_list[b], vertex_list[c], vertex_list[d],
                          edge_dict[e1], edge_dict[e2], edge_dict[e3], edge_dict[e4]))
 
-    # Errasing hanging nodes
+    # Erasing hanging nodes
     for i in range(vertex_list.__len__()):
         if not vertex_list[i].get_quads():
             vertex_list[i] = None
@@ -75,10 +75,6 @@ def quad_vert_generator():
     for i in range(_fine_verts.shape[0]):
         fine_vertex_list.append(FineVertex(id=i, x=_fine_verts[i, 0], y=_fine_verts[i, 1], z=_fine_verts[i, 2],
                                 u=_parameters[i, 1], v=_parameters[i, 2], quad=quad_list[int(_parameters[i, 0])]))
-
-    #parameter_list = []
-    #for i in range(_parameters.shape[0]):
-    #    parameter_list.append([quad_list[int(_parameters[i, 0])], _parameters[i, 1], _parameters[i, 2]])
 
     return new_vertex_list, quad_list, fine_vertex_list
 

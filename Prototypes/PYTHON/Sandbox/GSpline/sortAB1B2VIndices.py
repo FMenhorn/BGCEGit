@@ -1,5 +1,5 @@
 import numpy as np
-from helper_functions import getNumOfEdges
+from helper_functions import get_num_edges_meeting
 
 def sortAB1B2VIndices(oldA,oldB1,oldB2,oldC):
 
@@ -37,7 +37,7 @@ def sortAB1B2VIndices(oldA,oldB1,oldB2,oldC):
     newC = -1*np.ones(oldC.shape)
 
     for i in range(oldB2.shape[0]):
-        m = getNumOfEdges(oldB2,i)
+        m = get_num_edges_meeting(oldB2, i)
         indicesLocB1 = np.zeros(m,dtype=int)
         indicesLocB2 = np.zeros(m,dtype=int)
         indicesLocA = np.zeros(m,dtype=int)
@@ -85,6 +85,4 @@ A = np.array(mat_contents["A"])
 B1 = np.array(mat_contents["B1"])
 B2 = np.array(mat_contents["B2"])
 C = np.array(mat_contents["C"])
-
-print sortAB1B2VIndices(A, B1, B2, C)
 

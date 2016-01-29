@@ -1,9 +1,9 @@
 import numpy as np
 
-def getNumOfEdges(neighbour_matrix, orig_vertex_id):
-    numOfEdgesMeeting = np.sum(neighbour_matrix[orig_vertex_id,:,0] != -1)
 
-    return numOfEdgesMeeting
+def get_num_edges_meeting(neighbour_matrix, orig_vertex_id):
+    return np.sum(neighbour_matrix[orig_vertex_id,:,0] != -1)
+
 
 def checkB1B2Reversal_opt(B1,quad_list,quad_index,vertex_index,regularPoints):
 
@@ -39,6 +39,7 @@ def checkB1B2Reversal_opt(B1,quad_list,quad_index,vertex_index,regularPoints):
 
     return isReversed
 
+
 def checkB1B2OrientationReversal(B1,B2,quad_list,quad_index,vertex_index):
     """
     check if the B1 in the quad to the right lies along the same edge as the
@@ -57,7 +58,7 @@ def checkB1B2OrientationReversal(B1,B2,quad_list,quad_index,vertex_index):
     B1s_this_vertex = np.reshape(B1[vertex_index,:,:],[B1.shape[1:3]])
     B2s_this_vertex = np.reshape(B2[vertex_index,:,:],[B2.shape[1:3]])
 
-    numberOfEdges = getNumOfEdges(B1,vertex_index)
+    numberOfEdges = get_num_edges_meeting(B1, vertex_index)
 
     quadNumberLocal = np.where(B1[vertex_index,:,1] == quad_index)[0][0]
     B1EdgeFromB1 = np.reshape(B1[vertex_index,quadNumberLocal,2:4],[1,2])

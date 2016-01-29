@@ -1,15 +1,11 @@
 # ported from MATLAB/Sandbox/GSpline/getExtraOrdCornerIndexMask.m
 import numpy as np
-import sys
-from helper_functions import getNumOfEdges
+from helper_functions import get_num_edges_meeting
 
 from checkB1B2OrientationReversal import checkB1B2OrientationReversal
 from checkB1B2Reversal_opt import checkB1B2Reversal_opt
 
 def getExtraOrdCornerIndexMask(quad_list,AVertexList,B1VertexList,B2VertexList,CVertexList,quad_control_point_indices,quad_index,whichCorner):
-
-
-
     # TODO: Understand and change code
     mod_index = lambda i, modul: (i)%modul
     shifted_indices = lambda ind, modul: mod_index(np.array(range(modul)) + ind,modul)
@@ -17,9 +13,7 @@ def getExtraOrdCornerIndexMask(quad_list,AVertexList,B1VertexList,B2VertexList,C
 
     cornerVertexIndex = quad_list[quad_index,whichCorner]
 
-
-
-    numberOfEdges = getNumOfEdges(AVertexList,cornerVertexIndex) # todo Juan Carlos: with the objects this is very nice.
+    numberOfEdges = get_num_edges_meeting(AVertexList, cornerVertexIndex) # todo Juan Carlos: with the objects this is very nice.
     quadLocalIndex = np.where(AVertexList[cornerVertexIndex,:,1] == quad_index)
     if checkB1B2Reversal_opt(B1VertexList,quad_list,quad_index,cornerVertexIndex,quad_control_point_indices):
         if checkB1B2OrientationReversal(B2VertexList,B1VertexList,quad_list,quad_index,cornerVertexIndex):
