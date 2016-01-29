@@ -1,4 +1,4 @@
-__author__ = 'erik + jc'
+__author__ = 'erik + jc + anna'
 class Shape(object):
     def __init__(self, id, vertices):
         self._id = id
