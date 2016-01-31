@@ -12,8 +12,8 @@ def get3x3ControlPointIndexMask(quad_list, quad_control_point_indices, quad_inde
 
     indexMask = np.zeros([3,3])
 
-    localX = localIndexXY[0]
-    localY = localIndexXY[1]
+    localX = int(localIndexXY[0])
+    localY = int(localIndexXY[1])
 
     local_control_point_indices = np.array([[0,1,2,3],[4,5,6,7],[8,9,10,11],[12,13,14,15]]).transpose()
     maskMinX = 0
@@ -62,9 +62,9 @@ def get3x3ControlPointIndexMask(quad_list, quad_control_point_indices, quad_inde
                                            cellNumbers=range((localX-1),(localX+1)+1))
         maskMaxY = 1
 
-    for j in range(maskMinY,maskMaxY):
-        for i in range(maskMinX,maskMaxX):
-            local_control_point_index = local_control_point_indices[localX-2+i,localY-2+j]
+    for j in range(maskMinY,maskMaxY+1):
+        for i in range(maskMinX,maskMaxX+1):
+            local_control_point_index = local_control_point_indices[localX-1+i,localY-1+j]
             indexMask[i,j] = quad_control_point_indices[quad_index,local_control_point_index]
 
     return indexMask
