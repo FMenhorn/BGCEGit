@@ -24,6 +24,30 @@ vertices, quads, fine_vertices = quad_vert_generator()
 #dc_to_peter(vertex_list, quad_list)
 
 
+def write_matrix_to_csv(matrix, filename):
+    with open(filename, 'wb') as csvfile:
+        csvwriter = csv.writer(csvfile, delimiter=',',
+                               quotechar='|', quoting=csv.QUOTE_MINIMAL)
+        for row in matrix:
+            csvwriter.writerow(row[:])
+
+def write_tensor3_to_csv(tensor, filename):
+    with open(filename, 'wb') as csvfile:
+        csvwriter = csv.writer(csvfile, delimiter=',',
+                               quotechar='|', quoting=csv.QUOTE_MINIMAL)
+        for row in tensor:
+            csvwriter.writerow(row.T.flatten())
+
+
+def read_matrix_from_csv(filename):
+    matrix = []
+    with open(filename, 'rb') as csvfile:
+        csvreader = csv.reader(csvfile, delimiter=',', quotechar='|')
+        for row in csvreader:
+            matrix.append(row)
+    return scipy.array(matrix)
+
+
 def createGlobalControlMeshCoefs(parameterCoordinates, quad_list, AVertexList, B1VertexList, B2VertexList, CVertexList,
                                      quad_control_point_indices):
     """
@@ -53,11 +77,11 @@ def createGlobalControlMeshCoefs(parameterCoordinates, quad_list, AVertexList, B
     B2CoefsRaw = np.zeros((7,7,4,4))
     CCoefsRaw  = np.zeros((7,7,4,4))
 
-    for i in range(2,7):
-        [ACoefsRaw[i, 0:i, :, :],
-         B1CoefsRaw[i, 0:i, :, :],
-         B2CoefsRaw[i, 0:i, :, :],
-         CCoefsRaw[i, 0:i, :, :]] = createBicubicCoefMatrices(i)
+    for num_quads in range(3,8):
+        [ACoefsRaw[num_quads-1, 0:num_quads, :, :],
+         B1CoefsRaw[num_quads-1, 0:num_quads, :, :],
+         B2CoefsRaw[num_quads-1, 0:num_quads, :, :],
+         CCoefsRaw[num_quads-1, 0:num_quads, :, :]] = createBicubicCoefMatrices(num_quads) # compared to matlab by Saumi & Benni -> VALID
 
     coefsRawTemp = np.zeros((4,7,4,4))
 
@@ -69,7 +93,8 @@ def createGlobalControlMeshCoefs(parameterCoordinates, quad_list, AVertexList, B
         quadParameters = parameterCoordinates[p, 1:3]
         quad_index = int(parameterCoordinates[p, 0])
         [localCoords, whichCorner, whichPatch] = createLocalParamsExtraordinary(global_quad_params=quadParameters)
-
+        print "p=%d"%p # todo for p=1 get3x3... fails!
+        print "whichPatch="+str(whichPatch)
         # if there is a specified corner set
         if whichCorner != -1:
 
@@ -97,8 +122,8 @@ def createGlobalControlMeshCoefs(parameterCoordinates, quad_list, AVertexList, B
             neighbourCoefs = getBezierPointCoefs(localCoords)
 
             for j in range(3):
-                for i in range(3):
-                    coefsMatrix[p, neighbourMask[i,j]] = neighbourCoefs[i,j]
+                for num_quads in range(3):
+                    coefsMatrix[p, neighbourMask[num_quads,j]] = neighbourCoefs[num_quads,j]
     print "Main Loop Coeffs Done."
 
     return coefsMatrix
@@ -148,10 +173,23 @@ print "### Preprocessing ###"
 # since these cause trouble. (+ Scale the resulting ones so that max and min
 # param values are 1 and 0 repspectively in both u and v)
 
+write_tensor3_to_csv(A,'A.csv')
+write_tensor3_to_csv(B1,'B1.csv')
+write_tensor3_to_csv(B2,'B2.csv')
+write_tensor3_to_csv(C,'C.csv')
+
 print "Preprocessing of input data..."
 [parameters, fine_vertices] = scaleAwayParameters(parameters, fine_vertices)
 [newA, newB1, newB2, newC] = sortAB1B2VIndices(A, B1, B2, C)
 print "Done."
+
+write_matrix_to_csv(parameters,'parameters.csv')
+write_matrix_to_csv(quads,'quads.csv')
+write_tensor3_to_csv(newA,'newA.csv')
+write_tensor3_to_csv(newB1,'newB1.csv')
+write_tensor3_to_csv(newB2,'newB2.csv')
+write_tensor3_to_csv(newC,'newC.csv')
+write_matrix_to_csv(regularPoints,'regularPoints.csv')
 
 print "### Peters' Scheme ###"
 print "fine_vertices.shape = "+str(fine_vertices.shape)
@@ -181,22 +219,13 @@ READ_INPUT_FILE = False
 
 if READ_INPUT_FILE:
     print "Reading input file for skipping infinitely long least squares computation..."
-    vertices = []
-    with open('vertices.csv', 'rb') as csvfile:
-        csvreader = csv.reader(csvfile, delimiter=',', quotechar='|')
-        for row in csvreader:
-            vertices.append(row)
-        vertices = scipy.array(vertices)
+    vertices = read_matrix_from_csv('vertices.csv')
     print "Done."
 else:
     print "Least squares..."
     vertices = solve_least_squares_problem(joined_coefs, joined_verts)
     print "Done."
-    with open('vertices.csv', 'wb') as csvfile:
-        csvwriter = csv.writer(csvfile, delimiter=',',
-                               quotechar='|', quoting=csv.QUOTE_MINIMAL)
-        for v in vertices:
-            csvwriter.writerow(v[:])
+    write_matrix_to_csv(vertices,'vertices.csv')
 
 #plotBezierSurfaceWhole(quads, newA, newB1, newB2, newC, regularPoints, vertices)
 
