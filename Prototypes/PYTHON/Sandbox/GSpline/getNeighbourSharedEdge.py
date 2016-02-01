@@ -10,9 +10,7 @@ def getNeighbourSharedEdge(quads,selfIndex,ver1,ver2):
     hasBoth = hasVer1_rowIDX[hasVer2_rowIDX]    # todo this is not understandable...
 
     quadIndex = hasBoth[hasBoth != selfIndex]
+    quadIndexRet = quadIndex[0]
+    assert isinstance(quadIndexRet, int), "Not an int."
 
-    assert quadIndex is int
-
-    raise Exception("WHAAAAAAAT?!?!?!?")
-
-    return quadIndex
+    return quadIndexRet

@@ -93,8 +93,8 @@ def createGlobalControlMeshCoefs(parameterCoordinates, quad_list, AVertexList, B
         quadParameters = parameterCoordinates[p, 1:3]
         quad_index = int(parameterCoordinates[p, 0])
         [localCoords, whichCorner, whichPatch] = createLocalParamsExtraordinary(global_quad_params=quadParameters)
-        print "p=%d"%p # todo for p=1 get3x3... fails!
-        print "whichPatch="+str(whichPatch)
+        #print "p=%d"%p # todo for p=1 get3x3... fails! -> Resolved(?).
+        #print "whichPatch="+str(whichPatch)
         # if there is a specified corner set
         if whichCorner != -1:
 

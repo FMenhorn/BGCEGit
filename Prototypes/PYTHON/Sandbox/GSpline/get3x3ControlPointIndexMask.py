@@ -29,7 +29,7 @@ def get3x3ControlPointIndexMask(quad_list, quad_control_point_indices, quad_inde
                                            quad_index=neighbourIndex,
                                            vertex1=neighbourEdge[0],
                                            vertex2=neighbourEdge[1],
-                                           cellNumbers=range((localY-1),(localY+1)+1))
+                                           cellNumbers=np.arange((localY-1), (localY+1)+1))
         maskMinX = 1
     elif localX is 3:
         neighbourEdge = quad_list[[quad_index,quad_index],[1,2]]
@@ -39,7 +39,7 @@ def get3x3ControlPointIndexMask(quad_list, quad_control_point_indices, quad_inde
                                            quad_index=neighbourIndex,
                                            vertex1=neighbourEdge[0],
                                            vertex2=neighbourEdge[1],
-                                           cellNumbers=range((localY-1),(localY+1)+1))
+                                           cellNumbers=np.arange((localY-1), (localY+1)+1))
         maskMaxX = 1
     elif localY is 0:
         neighbourEdge = quad_list[[quad_index,quad_index],[0,1]]
@@ -49,7 +49,7 @@ def get3x3ControlPointIndexMask(quad_list, quad_control_point_indices, quad_inde
                                            quad_index=neighbourIndex,
                                            vertex1=neighbourEdge[0],
                                            vertex2=neighbourEdge[1],
-                                           cellNumbers=range((localX-1),(localX+1)+1))
+                                           cellNumbers=np.arange((localX-1), (localX+1)+1))
         maskMinY = 1
     elif localY is 3:
         neighbourEdge = quad_list[[quad_index,quad_index],[3,2]]
@@ -59,7 +59,7 @@ def get3x3ControlPointIndexMask(quad_list, quad_control_point_indices, quad_inde
                                            quad_index=neighbourIndex,
                                            vertex1=neighbourEdge[0],
                                            vertex2=neighbourEdge[1],
-                                           cellNumbers=range((localX-1),(localX+1)+1))
+                                           cellNumbers=np.arange((localX-1), (localX+1)+1))
         maskMaxY = 1
 
     for j in range(maskMinY,maskMaxY+1):
