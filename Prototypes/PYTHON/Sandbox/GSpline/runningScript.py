@@ -5,7 +5,7 @@ import scipy.sparse as sp
 import scipy.sparse.linalg as lin
 import csv
 
-from createFairnessControlMeshCoef import createFairnessControlMeshCoefs
+from createFairnessControlMeshCoefs import createFairnessControlMeshCoefs
 from quadvertGenerator import quad_vert_generator
 from helper_functions import get_num_edges_meeting
 from createBicubicCoefMatrices import createBicubicCoefMatrices
