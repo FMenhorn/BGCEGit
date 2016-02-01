@@ -39,11 +39,11 @@ def createFairnessControlMeshCoefs(quad_list, AVertexList, B1VertexList, B2Verte
     B2CoefsRaw = np.zeros((7, 7, 4, 4))
     CCoefsRaw = np.zeros((7, 7, 4, 4))
 
-    for i in range(2, 7):
-        ACoefsRaw[i, 0:i, :, :], \
-        B1CoefsRaw[i, 0:i, :, :], \
-        B2CoefsRaw[i, 0:i, :, :], \
-        CCoefsRaw[i, 0:i, :, :] = createBicubicCoefMatrices(i)
+    for num_quads in range(3,8):
+        ACoefsRaw[num_quads-1, 0:num_quads, :, :], \
+        B1CoefsRaw[num_quads-1, 0:num_quads, :, :], \
+        B2CoefsRaw[num_quads-1, 0:num_quads, :, :], \
+        CCoefsRaw[num_quads-1, 0:num_quads, :, :] = createBicubicCoefMatrices(num_quads)
 
     for bezierI in range(3):
         for bezierJ in range(3):
@@ -85,7 +85,7 @@ def createFairnessControlMeshCoefs(quad_list, AVertexList, B1VertexList, B2Verte
                     for matType in range(3):
                         bezier_points = np.squeeze(bicBezCoefs[matType, :, :])  # squeeze
                         patchCoefsMatrix = getPetersControlPointCoefs(bezier_points,
-                                                                      coefsRawTemp[:, 0:numberOfEdges - 1, :, :])
+                                                                      coefsRawTemp[:, 0:numberOfEdges, :, :])
                         coefsMatrix[p][indexMask[:]] = patchCoefsMatrix[:]
                         p += 1
 
@@ -93,13 +93,13 @@ def createFairnessControlMeshCoefs(quad_list, AVertexList, B1VertexList, B2Verte
                     neighbourMask = get3x3ControlPointIndexMask(quad_list=quad_list,
                                                                 quad_control_point_indices=quad_control_point_indices,
                                                                 quad_index=q,
-                                                                localIndexXY=np.array([i, j]))  # correct??
+                                                                localIndexXY=np.array([i, j])).astype(int)  # correct??
 
                     for matType in range(3):
                         bezier_points = np.squeeze(biqBezCoefs[matType, :, :])
-                        ordinaryPatchCoefsMAtrix = getPetersControlPointCoefs(bezier_points,
+                        ordinaryPatchCoefsMatrix = getPetersControlPointCoefs(bezier_points,
                                                                               ordinaryCoefsRaw)
-                        coefsMatrix[p][indexMask[:]] = patchCoefsMatrix[:]
-                        p = p + 1
+                        coefsMatrix[p][neighbourMask[:]] = ordinaryPatchCoefsMatrix[:]
+                        p += 1
 
     return coefsMatrix

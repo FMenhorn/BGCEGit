@@ -71,7 +71,6 @@ def createGlobalControlMeshCoefs(parameterCoordinates, quad_list, AVertexList, B
     first coord, bezier point second coord)
     """
 
-    #extraOrdinaryCoefsRaw = np.zeros((7,4,7,4,4))
     ACoefsRaw = np.zeros((7,7,4,4))
     B1CoefsRaw = np.zeros((7,7,4,4))
     B2CoefsRaw = np.zeros((7,7,4,4))
@@ -195,10 +194,8 @@ write_tensor3_to_csv(newC,'newC.csv')
 write_matrix_to_csv(regularPoints,'regularPoints.csv')
 
 print "### Peters' Scheme ###"
-print "fine_vertices.shape = "+str(fine_vertices.shape)
 print "Calculating coefs."
 coefs = createGlobalControlMeshCoefs(parameters, quads, newA, newB1, newB2, newC, regularPoints)
-print "coefs.shape = "+str(coefs.shape)
 print "Done."
 print "Calculating fair coefs."
 fair_coefs = createFairnessControlMeshCoefs(quads, newA, newB1, newB2, newC, regularPoints)
@@ -213,9 +210,7 @@ print "Done."
 print "Concatenating matrices."
 fairnessWeight = 2.0
 joined_verts = sp.vstack([scipy.array(fine_vertices), scipy.zeros([fair_coefs.shape[0], 3])]).todense()
-print "joined_verts.shape = "+str(joined_verts.shape)
 joined_coefs = sp.vstack([sparse_coefs, fairnessWeight * sparse_fair_coefs])
-print "joined_coefs.shape = "+str(joined_coefs.shape)
 print "Done."
 
 READ_INPUT_FILE = False
