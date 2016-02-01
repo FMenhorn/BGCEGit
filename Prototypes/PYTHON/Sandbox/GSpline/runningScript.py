@@ -128,6 +128,9 @@ def createGlobalControlMeshCoefs(parameterCoordinates, quad_list, AVertexList, B
 
     return coefsMatrix
 
+# todo || Till here, things seem to be okay. I say "seem to be", as there is no easy way to compare the coefsMatrix
+# todo || with the one from MatLab. Compared #elems in both, they are the same. Compared indices of non-zero entries
+# todo || , they are the same.
 
 def solve_least_squares_problem(A, b):
     print "A.shape"+str(A.shape) # todo transform to sparse least squares using csr-format for the matrix

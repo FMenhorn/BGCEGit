@@ -30,14 +30,14 @@ def getBiquadraticPatchCoefs(i,j):
     '''
     points=np.zeros((3,3))
     # Be careful with matlab/python indexing
-    if (i==0):
-        if (j==0):
+    if (i==1):
+        if (j==1):
             points[i,j]=1
         else:
             points[i,j]=0.5
             points[1,1]=0.5
     else:
-        if (j==2):
+        if (j==1):
             points[i,j]= 0.5
             points[1,1]= 0.5
         else:
