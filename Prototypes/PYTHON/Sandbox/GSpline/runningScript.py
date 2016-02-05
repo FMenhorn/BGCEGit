@@ -31,6 +31,13 @@ def write_matrix_to_csv(matrix, filename):
         for row in matrix:
             csvwriter.writerow(row[:])
 
+def write_matrix_to_asc(matrix, filename):
+    with open(filename, 'wb') as csvfile:
+        csvwriter = csv.writer(csvfile, delimiter=' ',
+                               quotechar='|', quoting=csv.QUOTE_MINIMAL)
+        for row in matrix:
+            csvwriter.writerow(row[:])
+
 def write_tensor3_to_csv(tensor, filename):
     with open(filename, 'wb') as csvfile:
         csvwriter = csv.writer(csvfile, delimiter=',',
@@ -175,23 +182,10 @@ print "### Preprocessing ###"
 # since these cause trouble. (+ Scale the resulting ones so that max and min
 # param values are 1 and 0 repspectively in both u and v)
 
-write_tensor3_to_csv(A,'A.csv')
-write_tensor3_to_csv(B1,'B1.csv')
-write_tensor3_to_csv(B2,'B2.csv')
-write_tensor3_to_csv(C,'C.csv')
-
 print "Preprocessing of input data..."
 [parameters, fine_vertices] = scaleAwayParameters(parameters, fine_vertices)
 [newA, newB1, newB2, newC] = sortAB1B2VIndices(A, B1, B2, C)
 print "Done."
-
-write_matrix_to_csv(parameters,'parameters.csv')
-write_matrix_to_csv(quads,'quads.csv')
-write_tensor3_to_csv(newA,'newA.csv')
-write_tensor3_to_csv(newB1,'newB1.csv')
-write_tensor3_to_csv(newB2,'newB2.csv')
-write_tensor3_to_csv(newC,'newC.csv')
-write_matrix_to_csv(regularPoints,'regularPoints.csv')
 
 print "### Peters' Scheme ###"
 print "Calculating coefs."
@@ -213,17 +207,11 @@ joined_verts = sp.vstack([scipy.array(fine_vertices), scipy.zeros([fair_coefs.sh
 joined_coefs = sp.vstack([sparse_coefs, fairnessWeight * sparse_fair_coefs])
 print "Done."
 
-READ_INPUT_FILE = False
-
-if READ_INPUT_FILE:
-    print "Reading input file for skipping infinitely long least squares computation..."
-    vertices = read_matrix_from_csv('vertices.csv')
-    print "Done."
-else:
-    print "Least squares..."
-    vertices = solve_least_squares_problem(joined_coefs, joined_verts)
-    print "Done."
-    write_matrix_to_csv(vertices,'vertices.csv')
+print "Least squares..."
+vertices = solve_least_squares_problem(joined_coefs, joined_verts)
+print "Done."
+write_matrix_to_csv(vertices,'vertices.csv')
+write_matrix_to_asc(vertices,'vertices.asc')
 
 #plotBezierSurfaceWhole(quads, newA, newB1, newB2, newC, regularPoints, vertices)
 
