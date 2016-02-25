@@ -13,7 +13,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     ui->ForceEdit->setValidator( new QDoubleValidator(0, 100000, 5, this));
     ui->RefinementEdit->setValidator(new QIntValidator(0, 10, this));
-   // ui->pushButton;
+    ui->ErrorField_force->hide();
+    ui->ErrorField_refinement->hide();
 }
 MainWindow::~MainWindow()
 {
@@ -78,16 +79,11 @@ void MainWindow::on_RefinementEdit_textChanged(const QString &arg1)
 bool MainWindow::checkInput(QString igsName, QString igsPath, QString stpName, QString stpPath){
     QString forceScaling = ui->ForceEdit->text();
     QString refinement = ui->RefinementEdit->text();
-    /*QString igsName;
-    QString igsPath;
-    QString stpName;
-    QString stpPath;*/
+
     bool flag = true;
 
     if (forceScaling.isEmpty()) {
-        QMessageBox messageBox;
-        messageBox.critical(0,"Error","Please enter the force!");
-        messageBox.setFixedSize(500,200);
+        ui->ErrorField_force->setText("Please enter the force!");
         flag = false;
     }
 
@@ -104,7 +100,7 @@ bool MainWindow::checkInput(QString igsName, QString igsPath, QString stpName, Q
         messageBox.setFixedSize(500,200);
         flag = false;
     } else {
-       // getPathAndName(igsFile, igsName, igsPath);
+
         if (igsName.contains(".")){
             QMessageBox messageBox;
             messageBox.critical(0, "Error", "Filename can not contain a dot! Please, choose another .igs file!");
@@ -119,7 +115,7 @@ bool MainWindow::checkInput(QString igsName, QString igsPath, QString stpName, Q
         messageBox.setFixedSize(500,200);
         flag = false;
     } else {
-       // getPathAndName(stpFile, stpName, stpPath);
+
         if (stpName.contains(".")){
             QMessageBox messageBox;
             messageBox.critical(0, "Error", "Filename can not contain a dot! Please, choose another .stp file!");

@@ -75,7 +75,7 @@
       <x>20</x>
       <y>180</y>
       <width>221</width>
-      <height>35</height>
+      <height>31</height>
      </rect>
     </property>
     <layout class="QFormLayout" name="formLayout_2">
@@ -120,10 +120,13 @@
       <x>20</x>
       <y>150</y>
       <width>221</width>
-      <height>35</height>
+      <height>31</height>
      </rect>
     </property>
     <layout class="QFormLayout" name="formLayout">
+     <property name="fieldGrowthPolicy">
+      <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+     </property>
      <property name="horizontalSpacing">
       <number>72</number>
      </property>
@@ -146,6 +149,42 @@
      </item>
     </layout>
    </widget>
+   <widget class="QLabel" name="ErrorField_force">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>154</y>
+      <width>381</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="ErrorField_refinement">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>180</y>
+      <width>381</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -153,7 +192,7 @@
      <x>0</x>
      <y>0</y>
      <width>689</width>
-     <height>27</height>
+     <height>25</height>
     </rect>
    </property>
   </widget>
