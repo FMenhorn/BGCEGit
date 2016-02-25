@@ -118,6 +118,8 @@ bool MainWindow::checkInput(QString igsName, QString igsPath, QString stpName, Q
     QString styleSheet = "QLabel {color : red}";
     QString forceScaling = ui->ForceEdit->text();
     QString refinement = ui->RefinementEdit->text();
+    ui->ErrorField_force->hide();
+    ui->ErrorField_refinement->hide();
 
     bool flag = true;
 
