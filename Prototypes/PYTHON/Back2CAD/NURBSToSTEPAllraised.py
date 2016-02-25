@@ -14,8 +14,8 @@ for the length of the knot vector, the following rule has to hold:
 n_knots = n_nodes + deg + 1
 n_nodes has to be chosen such that it matches with the given number of control nodes per patch in the input files
 """
-input_folder = "./TorusFairNURBSRaised"
-output_file_name = "./TorusFairNURBSRaised.step"
+input_folder = "./Torus_Fair_NURBS_AllRaised"
+output_file_name = "./Torus_NURBS_AllRaised.step"
 plot_control_points = False
 
 knots = [0, 0, 0, 0, 0.25, 0.25, 0.25, 0.5, 0.5, 0.5, 0.75, 0.75, 0.75, 1, 1, 1, 1]
@@ -69,7 +69,6 @@ def get_vertices(patch_ids, vertex_list):
     """
     vertices = []
     for v_id in patch_ids:
-        v_id = v_id - 1  # MATLAB indexing -> PYTHON indexing!!!
         vertices.append(vertex_list[v_id])
     return vertices
 
@@ -118,6 +117,7 @@ print "Plotting patches..."
 patch_id = 0
 for patch in nurbs_idx:
     print "Plotting patch no. " + str(patch_id) + "..."
+    patch[:] = [x - 1 for x in patch]
     vertices = get_vertices(patch, nurbs_pts)
     generate_bspline_patch(vertices)
     patch_id += 1
@@ -127,3 +127,28 @@ print "Exporting file..."
 __objs__ = FreeCAD.getDocument("tmp").findObjects()
 Import.export(__objs__, output_file_name)
 print "Output file " + output_file_name + " exported."
+
+print "load files"
+Import.insert("/home/severin/BGCEGit/Prototypes/OpenCascade/TestGeometry/BlackWhiteCube/BlackWhiteCube.step", "tmp")
+print "get objects"
+objs = FreeCAD.ActiveDocument.Objects
+
+print "create fusion object"
+App.activeDocument().addObject("Part::MultiFuse", "FusionForBoolean")
+
+#print "remove old objects"
+#for obj in objs:
+#   print obj.Name
+#   App.getDocument("tmp").removeObject(obj.Name)
+
+print "add objs to Fusion"
+App.activeDocument().FusionForBoolean.Shapes = objs
+
+#App.activeDocument().recompute()
+
+print "Exporting file..."
+finalWriteObjects = []
+finalWriteObjects.append(FreeCAD.getDocument("tmp").getObject("FusionForBoolean"))
+print finalWriteObjects
+Import.export(finalWriteObjects, "./FusionForBoolean.step")
+print "Exported Boolean Fusion"
