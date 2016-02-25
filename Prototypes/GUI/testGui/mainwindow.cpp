@@ -87,10 +87,10 @@ void MainWindow::on_runButton_clicked()
         std::cout << script << std::endl;
 
         this->ui->progressBar->show();
-        //system(script.c_str());
-        QThreadPool pool;
-        QFuture<void> future = QtConcurrent::run(&pool, std::system, script.c_str());
-        this->FutureWatcher.setFuture(future);
+        system(script.c_str());
+        //QThreadPool pool;
+        //QFuture<void> future = QtConcurrent::run(&pool, system, script.c_str());
+        //this->FutureWatcher.setFuture(future);
     }
 }
 
@@ -114,51 +114,58 @@ void MainWindow::on_RefinementEdit_textChanged(const QString &arg1)
 
 bool MainWindow::checkInput(QString igsName, QString igsPath, QString stpName, QString stpPath){
     QMessageBox messageBox;
+    QString styleSheet = "QLabel {color : red}";
     QString forceScaling = ui->ForceEdit->text();
     QString refinement = ui->RefinementEdit->text();
 
     bool flag = true;
 
     if (forceScaling.isEmpty()) {
-        messageBox.critical(0,"Error","Please enter the force!");
-        messageBox.setFixedSize(500,200);
         ui->ErrorField_force->setText("Please enter the force!");
+        ui->ErrorField_force->setStyleSheet(styleSheet);
+        ui->ErrorField_force->show();
         flag = false;
     }
 
     if (refinement.isEmpty()) {
-        messageBox.critical(0,"Error","Please enter the refinement!");
-        messageBox.setFixedSize(500,200);
+        ui->ErrorField_refinement->setText("Please enter the refinement!");
+        ui->ErrorField_refinement->setStyleSheet(styleSheet);
+        ui->ErrorField_refinement->show();
         flag = false;
     }
 
     if (!igsFile.endsWith(".igs")){
-        messageBox.critical(0,"Error","Please choose the .igs file!");
-        messageBox.setFixedSize(500,200);
+        ui->IGSFileInput->setText("Please choose the .igs file!");
+        ui->IGSFileInput->setStyleSheet(styleSheet);
+       // messageBox.critical(0,"Error","Please choose the .igs file!");
+        //messageBox.setFixedSize(500,200);
         flag = false;
     } else {
 
         if (igsName.contains(".")){
-            messageBox.critical(0, "Error", "Filename can not contain a dot! Please, choose another .igs file!");
-            messageBox.setFixedSize(500,200);
+            ui->IGSFileInput->setText("Filename can not contain a dot!");
+            ui->IGSFileInput->setStyleSheet(styleSheet);
             flag = false;
         }
     }
 
     if (!stpFile.endsWith(".stp")){
-        messageBox.critical(0,"Error","Please choose the .stp file!");
+        ui->STEPFileInput->setText("Please choose the .stp file!");
+        ui->STEPFileInput->setStyleSheet(styleSheet);
         messageBox.setFixedSize(500,200);
         flag = false;
     } else {
 
         if (stpName.contains(".")){
-            messageBox.critical(0, "Error", "Filename can not contain a dot! Please, choose another .stp file!");
-            messageBox.setFixedSize(500,200);
+            ui->STEPFileInput->setText("Filename can not contain a dot!");
+            ui->STEPFileInput->setStyleSheet(styleSheet);
             flag = false;
         }
     }
 
     if(stpName.compare(igsName)!=0){
+        ui->STEPFileInput->setStyleSheet(styleSheet);
+        ui->IGSFileInput->setStyleSheet(styleSheet);
         messageBox.critical(0, "Error", "Filenames are not equal!");
         messageBox.setFixedSize(500,200);
         flag = false;
