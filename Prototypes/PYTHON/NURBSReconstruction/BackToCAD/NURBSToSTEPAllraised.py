@@ -84,11 +84,11 @@ def export_step(output_file_name, nurbs_indices, control_points):
     print "Plotting patches..."
     patch_id = 0
     for nurbs_patch in nurbs_indices:
-        if patch_id < 1:
-            print "Plotting patch no. " + str(patch_id) + "..."
-            vertices = get_vertices(nurbs_patch, control_points)
-            generate_bspline_patch(vertices, n_nodes, degree, knots)
-            patch_id += 1
+        print "Plotting patch no. " + str(patch_id) + "..."
+        vertices = get_vertices(nurbs_patch, control_points)
+        generate_bspline_patch(vertices, n_nodes, degree, knots)
+        patch_id += 1
+
     print "All patches plotted."
 
     print "Exporting file..."
