@@ -1,7 +1,5 @@
 from sortAB1B2VIndices import sortAB1B2VIndices
 from scaleAwayParameters import scaleAwayParameters
-import scipy.io as sio
-import numpy as np
 import scipy.sparse as sp
 
 from createNURBSMatrices import createNURBSMatricesAllraised

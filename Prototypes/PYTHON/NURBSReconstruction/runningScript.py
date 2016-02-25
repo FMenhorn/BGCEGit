@@ -5,7 +5,7 @@ from DooSabin.DualCont_to_ABC import dooSabin_ABC
 from DualContouring.extraction import extract_surface
 from PetersScheme.fitting import fit_NURBS
 from PetersScheme.quadvertGenerator import quad_vert_generator
-from PetersScheme.scaleAwayParameters import scaleAwayParameters
+
 
 """
 parser = argparse.ArgumentParser(description='Include path to Cells and Dimensions.')
