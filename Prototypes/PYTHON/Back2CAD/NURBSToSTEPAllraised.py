@@ -21,6 +21,8 @@ plot_control_points = False
 knots = [0, 0, 0, 0, 0.25, 0.25, 0.25, 0.5, 0.5, 0.5, 0.75, 0.75, 0.75, 1, 1, 1, 1]
 degree = 3
 n_nodes = 13
+faceHolder = []
+#shapeHolder=Part.Shape()
 assert (knots.__len__() == n_nodes + degree + 1)
 """
 configuration done
@@ -102,7 +104,7 @@ def generate_bspline_patch(vertices):
             patch.setPole(ii + 1, jj + 1, control_point, 1)
             if(plot_control_points):
                 Part.show(Part.Vertex(control_point))  # plotting corresponding control points, switched on/off in configuration section
-    Part.show(patch.toShape())  # plots the patch
+    faceHolder.append(patch.toShape()) # add to the list of Faces the patch converted to Shape
 
 
 print "Creating FreeCAD Document..."
@@ -123,28 +125,30 @@ for patch in nurbs_idx:
     patch_id += 1
 print "All patches plotted."
 
+shellHolder = Part.makeShell(faceHolder)
+solidHolder = Part.makeSolid(shellHolder)
+
+Part.show(solidHolder)
+
 print "Exporting file..."
 __objs__ = FreeCAD.getDocument("tmp").findObjects()
 Import.export(__objs__, output_file_name)
 print "Output file " + output_file_name + " exported."
 
 print "load files"
-Import.insert("/home/severin/BGCEGit/Prototypes/OpenCascade/TestGeometry/BlackWhiteCube/BlackWhiteCube.step", "tmp")
+Import.insert("./Cone.step", "tmp")
 print "get objects"
 objs = FreeCAD.ActiveDocument.Objects
+
+print objs
 
 print "create fusion object"
 App.activeDocument().addObject("Part::MultiFuse", "FusionForBoolean")
 
-#print "remove old objects"
-#for obj in objs:
-#   print obj.Name
-#   App.getDocument("tmp").removeObject(obj.Name)
-
 print "add objs to Fusion"
 App.activeDocument().FusionForBoolean.Shapes = objs
 
-#App.activeDocument().recompute()
+App.activeDocument().recompute()
 
 print "Exporting file..."
 finalWriteObjects = []
