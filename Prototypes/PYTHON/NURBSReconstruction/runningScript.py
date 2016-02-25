@@ -1,5 +1,6 @@
 import argparse
 
+from BackToCAD.NURBSToSTEPAllraised import export_step
 from DooSabin.DualCont_to_ABC import dooSabin_ABC
 from DualContouring.extraction import extract_surface
 from PetersScheme.fitting import fit_NURBS
@@ -21,6 +22,13 @@ A, B1, B2, C, regularPoints = dooSabin_ABC(vertices, quads)
 print "### DooSabin DONE ###"
 
 print "### Peters' Scheme ### "
-fit_NURBS(A, B1, B2, C, regularPoints, vertices, quads, fine_vertices, parameters)
+NURBSMatrix, NURBSIndices = fit_NURBS(A, B1, B2, C, regularPoints, vertices, quads, fine_vertices, parameters)
 print "### Peters' Scheme DONE### "
+
+print "### Generating Step File ###"
+export_step('out.step', NURBSIndices, NURBSMatrix)
+print "### Step File DONE### "
+
+
+
 

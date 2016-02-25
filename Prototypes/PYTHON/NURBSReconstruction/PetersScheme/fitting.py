@@ -4,6 +4,8 @@ import scipy.io as sio
 import numpy as np
 import scipy.sparse as sp
 
+from createNURBSMatrices import createNURBSMatricesAllraised
+
 
 from writeMatrices import *
 from leastSquares import solve_least_squares_problem
@@ -45,14 +47,9 @@ def fit_NURBS(A, B1, B2, C, regularPoints, vertices, quads, fine_vertices, param
     write_matrix_to_csv(vertices,'vertices.csv')
     write_matrix_to_asc(vertices,'vertices.asc')
 
-    #plotBezierSurfaceWhole(quads, newA, newB1, newB2, newC, regularPoints, vertices)
 
-    #[biqPatchPoints,biqIndices,bicPatchPoints,bicIndices] = createBezierPointMatrices(quads_Torus,newA,newB1,newB2,newC,regularPoints,otherVertices);
-    #csvwrite('biquadraticPatchPoints.csv',biqPatchPoints);
-    #csvwrite('biquadraticPatchIndices.csv',biqIndices);
-    #csvwrite('bicubicPatchPoints.csv',bicPatchPoints);
-    #csvwrite('bicubicPatchIndices.csv',bicIndices);
+    NURBSMatrix, NURBSIndices = createNURBSMatricesAllraised(quads,newA,newB1,newB2,newC,regularPoints,vertices)
 
-    #[NURBSMatrix,NURBSIndices] = createNURBSMatrices(quads_Torus,newA,newB1,newB2,newC,regularPoints,otherVertices);
-    #csvwrite('NURBSPatchPoints.csv',NURBSMatrix);
-    #csvwrite('NURBSPatchIndices.csv',NURBSIndices);
+    return NURBSMatrix, NURBSIndices
+
+
