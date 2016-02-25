@@ -155,4 +155,4 @@ def dual_contour(data, res, res_fine, dims, coarse_level, do_manifold_treatment)
     else:
         dc_manifold_edges = create_manifold_edges(dc_quads, vindex, data, res)
 
-    return np.array(dc_verts), dc_quads, dc_manifold_edges
+    return np.array(dc_verts), np.array(dc_quads), dc_manifold_edges

@@ -7,6 +7,8 @@ from Quad import Quad
 
 def quad_vert_generator(_verts, _quads, _fine_verts, _parameters ):
     assert type(_verts) is np.ndarray
+    assert type(_quads) is np.ndarray
+    assert type(_fine_verts) is np.ndarray
     # Create vertices
     vertex_list = []
     for i in range(_verts.shape[0]):
@@ -65,7 +67,7 @@ def quad_vert_generator(_verts, _quads, _fine_verts, _parameters ):
         fine_vertex_list.append(FineVertex(id=i, x=_fine_verts[i, 0], y=_fine_verts[i, 1], z=_fine_verts[i, 2],
                                 u=_parameters[i, 1], v=_parameters[i, 2], quad=quad_list[int(_parameters[i, 0])]))
 
-    return new_vertex_list, quad_list, fine_vertex_list
+    return np.array(new_vertex_list), np.array(quad_list), np.array(fine_vertex_list)
 
 
 

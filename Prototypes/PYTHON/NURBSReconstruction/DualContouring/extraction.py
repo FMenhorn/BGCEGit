@@ -49,7 +49,7 @@ def extraction_algorithm(fine_data, resolutions, dimensions):
     param = create_parameters(verts, quads)
     print "### Projecting Datapoints onto coarse quads DONE ###"
 
-    return verts, quads, param
+    return verts_out_dc, quads_out_dc, param
 
 
 def extract_surface_from_path_w_plot(path):
