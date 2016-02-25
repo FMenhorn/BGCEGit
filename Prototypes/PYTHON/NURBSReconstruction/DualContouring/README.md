@@ -1,0 +1,1 @@
+This version of DC is copied (antipattern? no way...) from ```BGCEGit/Prototypes/PYTHON/DualContouring/*```
