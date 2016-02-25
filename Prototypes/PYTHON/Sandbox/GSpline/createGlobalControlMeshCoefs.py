@@ -8,8 +8,6 @@ from getBezierPointCoefs import getBezierPointCoefs
 from getBicubicBezierPointCoefs import getBicubicBezierPointCoefs
 from getExtraOrdCornerIndexMask import getExtraOrdCornerIndexMask
 
-getBicubicBezierPointCoefs
-
 def createGlobalControlMeshCoefs(parameterCoordinates, quad_list, AVertexList, B1VertexList, B2VertexList, CVertexList,
                                      quad_control_point_indices):
     """

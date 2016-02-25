@@ -9,9 +9,10 @@ from createGlobalControlMeshCoefs import createGlobalControlMeshCoefs
 from quadvertGenerator import quad_vert_generator
 from sortAB1B2VIndices import sortAB1B2VIndices
 from scaleAwayParameters import scaleAwayParameters
+from createNURBSMatrices import createNURBSMatricesAllraised
 
 # TODO: INSERT dual contouring CODE!
-vertices, quads, fine_vertices = quad_vert_generator()
+#vertices, quads, fine_vertices = quad_vert_generator()
 
 # For now we use test data to not run Annas slow code
 #dc_to_peter(vertex_list, quad_list)
@@ -68,8 +69,8 @@ print "Done."
 print "Least squares..."
 vertices = solve_least_squares_problem(joined_coefs, joined_verts)
 print "Done."
-write_matrix_to_csv(vertices,'vertices.csv')
-write_matrix_to_asc(vertices,'vertices.asc')
+write_matrix_to_csv(vertices, 'vertices.csv')
+write_matrix_to_asc(vertices, 'vertices.asc')
 
 #plotBezierSurfaceWhole(quads, newA, newB1, newB2, newC, regularPoints, vertices)
 
@@ -79,6 +80,10 @@ write_matrix_to_asc(vertices,'vertices.asc')
 #csvwrite('bicubicPatchPoints.csv',bicPatchPoints);
 #csvwrite('bicubicPatchIndices.csv',bicIndices);
 
-#[NURBSMatrix,NURBSIndices] = createNURBSMatrices(quads_Torus,newA,newB1,newB2,newC,regularPoints,otherVertices);
+NURBSMatrix, NURBSIndices = createNURBSMatricesAllraised(quads, newA, newB1, newB2, newC, regularPoints, vertices)
 #csvwrite('NURBSPatchPoints.csv',NURBSMatrix);
 #csvwrite('NURBSPatchIndices.csv',NURBSIndices);
+write_matrix_to_csv(NURBSMatrix, 'NURBSPatchPoints.csv')
+write_matrix_to_asc(NURBSMatrix, 'NURBSPatchPoints.asc')
+write_matrix_to_csv(NURBSIndices, 'NURBSPatchIndices.csv')
+write_matrix_to_asc(NURBSIndices, 'NURBSPatchIndices.asc')

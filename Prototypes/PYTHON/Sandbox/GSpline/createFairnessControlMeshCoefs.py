@@ -75,7 +75,7 @@ def createFairnessControlMeshCoefs(quad_list, AVertexList, B1VertexList, B2Verte
                     whichCorner = whichCornerFun(i, j, whichCornerList)
                     indexMask = getExtraOrdCornerIndexMask(quad_list, AVertexList, B1VertexList, B2VertexList,
                                                            CVertexList, quad_control_point_indices, q, whichCorner)
-                    numberOfEdges = indexMask.shape[2]
+                    numberOfEdges = indexMask.shape[1]
 
                     coefsRawTemp[0, 0:numberOfEdges, :, :] = ACoefsRaw[numberOfEdges - 1, 0:numberOfEdges, :, :]
                     coefsRawTemp[1, 0:numberOfEdges, :, :] = B1CoefsRaw[numberOfEdges - 1, 0:numberOfEdges, :, :]
