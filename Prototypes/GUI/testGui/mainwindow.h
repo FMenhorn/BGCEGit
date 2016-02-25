@@ -3,8 +3,11 @@
 
 #include <QLabel>
 #include <QString>
+#include <QFutureWatcher>
 
 #include <QMainWindow>
+
+#include "ScriptCaller.h"
 
 namespace Ui {
 class MainWindow;
@@ -21,8 +24,6 @@ public:
 private slots:
     void on_STEPFileSelector_clicked();
 
-//    void on_lineEdit_textChanged(const QString &arg1);
-
     void on_IGSFileSelector_clicked();
 
 
@@ -32,16 +33,22 @@ private slots:
 
     void on_RefinementEdit_textChanged(const QString &arg1);
 
-    void checkInput();
+    bool checkInput(QString igsName, QString igsPath, QString stpName, QString stpPath);
+
+    void slot_finished();
 
     void getPathAndName(QString fullPath, QString &name, QString &path);
 
 private:
     Ui::MainWindow *ui;
+
+    QFutureWatcher<void> FutureWatcher;
     QString stpFile;
     QString igsFile;
 
     QString cropText(QLabel* curLabel, QString toCropString);
+
+    ScriptCaller scriptCaller;
 };
 
 #endif // MAINWINDOW_H
