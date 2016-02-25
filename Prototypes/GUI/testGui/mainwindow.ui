@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
+    <width>689</width>
     <height>300</height>
    </rect>
   </property>
@@ -14,17 +14,30 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QPushButton" name="SelectInputFile">
+   <widget class="QPushButton" name="STEPFileSelector">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>80</y>
-      <width>96</width>
+      <x>15</x>
+      <y>40</y>
+      <width>111</width>
       <height>31</height>
      </rect>
     </property>
     <property name="text">
-     <string>SelectInputFile</string>
+     <string>Select STP File</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="STEPFileInput">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>50</y>
+      <width>521</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>STEPFileInput</string>
     </property>
    </widget>
   </widget>
@@ -33,7 +46,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>400</width>
+     <width>689</width>
      <height>27</height>
     </rect>
    </property>

@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include <QFileDialog>
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -13,8 +15,8 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_SelectInputFile_clicked()
+void MainWindow::on_STEPFileSelector_clicked()
 {
-    QStringList fileNames = QFileDialog::getOpenFileNames(this, tr("Open File"),"/path/to/file/",tr("Mp3 Files (*.mp3)"));
-    ui->listWidget->addItems(fileNames);
+    QStringList fileNames = QFileDialog::getOpenFileNames(this, tr("Open File"),"/path/to/file/",tr("STEP File (*.stp)"));
+    ui->STEPFileInput->setText(fileNames.first());
 }

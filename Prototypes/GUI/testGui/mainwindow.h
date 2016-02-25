@@ -16,7 +16,7 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_SelectInputFile_clicked();
+    void on_STEPFileSelector_clicked();
 
 private:
     Ui::MainWindow *ui;
