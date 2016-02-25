@@ -7,18 +7,18 @@
     <x>0</x>
     <y>0</y>
     <width>689</width>
-    <height>331</height>
+    <height>442</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>CADTOPCAD</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QPushButton" name="STEPFileSelector">
     <property name="geometry">
      <rect>
       <x>15</x>
-      <y>40</y>
+      <y>170</y>
       <width>111</width>
       <height>31</height>
      </rect>
@@ -31,7 +31,7 @@
     <property name="geometry">
      <rect>
       <x>150</x>
-      <y>50</y>
+      <y>175</y>
       <width>521</width>
       <height>21</height>
      </rect>
@@ -47,7 +47,7 @@
     <property name="geometry">
      <rect>
       <x>15</x>
-      <y>100</y>
+      <y>210</y>
       <width>111</width>
       <height>31</height>
      </rect>
@@ -60,7 +60,7 @@
     <property name="geometry">
      <rect>
       <x>150</x>
-      <y>100</y>
+      <y>215</y>
       <width>521</width>
       <height>21</height>
      </rect>
@@ -73,7 +73,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>180</y>
+      <y>290</y>
       <width>221</width>
       <height>35</height>
      </rect>
@@ -105,7 +105,7 @@
     <property name="geometry">
      <rect>
       <x>15</x>
-      <y>230</y>
+      <y>340</y>
       <width>99</width>
       <height>27</height>
      </rect>
@@ -118,7 +118,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>150</y>
+      <y>250</y>
       <width>221</width>
       <height>35</height>
      </rect>
@@ -153,7 +153,7 @@
     <property name="geometry">
      <rect>
       <x>270</x>
-      <y>154</y>
+      <y>255</y>
       <width>381</width>
       <height>21</height>
      </rect>
@@ -171,7 +171,7 @@
     <property name="geometry">
      <rect>
       <x>270</x>
-      <y>180</y>
+      <y>296</y>
       <width>381</width>
       <height>21</height>
      </rect>
@@ -192,13 +192,23 @@
     <property name="geometry">
      <rect>
       <x>160</x>
-      <y>230</y>
+      <y>340</y>
       <width>341</width>
       <height>23</height>
      </rect>
     </property>
     <property name="value">
      <number>24</number>
+    </property>
+   </widget>
+   <widget class="QGraphicsView" name="logoView">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>0</y>
+      <width>651</width>
+      <height>151</height>
+     </rect>
     </property>
    </widget>
   </widget>
@@ -208,7 +218,7 @@
      <x>0</x>
      <y>0</y>
      <width>689</width>
-     <height>25</height>
+     <height>27</height>
     </rect>
    </property>
   </widget>

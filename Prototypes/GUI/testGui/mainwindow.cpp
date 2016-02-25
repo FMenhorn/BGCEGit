@@ -6,7 +6,6 @@
 #include <QFuture>
 #include <QtConcurrent/QtConcurrent>
 #include <QtGui>
-#include <QImage>
 
 #include <iostream>
 
@@ -25,9 +24,15 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(&this->FutureWatcher, SIGNAL (finished()), this, SLOT (slot_finished()));
     ui->ErrorField_force->hide();
     ui->ErrorField_refinement->hide();
+
+    this->ui->logoView->setScene(&logoScene);
+    logoItem.setPixmap(*logoPicture);
+    logoScene.addItem(&logoItem);
+    this->ui->logoView->show();
 }
 MainWindow::~MainWindow()
 {
+    delete this->logoPicture;
     delete ui;
 }
 

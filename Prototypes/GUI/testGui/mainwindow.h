@@ -7,6 +7,11 @@
 
 #include <QMainWindow>
 
+#include <QImage>
+#include <QPixmap>
+#include <QGraphicsPixmapItem>
+#include <QGraphicsScene>
+
 #include "ScriptCaller.h"
 
 namespace Ui {
@@ -48,6 +53,10 @@ private:
     QString cropText(QLabel* curLabel, QString toCropString);
 
     ScriptCaller scriptCaller;
+
+    QGraphicsScene logoScene;
+    QPixmap* logoPicture = new QPixmap("../testGui/images/bgceCSEsccs_logo.png");
+    QGraphicsPixmapItem logoItem;
 };
 
 #endif // MAINWINDOW_H
