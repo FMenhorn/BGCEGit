@@ -23,13 +23,21 @@ private slots:
 
 //    void on_lineEdit_textChanged(const QString &arg1);
 
-//    void on_pushButton_clicked();
-
     void on_IGSFileSelector_clicked();
 
 
+    void on_runButton_clicked();
+
+    void on_ForceEdit_textChanged(const QString &arg1);
+
+    void on_RefinementEdit_textChanged(const QString &arg1);
+
+    void checkInput();
+
 private:
     Ui::MainWindow *ui;
+    QString stpFile;
+    QString igsFile;
 
     QString cropText(QLabel* curLabel, QString toCropString);
 };

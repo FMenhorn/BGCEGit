@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>689</width>
-    <height>300</height>
+    <height>331</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -75,7 +75,7 @@
       <x>20</x>
       <y>180</y>
       <width>221</width>
-      <height>29</height>
+      <height>35</height>
      </rect>
     </property>
     <layout class="QFormLayout" name="formLayout_2">
@@ -104,8 +104,8 @@
    <widget class="QPushButton" name="runButton">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>210</y>
+      <x>15</x>
+      <y>230</y>
       <width>99</width>
       <height>27</height>
      </rect>
@@ -114,13 +114,13 @@
      <string>Run</string>
     </property>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>20</x>
       <y>150</y>
       <width>221</width>
-      <height>29</height>
+      <height>35</height>
      </rect>
     </property>
     <layout class="QFormLayout" name="formLayout">
@@ -153,7 +153,7 @@
      <x>0</x>
      <y>0</y>
      <width>689</width>
-     <height>25</height>
+     <height>27</height>
     </rect>
    </property>
   </widget>

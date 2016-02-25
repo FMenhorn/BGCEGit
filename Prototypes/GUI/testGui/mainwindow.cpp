@@ -4,6 +4,8 @@
 #include <QFileDialog>
 #include <QMessageBox>
 
+#include <iostream>
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -29,7 +31,8 @@ void MainWindow::on_STEPFileSelector_clicked()
             messageBox.setFixedSize(500,200);
         }
     }
-    ui->STEPFileInput->setText(this->cropText(ui->STEPFileInput, fileNames.first()));
+    stpFile = fileNames.first();
+    ui->STEPFileInput->setText(this->cropText(ui->STEPFileInput, stpFile));
 }
 
 void MainWindow::on_IGSFileSelector_clicked()
@@ -43,7 +46,8 @@ void MainWindow::on_IGSFileSelector_clicked()
             messageBox.setFixedSize(500,200);
         }
     }
-    ui->IGSFileInput->setText(this->cropText(ui->IGSFileInput, fileNames.first()));
+    igsFile = fileNames.first();
+    ui->IGSFileInput->setText(this->cropText(ui->IGSFileInput, igsFile));
 }
 
 QString MainWindow::cropText(QLabel* curLabel, QString toCropString){
@@ -57,8 +61,26 @@ QString MainWindow::cropText(QLabel* curLabel, QString toCropString){
 {
 
 }
+*/
 
-void MainWindow::on_pushButton_clicked()
+void MainWindow::on_runButton_clicked()
 {
+    this->checkInput();
 
-}*/
+    float forceScaling = ui->ForceEdit->text().toFloat();
+    int refinementLevel = ui->RefinementEdit->text().toInt();
+}
+
+void MainWindow::on_ForceEdit_textChanged(const QString &arg1)
+{
+    ui->ForceEdit->setText(arg1);
+}
+
+void MainWindow::on_RefinementEdit_textChanged(const QString &arg1)
+{
+    ui->RefinementEdit->setText(arg1);
+}
+
+void MainWindow::checkInput(){
+    //TODO
+}
