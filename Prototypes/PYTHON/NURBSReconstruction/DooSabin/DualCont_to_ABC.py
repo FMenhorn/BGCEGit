@@ -1,13 +1,13 @@
 __author__ = 'anna'
 
-from Shape import Shape_DooSabin
+import matplotlib.pyplot as plt
+import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
-from DooSabin import DooSabin
-from Vertex import Vertex_DooSabin
-import numpy as np
-import matplotlib.pyplot as plt
 
+from DooSabin import DooSabin
+from PetersScheme.Shape import Shape_DooSabin
+from vertex_DooSabin  import Vertex_DooSabin
 
 
 def dooSabin_ABC(verts, faces):
@@ -36,11 +36,9 @@ def dooSabin_ABC(verts, faces):
     ax.set_aspect('equal')
 
     for face in faces_refined1:
-        #print face.quad_id
-       # print(face.ordered_refined_vertices)
+
         n = len(face._vertices)
-        # print(face.vertices)
-       # print(face._vertices)
+
         x = [face._vertices[i]._coordinates[0] for i in range(n)]
         y = [face._vertices[i]._coordinates[1] for i in range(n)]
         z = [face._vertices[i]._coordinates[2] for i in range(n)]

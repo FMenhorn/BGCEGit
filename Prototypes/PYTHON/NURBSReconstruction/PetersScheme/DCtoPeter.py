@@ -1,9 +1,12 @@
+import matplotlib.pyplot as plt
+import numpy as np
+import scipy.io
 from mpl_toolkits.mplot3d import Axes3D
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
-from DooSabin import DooSabin
-import numpy as np
-import matplotlib.pyplot as plt
-import scipy.io
+
+from DooSabin.DooSabin import DooSabin
+
+
 #from Quad_DooSabin import Quad_DooSabin as Quad
 #from Vertex_DooSabin import Vertex_DooSabin as Vertex
 

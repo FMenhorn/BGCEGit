@@ -66,8 +66,17 @@ def quad_vert_generator(_verts, _quads, _fine_verts, _parameters ):
     for i in range(_fine_verts.shape[0]):
         fine_vertex_list.append(FineVertex(id=i, x=_fine_verts[i, 0], y=_fine_verts[i, 1], z=_fine_verts[i, 2],
                                 u=_parameters[i, 1], v=_parameters[i, 2], quad=quad_list[int(_parameters[i, 0])]))
+    verts=[]
 
-    return np.array(new_vertex_list), np.array(quad_list), np.array(fine_vertex_list)
+    quads=[]
+
+    verts= [new_vertex_list[i].get_coordinates()  for i in range(new_vertex_list.__len__())]
+    fine_verts= [fine_vertex_list[i].get_coordinates()  for i in range(fine_vertex_list.__len__())]
+
+    for i in range(quad_list.__len__()):
+        quads.append([quad_list[i].get_vertices()[j].id for j in range(4)])
+
+    return np.array(verts), np.array(quads), np.array(fine_verts)
 
 
 

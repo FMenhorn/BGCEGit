@@ -1,7 +1,7 @@
 __author__ = 'anna'
 
-from Vertex import Vertex_DooSabin
-from Shape import Shape_DooSabin
+from PetersScheme.Vertex import Vertex_DooSabin
+from PetersScheme.Shape import Shape_DooSabin
 
 def DooSabin(vertices, faces, alpha, iter):
     vertices_refined = []
@@ -29,8 +29,6 @@ def DooSabin(vertices, faces, alpha, iter):
             newVertex_yCoord = face._vertices[j]._coordinates[1]*(1 - alpha) + F[1]*alpha
             newVertex_zCoord = face._vertices[j]._coordinates[2]*(1 - alpha) + F[2]*alpha
             v = Vertex_DooSabin(len(vertices_refined), newVertex_xCoord, newVertex_yCoord, newVertex_zCoord)
-            print(len(vertices_refined))
-            print(v._coordinates)
             vertices_children[face._vertices[j]._id].append([face, v])
             vertices_refined.append(v)
 
@@ -62,11 +60,11 @@ def DooSabin(vertices, faces, alpha, iter):
             if face.type == "vertex":
                 globalIndicesInOrderedOriginalQuad = [0, 3, 15, 12]
                 parent_faces = face.parents
-             #   print("list of parents when try to add to the refined list", [parent_faces[i]._id for i in range(len(parent_faces))])
+
                 for i in range(numberOfVertices):
                     face.parent_vertex.C.append([face.parents[i], newVertices[i]])
                     ind = face.parents[i]._vertices.index(face.parent_vertex)
-                    #print(face.parents[i]._id)
+
                     face.parents[i].ordered_refined_vertices[globalIndicesInOrderedOriginalQuad[ind]] = newVertices[i]
                     newVertices[i].parentOrigGrid = face.parents[i]
 
@@ -113,7 +111,7 @@ def DooSabin(vertices, faces, alpha, iter):
                         #     localInd = face._vertices.index(vert)
                         #     grandParentFace.ordered_refined_vertices[globalIndicesInOrderedOriginalQuad[1-positioning[localInd]][grandParentFace.edges.index([parent_edge[1], parent_edge[0]])]]
                          if localFaceId == indexOfSharedEdge:
-                            #print("Here!")
+
                             face.parent_edge[i].B2.append([grandParentFace, newVertices[face._vertices.index(vert)], face.parent_edge])
                          else:
                             face.parent_edge[i].B1.append([grandParentFace, newVertices[face._vertices.index(vert)], face.parent_edge])
@@ -131,7 +129,7 @@ def DooSabin(vertices, faces, alpha, iter):
         n = len(vertices_children[vert._id])
         new_face_vertices = [vertices_children[vert._id][i][1] for i in range(n)]
         parent_faces = [vertices_children[vert._id][i][0] for i in range(n)]
-       # print("Parent faces when create a vertex face _ids", [parent_faces[i]._id for i in range(len(parent_faces))])
+
         face_ordered = [vertices_children[vert._id][0][1]]
         parent_faces_ordered = [vertices_children[vert._id][0][0]]
         current_face = parent_faces[0]
@@ -143,7 +141,7 @@ def DooSabin(vertices, faces, alpha, iter):
 
             face_ordered.append(new_face_vertices[j])
             parent_faces_ordered.append(parent_faces[j])
-          #  print("ordered face",[parent_faces_ordered[i]._id for i in range(len(face_ordered))])
+
             current_face = parent_faces[j]
 
         face_object = Shape_DooSabin(len(faces_refined), face_ordered)

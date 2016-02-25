@@ -1,14 +1,14 @@
-from quad import Quad
-from mpl_toolkits.mplot3d import Axes3D
-from mpl_toolkits.mplot3d.art3d import Poly3DCollection
-from DooSabin import DooSabin
-from vertex import Vertex
-import numpy as np
-import matplotlib.pyplot as plt
-import scipy.io
-import sys
 import argparse
 
+import matplotlib.pyplot as plt
+import numpy as np
+import scipy.io
+from mpl_toolkits.mplot3d import Axes3D
+from mpl_toolkits.mplot3d.art3d import Poly3DCollection
+from quad import Quad
+from vertex import Vertex
+
+from DooSabin.DooSabin import DooSabin
 
 __author__ = 'anna'
 parser=argparse.ArgumentParser(

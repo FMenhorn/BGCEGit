@@ -31,6 +31,6 @@ def create_parameters(verts, quads):
                 v_min = v
                 idx_min = candidate_idx
 
-        param.append(np.array([idx_min,u_min,v_min]))
+        param.append([idx_min,u_min,v_min])
 
     return np.array(param)
