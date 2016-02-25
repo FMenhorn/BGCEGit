@@ -8,7 +8,7 @@ from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 __author__ = 'benjamin'
 
 # choose example here
-__EXAMPLE__ = "Doubletorus"
+__EXAMPLE__ = "Path"
 
 if __EXAMPLE__ == "Path":
     print "initializition is done later"
@@ -53,9 +53,9 @@ else:
 if __EXAMPLE__ == "Path":
     print "Example: Path"
     path = "cantilever"
-    [verts, quads, params, plot_dims] = extraction.extract_surface_from_path_w_plot(path)
+    [verts, quads, params, plot_dims, quads_objs] = extraction.extract_surface_from_path_w_plot(path)
 else:
-    [verts, quads, params] = extraction.extraction_algorithm(fine_data, resolutions, dimensions)
+    [verts, quads, quads_objs, params] = extraction.extraction_algorithm(fine_data, resolutions, dimensions)
 
 print "###Plotting###"
 
@@ -64,7 +64,7 @@ ax = Axes3D(fig)
 ax.set_aspect('equal')
 
 plane_oo = [False] * quads['coarse'].__len__()
-for q in quads['coarse']:
+for q in quads_objs['coarse']:
     vtx = q.vertices_plane
     vtx_orig = verts['coarse'][q.vertex_ids]
     M = vtx[1:4, :] - vtx[0, :]
@@ -84,7 +84,7 @@ for q in quads['coarse']:
     # poly.set_alpha(.25)
     ax.add_collection3d(poly)
 
-for q in quads['fine']:
+for q in quads_objs['fine']:
     vtx = verts['fine'][q]
     x = vtx[:, 0].tolist()
     y = vtx[:, 1].tolist()

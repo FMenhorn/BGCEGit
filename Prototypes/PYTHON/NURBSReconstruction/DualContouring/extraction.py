@@ -31,9 +31,9 @@ def read_from_path(path, coarse_scale):
 
 
 def extraction_algorithm(fine_data, resolutions, dimensions):
-    print "###Dual Contouring###"
+    print "### Dual Contouring ###"
     [verts_out_dc, quads_out_dc, manifolds] = tworesolution_dual_contour(fine_data, resolutions, dimensions)
-    print "###Dual Contouring DONE###"
+    print "### Dual Contouring DONE ###"
 
     N_quads = {'coarse': quads_out_dc['coarse'].__len__(), 'fine': quads_out_dc['fine'].__len__()}
     N_verts = {'coarse': verts_out_dc['coarse'].__len__(), 'fine': verts_out_dc['fine'].__len__()}
@@ -49,22 +49,22 @@ def extraction_algorithm(fine_data, resolutions, dimensions):
     param = create_parameters(verts, quads)
     print "### Projecting Datapoints onto coarse quads DONE ###"
 
-    return verts_out_dc, quads_out_dc, param
+    return verts_out_dc, quads_out_dc, quads, param
 
 
 def extract_surface_from_path_w_plot(path):
 
     fine_data, dimensions, resolutions = read_from_path(path,2.0)
-    [verts, quads, params] = extraction_algorithm(fine_data=fine_data,
+    verts, quads, quad_objs, params = extraction_algorithm(fine_data=fine_data,
                                                   resolutions=resolutions,
                                                   dimensions=dimensions)
-    return verts, quads, params, dimensions
+    return verts, quads, params, dimensions, quad_objs
 
 
 def extract_surface_from_path_wrapped(path):
-    verts,quads,params,notused=extract_surface_from_path_w_plot(path)
+    verts, quads, params, notused, notused = extract_surface_from_path_w_plot(path)
     return verts, quads, params
 
 def extract_surface(path):
-    verts,quads,params,notused=extract_surface_from_path_w_plot(path)
+    verts, quads, params, notused, notused = extract_surface_from_path_w_plot(path)
     return verts['coarse'], quads['coarse'], verts['fine'], params
