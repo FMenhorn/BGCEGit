@@ -7,7 +7,7 @@ from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 
 from DooSabin import DooSabin
 from PetersScheme.Shape import Shape_DooSabin
-from vertex_DooSabin  import Vertex_DooSabin
+from PetersScheme.Vertex  import Vertex_DooSabin
 
 
 def dooSabin_ABC(verts, faces):
