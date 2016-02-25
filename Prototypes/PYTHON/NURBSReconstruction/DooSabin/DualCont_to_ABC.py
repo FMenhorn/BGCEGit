@@ -1,9 +1,6 @@
 __author__ = 'anna'
 
-import matplotlib.pyplot as plt
 import numpy as np
-from mpl_toolkits.mplot3d import Axes3D
-from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 
 from DooSabin import DooSabin
 from PetersScheme.Shape import Shape_DooSabin
@@ -29,25 +26,6 @@ def dooSabin_ABC(verts, faces):
 
     [vertices_refined, faces_refined] = DooSabin(listOfVertices, quads, 0.5, 1)
     [vertices_refined1, faces_refined1] = DooSabin(vertices_refined, faces_refined, 0.5, 2)
-
-
-    fig = plt.figure()
-    ax = Axes3D(fig)
-    ax.set_aspect('equal')
-
-    for face in faces_refined1:
-
-        n = len(face._vertices)
-
-        x = [face._vertices[i]._coordinates[0] for i in range(n)]
-        y = [face._vertices[i]._coordinates[1] for i in range(n)]
-        z = [face._vertices[i]._coordinates[2] for i in range(n)]
-        vtx = [zip(x,y,z)]
-        poly = Poly3DCollection(vtx, alpha = 0.2)
-        poly.set_color('b')
-        poly.set_edgecolor('k')
-        ax.add_collection3d(poly)
-
 
     vertA = -1*np.ones((len(verts), 7, 2))
     vertB1 = -1*np.ones((len(verts), 7, 4))
