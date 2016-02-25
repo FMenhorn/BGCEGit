@@ -37,17 +37,3 @@ def scaleAwayParameters(unscaled_params, datapoints):
     return scaledParams, throwndata;
 
 
-#####MAIN CODE######
-# Initialization
-parameters = np.genfromtxt('Data/Cantilever_try/parameters.csv', delimiter=';')
-quads = np.array(np.genfromtxt('Data/Cantilever_try/cantilever_quads_coarse.csv', delimiter=';'))
-vertices = np.array(np.genfromtxt('Data/Cantilever_try/cantilever_verts_coarse.csv', delimiter=';'))
-fine_vertices = np.array(np.genfromtxt('Data/Cantilever_try/cantilever_verts_fine.csv', delimiter=';'))
-
-
-mat_contents = sio.loadmat('Data/Cantilever_try/cantilever.mat')
-
-A = np.array(mat_contents["A"])
-B1 = np.array(mat_contents["B1"])
-B2 = np.array(mat_contents["B2"])
-C = np.array(mat_contents["C"])
