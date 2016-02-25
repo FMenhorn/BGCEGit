@@ -21,7 +21,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     this->ui->progressBar->setMinimum(0);
     this->ui->progressBar->setMaximum(0);
-    //this->ui->progressBar->hide();
+    this->ui->progressBar->hide();
     connect(&this->FutureWatcher, SIGNAL (finished()), this, SLOT (slot_finished()));
 }
 MainWindow::~MainWindow()
@@ -67,28 +67,38 @@ QString MainWindow::cropText(QLabel* curLabel, QString toCropString){
 
 void MainWindow::on_runButton_clicked()
 {
+    QString igsPath, igsName;
+    QString stpPath, stpName;
 
-    //CROPPING
+    this->getPathAndName(stpFile, stpName, stpPath);
+    this->getPathAndName(igsFile, igsName, igsPath);
 
+    if(this->checkInput(igsName, igsPath, stpName, stpPath)){
 
-    //CHECKING
-    this->checkInput();
+        QString forceScaling = ui->ForceEdit->text();
+        QString refinementLevel = ui->RefinementEdit->text();
 
-    QString forceScaling = ui->ForceEdit->text();
-    QString refinementLevel = ui->RefinementEdit->text();
+        std::string path = "~/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/TestGeometry/CantileverColoredNew/";
+        std::string fileName = "CantiLeverWithLoadAtEndSmallerMovedLoad";
+        std::string parameterString = path + " " + fileName + " " + forceScaling.toStdString() + " " + refinementLevel.toStdString();
+        std::string script = "./../../CADTopOp.sh " + parameterString;
+        std::cout << script << std::endl;
 
-    std::string path = "~/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/TestGeometry/CantileverColoredNew/";
-    std::string fileName = "CantiLeverWithLoadAtEndSmallerMovedLoad";
-    std::string parameterString = path + " " + fileName + " " + forceScaling.toStdString() + " " + refinementLevel.toStdString();
-    std::string script = "./../../CADTopOp.sh " + parameterString;
-    std::cout << script << std::endl;
-
-    this->ui->progressBar->show();
-    //system(script.c_str());
-    QThreadPool pool;
-    QFuture<void> future = QtConcurrent::run(&pool, system, script.c_str());
-    this->FutureWatcher.setFuture(future);
+        this->ui->progressBar->show();
+        //system(script.c_str());
+        QThreadPool pool;
+        QFuture<void> future = QtConcurrent::run(&pool, std::system, script.c_str());
+        this->FutureWatcher.setFuture(future);
+    }
 }
+
+//void MainWindow::longFunction(){
+//    for( int count = 0; count < 5; count++ )
+//    {
+//    sleep( 1 );
+//    std::cout << "Ping long!" << std::endl;
+//    }
+//}
 
 void MainWindow::on_ForceEdit_textChanged(const QString &arg1)
 {
@@ -100,6 +110,70 @@ void MainWindow::on_RefinementEdit_textChanged(const QString &arg1)
     ui->RefinementEdit->setText(arg1);
 }
 
-void MainWindow::checkInput(){
-    //TODO
+bool MainWindow::checkInput(QString igsName, QString igsPath, QString stpName, QString stpPath){
+    QMessageBox messageBox;
+    QString forceScaling = ui->ForceEdit->text();
+    QString refinement = ui->RefinementEdit->text();
+    /*QString igsName;
+    QString igsPath;
+    QString stpName;
+    QString stpPath;*/
+    bool flag = true;
+
+    if (forceScaling.isEmpty()) {
+        messageBox.critical(0,"Error","Please enter the force!");
+        messageBox.setFixedSize(500,200);
+        flag = false;
+    }
+
+    if (refinement.isEmpty()) {
+        messageBox.critical(0,"Error","Please enter the refinement!");
+        messageBox.setFixedSize(500,200);
+        flag = false;
+    }
+
+    if (!igsFile.endsWith(".igs")){
+        messageBox.critical(0,"Error","Please choose the .igs file!");
+        messageBox.setFixedSize(500,200);
+        flag = false;
+    } else {
+       // getPathAndName(igsFile, igsName, igsPath);
+        if (igsName.contains(".")){
+            messageBox.critical(0, "Error", "Filename can not contain a dot! Please, choose another .igs file!");
+            messageBox.setFixedSize(500,200);
+            flag = false;
+        }
+    }
+
+    if (!stpFile.endsWith(".stp")){
+        messageBox.critical(0,"Error","Please choose the .stp file!");
+        messageBox.setFixedSize(500,200);
+        flag = false;
+    } else {
+       // getPathAndName(stpFile, stpName, stpPath);
+        if (stpName.contains(".")){
+            messageBox.critical(0, "Error", "Filename can not contain a dot! Please, choose another .stp file!");
+            messageBox.setFixedSize(500,200);
+            flag = false;
+        }
+    }
+
+    if(stpName.compare(igsName)!=0){
+        messageBox.critical(0, "Error", "Filenames are not equal!");
+        messageBox.setFixedSize(500,200);
+        flag = false;
+    }
+    return flag;
+}
+
+void MainWindow::getPathAndName(QString fullPath, QString &name, QString &path){
+    QStringList igsPathParsed = fullPath.split( "/" );
+    path = "";
+    for (int i = 0; i < igsPathParsed.length() - 1; i++){
+        path.push_back(igsPathParsed.value(i) + "/");
+    }
+
+    name = igsPathParsed.value(igsPathParsed.length() - 1);
+    name = name.left(name.length() - 4);
+
 }

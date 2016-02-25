@@ -7,6 +7,8 @@
 
 #include <QMainWindow>
 
+#include "ScriptCaller.h"
+
 namespace Ui {
 class MainWindow;
 }
@@ -31,9 +33,11 @@ private slots:
 
     void on_RefinementEdit_textChanged(const QString &arg1);
 
-    void checkInput();
+    bool checkInput(QString igsName, QString igsPath, QString stpName, QString stpPath);
 
     void slot_finished();
+
+    void getPathAndName(QString fullPath, QString &name, QString &path);
 
 private:
     Ui::MainWindow *ui;
@@ -43,6 +47,8 @@ private:
     QString igsFile;
 
     QString cropText(QLabel* curLabel, QString toCropString);
+
+    ScriptCaller scriptCaller;
 };
 
 #endif // MAINWINDOW_H
