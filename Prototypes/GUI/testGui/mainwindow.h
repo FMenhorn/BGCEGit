@@ -18,6 +18,10 @@ public:
 private slots:
     void on_STEPFileSelector_clicked();
 
+    void on_lineEdit_textChanged(const QString &arg1);
+
+    void on_pushButton_clicked();
+
 private:
     Ui::MainWindow *ui;
 };
