@@ -80,7 +80,7 @@ def createNURBSMatricesAllraised(quad_list, AVertexList, B1VertexList, B2VertexL
                     #patch: corner 3 is in the correct orientation, the next
                     #(corner 4) needs to be rotated one 90deg rotation
                     #clockwise, the next another one clockwise etc...
-                    patch = np.rot90(patch, whichCorner-2)
+                    patch = np.rot90(patch, (whichCorner-2) % 4)
 
                     for jPatch in range(4):
                         for iPatch in range(4):

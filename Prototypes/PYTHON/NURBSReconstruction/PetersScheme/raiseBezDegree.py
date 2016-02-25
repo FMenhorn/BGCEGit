@@ -10,20 +10,20 @@ def raiseDeg1D(old_bezier_points):
 
     assert type(old_bezier_points) is np.ndarray
 
-    dimensions = np.size(old_bezier_points, 0)
-    new_degree = np.size(old_bezier_points, 1)
+    dimensions = np.size(old_bezier_points, 1)
+    new_degree = np.size(old_bezier_points, 0)
 
-    new_bezier_points = np.zeros([dimensions, new_degree+1])
+    new_bezier_points = np.zeros([new_degree+1, dimensions])
 
     inv_degree = 1.0/new_degree
 
-    new_bezier_points[:, 1] = old_bezier_points[:, 1]
-    new_bezier_points[:, new_degree] = old_bezier_points[:, new_degree-1]
+    new_bezier_points[0, :] = old_bezier_points[0, :]
+    new_bezier_points[new_degree, :] = old_bezier_points[new_degree-1, :]
 
     for i in range(1, new_degree):
-        new_bezier_points[:, i] = \
-            i * inv_degree * old_bezier_points[:, i-1] + \
-            (1-i*inv_degree)*old_bezier_points[:, i]
+        new_bezier_points[i, :] = \
+            i * inv_degree * old_bezier_points[i-1, :] + \
+            (1-i*inv_degree)*old_bezier_points[i, :]
 
     return new_bezier_points
 
@@ -45,10 +45,10 @@ def raiseDeg2D(old_bezier_points):
     new_bezier_points = np.zeros([new_degreeU+1, new_degreeV+1, dimensions])
 
     for j in range(new_degreeV):
-        half_raised[:, j, :] = raiseDeg1D(np.squeeze(old_bezier_points[:, j, :]).T).T
+        half_raised[:, j, :] = raiseDeg1D(np.squeeze(old_bezier_points[:, j, :]))
 
     for i in range(new_degreeU+1):
-        new_bezier_points[i, :, :] = raiseDeg1D(np.squeeze(half_raised[i, :, :]).T).T
+        new_bezier_points[i, :, :] = raiseDeg1D(np.squeeze(half_raised[i, :, :]))
 
     return new_bezier_points
 
