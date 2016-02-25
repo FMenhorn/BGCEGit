@@ -124,6 +124,9 @@
      </rect>
     </property>
     <layout class="QFormLayout" name="formLayout">
+     <property name="fieldGrowthPolicy">
+      <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+     </property>
      <property name="horizontalSpacing">
       <number>72</number>
      </property>
@@ -146,12 +149,48 @@
      </item>
     </layout>
    </widget>
+   <widget class="QLabel" name="ErrorField_force">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>154</y>
+      <width>381</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="ErrorField_refinement">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>180</y>
+      <width>381</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
    <widget class="QProgressBar" name="progressBar">
     <property name="geometry">
      <rect>
-      <x>150</x>
+      <x>160</x>
       <y>230</y>
-      <width>431</width>
+      <width>341</width>
       <height>23</height>
      </rect>
     </property>
