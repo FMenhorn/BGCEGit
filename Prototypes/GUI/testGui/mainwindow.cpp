@@ -43,8 +43,10 @@ void MainWindow::on_STEPFileSelector_clicked()
     if(fileNames.size()==1){
         stpFile = fileNames.first();
         ui->STEPFileInput->setText(this->cropText(ui->STEPFileInput, stpFile));
+        ui->STEPFileInput->setStyleSheet("QLabel { Color : black }");
     }else{
         ui->STEPFileInput->setText("ERROR: Select ONE stp input file!");
+        ui->STEPFileInput->setStyleSheet("QLabel { Color : red }");
     }
 }
 
@@ -55,8 +57,10 @@ void MainWindow::on_IGSFileSelector_clicked()
     if(fileNames.size()==1){
         igsFile = fileNames.first();
         ui->IGSFileInput->setText(this->cropText(ui->IGSFileInput, igsFile));
+        ui->IGSFileInput->setStyleSheet("QLabel { Color : black }");
     }else{
         ui->IGSFileInput->setText("ERROR: Select ONE igs input file!");
+        ui->IGSFileInput->setStyleSheet("QLabel { Color : red }");
     }
 }
 
@@ -80,27 +84,15 @@ void MainWindow::on_runButton_clicked()
         QString forceScaling = ui->ForceEdit->text();
         QString refinementLevel = ui->RefinementEdit->text();
 
-        std::string path = "~/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/TestGeometry/CantileverColoredNew/";
-        std::string fileName = "CantiLeverWithLoadAtEndSmallerMovedLoad";
-        std::string parameterString = path + " " + fileName + " " + forceScaling.toStdString() + " " + refinementLevel.toStdString();
+        std::string parameterString = stpPath.toStdString() + " " + stpName.toStdString() + " " + forceScaling.toStdString() + " " + refinementLevel.toStdString();
         std::string script = "./../../CADTopOp.sh " + parameterString;
         std::cout << script << std::endl;
 
         this->ui->progressBar->show();
-        //system(script.c_str());
-        QThreadPool pool;
-        QFuture<void> future = QtConcurrent::run(&pool, std::system, script.c_str());
+        QFuture<void> future = QtConcurrent::run(&this->scriptCaller, &ScriptCaller::callScript, script);
         this->FutureWatcher.setFuture(future);
     }
 }
-
-//void MainWindow::longFunction(){
-//    for( int count = 0; count < 5; count++ )
-//    {
-//    sleep( 1 );
-//    std::cout << "Ping long!" << std::endl;
-//    }
-//}
 
 void MainWindow::on_ForceEdit_textChanged(const QString &arg1)
 {

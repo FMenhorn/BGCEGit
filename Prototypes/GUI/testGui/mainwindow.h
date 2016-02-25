@@ -26,7 +26,6 @@ private slots:
 
     void on_IGSFileSelector_clicked();
 
-
     void on_runButton_clicked();
 
     void on_ForceEdit_textChanged(const QString &arg1);
