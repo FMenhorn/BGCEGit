@@ -57,11 +57,14 @@ def createNURBSMatricesAllraised(quad_list, AVertexList, B1VertexList, B2VertexL
             ordinaryCoefsRaw[:, :, bezierI, bezierJ] = getBiquadraticPatchCoefs(bezierI, bezierJ)
 
     getLinearIndexing = lambda x, y, width: x + y*width
+
+    addToIndex = lambda x: x*3
+
     for q in range(number_of_quads):
         for j in range(4):
             for i in range(4):
-                addToIndexI = i*3
-                addToIndexJ = j*3
+                addToIndexI = addToIndex(i)
+                addToIndexJ = addToIndex(j)
 
                 if is_in_corner(i, j):
                     whichCorner = whichCornerFun(i, j)
@@ -95,8 +98,8 @@ def createNURBSMatricesAllraised(quad_list, AVertexList, B1VertexList, B2VertexL
                     tempBiquadBezierMatrix = multiply_patch(ordinaryCoefsRaw, tempBiquadBezierMatrix)
                     raisedBiquadMatrix = raiseDeg2D(tempBiquadBezierMatrix)
 
-                    for jPatch in range(3):
-                        for iPatch in range(3):
+                    for jPatch in range(4):
+                        for iPatch in range(4):
                             NURBScurrentIndex = q*13*13 + getLinearIndexing(iPatch+addToIndexI,jPatch+addToIndexJ, 13)
                             NURBSMatrix[NURBScurrentIndex, :] = raisedBiquadMatrix[iPatch, jPatch, :]
                             NURBSIndices[q,getLinearIndexing(iPatch+addToIndexI, jPatch+addToIndexJ, 13)] = NURBScurrentIndex
