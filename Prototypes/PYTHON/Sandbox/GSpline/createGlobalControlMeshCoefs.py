@@ -83,8 +83,8 @@ def createGlobalControlMeshCoefs(parameterCoordinates, quad_list, AVertexList, B
             neighbourCoefs = getBezierPointCoefs(localCoords)
 
             for j in range(3):
-                for num_quads in range(3):
-                    coefsMatrix[p, neighbourMask[num_quads,j]] = neighbourCoefs[num_quads,j]
+                for i in range(3):
+                    coefsMatrix[p, neighbourMask[i, j]] = neighbourCoefs[i, j]
     print "Main Loop Coeffs Done."
 
     return coefsMatrix
