@@ -62,7 +62,7 @@ def createFairnessControlMeshCoefs(quad_list, AVertexList, B1VertexList, B2Verte
     biqBezCoefs = np.array([uu2mat, 2.0 * uv2mat, vv2mat])
     bicBezCoefs = np.array([uu3mat, 2.0 * uv3mat, vv3mat])
 
-    whichCornerList = np.array([[0, 3], [1, 2]])
+    whichCornerList = np.array([[0, 3], [1, 2]], dtype=int)
 
     p = 0
     print "Main Loop Fairness Coeffs"
