@@ -1,23 +1,12 @@
 __author__ = 'juan'
-
 import numpy as np
 from Vertex import Vertex, FineVertex
 from Edge import Edge
 from Quad import Quad
 
 
-def quad_vert_generator():
-
-    _verts = np.array(np.genfromtxt('Data/Torus/torus_verts_coarse.csv', delimiter=';'))
-    _quads = np.array(np.genfromtxt('Data/Torus/torus_quads_coarse.csv', delimiter=';'))
-    _fine_verts = np.array(np.genfromtxt('Data/Torus/torus_verts_fine.csv', delimiter=';'))
-    _parameters = np.genfromtxt('Data/Torus/parameters.csv', delimiter=';')
-
-    #_verts = np.array(np.genfromtxt('Data/Torus_minimal/vers_torusminimal.csv', delimiter=';'))
-    #_quads = np.array(np.genfromtxt('Data/Torus_minimal/quads_torusminimal.csv', delimiter=';'))
-    #_fine_verts = np.array(np.genfromtxt('Data/Torus_minimal/torus_datapoints.csv', delimiter=';'))
-    #_parameters = np.genfromtxt('Data/Torus_minimal/parameters.csv', delimiter=';')
-
+def quad_vert_generator(_verts, _quads, _fine_verts, _parameters ):
+    assert type(_verts) is np.ndarray
     # Create vertices
     vertex_list = []
     for i in range(_verts.shape[0]):
