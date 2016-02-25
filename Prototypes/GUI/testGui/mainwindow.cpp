@@ -45,7 +45,7 @@ void MainWindow::on_STEPFileSelector_clicked()
         ui->STEPFileInput->setText(this->cropText(ui->STEPFileInput, stpFile));
         ui->STEPFileInput->setStyleSheet("QLabel { Color : black }");
     }else{
-        ui->STEPFileInput->setText("ERROR: Select ONE stp input file!");
+        ui->STEPFileInput->setText("Select ONE stp input file!");
         ui->STEPFileInput->setStyleSheet("QLabel { Color : red }");
     }
 }
@@ -59,7 +59,7 @@ void MainWindow::on_IGSFileSelector_clicked()
         ui->IGSFileInput->setText(this->cropText(ui->IGSFileInput, igsFile));
         ui->IGSFileInput->setStyleSheet("QLabel { Color : black }");
     }else{
-        ui->IGSFileInput->setText("ERROR: Select ONE igs input file!");
+        ui->IGSFileInput->setText("Select ONE igs input file!");
         ui->IGSFileInput->setStyleSheet("QLabel { Color : red }");
     }
 }
@@ -73,6 +73,9 @@ QString MainWindow::cropText(QLabel* curLabel, QString toCropString){
 
 void MainWindow::on_runButton_clicked()
 {
+    ui->IGSFileInput->setStyleSheet("QLabel { Color : black }");
+    ui->STEPFileInput->setStyleSheet("QLabel { Color : black }");
+
     QString igsPath, igsName;
     QString stpPath, stpName;
 
@@ -91,6 +94,7 @@ void MainWindow::on_runButton_clicked()
         this->ui->progressBar->show();
         QFuture<void> future = QtConcurrent::run(&this->scriptCaller, &ScriptCaller::callScript, script);
         this->FutureWatcher.setFuture(future);
+        //system(script.c_str());
     }
 }
 
@@ -106,51 +110,58 @@ void MainWindow::on_RefinementEdit_textChanged(const QString &arg1)
 
 bool MainWindow::checkInput(QString igsName, QString igsPath, QString stpName, QString stpPath){
     QMessageBox messageBox;
+    QString styleSheet = "QLabel {color : red}";
     QString forceScaling = ui->ForceEdit->text();
     QString refinement = ui->RefinementEdit->text();
 
     bool flag = true;
 
     if (forceScaling.isEmpty()) {
-        messageBox.critical(0,"Error","Please enter the force!");
-        messageBox.setFixedSize(500,200);
         ui->ErrorField_force->setText("Please enter the force!");
+        ui->ErrorField_force->setStyleSheet(styleSheet);
+        ui->ErrorField_force->show();
         flag = false;
     }
 
     if (refinement.isEmpty()) {
-        messageBox.critical(0,"Error","Please enter the refinement!");
-        messageBox.setFixedSize(500,200);
+        ui->ErrorField_refinement->setText("Please enter the refinement!");
+        ui->ErrorField_refinement->setStyleSheet(styleSheet);
+        ui->ErrorField_refinement->show();
         flag = false;
     }
 
     if (!igsFile.endsWith(".igs")){
-        messageBox.critical(0,"Error","Please choose the .igs file!");
-        messageBox.setFixedSize(500,200);
+        ui->IGSFileInput->setText("Please choose the .igs file!");
+        ui->IGSFileInput->setStyleSheet(styleSheet);
+       // messageBox.critical(0,"Error","Please choose the .igs file!");
+        //messageBox.setFixedSize(500,200);
         flag = false;
     } else {
 
         if (igsName.contains(".")){
-            messageBox.critical(0, "Error", "Filename can not contain a dot! Please, choose another .igs file!");
-            messageBox.setFixedSize(500,200);
+            ui->IGSFileInput->setText("Filename can not contain a dot!");
+            ui->IGSFileInput->setStyleSheet(styleSheet);
             flag = false;
         }
     }
 
     if (!stpFile.endsWith(".stp")){
-        messageBox.critical(0,"Error","Please choose the .stp file!");
+        ui->STEPFileInput->setText("Please choose the .stp file!");
+        ui->STEPFileInput->setStyleSheet(styleSheet);
         messageBox.setFixedSize(500,200);
         flag = false;
     } else {
 
         if (stpName.contains(".")){
-            messageBox.critical(0, "Error", "Filename can not contain a dot! Please, choose another .stp file!");
-            messageBox.setFixedSize(500,200);
+            ui->STEPFileInput->setText("Filename can not contain a dot!");
+            ui->STEPFileInput->setStyleSheet(styleSheet);
             flag = false;
         }
     }
 
     if(stpName.compare(igsName)!=0){
+        ui->STEPFileInput->setStyleSheet(styleSheet);
+        ui->IGSFileInput->setStyleSheet(styleSheet);
         messageBox.critical(0, "Error", "Filenames are not equal!");
         messageBox.setFixedSize(500,200);
         flag = false;
