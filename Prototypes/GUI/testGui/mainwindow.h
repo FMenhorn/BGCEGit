@@ -34,6 +34,8 @@ private slots:
 
     void checkInput();
 
+    void getPathAndName(QString fullPath, QString &name, QString &path);
+
 private:
     Ui::MainWindow *ui;
     QString stpFile;

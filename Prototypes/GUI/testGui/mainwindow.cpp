@@ -57,12 +57,6 @@ QString MainWindow::cropText(QLabel* curLabel, QString toCropString){
     return croppedText;
 }
 
-/*void MainWindow::on_lineEdit_textChanged(const QString &arg1)
-{
-
-}
-*/
-
 void MainWindow::on_runButton_clicked()
 {
     this->checkInput();
@@ -81,6 +75,70 @@ void MainWindow::on_RefinementEdit_textChanged(const QString &arg1)
     ui->RefinementEdit->setText(arg1);
 }
 
-void MainWindow::checkInput(){
-    //TODO
+bool MainWindow::checkInput(QString igsName, QString igsPath, QString stpName, QString stpPath){
+    QString forceScaling = ui->ForceEdit->text();
+    QString refinement = ui->RefinementEdit->text();
+    /*QString igsName;
+    QString igsPath;
+    QString stpName;
+    QString stpPath;*/
+    bool flag = true;
+
+    if (forceScaling.isEmpty()) {
+        QMessageBox messageBox;
+        messageBox.critical(0,"Error","Please enter the force!");
+        messageBox.setFixedSize(500,200);
+        flag = false;
+    }
+
+    if (refinement.isEmpty()) {
+        QMessageBox messageBox;
+        messageBox.critical(0,"Error","Please enter the refinement!");
+        messageBox.setFixedSize(500,200);
+        flag = false;
+    }
+
+    if (!igsFile.endsWith(".igs")){
+        QMessageBox messageBox;
+        messageBox.critical(0,"Error","Please choose the .igs file!");
+        messageBox.setFixedSize(500,200);
+        flag = false;
+    } else {
+       // getPathAndName(igsFile, igsName, igsPath);
+        if (igsName.contains(".")){
+            QMessageBox messageBox;
+            messageBox.critical(0, "Error", "Filename can not contain a dot! Please, choose another .igs file!");
+            messageBox.setFixedSize(500,200);
+            flag = false;
+        }
+    }
+
+    if (!stpFile.endsWith(".stp")){
+        QMessageBox messageBox;
+        messageBox.critical(0,"Error","Please choose the .stp file!");
+        messageBox.setFixedSize(500,200);
+        flag = false;
+    } else {
+       // getPathAndName(stpFile, stpName, stpPath);
+        if (stpName.contains(".")){
+            QMessageBox messageBox;
+            messageBox.critical(0, "Error", "Filename can not contain a dot! Please, choose another .stp file!");
+            messageBox.setFixedSize(500,200);
+            flag = false;
+        }
+    }
+
+return flag;
+}
+
+void MainWindow::getPathAndName(QString fullPath, QString &name, QString &path){
+    QStringList igsPathParsed = fullPath.split( "/" );
+    path = "";
+    for (int i = 0; i < igsPathParsed.length() - 1; i++){
+        path.push_back(igsPathParsed.value(i) + "/");
+    }
+
+    name = igsPathParsed.value(igsPathParsed.length() - 1);
+    name = name.left(name.length() - 4);
+
 }
