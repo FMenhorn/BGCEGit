@@ -16,18 +16,20 @@ n_nodes has to be chosen such that it matches with the given number of control n
 """
 input_folder = "./Torus_Fair_NURBS_AllRaised"
 output_file_name = "./Torus_NURBS_AllRaised.step"
+nonchanging_file_name = "./Cone.step"
 plot_control_points = False
 
 knots = [0, 0, 0, 0, 0.25, 0.25, 0.25, 0.5, 0.5, 0.5, 0.75, 0.75, 0.75, 1, 1, 1, 1]
 degree = 3
 n_nodes = 13
+
+# holds the faces
 faceHolder = []
-#shapeHolder=Part.Shape()
+
 assert (knots.__len__() == n_nodes + degree + 1)
 """
 configuration done
 """
-
 
 def parse_csv_into_matrix(csv_path, out_type):
     """
@@ -125,6 +127,7 @@ for patch in nurbs_idx:
     patch_id += 1
 print "All patches plotted."
 
+# Create shell from face list, create solid from shell
 shellHolder = Part.makeShell(faceHolder)
 solidHolder = Part.makeSolid(shellHolder)
 
@@ -135,24 +138,24 @@ __objs__ = FreeCAD.getDocument("tmp").findObjects()
 Import.export(__objs__, output_file_name)
 print "Output file " + output_file_name + " exported."
 
-print "load files"
-Import.insert("./Cone.step", "tmp")
-print "get objects"
-objs = FreeCAD.ActiveDocument.Objects
+print "Loading non-changing component..."
+Import.insert(nonchanging_file_name, "tmp")
 
-print objs
+# get objects
+__objs__ = []
+__objs__ = FreeCAD.getDocument("tmp").findObjects()
 
-print "create fusion object"
-App.activeDocument().addObject("Part::MultiFuse", "FusionForBoolean")
+# create fusion object
+FreeCAD.getDocument("tmp").addObject("Part::MultiFuse", "FusionForBoolean")
 
-print "add objs to Fusion"
-App.activeDocument().FusionForBoolean.Shapes = objs
+# add objs to FusionForBoolean
+FreeCAD.getDocument("tmp").FusionForBoolean.Shapes = __objs__
 
-App.activeDocument().recompute()
+# compute
+FreeCAD.getDocument("tmp").recompute()
 
 print "Exporting file..."
 finalWriteObjects = []
 finalWriteObjects.append(FreeCAD.getDocument("tmp").getObject("FusionForBoolean"))
-print finalWriteObjects
 Import.export(finalWriteObjects, "./FusionForBoolean.step")
-print "Exported Boolean Fusion"
+print "Export done."
