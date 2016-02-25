@@ -1,0 +1,31 @@
+
+		
+
+Topy:
+	Prerequisites:
+		Python
+		Numpy
+		Pyvtk    
+			sudo apt-get install python-pip
+			sudo pip install pyvtk
+		Pysparse:
+			git clone git://pysparse.git.sourceforge.net/gitroot/pysparse/pysparse
+			cd pysparse
+			sudo python setup.py install
+
+	in core/visualization.py in _write_legacy_vtu(x, fname) (line 160), change in line 194 'binary' to 'ascii'
+	sudo python setup.py install
+
+OpenCascade:
+	git clone git://github.com/tpaviot/oce.git
+	cd oce
+	mkdir build
+	cd build
+	cmake ..
+	make
+	sudo make install
+
+CADToVoxel
+	Prerequisites:
+		CPPUnit
+			sudo apt-get install lib-cppunitdev
