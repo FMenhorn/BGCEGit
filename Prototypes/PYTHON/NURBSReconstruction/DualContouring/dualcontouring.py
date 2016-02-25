@@ -59,14 +59,12 @@ def tworesolution_dual_contour(dataset, resolutions, dims):
                                                                           dims,
                                                                           coarse_level=False,
                                                                           do_manifold_treatment=False)
-    print "coarse level:"
     [dc_verts_coarse, dc_quads_coarse, dc_manifold_edges_coarse] = dual_contour(dataset,
                                                                                 resolutions['coarse'],
                                                                                 resolutions['fine'],
                                                                                 dims,
                                                                                 coarse_level=True,
                                                                                 do_manifold_treatment=True)
-    #quit()
 
     dc_verts = {'fine': dc_verts_fine, 'coarse': dc_verts_coarse}
     dc_quads = {'fine': dc_quads_fine, 'coarse': dc_quads_coarse}
