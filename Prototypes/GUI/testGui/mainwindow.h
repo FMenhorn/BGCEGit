@@ -3,6 +3,7 @@
 
 #include <QLabel>
 #include <QString>
+#include <QFutureWatcher>
 
 #include <QMainWindow>
 
@@ -21,8 +22,6 @@ public:
 private slots:
     void on_STEPFileSelector_clicked();
 
-//    void on_lineEdit_textChanged(const QString &arg1);
-
     void on_IGSFileSelector_clicked();
 
 
@@ -34,8 +33,12 @@ private slots:
 
     void checkInput();
 
+    void slot_finished();
+
 private:
     Ui::MainWindow *ui;
+
+    QFutureWatcher<void> FutureWatcher;
     QString stpFile;
     QString igsFile;
 

@@ -3,6 +3,10 @@
 
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QFuture>
+#include <QtConcurrent/QtConcurrent>
+#include <QtGui>
+#include <QImage>
 
 #include <iostream>
 
@@ -14,40 +18,44 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->ForceEdit->setValidator( new QDoubleValidator(0, 100000, 5, this));
     ui->RefinementEdit->setValidator(new QIntValidator(0, 10, this));
    // ui->pushButton;
+
+    this->ui->progressBar->setMinimum(0);
+    this->ui->progressBar->setMaximum(0);
+    //this->ui->progressBar->hide();
+    connect(&this->FutureWatcher, SIGNAL (finished()), this, SLOT (slot_finished()));
 }
 MainWindow::~MainWindow()
 {
     delete ui;
 }
 
+void MainWindow::slot_finished()
+{
+    this->ui->progressBar->hide();
+}
+
 void MainWindow::on_STEPFileSelector_clicked()
 {
     QStringList fileNames;
-    while(fileNames.size() != 1){
-        fileNames = QFileDialog::getOpenFileNames(this, tr("Open File"),"/path/to/file/",tr("STP File (*.stp)"));
-        if(fileNames.size() != 1){
-            QMessageBox messageBox;
-            messageBox.critical(0,"Error","Please select ONE stp input file!");
-            messageBox.setFixedSize(500,200);
-        }
+    fileNames = QFileDialog::getOpenFileNames(this, tr("Open File"),"/path/to/file/",tr("STP File (*.stp)"));
+    if(fileNames.size()==1){
+        stpFile = fileNames.first();
+        ui->STEPFileInput->setText(this->cropText(ui->STEPFileInput, stpFile));
+    }else{
+        ui->STEPFileInput->setText("ERROR: Select ONE stp input file!");
     }
-    stpFile = fileNames.first();
-    ui->STEPFileInput->setText(this->cropText(ui->STEPFileInput, stpFile));
 }
 
 void MainWindow::on_IGSFileSelector_clicked()
 {
     QStringList fileNames;
-    while(fileNames.size() != 1){
-        fileNames = QFileDialog::getOpenFileNames(this, tr("Open File"),"/path/to/file/",tr("IGS File (*.igs)"));
-        if(fileNames.size() != 1){
-            QMessageBox messageBox;
-            messageBox.critical(0,"Error","Please select ONE igs input file!");
-            messageBox.setFixedSize(500,200);
-        }
+    fileNames = QFileDialog::getOpenFileNames(this, tr("Open File"),"/path/to/file/",tr("IGS File (*.igs)"));
+    if(fileNames.size()==1){
+        igsFile = fileNames.first();
+        ui->IGSFileInput->setText(this->cropText(ui->IGSFileInput, igsFile));
+    }else{
+        ui->IGSFileInput->setText("ERROR: Select ONE igs input file!");
     }
-    igsFile = fileNames.first();
-    ui->IGSFileInput->setText(this->cropText(ui->IGSFileInput, igsFile));
 }
 
 QString MainWindow::cropText(QLabel* curLabel, QString toCropString){
@@ -57,18 +65,29 @@ QString MainWindow::cropText(QLabel* curLabel, QString toCropString){
     return croppedText;
 }
 
-/*void MainWindow::on_lineEdit_textChanged(const QString &arg1)
-{
-
-}
-*/
-
 void MainWindow::on_runButton_clicked()
 {
+
+    //CROPPING
+
+
+    //CHECKING
     this->checkInput();
 
-    float forceScaling = ui->ForceEdit->text().toFloat();
-    int refinementLevel = ui->RefinementEdit->text().toInt();
+    QString forceScaling = ui->ForceEdit->text();
+    QString refinementLevel = ui->RefinementEdit->text();
+
+    std::string path = "~/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/TestGeometry/CantileverColoredNew/";
+    std::string fileName = "CantiLeverWithLoadAtEndSmallerMovedLoad";
+    std::string parameterString = path + " " + fileName + " " + forceScaling.toStdString() + " " + refinementLevel.toStdString();
+    std::string script = "./../../CADTopOp.sh " + parameterString;
+    std::cout << script << std::endl;
+
+    this->ui->progressBar->show();
+    //system(script.c_str());
+    QThreadPool pool;
+    QFuture<void> future = QtConcurrent::run(&pool, system, script.c_str());
+    this->FutureWatcher.setFuture(future);
 }
 
 void MainWindow::on_ForceEdit_textChanged(const QString &arg1)
