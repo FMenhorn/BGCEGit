@@ -45,10 +45,10 @@ def raiseDeg2D(old_bezier_points):
     new_bezier_points = np.zeros([new_degreeU+1, new_degreeV+1, dimensions])
 
     for j in range(new_degreeV):
-        half_raised[:, j, :] = raiseDeg1D(np.squeeze(old_bezier_points[:, j, :]))
+        half_raised[:, j, :] = raiseDeg1D(np.squeeze(old_bezier_points[:, j, :]).T).T
 
     for i in range(new_degreeU+1):
-        new_bezier_points[i, :, :] = raiseDeg1D(np.squeeze(half_raised[i, :, :]))
+        new_bezier_points[i, :, :] = raiseDeg1D(np.squeeze(half_raised[i, :, :]).T).T
 
     return new_bezier_points
 

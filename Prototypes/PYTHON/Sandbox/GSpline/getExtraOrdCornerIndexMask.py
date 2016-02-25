@@ -41,4 +41,4 @@ def getExtraOrdCornerIndexMask(quad_list,AVertexList,B1VertexList,B2VertexList,C
                           B2Indices[:].reshape([1, numberOfEdges]),
                           CIndices[:].reshape([1, numberOfEdges])], dtype=int)
 
-    return indexMask
+    return np.squeeze(indexMask)

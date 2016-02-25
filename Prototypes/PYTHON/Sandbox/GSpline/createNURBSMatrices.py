@@ -15,11 +15,11 @@ def multiply_patch(point_coefs, points):
     i_max = np.size(point_coefs, 2)
     j_max = np.size(point_coefs, 3)
 
-    result = np.zeros(i_max, j_max, 3)
+    result = np.zeros((i_max, j_max, 3))
     for d in range(np.size(points, 2)):
         for l in range(np.size(point_coefs, 1)):
             for k in range(np.size(point_coefs, 0)):
-                result[:, :, d] = result[:, :, d] + point_coefs[k, l, :, :] * points[:, :, d]
+                result[:, :, d] = result[:, :, d] + point_coefs[k, l, :, :] * points[k, l, d]
 
     return result
 
@@ -41,10 +41,10 @@ def createNURBSMatricesAllraised(quad_list, AVertexList, B1VertexList, B2VertexL
     number_of_quads = np.size(quad_list, 0)
     ordinaryCoefsRaw = np.zeros((3,3,3,3))
     allCoefsRaw = np.zeros((4, 7, 7, 4, 4))
-    verticesTemp = np.zeros(4, 7, 3)
-    tempBiquadBezierMatrix = np.zeros(3, 3, 3)
-    NURBSMatrix = np.zeros(13*13*number_of_quads, 3)
-    NURBSIndices = np.zeros(number_of_quads, 13*13)
+    verticesTemp = np.zeros((4, 7, 3))
+    tempBiquadBezierMatrix = np.zeros((3, 3, 3))
+    NURBSMatrix = np.zeros((13*13*number_of_quads, 3))
+    NURBSIndices = np.zeros((number_of_quads, 13*13))
 
     for num_quads in range(3,8):
         allCoefsRaw[0, num_quads-1, 0:num_quads, :, :], \
@@ -69,7 +69,7 @@ def createNURBSMatricesAllraised(quad_list, AVertexList, B1VertexList, B2VertexL
                     numberOfEdges = np.size(indexMask,1)
 
                     for k in range(4):
-                        verticesTemp[k, 0:numberOfEdges, :] = control_points[indexMask[k, :], :]
+                        verticesTemp[k, 0:numberOfEdges, :] = control_points[np.squeeze(indexMask[k, 0:numberOfEdges]), :]
 
                     patch = multiply_patch(allCoefsRaw[:, numberOfEdges-1, 0:numberOfEdges, :, :], verticesTemp)
 
