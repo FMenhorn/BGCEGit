@@ -44,7 +44,7 @@ def createNURBSMatricesAllraised(quad_list, AVertexList, B1VertexList, B2VertexL
     verticesTemp = np.zeros((4, 7, 3))
     tempBiquadBezierMatrix = np.zeros((3, 3, 3))
     NURBSMatrix = np.zeros((13*13*number_of_quads, 3))
-    NURBSIndices = np.zeros((number_of_quads, 13*13))
+    NURBSIndices = np.zeros((number_of_quads, 13*13), dtype=int)
 
     for num_quads in range(3,8):
         allCoefsRaw[0, num_quads-1, 0:num_quads, :, :], \
