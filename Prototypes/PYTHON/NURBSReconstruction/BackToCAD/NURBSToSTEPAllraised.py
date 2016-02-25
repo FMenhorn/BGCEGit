@@ -20,7 +20,6 @@ def get_vertices(patch_ids, vertex_list):
         """
         vertices = []
         for v_id in patch_ids:
-            v_id = v_id - 1  # MATLAB indexing -> PYTHON indexing!!!
             vertices.append(vertex_list[v_id])
         return vertices
 
@@ -85,10 +84,11 @@ def export_step(output_file_name, nurbs_indices, control_points):
     print "Plotting patches..."
     patch_id = 0
     for nurbs_patch in nurbs_indices:
-        print "Plotting patch no. " + str(patch_id) + "..."
-        vertices = get_vertices(nurbs_patch, control_points)
-        generate_bspline_patch(vertices, n_nodes, degree, knots)
-        patch_id += 1
+        if patch_id < 1:
+            print "Plotting patch no. " + str(patch_id) + "..."
+            vertices = get_vertices(nurbs_patch, control_points)
+            generate_bspline_patch(vertices, n_nodes, degree, knots)
+            patch_id += 1
     print "All patches plotted."
 
     print "Exporting file..."
