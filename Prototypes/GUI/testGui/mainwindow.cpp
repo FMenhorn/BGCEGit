@@ -17,8 +17,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->ForceEdit->setValidator( new QDoubleValidator(0, 100000, 7, this));
-    ui->FairnessWeight->setValidator(new QDoubleValidator(0, 100000, 7, this));
+
+    QDoubleValidator* doubleValidator = new QDoubleValidator(0, 10000000000, 5, this);
+    doubleValidator->setNotation(QDoubleValidator::StandardNotation);
+    ui->ForceEdit->setValidator(doubleValidator);
+    ui->FairnessWeight->setValidator(doubleValidator);
     ui->VertsPerPatch->setValidator(new QIntValidator(1, 1000000, this));
     ui->RefinementEdit->setValidator(new QIntValidator(0, 10, this));
     ui->Coarsening->setValidator(new QIntValidator(0, 10000000, this));
@@ -82,6 +85,7 @@ void MainWindow::on_runButton_clicked()
     ui->IGSFileInput->setStyleSheet("QLabel { Color : black }");
     ui->STEPFileInput->setStyleSheet("QLabel { Color : black }");
 
+
     QString igsPath, igsName;
     QString stpPath, stpName;
 
@@ -134,8 +138,8 @@ bool MainWindow::checkInput(){
     QString igsPath, igsName;
     QString stpPath, stpName;
 
-    this->getPathAndName(stpFile, stpName, stpPath);
-    this->getPathAndName(igsFile, igsName, igsPath);
+    StringHelper::getPathAndName(stpFile, stpName, stpPath);
+    StringHelper::getPathAndName(igsFile, igsName, igsPath);
     flag = flag && verificator.isEmpty(ui->Coarsening, ui->ErrorField_coarsening, "Please enter the coarsening!");
     flag = verificator.isEmpty(ui->FairnessWeight, ui->ErrorField_fairness, "Please enter the fairness weight") && flag;
     flag = verificator.isEmpty(ui->ForceEdit, ui->ErrorField_force, "Please enter the force") && flag;
