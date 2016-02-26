@@ -195,7 +195,6 @@ def resolve_not_consistent4(_dc_verts, _dc_quads, _not_consistent_edges):
 
 
 def resolve_not_consistent1(_dc_verts, _dc_quads, _not_consistent_edges):
-    print _not_consistent_edges.keys()
     for edge in _not_consistent_edges.keys():
         if edge in _not_consistent_edges:
             new_quad = 4*[None]
@@ -222,7 +221,6 @@ def resolve_not_consistent1(_dc_verts, _dc_quads, _not_consistent_edges):
                 quit()
 
             _dc_quads.append(new_quad)
-            print new_quad
 
     return _dc_verts, _dc_quads
 
