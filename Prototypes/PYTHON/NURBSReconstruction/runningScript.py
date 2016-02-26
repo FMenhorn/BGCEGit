@@ -8,9 +8,9 @@ from PetersScheme.quadvertGenerator import quad_vert_generator
 
 # TODO: how to include INPUT: output_file_name, nonchanging_file_name, fairnessWeight, coarsening_factor
 
-parser = argparse.ArgumentParser(description='Include path to Cells and Dimensions.')
-parser.add_argument('path', type=str, help='path to Cells and Dimensions')
-args = parser.parse_args()
+#parser = argparse.ArgumentParser(description='Include path to Cells and Dimensions.')
+#parser.add_argument('path', type=str, help='path to Cells and Dimensions')
+#args = parser.parse_args()
 
 #####TESTING PATHS ######
 path="./DualContouring/cantilever/"
@@ -22,7 +22,7 @@ fairnessWeight = 0.5
 
 
 print "### Surface Extraction ###"
-verts_coarse, quads_coarse, verts_fine, parameters = extract_surface(args.path, coarsening_factor)
+verts_coarse, quads_coarse, verts_fine, parameters = extract_surface(path, coarsening_factor)
 vertices, quads, fine_vertices = quad_vert_generator(verts_coarse, quads_coarse, verts_fine, parameters)
 
 print "### DooSabin ###"
