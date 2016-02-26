@@ -15,7 +15,11 @@ from PetersScheme.quadvertGenerator import quad_vert_generator
 #####TESTING PATHS ######
 path="./DualContouring/cantilever/"
 output_file_name = "Cantilever_NURBS_AllRaised"
+
+# file holding domain bounds (as geometry) that restrict the RAW output from Peter's scheme
 allowed_domains_file_name = "./BlackWhiteCube.step"
+
+# file holding domains that (as geometry) that need to be as they are
 nonchanging_file_name = "./BackToCAD/Cone.step"
 coarsening_factor = 2
 fairnessWeight = 0.5
