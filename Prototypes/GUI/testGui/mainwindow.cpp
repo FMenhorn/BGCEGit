@@ -7,10 +7,18 @@
 #include <QFuture>
 #include <QtConcurrent/QtConcurrent>
 #include <QtGui>
+#include <QFont>
+#include <QThreadPool>
 
 #include "stringhelper.h"
 
 #include <iostream>
+
+#include <stdlib.h>     //for using the function sleep
+#include <stdio.h>
+#include <time.h>
+#include <unistd.h>
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -24,26 +32,34 @@ MainWindow::MainWindow(QWidget *parent) :
 
     this->hide_ErrorFields();
 
-    //this->ui->progressBar->setMinimum(0);
-    //this->ui->progressBar->setMaximum(0);
-    //this->ui->progressBar->hide();
+    this->ui->VoxelizerDial->setValue(0);
+    this->ui->ToPyDial->setValue(0);
+    this->ui->NurbsDial->setValue(0);
     //connect(&this->FutureWatcher, SIGNAL (finished()), this, SLOT (slot_finished()));
 
     this->ui->logoView->setScene(&logoScene);
     logoItem.setPixmap(*logoPicture);
     logoScene.addItem(&logoItem);
     this->ui->logoView->show();
+
+    /*ui->IGSFileInput->setText("/home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/TestGeometry/CantileverColoredNew/CantiLeverWithLoadAtEndSmallerMovedLoad.igs");
+    ui->STEPFileInput->setText("/home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/TestGeometry/CantileverColoredNew/CantiLeverWithLoadAtEndSmallerMovedLoad.stp");
+    ui->BooleanFileInput->setText("/home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/PYTHON/Back2CAD/Cone.step");
+    ui->STEPOutput->setText("/home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/GUI/build-testGui-Desktop-Debug/testBitch.step");
+    igsFile = ui->IGSFileInput->text();
+    stpFile = ui->STEPFileInput->text();
+    booleanFile = ui->BooleanFileInput->text();
+    stepOutputFile = ui->STEPFileInput->text();
+    ui->RefinementEdit->setText("0");
+    ui->ForceEdit->setText("1");
+    ui->Coarsening->setText("2");
+    ui->FairnessWeight->setText("0.5");*/
 }
 
 MainWindow::~MainWindow()
 {
     delete this->logoPicture;
     delete ui;
-}
-
-void MainWindow::slot_finished()
-{
-    //this->ui->progressBar->hide();
 }
 
 void MainWindow::on_STEPFileSelector_clicked()
@@ -86,25 +102,79 @@ void MainWindow::on_runButton_clicked()
     StringHelper::getPathAndName(stpFile, stpName, stpPath);
     StringHelper::getPathAndName(igsFile, igsName, igsPath);
 
+    //std::cout << "CHECK STILL DISABLED" << std::endl;
+    //this->checkInput(igsName, stpName)
     if (this->checkInput(igsName, stpName)){
         QString forceScaling = ui->ForceEdit->text();
         QString refinementLevel = ui->RefinementEdit->text();
+        QFuture<void> future;
 
-        //this->ui->progressBar->show();
+        QFont boldFont("Cantarell", 11, QFont::Bold);
+        QFont normalFont("Cantarell", 11, QFont::Normal);
 
+        int rotationDirection = 1;
         /** Start the Voxelization Script **/
         std::string parameterString = stpPath.toStdString() + " " + stpName.toStdString() + " " + forceScaling.toStdString() + " " + refinementLevel.toStdString();
         std::string scriptCADToVoxel = "./../../CADTopOp.sh " + parameterString;
         std::cout << scriptCADToVoxel << std::endl;
-        system(scriptCADToVoxel.c_str());
 
-        //QFuture<void> future = QtConcurrent::run(&this->scriptCaller, &ScriptCaller::callScript, scriptCADToVoxel);
-        //this->FutureWatcher.setFuture(future);
+        //system(scriptCADToVoxel.c_str());
+        future = QtConcurrent::run(&this->scriptCaller, &ScriptCaller::callScript, scriptCADToVoxel);
+        this->ui->VoxelizerDial->setStyleSheet( "QDial {background-color : orange }" );
+        this->ui->voxelizationLabel->setFont( boldFont );
+        while(future.isRunning()){
+            if( this->ui->VoxelizerDial->value() == this->ui->VoxelizerDial->maximum()){
+                rotationDirection = -1;
+            }else if( this->ui->VoxelizerDial->value() == this->ui->VoxelizerDial->minimum()){
+                rotationDirection = 1;
+            }
+            this->ui->VoxelizerDial->setValue(this->ui->VoxelizerDial->value()+rotationDirection );
+            QCoreApplication::processEvents();
+            usleep(70000);
+        }
+        while(this->ui->VoxelizerDial->value() < this->ui->VoxelizerDial->maximum()){
+            this->ui->VoxelizerDial->setValue( this->ui->VoxelizerDial->value()+1 );
+            QCoreApplication::processEvents();
+            usleep(7000);
+        }
+        this->ui->VoxelizerDial->setStyleSheet( "QDial {background-color : green }" );
+        this->ui->VoxelizerDial->setValue(this->ui->VoxelizerDial->maximum());
+        this->ui->voxelizationLabel->setFont( normalFont );
+        QCoreApplication::processEvents();
+        counter = 1;
+        rotationDirection = 1;
 
         /** Start ToPy **/
         parameterString = stpName.toStdString();
         std::string scriptToPy = "./../../ToPyRunner.sh " + parameterString;
-        system(scriptToPy.c_str());
+
+        QThreadPool qpool;
+        future = QtConcurrent::run(&qpool, &this->scriptCaller, &ScriptCaller::callScript, scriptToPy);
+        this->ui->ToPyDial->setStyleSheet( "QDial {background-color : orange }" );
+        this->ui->topologyOptimizationLabel->setFont( boldFont );
+        while(future.isRunning()){
+            if( this->ui->ToPyDial->value() == this->ui->ToPyDial->maximum()){
+                rotationDirection = -1;
+            }else if( this->ui->ToPyDial->value() == this->ui->ToPyDial->minimum()){
+                rotationDirection = 1;
+            }
+            this->ui->ToPyDial->setValue( this->ui->ToPyDial->value()+rotationDirection );
+            QCoreApplication::processEvents();
+            usleep(70000);
+        }
+        while(this->ui->ToPyDial->value() < this->ui->ToPyDial->maximum()){
+            this->ui->ToPyDial->setValue( this->ui->ToPyDial->value()+1 );
+            QCoreApplication::processEvents();
+            usleep(7000);
+        }
+        this->ui->ToPyDial->setStyleSheet( "QDial {background-color : green }" );
+        this->ui->ToPyDial->setValue(this->ui->ToPyDial->maximum());
+        this->ui->topologyOptimizationLabel->setFont( normalFont );
+        QCoreApplication::processEvents();
+        std::cout << std::endl;
+        //system(scriptToPy.c_str());
+        counter = 1;
+        rotationDirection = 1;
 
         /** Start the Surface Fitting, Extraction and Back2CAD **/
         std::string cellsAndDimensionsPath = "./../../PYTHON/NURBSReconstruction";
@@ -115,8 +185,35 @@ void MainWindow::on_runButton_clicked()
         parameterString = cellsAndDimensionsPath + " " + outputFileString + " " + fairnessWeight + " " + coarseningFactor + " " + booleanFileString;
         std::string scriptPython = "python ./../../PYTHON/NURBSReconstruction/runningScript.py " + parameterString;
         std::cout << scriptPython << std::endl;
-        system(scriptPython.c_str());
+        //system(scriptPython.c_str());
+        future = QtConcurrent::run(&this->scriptCaller, &ScriptCaller::callScript, scriptPython);
+        this->ui->NurbsDial->setStyleSheet( "QDial {background-color : orange }" );
+        this->ui->surfaceFittingLabel->setFont( boldFont );
+        while(future.isRunning()){
+            if( this->ui->NurbsDial->value() == this->ui->NurbsDial->maximum()){
+                rotationDirection = -1;
+            }else if( this->ui->NurbsDial->value() == this->ui->NurbsDial->minimum()){
+                rotationDirection = 1;
+            }
+            this->ui->NurbsDial->setValue(this->ui->NurbsDial->value()+rotationDirection );
+            QCoreApplication::processEvents();
+            usleep(70000);
+        }
+        while(this->ui->NurbsDial->value() < this->ui->NurbsDial->maximum()){
+            this->ui->NurbsDial->setValue( this->ui->NurbsDial->value()+1 );
+            QCoreApplication::processEvents();
+            usleep(7000);
+        }
+        this->ui->NurbsDial->setStyleSheet( "QDial {background-color : green }" );
+        this->ui->NurbsDial->setValue(this->ui->NurbsDial->maximum());
+        this->ui->surfaceFittingLabel->setFont( normalFont );
+        QCoreApplication::processEvents();
     }
+}
+
+void MainWindow::setValueOfToPyDial(int value){
+    std::cout << "We are actually using this function with value: " << value << std::endl;
+    this->ui->ToPyDial->setValue(value % (this->ui->ToPyDial->maximum()+1));
 }
 
 bool MainWindow::checkInput(QString igsName, QString stpName){

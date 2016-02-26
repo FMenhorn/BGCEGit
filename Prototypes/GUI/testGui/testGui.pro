@@ -17,11 +17,12 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     inputverificator.cpp \
-    stringhelper.cpp
+    stringhelper.cpp \
+    scriptcaller.cpp
 
 HEADERS  += mainwindow.h \
-    ScriptCaller.h \
     inputverificator.h \
-    stringhelper.h
+    stringhelper.h \
+    scriptcaller.h
 
 FORMS    += mainwindow.ui
