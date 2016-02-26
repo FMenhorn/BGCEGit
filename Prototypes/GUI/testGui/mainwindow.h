@@ -43,6 +43,13 @@ private slots:
 
     void getPathAndName(QString fullPath, QString &name, QString &path);
 
+    void on_Coarsening_textChanged(const QString &arg1);
+
+    void on_FairnessWeight_textChanged(const QString &arg1);
+
+    void on_VertsPerPatch_textChanged(const QString &arg1);
+
+    bool checkInputSurfaceFitting();
 private:
     Ui::MainWindow *ui;
 
