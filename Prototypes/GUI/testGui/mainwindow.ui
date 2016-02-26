@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>689</width>
-    <height>570</height>
+    <height>645</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -105,7 +105,7 @@
     <property name="geometry">
      <rect>
       <x>15</x>
-      <y>480</y>
+      <y>545</y>
       <width>99</width>
       <height>27</height>
      </rect>
@@ -192,7 +192,7 @@
     <property name="geometry">
      <rect>
       <x>160</x>
-      <y>480</y>
+      <y>545</y>
       <width>341</width>
       <height>23</height>
      </rect>
@@ -413,7 +413,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>410</y>
+      <y>475</y>
       <width>321</width>
       <height>21</height>
      </rect>
@@ -431,7 +431,7 @@
     <property name="geometry">
      <rect>
       <x>15</x>
-      <y>440</y>
+      <y>505</y>
       <width>111</width>
       <height>31</height>
      </rect>
@@ -444,7 +444,7 @@
     <property name="geometry">
      <rect>
       <x>150</x>
-      <y>445</y>
+      <y>510</y>
       <width>521</width>
       <height>21</height>
      </rect>
@@ -456,6 +456,50 @@
      <bool>false</bool>
     </property>
    </widget>
+   <widget class="QLabel" name="label_5">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>410</y>
+      <width>321</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Boolean File</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="BooleanFileSelector">
+    <property name="geometry">
+     <rect>
+      <x>15</x>
+      <y>435</y>
+      <width>141</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Select Boolean File</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="BooleanFileInput">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>440</y>
+      <width>491</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Boolean File</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -463,7 +507,7 @@
      <x>0</x>
      <y>0</y>
      <width>689</width>
-     <height>25</height>
+     <height>27</height>
     </rect>
    </property>
   </widget>

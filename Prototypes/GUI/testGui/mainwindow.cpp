@@ -26,21 +26,19 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->RefinementEdit->setValidator(new QIntValidator(0, 10, this));
     ui->Coarsening->setValidator(new QIntValidator(0, 10000000, this));
 
-    this->ui->progressBar->setMinimum(0);
-    this->ui->progressBar->setMaximum(0);
-    this->ui->progressBar->hide();
-    connect(&this->FutureWatcher, SIGNAL (finished()), this, SLOT (slot_finished()));
-    ui->ErrorField_force->hide();
-    ui->ErrorField_refinement->hide();
-    ui->ErrorField_coarsening->hide();
-    ui->ErrorField_fairness->hide();
-    ui->ErrorField_vertsPerPatch->hide();
+    this->hide_ErrorFields();
+
+    //this->ui->progressBar->setMinimum(0);
+    //this->ui->progressBar->setMaximum(0);
+    //this->ui->progressBar->hide();
+    //connect(&this->FutureWatcher, SIGNAL (finished()), this, SLOT (slot_finished()));
 
     this->ui->logoView->setScene(&logoScene);
     logoItem.setPixmap(*logoPicture);
     logoScene.addItem(&logoItem);
     this->ui->logoView->show();
 }
+
 MainWindow::~MainWindow()
 {
     delete this->logoPicture;
@@ -49,7 +47,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::slot_finished()
 {
-    this->ui->progressBar->hide();
+    //this->ui->progressBar->hide();
 }
 
 void MainWindow::on_STEPFileSelector_clicked()
@@ -84,6 +82,7 @@ void MainWindow::on_runButton_clicked()
 {
     ui->IGSFileInput->setStyleSheet("QLabel { Color : black }");
     ui->STEPFileInput->setStyleSheet("QLabel { Color : black }");
+    this->hide_ErrorFields();
 
 
     QString igsPath, igsName;
@@ -92,66 +91,52 @@ void MainWindow::on_runButton_clicked()
     StringHelper::getPathAndName(stpFile, stpName, stpPath);
     StringHelper::getPathAndName(igsFile, igsName, igsPath);
 
-    if (this->checkInput()){
+    if (this->checkInput(igsName, stpName)){
         QString forceScaling = ui->ForceEdit->text();
         QString refinementLevel = ui->RefinementEdit->text();
 
-        std::string parameterString = stpPath.toStdString() + " " + stpName.toStdString() + " " + forceScaling.toStdString() + " " + refinementLevel.toStdString();
-        std::string script = "./../../CADTopOp.sh " + parameterString;
-        std::cout << script << std::endl;
+        //this->ui->progressBar->show();
 
-        this->ui->progressBar->show();
-        QFuture<void> future = QtConcurrent::run(&this->scriptCaller, &ScriptCaller::callScript, script);
-        this->FutureWatcher.setFuture(future);
-        //system(script.c_str());
+        /** Start the Voxelization Script **/
+        std::string parameterString = stpPath.toStdString() + " " + stpName.toStdString() + " " + forceScaling.toStdString() + " " + refinementLevel.toStdString();
+        std::string scriptCADToVoxel = "./../../CADTopOp.sh " + parameterString;
+        std::cout << scriptCADToVoxel << std::endl;
+        system(scriptCADToVoxel.c_str());
+
+        //QFuture<void> future = QtConcurrent::run(&this->scriptCaller, &ScriptCaller::callScript, scriptCADToVoxel);
+        //this->FutureWatcher.setFuture(future);
+
+        /** Start ToPy **/
+        parameterString = stpName.toStdString();
+        std::string scriptToPy = "./../../ToPyRunner.sh " + parameterString;
+        system(scriptToPy.c_str());
+
+        /** Start the Surface Fitting, Extraction and Back2CAD **/
+        std::string cellsAndDimensionsPath = "./../../PYTHON/NURBSReconstruction";
+        std::string outputFileString = stepOutputFile.toStdString();
+        std::string booleanFileString = booleanFile.toStdString();
+        std::string fairnessWeight = ui->FairnessWeight->text().toStdString();
+        std::string coarseningFactor = ui->Coarsening->text().toStdString();
+        parameterString = cellsAndDimensionsPath + " " + outputFileString + " " + fairnessWeight + " " + coarseningFactor + " " + booleanFileString;
+        std::string scriptPython = "python ./../../PYTHON/NURBSReconstruction/runningScript.py " + parameterString;
+        std::cout << scriptPython << std::endl;
+        system(scriptPython.c_str());
     }
 }
 
-void MainWindow::on_ForceEdit_textChanged(const QString &arg1)
-{
-    ui->ForceEdit->setText(arg1);
-}
-
-void MainWindow::on_RefinementEdit_textChanged(const QString &arg1)
-{
-    ui->RefinementEdit->setText(arg1);
-}
-
-void MainWindow::on_Coarsening_textChanged(const QString &arg1)
-{
-    ui->Coarsening->setText(arg1);
-}
-
-void MainWindow::on_FairnessWeight_textChanged(const QString &arg1)
-{
-    ui->FairnessWeight->setText(arg1);
-}
-
-void MainWindow::on_VertsPerPatch_textChanged(const QString &arg1)
-{
-    ui->VertsPerPatch->setText(arg1);
-}
-
-bool MainWindow::checkInput(){
+bool MainWindow::checkInput(QString igsName, QString stpName){
     InputVerificator verificator;
     bool flag = true;
-    QString igsPath, igsName;
-    QString stpPath, stpName;
 
-    StringHelper::getPathAndName(stpFile, stpName, stpPath);
-    StringHelper::getPathAndName(igsFile, igsName, igsPath);
     flag = flag && verificator.isEmpty(ui->Coarsening, ui->ErrorField_coarsening, "Please enter the coarsening!");
     flag = verificator.isEmpty(ui->FairnessWeight, ui->ErrorField_fairness, "Please enter the fairness weight") && flag;
     flag = verificator.isEmpty(ui->ForceEdit, ui->ErrorField_force, "Please enter the force") && flag;
     flag = verificator.isEmpty(ui->RefinementEdit, ui->ErrorField_refinement, "Please enter the refinement") && flag;
-    flag = verificator.isEmpty(ui->VertsPerPatch, ui->ErrorField_vertsPerPatch, "Please enter the number of vertices per patch!") && flag;
 
     flag = verificator.areSame(stpName, igsName, ui->STEPFileInput, ui->IGSFileInput) && flag;
     flag = verificator.checkFileName(this->stpFile, stpName, ".stp", ui->STEPFileInput) && flag;
     flag = verificator.checkFileName(this->igsFile, igsName, ".igs", ui->IGSFileInput) && flag;
     return flag;
-
-
 }
 
 void MainWindow::on_Output_selector_clicked()
@@ -169,4 +154,26 @@ void MainWindow::on_Output_selector_clicked()
         ui->STEPOutput->setText("Select ONE stp input file!");
         ui->STEPOutput->setStyleSheet("QLabel { Color : red }");
     }
+}
+
+void MainWindow::on_BooleanFileSelector_clicked()
+{
+    QStringList fileNames;
+    fileNames = QFileDialog::getOpenFileNames(this, tr("Open File"),"/path/to/file/",tr("STEP File (*.step)"));
+    if(fileNames.size() == 1 && fileNames.first().size() > 0){
+        booleanFile = fileNames.first();
+        ui->BooleanFileInput->setText(StringHelper::cropText(ui->BooleanFileInput, booleanFile));
+        ui->BooleanFileInput->setStyleSheet("QLabel { Color : black }");
+    }else{
+        booleanFile = "";
+        ui->BooleanFileInput->setText("Select ONE step input file!");
+        ui->BooleanFileInput->setStyleSheet("QLabel { Color : red }");
+    }
+}
+
+void MainWindow::hide_ErrorFields(){
+    ui->ErrorField_force->hide();
+    ui->ErrorField_refinement->hide();
+    ui->ErrorField_coarsening->hide();
+    ui->ErrorField_fairness->hide();
 }

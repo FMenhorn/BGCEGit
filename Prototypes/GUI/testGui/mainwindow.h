@@ -33,25 +33,15 @@ private slots:
 
     void on_runButton_clicked();
 
-    void on_ForceEdit_textChanged(const QString &arg1);
-
-    void on_RefinementEdit_textChanged(const QString &arg1);
-
- //   bool checkInput(QString igsName, QString igsPath, QString stpName, QString stpPath);
-
     void slot_finished();
 
-    bool checkInput();
+    bool checkInput(QString igsName, QString stpName);
 
     void on_Output_selector_clicked();
 
-    void on_Coarsening_textChanged(const QString &arg1);
+    void on_BooleanFileSelector_clicked();
 
-    void on_FairnessWeight_textChanged(const QString &arg1);
-
-    void on_VertsPerPatch_textChanged(const QString &arg1);
-
-    //bool checkInputSurfaceFitting();
+    void hide_ErrorFields();
 
 private:
     Ui::MainWindow *ui;
@@ -59,6 +49,7 @@ private:
     QFutureWatcher<void> FutureWatcher;
     QString stpFile;
     QString igsFile;
+    QString booleanFile = "";
     QString stepOutputFile;
 
     ScriptCaller scriptCaller;
