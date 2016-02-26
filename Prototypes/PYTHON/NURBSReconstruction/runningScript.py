@@ -6,7 +6,7 @@ from DualContouring.extraction import extract_surface
 from PetersScheme.fitting import fit_NURBS
 from PetersScheme.quadvertGenerator import quad_vert_generator
 
-# TODO: how to include INPUT: output_file_name, nonchanging_file_name, fairnessWeight, coarse_resolution
+# TODO: how to include INPUT: output_file_name, nonchanging_file_name, fairnessWeight, coarsening_factor
 
 parser = argparse.ArgumentParser(description='Include path to Cells and Dimensions.')
 parser.add_argument('path', type=str, help='path to Cells and Dimensions')
@@ -15,14 +15,14 @@ args = parser.parse_args()
 #####TESTING PATHS ######
 path="./DualContouring/cantilever/"
 output_file_name = "./Cantilever_NURBS_AllRaised.step"
-nonchanging_file_name = "./Cone.step"
-coarse_resolution = 2
+nonchanging_file_name = "./BackToCAD/Cone.step"
+coarsening_factor = 2
 fairnessWeight = 0.5
 #######
 
 
 print "### Surface Extraction ###"
-verts_coarse, quads_coarse, verts_fine, parameters = extract_surface(args.path, coarse_resolution)
+verts_coarse, quads_coarse, verts_fine, parameters = extract_surface(args.path, coarsening_factor)
 vertices, quads, fine_vertices = quad_vert_generator(verts_coarse, quads_coarse, verts_fine, parameters)
 
 print "### DooSabin ###"
