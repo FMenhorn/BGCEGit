@@ -13,7 +13,7 @@ def getBicubicBezierPointCoefs(localParams, coefs_raw):
 
     m = coefs_raw.shape[1]
     coefsMatrix = np.zeros((4,m))
-    for j in range (4):
+    for j in range (4): #possible optimisation: vectorize this loop by hardcoding bernstein for degree 3
         for i in range (4):
             #bernstein degree is ^3
             coefsMatrix[:, :] += coefs_raw[:, :, i, j] * bernstein(i, 3, localParams[0]) * bernstein(j, 3, localParams[1])
