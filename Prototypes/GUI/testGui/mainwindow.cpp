@@ -193,8 +193,6 @@ bool MainWindow::checkInput(QString igsName, QString igsPath, QString stpName, Q
     if (!igsFile.endsWith(".igs")){
         ui->IGSFileInput->setText("Please choose the .igs file!");
         ui->IGSFileInput->setStyleSheet(styleSheet);
-       // messageBox.critical(0,"Error","Please choose the .igs file!");
-        //messageBox.setFixedSize(500,200);
         flag = false;
     } else {
 
