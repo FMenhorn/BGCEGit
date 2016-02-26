@@ -33,15 +33,15 @@ private slots:
 
     void on_runButton_clicked();
 
-    bool checkInput(QString igsName, QString igsPath, QString stpName, QString stpPath);
-
     void slot_finished();
+
+    bool checkInput(QString igsName, QString stpName);
 
     void on_Output_selector_clicked();
 
-    bool checkInputSurfaceFitting();
-
     void on_BooleanFileSelector_clicked();
+
+    void hide_ErrorFields();
 
 private:
     Ui::MainWindow *ui;

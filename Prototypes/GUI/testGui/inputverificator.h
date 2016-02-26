@@ -1,21 +1,21 @@
 #ifndef INPUTVERIFICATOR_H
 #define INPUTVERIFICATOR_H
 
-#include "mainwindow.h"
+#include <QMainWindow>
 #include <QString>
-
+#include <QLineEdit>
+#include <QLabel>
 class InputVerificator
 {
 private:
     QString styleSheet = "QLabel {color : red}";
-    MainWindow* ui;
 
 public:
-    InputVerificator(MainWindow* ui);
+    InputVerificator();
+    bool isEmpty(QLineEdit*& qlineEdit, QLabel*& qlabel, QString errorMessage);
+    bool checkFileName(QString file, QString name, QString type, QLabel*& errorField);
+    bool areSame(QString stpName, QString igsName, QLabel*& STEPFileInput, QLabel*& IGSFileInput);
 
-    static bool checkInputTopologyOptimization(QString igsName, QString igsPath, QString stpName, QString stpPath);
-
-    static bool checkInputSurfaceFitting();
 };
 
 #endif // INPUTVERIFICATOR_H
