@@ -52,7 +52,7 @@ else:
 
 if __EXAMPLE__ == "Path":
     print "Example: Path"
-    path = "cantilever"
+    path = "bridge"
     coarse_scale = 2.0
     [verts, quads, params, plot_dims, quads_objs] = extraction.extract_surface_from_path_w_plot(path, coarse_scale)
 else:
@@ -95,7 +95,7 @@ for q in quads_objs['fine']:
     poly.set_color('r')
     poly.set_edgecolor('k')
     poly.set_alpha(.25)
-    ax.add_collection3d(poly)
+    #ax.add_collection3d(poly)
 
 ax.set_xlim3d(plot_dims['xmin'], plot_dims['xmax'])
 ax.set_ylim3d(plot_dims['ymin'], plot_dims['ymax'])

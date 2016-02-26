@@ -23,8 +23,9 @@ def dooSabin_ABC(verts, faces):
         for vertex in face_vertices:
             vertex.addNeighbouringFace(quads[i])
     #neighbours_test = quads[4].find_neighbors(quads)
-
+    print "1st refinement"
     [vertices_refined, faces_refined] = DooSabin(listOfVertices, quads, 0.5, 1)
+    print "2nd refinement"
     [vertices_refined1, faces_refined1] = DooSabin(vertices_refined, faces_refined, 0.5, 2)
 
     vertA = -1*np.ones((len(verts), 7, 2))

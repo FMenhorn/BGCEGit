@@ -13,9 +13,9 @@ from PetersScheme.quadvertGenerator import quad_vert_generator
 #args = parser.parse_args()
 
 #####TESTING PATHS ######
-path="./DualContouring/cantilever/"
-output_file_name = "./Cantilever_NURBS_AllRaised.step"
-nonchanging_file_name = "./BackToCAD/Cone.step"
+path="./DualContouring/bridge/"
+output_file_name = "./Bridge_NURBS_AllRaised.step"
+nonchanging_file_name = ""
 coarsening_factor = 2
 fairnessWeight = 0.5
 #######
