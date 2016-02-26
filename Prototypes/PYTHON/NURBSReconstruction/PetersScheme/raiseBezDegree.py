@@ -18,12 +18,13 @@ def raiseDeg1D(old_bezier_points):
     inv_degree = 1.0/new_degree
 
     new_bezier_points[0, :] = old_bezier_points[0, :]
-    new_bezier_points[new_degree, :] = old_bezier_points[new_degree-1, :]
 
     for i in range(1, new_degree):
         new_bezier_points[i, :] = \
             i * inv_degree * old_bezier_points[i-1, :] + \
             (1-i*inv_degree)*old_bezier_points[i, :]
+
+    new_bezier_points[new_degree, :] = old_bezier_points[new_degree-1, :]
 
     return new_bezier_points
 
