@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "inputverificator.h"
 
 #include <QFileDialog>
 #include <QMessageBox>
@@ -92,8 +93,7 @@ void MainWindow::on_runButton_clicked()
     this->getPathAndName(stpFile, stpName, stpPath);
     this->getPathAndName(igsFile, igsName, igsPath);
 
-    if(this->checkInput(igsName, igsPath, stpName, stpPath) & this->checkInputSurfaceFitting()){
-
+    if (this->checkInput()){
         QString forceScaling = ui->ForceEdit->text();
         QString refinementLevel = ui->RefinementEdit->text();
 
@@ -133,97 +133,26 @@ void MainWindow::on_VertsPerPatch_textChanged(const QString &arg1)
     ui->VertsPerPatch->setText(arg1);
 }
 
-bool MainWindow::checkInputSurfaceFitting(){
-    QString coarsening = ui->Coarsening->text();
-    QString vertsPerPatch = ui->VertsPerPatch->text();
-    QString fairnessWeight = ui->FairnessWeight->text();
-    QString styleSheet = "QLabel {color : red}";
-
+bool MainWindow::checkInput(){
+    InputVerificator verificator;
     bool flag = true;
+    QString igsPath, igsName;
+    QString stpPath, stpName;
 
-    if (coarsening.isEmpty()){
-        ui->ErrorField_coarsening->setText("Please enter the coarsening!");
-        ui->ErrorField_coarsening->setStyleSheet(styleSheet);
-        ui->ErrorField_coarsening->show();
-        flag = false;
-    }
+    this->getPathAndName(stpFile, stpName, stpPath);
+    this->getPathAndName(igsFile, igsName, igsPath);
+    flag = flag && verificator.isEmpty(ui->Coarsening, ui->ErrorField_coarsening, "Please enter the coarsening!");
+    flag = verificator.isEmpty(ui->FairnessWeight, ui->ErrorField_fairness, "Please enter the fairness weight") && flag;
+    flag = verificator.isEmpty(ui->ForceEdit, ui->ErrorField_force, "Please enter the force") && flag;
+    flag = verificator.isEmpty(ui->RefinementEdit, ui->ErrorField_refinement, "Please enter the refinement") && flag;
+    flag = verificator.isEmpty(ui->VertsPerPatch, ui->ErrorField_vertsPerPatch, "Please enter the number of vertices per patch!") && flag;
 
-    if (fairnessWeight.isEmpty()){
-        ui->ErrorField_fairness->setText("Please enter the fairness weight!");
-        ui->ErrorField_fairness->setStyleSheet(styleSheet);
-        ui->ErrorField_fairness->show();
-        flag = false;
-    }
-
-    if (vertsPerPatch.isEmpty()){
-        ui->ErrorField_vertsPerPatch->setText("Please enter the No of verts per patch!");
-        ui->ErrorField_vertsPerPatch->setStyleSheet(styleSheet);
-        ui->ErrorField_vertsPerPatch->show();
-        flag = false;
-    }
+    flag = verificator.areSame(stpName, igsName, ui->STEPFileInput, ui->IGSFileInput) && flag;
+    flag = verificator.checkFileName(this->stpFile, stpName, ".stp", ui->STEPFileInput) && flag;
+    flag = verificator.checkFileName(this->igsFile, igsName, ".igs", ui->IGSFileInput) && flag;
     return flag;
 
-}
 
-bool MainWindow::checkInput(QString igsName, QString igsPath, QString stpName, QString stpPath){
-    QMessageBox messageBox;
-    QString styleSheet = "QLabel {color : red}";
-    QString forceScaling = ui->ForceEdit->text();
-    QString refinement = ui->RefinementEdit->text();
-    ui->ErrorField_force->hide();
-    ui->ErrorField_refinement->hide();
-
-    bool flag = true;
-
-    if (forceScaling.isEmpty()) {
-        ui->ErrorField_force->setText("Please enter the force!");
-        ui->ErrorField_force->setStyleSheet(styleSheet);
-        ui->ErrorField_force->show();
-        flag = false;
-    }
-
-    if (refinement.isEmpty()) {
-        ui->ErrorField_refinement->setText("Please enter the refinement!");
-        ui->ErrorField_refinement->setStyleSheet(styleSheet);
-        ui->ErrorField_refinement->show();
-        flag = false;
-    }
-
-    if (!igsFile.endsWith(".igs")){
-        ui->IGSFileInput->setText("Please choose the .igs file!");
-        ui->IGSFileInput->setStyleSheet(styleSheet);
-        flag = false;
-    } else {
-
-        if (igsName.contains(".")){
-            ui->IGSFileInput->setText("Filename can not contain a dot!");
-            ui->IGSFileInput->setStyleSheet(styleSheet);
-            flag = false;
-        }
-    }
-
-    if (!stpFile.endsWith(".stp")){
-        ui->STEPFileInput->setText("Please choose the .stp file!");
-        ui->STEPFileInput->setStyleSheet(styleSheet);
-        messageBox.setFixedSize(500,200);
-        flag = false;
-    } else {
-
-        if (stpName.contains(".")){
-            ui->STEPFileInput->setText("Filename can not contain a dot!");
-            ui->STEPFileInput->setStyleSheet(styleSheet);
-            flag = false;
-        }
-    }
-
-    if(stpName.compare(igsName)!=0){
-        ui->STEPFileInput->setStyleSheet(styleSheet);
-        ui->IGSFileInput->setStyleSheet(styleSheet);
-        messageBox.critical(0, "Error", "Filenames are not equal!");
-        messageBox.setFixedSize(500,200);
-        flag = false;
-    }
-    return flag;
 }
 
 void MainWindow::getPathAndName(QString fullPath, QString &name, QString &path){
@@ -249,7 +178,7 @@ void MainWindow::on_Output_selector_clicked()
         stepOutputFile = fileName;
         ui->STEPOutput->setText(this->cropText(ui->STEPOutput, stepOutputFile));
         ui->STEPOutput->setStyleSheet("QLabel { Color : black }");
-    }else{
+    } else {
         ui->STEPOutput->setText("Select ONE stp input file!");
         ui->STEPOutput->setStyleSheet("QLabel { Color : red }");
     }

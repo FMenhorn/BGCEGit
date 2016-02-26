@@ -37,9 +37,11 @@ private slots:
 
     void on_RefinementEdit_textChanged(const QString &arg1);
 
-    bool checkInput(QString igsName, QString igsPath, QString stpName, QString stpPath);
+ //   bool checkInput(QString igsName, QString igsPath, QString stpName, QString stpPath);
 
     void slot_finished();
+
+    bool checkInput();
 
     void getPathAndName(QString fullPath, QString &name, QString &path);
 
@@ -51,7 +53,7 @@ private slots:
 
     void on_VertsPerPatch_textChanged(const QString &arg1);
 
-    bool checkInputSurfaceFitting();
+    //bool checkInputSurfaceFitting();
 
 private:
     Ui::MainWindow *ui;
