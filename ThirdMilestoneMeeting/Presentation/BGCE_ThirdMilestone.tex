@@ -1,0 +1,158 @@
+\documentclass[9pt,pdftex]{beamer}
+\setbeamertemplate{section in toc}[sections numbered]
+\setbeamertemplate{subsection in toc}%
+{\leavevmode\leftskip=3em\rlap{\hskip-2em\inserttocsectionnumber.\inserttocsubsectionnumber}\inserttocsubsection\par}
+% use git: import repository as new project in eclipse: http://www.eclipse.org/forums/index.php/t/226301/
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amsfonts, amsmath, amssymb}
+\usepackage[bf,small, format=plain]{caption}
+\usepackage{color}
+
+%\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{graphicx}
+\usepackage{tikz,tikzscale,pgfplots,grffile}
+\usepackage{3dplot}
+\usetikzlibrary{arrows,shapes,backgrounds}
+\usetikzlibrary{plotmarks}
+\usetikzlibrary{spy}
+\tikzset{
+    invisible/.style={opacity=0,text opacity=0},
+    visible on/.style={alt={#1{}{invisible}}},
+    alt/.code args={<#1>#2#3}{%
+      \alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} 
+    },
+}
+\usetikzlibrary{shapes.misc}
+\usetikzlibrary{calc}
+\tikzset{cross/.style={cross out, draw=black, minimum size=2*(#1-\pgflinewidth), inner sep=0pt, outer sep=0pt},
+%default radius will be 1pt. 
+cross/.default={2pt}}
+\tikzstyle{dot}=[fill, draw, circle,inner sep=1pt]
+
+\usepackage{bbding}
+
+\usepackage[clock]{ifsym}
+
+\usepackage{pgfplots}
+\usepackage{grffile}
+\pgfplotsset{compat=newest}
+
+%\author{}
+%\title{}
+%\setbeamercovered{transparent} 
+%\setbeamertemplate{navigation symbols}{} 
+%\logo{} 
+%\institute{} 
+%\date{} 
+%\subject{} 
+
+\pgfdeclarelayer{bg}
+\pgfsetlayers{bg,main}
+
+\usepackage{mdframed}
+\usepackage{multicol}
+\usepackage{tcolorbox}
+%\usepackage{multirow}
+% \usepackage{paralist}
+%\usepackage[colorinlistoftodos]{todonotes}
+%\usepackage{biblatex}
+%usepackage[nolist,nohyperlinks]{acronym}
+%\usepackage{amstext}
+%\usepackage{hyperref} 
+%\usepackage{comment}
+%\usepackage{subcaption}
+%\renewcommand*{\figureautorefname}{fig.}
+%\renewcommand*{\equationautorefname}{eq.}
+\usepackage{bm}
+\usepackage{comment}
+%\usepackage{beamerthemeshadow}
+%\usepackage{tikz}
+%\usepackage{pgfplots}
+%\usepackage{ulem}
+%\usepackage[lofdepth,lotdepth]{subfig}
+%\newenvironment{figure*}%
+%{\begin{figure}}
+%{\end{figure}}
+%\usepackage[style=mla,babel=hyphen,backend=biber]{biblatex}
+% CSE-Beamer-Styles:
+\usepackage[course]{beamertheme_sccstalk}
+%\usepackage[lecture]{beamertheme_sccstalk}
+\usepackage{beamercolorscheme_sccs}
+\usepackage{beamerfontthemestructurebold}
+\setcounter{tocdepth}{3} 
+%colored blocks, example \begin{variableblock}{Title}{bg=blue,fg=white}{bg=white,fg=black}
+\newenvironment{variableblock}[4]{%
+\setbeamercolor{block title}{#2}
+\setbeamercolor{block body}{#3}
+\begin{block}{#1}\begin{mdframed}{#4}\end{mdframed}\end{block}}
+
+%some useful commands
+%\newcommand{\der}[2]{\frac{\text{d}#1}{\text{d}#2}}
+\title{BGCE Project: CAD -- Integrated Topology Optimization}
+\subtitle{BGCE Final Milestone Meeting}
+\author[S. Joshi, S. Reiz] {
+S. Joshi, J.C. Medina, F. Menhorn, 
+\\
+S. Reiz, B. Rüth, E. Wannerberg, A. Yurova} %[displayed in footer]{displayed on title page}
+\date{\today}
+\institute{Technische Universität München}
+\newtheorem*{rem}{Remark}
+
+
+\begin{document}
+\setbeamertemplate{caption}{\raggedright\insertcaption\par} % removes "figure" label at figures
+\frame{\maketitle}
+
+
+\section{Saumi}
+\input{Sections/Pitch}
+
+%-------------------------------------------------------
+\section{Introduction}
+\begin{frame}{Contents}
+\tableofcontents
+\end{frame}
+
+%-------------------------------------------------------
+\subsection{Motivation}
+\input{Sections/Motivation}
+
+%-------------------------------------------------------
+\subsection{Workflow Overview}
+\input{Sections/Workflow}
+
+%-------------------------------------------------------
+\subsection{Organization}
+\input{Sections/Organization}
+
+\AtBeginSection[]
+{
+  \begin{frame}
+  \frametitle{Contents}
+  \tableofcontents[currentsection]
+  \end{frame}
+}
+
+%-------------------------------------------------------
+\section{Topology optimization}
+\input{Sections/TopologyOptimization}
+%-------------------------------------------------------
+
+%-------------------------------------------------------
+%
+\section{Surface Extraction}
+\input{Sections/SurfaceExtraction}
+
+
+\section{B--Spline Fitting}
+\input{Sections/Nurbs}
+\section{Summary \& Outlook}
+\input{Sections/SummaryOutlook}
+\section*{Thank You}
+\input{Sections/ThankYou}
+\section*{Literature}
+\input{Sections/Literature}
+\section*{Theory}
+\input{Sections/BackupSlidesProjection}
+\end{document}

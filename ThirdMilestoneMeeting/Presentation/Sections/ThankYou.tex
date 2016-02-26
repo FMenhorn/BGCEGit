@@ -1,0 +1,32 @@
+\begin{frame}{Thank you for your attention!}
+	\begin{figure}
+		\scalebox{0.14}{\includegraphics{Pictures/1CAD.pdf}}
+		\scalebox{0.14}{\includegraphics{Pictures/2STL.pdf}}
+		\scalebox{0.14}{\includegraphics{Pictures/3VOX.pdf}}
+		\scalebox{0.14}{\includegraphics{Pictures/4TPD.pdf}}
+		\scalebox{0.14}{\includegraphics{Pictures/5TOPOPT.pdf}}
+		\scalebox{0.14}{\includegraphics{Pictures/7MC.pdf}}
+		\scalebox{0.14}{\includegraphics[scale=1.3]{Pictures/End.png}}
+	\end{figure}
+	\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}% 
+        \node at (0,0)[inner sep=0pt, scale = 0.43](N1)%
+                %{\input{Pictures/NURBS/tikz/control_mesh.tex}};%
+                {\includegraphics{Pictures/NURBS/fitting_pipeline/half_torus.eps}};%
+        \node at (2,4) [inner sep=0pt, scale = 0.4](N2)%
+        			%{\includegraphics[width=5cm]{Pictures/NURBS/tikz/patch_points.eps}};%
+                 %{\input{Pictures/NURBS/tikz/patch_points.tex}};%
+                 {\includegraphics{Pictures/NURBS/fitting_pipeline/half_torus_dc.eps}}; %                  
+        \node at (7,4)[inner sep=0pt, scale = 0.4](N3)%
+                 %{\input{Pictures/NURBS/tikz/bezier_points.tex}};%
+                  %{\includegraphics[width=5cm]{Pictures/NURBS/tikz/bezier_points.eps}};%
+                  {\includegraphics{Pictures/NURBS/fitting_pipeline/half_torus_hair.eps}};%        
+        \node at (9, 0)[inner sep=0pt, scale = 0.43](N4)%
+                 %{\input{Pictures/NURBS/tikz/peters_surface.tex}};%
+                {\includegraphics{Pictures/NURBS/fitting_pipeline/half_torus.eps}};%
+        \draw[thick,->] (N2) -- (N1);%
+        \draw[thick,->] (N3) -- (N2);%
+        \draw[thick,->] (N4) -- (N3);%
+\end{tikzpicture}%
+}
+\end{frame}
