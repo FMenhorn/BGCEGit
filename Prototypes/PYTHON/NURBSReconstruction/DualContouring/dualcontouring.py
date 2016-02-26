@@ -3,6 +3,38 @@ import numpy.linalg as la
 import itertools as it
 from dcHelpers import resolve_manifold_edges, is_inside, create_manifold_edges
 
+def coarsen_dataset(fine_dataset, coarsening_steps, res, dims):
+    import matplotlib.pyplot as plt
+    from mpl_toolkits.mplot3d import Axes3D
+    from mpl_toolkits.mplot3d.art3d import Poly3DCollection
+
+    print res
+    print dims
+
+    xx=[]
+    yy=[]
+    zz=[]
+    for x, y, z in it.product(np.arange(dims['xmin'], dims['xmax'] + res, res),
+                              np.arange(dims['ymin'], dims['ymax'] + res, res),
+                              np.arange(dims['zmin'], dims['zmax'] + res, res)):
+        o = np.array([float(x), float(y), float(z)])
+        key = tuple(o)
+        if key in fine_dataset:
+            xx.append(o[0])
+            yy.append(o[1])
+            zz.append(o[2])
+
+    fig = plt.figure()
+    ax = Axes3D(fig)
+    ax.set_aspect('equal')
+
+    ax.scatter(xx, yy, zz)
+    plt.show()
+
+
+
+    quit()
+
 #########################
 #### DUAL CONTOURING ####
 #########################
@@ -52,14 +84,16 @@ def estimate_hermite(data, v0, v1, res, res_fine, coarse_level):
     return x0
 
 
-def tworesolution_dual_contour(dataset, resolutions, dims):
-    [dc_verts_fine, dc_quads_fine, dc_manifold_edges_fine] = dual_contour(dataset,
+def tworesolution_dual_contour(fine_dataset, resolutions, dims):
+    [dc_verts_fine, dc_quads_fine, dc_manifold_edges_fine] = dual_contour(fine_dataset,
                                                                           resolutions['fine'],
                                                                           resolutions['fine'],
                                                                           dims,
                                                                           coarse_level=False,
                                                                           do_manifold_treatment=False)
-    [dc_verts_coarse, dc_quads_coarse, dc_manifold_edges_coarse] = dual_contour(dataset,
+    coarsening_steps = 1
+    coarse_dataset = coarsen_dataset(fine_dataset, coarsening_steps, resolutions['fine'], dims)
+    [dc_verts_coarse, dc_quads_coarse, dc_manifold_edges_coarse] = dual_contour(coarse_dataset,
                                                                                 resolutions['coarse'],
                                                                                 resolutions['fine'],
                                                                                 dims,
