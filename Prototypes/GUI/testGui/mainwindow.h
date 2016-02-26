@@ -41,7 +41,15 @@ private slots:
 
     void slot_finished();
 
-    void getPathAndName(QString fullPath, QString &name, QString &path);
+    void on_Output_selector_clicked();
+
+    void on_Coarsening_textChanged(const QString &arg1);
+
+    void on_FairnessWeight_textChanged(const QString &arg1);
+
+    void on_VertsPerPatch_textChanged(const QString &arg1);
+
+    bool checkInputSurfaceFitting();
 
 private:
     Ui::MainWindow *ui;
@@ -49,8 +57,7 @@ private:
     QFutureWatcher<void> FutureWatcher;
     QString stpFile;
     QString igsFile;
-
-    QString cropText(QLabel* curLabel, QString toCropString);
+    QString stepOutputFile;
 
     ScriptCaller scriptCaller;
 
