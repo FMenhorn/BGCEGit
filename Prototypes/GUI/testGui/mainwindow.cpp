@@ -113,6 +113,27 @@ void MainWindow::on_RefinementEdit_textChanged(const QString &arg1)
     ui->RefinementEdit->setText(arg1);
 }
 
+void MainWindow::on_OutputFileName_textChanged(const QString &arg1)
+{
+    ui->OutputFileName->setText(arg1);
+}
+
+void MainWindow::on_Coarsening_textChanged(const QString &arg1)
+{
+    ui->Coarsening->setText(arg1);
+}
+
+void MainWindow::on_FairnessWeight_textChanged(const QString &arg1)
+{
+    ui->FairnessWeight->setText(arg1);
+}
+
+void MainWindow::on_VertsPerPatch_textChanged(const QString &arg1)
+{
+    ui->VertsPerPatch->setText(arg1);
+}
+
+
 bool MainWindow::checkInput(QString igsName, QString igsPath, QString stpName, QString stpPath){
     QMessageBox messageBox;
     QString styleSheet = "QLabel {color : red}";
