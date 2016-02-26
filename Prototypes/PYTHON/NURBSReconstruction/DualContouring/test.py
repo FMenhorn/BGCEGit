@@ -53,7 +53,8 @@ else:
 if __EXAMPLE__ == "Path":
     print "Example: Path"
     path = "cantilever"
-    [verts, quads, params, plot_dims, quads_objs] = extraction.extract_surface_from_path_w_plot(path)
+    coarse_scale = 2.0
+    [verts, quads, params, plot_dims, quads_objs] = extraction.extract_surface_from_path_w_plot(path, coarse_scale)
 else:
     [verts, quads, quads_objs, params] = extraction.extraction_algorithm(fine_data, resolutions, dimensions)
 
