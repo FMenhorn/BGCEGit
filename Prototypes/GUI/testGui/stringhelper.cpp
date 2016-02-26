@@ -12,7 +12,8 @@ void StringHelper::getPathAndName(QString fullPath, QString &name, QString &path
     }
 
     name = igsPathParsed.value(igsPathParsed.length() - 1);
-    name = name.left(name.length() - 4);
+    name = name.split(".").first();
+    //name = name.left(name.length() - 4);
 }
 
 QString StringHelper::cropText(QLabel* curLabel, QString toCropString){

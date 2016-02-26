@@ -44,6 +44,12 @@ private slots:
 
     void setValueOfToPyDial(int value);
 
+    void on_startFreeCadButton_clicked();
+
+    void rotateDial(QDial* dial,const QFuture<void>& future);
+
+    void resetDials();
+
 private:
     Ui::MainWindow *ui;
 
