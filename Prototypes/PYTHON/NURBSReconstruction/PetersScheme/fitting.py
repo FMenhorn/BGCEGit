@@ -10,7 +10,7 @@ from leastSquares import solve_least_squares_problem
 from createFairnessControlMeshCoefs import createFairnessControlMeshCoefs
 from createGlobalControlMeshCoefs import createGlobalControlMeshCoefs
 
-def fit_NURBS(A, B1, B2, C, regularPoints, vertices, quads, fine_vertices, parameters):
+def fit_NURBS(A, B1, B2, C, regularPoints, vertices, quads, fine_vertices, parameters, fairnessWeight):
     print "### Preprocessing ###"
     # Throw away any datapoints which are NaN or outside the parameter range [0,1]
     # since these cause trouble. (+ Scale the resulting ones so that max and min
@@ -34,7 +34,7 @@ def fit_NURBS(A, B1, B2, C, regularPoints, vertices, quads, fine_vertices, param
     print "Done."
 
     print "Concatenating matrices."
-    fairnessWeight = 0.5
+
     joined_verts = sp.vstack([scipy.array(fine_vertices), scipy.zeros([fair_coefs.shape[0], 3])]).todense()
     joined_coefs = sp.vstack([sparse_coefs, fairnessWeight * sparse_fair_coefs])
     print "Done."

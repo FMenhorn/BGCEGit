@@ -52,9 +52,9 @@ def extraction_algorithm(fine_data, resolutions, dimensions):
     return verts_out_dc, quads_out_dc, quads, param
 
 
-def extract_surface_from_path_w_plot(path):
+def extract_surface_from_path_w_plot(path, coarse_scale):
 
-    fine_data, dimensions, resolutions = read_from_path(path,2.0)
+    fine_data, dimensions, resolutions = read_from_path(path, coarse_scale)
     verts, quads, quad_objs, params = extraction_algorithm(fine_data=fine_data,
                                                   resolutions=resolutions,
                                                   dimensions=dimensions)
@@ -65,6 +65,6 @@ def extract_surface_from_path_wrapped(path):
     verts, quads, params, notused, notused = extract_surface_from_path_w_plot(path)
     return verts, quads, params
 
-def extract_surface(path):
-    verts, quads, params, notused, notused = extract_surface_from_path_w_plot(path)
+def extract_surface(path, coarse_scale):
+    verts, quads, params, notused, notused = extract_surface_from_path_w_plot(path, coarse_scale)
     return verts['coarse'], quads['coarse'], verts['fine'], params
