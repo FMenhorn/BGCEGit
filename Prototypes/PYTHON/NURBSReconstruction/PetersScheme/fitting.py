@@ -34,7 +34,7 @@ def fit_NURBS(A, B1, B2, C, regularPoints, vertices, quads, fine_vertices, param
     print "Done."
 
     print "Concatenating matrices."
-    fairnessWeight = 2.0
+    fairnessWeight = 0.5
     joined_verts = sp.vstack([scipy.array(fine_vertices), scipy.zeros([fair_coefs.shape[0], 3])]).todense()
     joined_coefs = sp.vstack([sparse_coefs, fairnessWeight * sparse_fair_coefs])
     print "Done."
@@ -44,6 +44,7 @@ def fit_NURBS(A, B1, B2, C, regularPoints, vertices, quads, fine_vertices, param
     print "Done."
     write_matrix_to_csv(vertices,'vertices.csv')
     write_matrix_to_asc(vertices,'vertices.asc')
+    write_matrix_to_asc(fine_vertices,'vertices_fine.asc')
 
 
     NURBSMatrix, NURBSIndices = createNURBSMatricesAllraised(quads,newA,newB1,newB2,newC,regularPoints,vertices)
