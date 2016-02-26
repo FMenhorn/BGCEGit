@@ -11,15 +11,20 @@ def getPetersControlPointCoefs(bezierCoefs,coefs_raw):
     assert type(bezierCoefs) is np.ndarray
     assert type(coefs_raw) is np.ndarray
 
-    m=coefs_raw.shape[1]
-    n=coefs_raw.shape[0]
-    coefs_matrix = np.zeros((n,m))
 
-    for j in range(n):
-        for i in range (n):
-            controlPointCoef = bezierCoefs[i,j]
-            for l in range (m):
-                for k in range (n):
-                    coefs_matrix[k,l] += coefs_raw[k,l,i,j]*controlPointCoef
+    #summing using vectorized code by numpy
+    coefs_matrix = np.einsum('klij,ij->kl', coefs_raw, bezierCoefs)
+
+    #equivalent loop-code
+    # m=coefs_raw.shape[1]
+    # n=coefs_raw.shape[0]
+    # coefs_matrix = np.zeros((n,m))
+
+    # for j in range(n):
+    #     for i in range (n):
+    #         controlPointCoef = bezierCoefs[i,j]
+    #         for l in range (m):
+    #             for k in range (n):
+    #                 coefs_matrix[k,l] += coefs_raw[k,l,i,j]*controlPointCoef
 
     return coefs_matrix

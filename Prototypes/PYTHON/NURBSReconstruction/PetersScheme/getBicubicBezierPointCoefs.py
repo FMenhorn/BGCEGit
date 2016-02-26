@@ -16,8 +16,5 @@ def getBicubicBezierPointCoefs(localParams, coefs_raw):
     for j in range (4):
         for i in range (4):
             #bernstein degree is ^3
-            controlPointCoef = bernstein(i,3,localParams[0]) * bernstein(j,3,localParams[1])
-            for l in range (m):
-                for k in range (4):
-                    coefsMatrix[k,l] += coefs_raw[k,l,i,j]* controlPointCoef
+            coefsMatrix[:, :] += coefs_raw[:, :, i, j] * bernstein(i, 3, localParams[0]) * bernstein(j, 3, localParams[1])
     return coefsMatrix
