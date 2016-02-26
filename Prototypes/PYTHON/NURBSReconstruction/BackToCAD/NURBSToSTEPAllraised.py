@@ -101,6 +101,7 @@ def generate_bspline_patch(vertices, n_nodes, degree, knots):
     return patch.toShape()
 
 
+#def export_step(nurbs_idx, nurbs_pts, output_file_name, nonchanging_file_name, allowed_domain_names):
 def export_step(nurbs_idx, nurbs_pts, output_file_name, nonchanging_file_name):
 
     plot_control_points = False
@@ -144,6 +145,9 @@ def export_step(nurbs_idx, nurbs_pts, output_file_name, nonchanging_file_name):
     __objs__ = FreeCAD.getDocument("tmp").findObjects()
     Import.export(__objs__, output_file_name)
     print "Output file " + output_file_name + " exported."
+
+#    for domain_name in allowed_domain_names:
+#        Import.insert(domain_name, "tmp")
 
     if len(nonchanging_file_name) != 0:
         print "Loading non-changing component..."
