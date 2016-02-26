@@ -147,17 +147,37 @@ def resolve_manifold_edges(_dc_verts, _dc_vindex, _dc_quads, _data, _resolution)
 
     edge_usage_dict = generate_edge_usage_dict(_dc_quads)  # here we save the quads using a certain edge
 
-    not_consistent_edges = {}
+    not_consistent4_edges = {}
+    not_consistent1_edges = {}
     for edge, used in edge_usage_dict.items():
-        if used.__len__() != 2:
-            not_consistent_edges[edge] = used
+        if not used.__len__() == 2:
+            if used.__len__() == 4:
+                not_consistent4_edges[edge] = used
+            elif used.__len__() == 1:
+                not_consistent1_edges[edge] = used
+            else:
+                print "ERROR!"
+                quit()
 
-    _dc_verts, _dc_quads = resolve_not_consistent(_dc_verts, _dc_quads, not_consistent_edges)
+    _dc_verts, _dc_quads = resolve_not_consistent4(_dc_verts, _dc_quads, not_consistent4_edges)
+
+    # we have to update the edge usage now
+    edge_usage_dict = generate_edge_usage_dict(_dc_quads)  # here we save the quads using a certain edge
+    not_consistent1_edges = {}
+    for edge, used in edge_usage_dict.items():
+        if not used.__len__() == 2:
+            if used.__len__() == 1:
+                not_consistent1_edges[edge] = used
+            else:
+                print "ERROR!"
+                quit()
+
+    _dc_verts, _dc_quads = resolve_not_consistent1(_dc_verts, _dc_quads, not_consistent1_edges)
 
     return _dc_verts, _dc_quads, manifold_edges
 
 
-def resolve_not_consistent(_dc_verts, _dc_quads, _not_consistent_edges):
+def resolve_not_consistent4(_dc_verts, _dc_quads, _not_consistent_edges):
     not_consistent_quad_clusters = []
     for edge, used in _not_consistent_edges.items():
         if used.__len__() == 4:
@@ -170,6 +190,39 @@ def resolve_not_consistent(_dc_verts, _dc_quads, _not_consistent_edges):
                                                                                cluster,
                                                                                o_idx_nodes)
         _dc_verts, _dc_quads = update_mesh_3d(_dc_verts, _dc_quads, new_quads, new_nodes, delete_quads)
+
+    return _dc_verts, _dc_quads
+
+
+def resolve_not_consistent1(_dc_verts, _dc_quads, _not_consistent_edges):
+    print _not_consistent_edges.keys()
+    for edge in _not_consistent_edges.keys():
+        if edge in _not_consistent_edges:
+            new_quad = 4*[None]
+            _not_consistent_edges.__delitem__(edge)
+            new_quad[1] = edge[0]
+            new_quad[2] = edge[1]
+            for other_edge in _not_consistent_edges.keys():
+                if edge[0] in other_edge:
+                    other_vertex_id_low = other_edge[int(not other_edge.index(edge[0]))]
+                    new_quad[0] = other_vertex_id_low
+                    _not_consistent_edges.__delitem__(other_edge)
+                elif edge[1] in other_edge:
+                    other_vertex_id_high = other_edge[int(not other_edge.index(edge[1]))]
+                    new_quad[3] = other_vertex_id_high
+                    _not_consistent_edges.__delitem__(other_edge)
+            remaining_edge = (other_vertex_id_low,other_vertex_id_high)
+            if remaining_edge in _not_consistent_edges.keys():
+                _not_consistent_edges.__delitem__(remaining_edge)
+            elif remaining_edge[::-1] in _not_consistent_edges.keys():
+                _not_consistent_edges.__delitem__(remaining_edge[::-1])
+            else:
+                print "ERROR!"
+                assert(False)
+                quit()
+
+            _dc_quads.append(new_quad)
+            print new_quad
 
     return _dc_verts, _dc_quads
 

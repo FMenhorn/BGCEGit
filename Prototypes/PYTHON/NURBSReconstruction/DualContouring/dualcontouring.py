@@ -111,7 +111,6 @@ def tworesolution_dual_contour(fine_dataset, resolutions, dims):
 
     # compute necessary coarsening steps from given coarse resolution.
     coarsening_steps = int(np.log(resolutions['coarse'])/np.log(2))
-    print coarsening_steps
     coarse_dataset, coarse_res, coarse_dims = coarsen_dataset(coarsening_steps,
                                                               fine_dataset,
                                                               resolutions['fine'],

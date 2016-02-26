@@ -3,7 +3,8 @@ import numpy as np
 import extraction
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
-from mpl_toolkits.mplot3d.art3d import Poly3DCollection
+from mpl_toolkits.mplot3d.art3d import Poly3DCollection, Line3DCollection
+import dcHelpers
 
 __author__ = 'benjamin'
 
@@ -60,6 +61,20 @@ else:
 
 print "###Plotting###"
 
+nonmanifold=[]
+edge_usage = dcHelpers.generate_edge_usage_dict(quads['coarse'])
+for edge_identifier, used_by_quads in edge_usage.items():
+    if used_by_quads.__len__() != 2:
+        print used_by_quads.__len__()
+        nonmanifold.append(edge_identifier)
+
+print nonmanifold
+for e in nonmanifold:
+    print e[0]
+    print verts['coarse'][e[0]]
+    print e[1]
+    print verts['coarse'][e[1]]
+
 fig = plt.figure()
 ax = Axes3D(fig)
 ax.set_aspect('equal')
@@ -82,8 +97,19 @@ for q in quads_objs['coarse']:
     poly = Poly3DCollection(vtx_orig)
     poly.set_color('b')
     poly.set_edgecolor('k')
-    # poly.set_alpha(.25)
+    #poly.set_alpha(.25)
     ax.add_collection3d(poly)
+
+for nonmanifold_edge in nonmanifold:
+    vtx = verts['coarse'][list(nonmanifold_edge)]
+    x = vtx[:, 0].tolist()
+    y = vtx[:, 1].tolist()
+    z = vtx[:, 2].tolist()
+    vtx = [zip(x, y, z)]
+    line = Line3DCollection(vtx)
+    line.set_color('r')
+    line.set_linewidth(5)
+    ax.add_collection3d(line)
 
 for q in quads_objs['fine']:
     vtx = verts['fine'][q]
