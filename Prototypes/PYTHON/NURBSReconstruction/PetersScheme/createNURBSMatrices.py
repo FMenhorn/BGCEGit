@@ -4,7 +4,7 @@ from getExtraOrdCornerIndexMask import getExtraOrdCornerIndexMask
 from createBicubicCoefMatrices import createBicubicCoefMatrices
 from getBezierPointCoefs import getBiquadraticPatchCoefs
 from get3x3ControlPointIndexMask import get3x3ControlPointIndexMask
-from raiseBezDegree import raiseDeg2D
+from raiseBezDegree import raiseDeg2D_from3x3
 
 def multiply_patch(point_coefs, points):
     import numpy as np
@@ -56,6 +56,9 @@ def createNURBSMatricesAllraised(quad_list, AVertexList, B1VertexList, B2VertexL
 
     addToIndex = lambda x: x*3
 
+    #indices of 0-3 just for vectorized access of stuff
+    ii, jj = np.meshgrid(np.arange(4), np.arange(4))
+
     for q in range(number_of_quads):
         for j in range(4):
             for i in range(4):
@@ -78,11 +81,17 @@ def createNURBSMatricesAllraised(quad_list, AVertexList, B1VertexList, B2VertexL
                     #clockwise, the next another one clockwise etc...
                     patch = np.rot90(patch, (whichCorner-2) % 4)
 
+                    patchIndexArray = getLinearIndexing(ii+addToIndexI, jj+addToIndexJ, 13)
+                    NURBSMatrix[q*13*13 + patchIndexArray[:], :] = patch[ii[:], jj[:], :]
+                    NURBSIndices[q, patchIndexArray[:]] = q*13*13 + patchIndexArray
+                    '''
+                    #equivalent code:
                     for jPatch in range(4):
                         for iPatch in range(4):
                             NURBScurrentIndex = q*13*13 + getLinearIndexing(iPatch+addToIndexI, jPatch+addToIndexJ, 13)
                             NURBSMatrix[NURBScurrentIndex, :] = patch[iPatch, jPatch, :]
                             NURBSIndices[q, getLinearIndexing(iPatch+addToIndexI, jPatch+addToIndexJ, 13)] = NURBScurrentIndex
+                    '''
 
                 else:
                     neighbourMask = get3x3ControlPointIndexMask(quad_list, quad_control_point_indices, q, np.array([i,j]))
@@ -92,12 +101,10 @@ def createNURBSMatricesAllraised(quad_list, AVertexList, B1VertexList, B2VertexL
                             tempBiquadBezierMatrix[iPatch, jPatch, :] = control_points[neighbourMask[iPatch,jPatch],:]
 
                     tempBiquadBezierMatrix = multiply_patch(ordinaryCoefsRaw, tempBiquadBezierMatrix)
-                    raisedBiquadMatrix = raiseDeg2D(tempBiquadBezierMatrix)
+                    raisedBiquadMatrix = raiseDeg2D_from3x3(tempBiquadBezierMatrix)
 
-                    for jPatch in range(4):
-                        for iPatch in range(4):
-                            NURBScurrentIndex = q*13*13 + getLinearIndexing(iPatch+addToIndexI,jPatch+addToIndexJ, 13)
-                            NURBSMatrix[NURBScurrentIndex, :] = raisedBiquadMatrix[iPatch, jPatch, :]
-                            NURBSIndices[q,getLinearIndexing(iPatch+addToIndexI, jPatch+addToIndexJ, 13)] = NURBScurrentIndex
+                    patchIndexArray = getLinearIndexing(ii+addToIndexI, jj+addToIndexJ, 13)
+                    NURBSMatrix[q*13*13 + patchIndexArray[:], :] = raisedBiquadMatrix[ii[:], jj[:], :]
+                    NURBSIndices[q, patchIndexArray[:]] = q*13*13 + patchIndexArray
 
     return NURBSMatrix, NURBSIndices

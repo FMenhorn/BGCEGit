@@ -54,3 +54,17 @@ def raiseDeg2D(old_bezier_points):
     return new_bezier_points
 
 
+def raiseDeg2D_from3x3(old_bezier_points):
+    # raiseDeg2D Raise the order of the bezier surface by 1.
+    #   Provided a dxMxN - matrix of d-dimensional bezier points, the algorithm outputs a
+    #   dx(M+1)x(N+1) matrix of bezier points drawing te exact same surface but with a
+    #   degree 1 higher. Tested and works.
+    import numpy as np
+
+    assert type(old_bezier_points) is np.ndarray
+
+    raisingMatrix = np.array([[1,0,0],[1.0/3.0,2.0/3.0,0],[0,1.0/3.0,2.0/3.0],[0,0,1]])
+
+    new_bezier_points = np.einsum('ik,kld,lj->ijd', raisingMatrix, old_bezier_points, raisingMatrix.T)
+
+    return new_bezier_points
