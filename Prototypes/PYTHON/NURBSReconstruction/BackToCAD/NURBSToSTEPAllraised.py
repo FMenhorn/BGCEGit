@@ -5,7 +5,7 @@ import csv
 import FreeCAD
 import Part
 import Import
-import numpy as np
+
 
 """
 configuration parameters:
@@ -14,19 +14,10 @@ for the length of the knot vector, the following rule has to hold:
 n_knots = n_nodes + deg + 1
 n_nodes has to be chosen such that it matches with the given number of control nodes per patch in the input files
 """
-input_folder = "./Torus_Fair_NURBS_AllRaised"
-output_file_name = "./Torus_NURBS_AllRaised.step"
-nonchanging_file_name = "./Cone.step"
-plot_control_points = False
+#input_folder = "./Torus_Fair_NURBS_AllRaised"
+#output_file_name = "./Torus_NURBS_AllRaised.step"
+#nonchanging_file_name = "./Cone.step"
 
-knots = [0, 0, 0, 0, 0.25, 0.25, 0.25, 0.5, 0.5, 0.5, 0.75, 0.75, 0.75, 1, 1, 1, 1]
-degree = 3
-n_nodes = 13
-
-# holds the faces
-faceHolder = []
-
-assert (knots.__len__() == n_nodes + degree + 1)
 """
 configuration done
 """
@@ -77,7 +68,7 @@ def get_vertices(patch_ids, vertex_list):
     return vertices
 
 
-def generate_bspline_patch(vertices):
+def generate_bspline_patch(vertices, n_nodes, degree, knots):
     """
     Generates a bspine patch from the given vertices. Parameters like degree of the patch, knot vector and number of
     control points are defined above.
@@ -104,58 +95,76 @@ def generate_bspline_patch(vertices):
             v = vertices[k]
             control_point = FreeCAD.Vector(v[0], v[1], v[2])
             patch.setPole(ii + 1, jj + 1, control_point, 1)
-            if(plot_control_points):
-                Part.show(Part.Vertex(control_point))  # plotting corresponding control points, switched on/off in configuration section
-    faceHolder.append(patch.toShape()) # add to the list of Faces the patch converted to Shape
+            #if(plot_control_points):
+            #    Part.show(Part.Vertex(control_point))  # plotting corresponding control points, switched on/off in configuration section
+
+    return patch.toShape()
 
 
-print "Creating FreeCAD Document..."
-doc = FreeCAD.newDocument("tmp")
-print "FreeCAD Document created."
+def export_step(nurbs_idx, nurbs_pts, output_file_name, nonchanging_file_name):
 
-print "Parsing input..."
-nurbs_idx, nurbs_pts = parse_all_from_folder(input_folder)
-print "Input files from " + input_folder + " parsed."
+    plot_control_points = False
 
-print "Plotting patches..."
-patch_id = 0
-for patch in nurbs_idx:
-    print "Plotting patch no. " + str(patch_id) + "..."
-    patch[:] = [x - 1 for x in patch]
-    vertices = get_vertices(patch, nurbs_pts)
-    generate_bspline_patch(vertices)
-    patch_id += 1
-print "All patches plotted."
+    knots = [0, 0, 0, 0, 0.25, 0.25, 0.25, 0.5, 0.5, 0.5, 0.75, 0.75, 0.75, 1, 1, 1, 1]
+    degree = 3
+    n_nodes = 13
 
-# Create shell from face list, create solid from shell
-shellHolder = Part.makeShell(faceHolder)
-solidHolder = Part.makeSolid(shellHolder)
+    # holds the faces
+    faceHolder = []
 
-Part.show(solidHolder)
+    assert (knots.__len__() == n_nodes + degree + 1)
 
-print "Exporting file..."
-__objs__ = FreeCAD.getDocument("tmp").findObjects()
-Import.export(__objs__, output_file_name)
-print "Output file " + output_file_name + " exported."
 
-print "Loading non-changing component..."
-Import.insert(nonchanging_file_name, "tmp")
 
-# get objects
-__objs__ = []
-__objs__ = FreeCAD.getDocument("tmp").findObjects()
+    print "Creating FreeCAD Document..."
+    doc = FreeCAD.newDocument("tmp")
+    print "FreeCAD Document created."
 
-# create fusion object
-FreeCAD.getDocument("tmp").addObject("Part::MultiFuse", "FusionForBoolean")
+    #print "Parsing input..."
+    #nurbs_idx, nurbs_pts = parse_all_from_folder(input_folder)
+    #print "Input files from " + input_folder + " parsed."
 
-# add objs to FusionForBoolean
-FreeCAD.getDocument("tmp").FusionForBoolean.Shapes = __objs__
+    print "Plotting patches..."
+    patch_id = 0
+    for patch in nurbs_idx:
+        print "Plotting patch no. " + str(patch_id) + "..."
+        patch[:] = [x - 1 for x in patch]
+        vertices = get_vertices(patch, nurbs_pts)
+        faceHolder.append(generate_bspline_patch(vertices, n_nodes, degree, knots)) # add to the list of Faces the patch converted to Shape
+        patch_id += 1
+    print "All patches plotted."
 
-# compute
-FreeCAD.getDocument("tmp").recompute()
+    # Create shell from face list, create solid from shell
+    shellHolder = Part.makeShell(faceHolder)
+    solidHolder = Part.makeSolid(shellHolder)
 
-print "Exporting file..."
-finalWriteObjects = []
-finalWriteObjects.append(FreeCAD.getDocument("tmp").getObject("FusionForBoolean"))
-Import.export(finalWriteObjects, "./FusionForBoolean.step")
-print "Export done."
+    Part.show(solidHolder)
+
+    print "Exporting file..."
+    __objs__ = FreeCAD.getDocument("tmp").findObjects()
+    Import.export(__objs__, output_file_name)
+    print "Output file " + output_file_name + " exported."
+
+    if len(nonchanging_file_name) != 0:
+        print "Loading non-changing component..."
+        Import.insert(nonchanging_file_name, "tmp")
+
+        # get objects
+        __objs__ = []
+        __objs__ = FreeCAD.getDocument("tmp").findObjects()
+
+        # create fusion object
+        FreeCAD.getDocument("tmp").addObject("Part::MultiFuse", "FusionForBoolean")
+
+        # add objs to FusionForBoolean
+        FreeCAD.getDocument("tmp").FusionForBoolean.Shapes = __objs__
+
+        # compute
+        FreeCAD.getDocument("tmp").recompute()
+
+        print "Exporting file..."
+        finalWriteObjects = []
+        finalWriteObjects.append(FreeCAD.getDocument("tmp").getObject("FusionForBoolean"))
+        Import.export(finalWriteObjects, "./FusionForBoolean.step")
+
+    print "Export done."
