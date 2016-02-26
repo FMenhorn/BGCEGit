@@ -7,6 +7,8 @@
 #include <QtConcurrent/QtConcurrent>
 #include <QtGui>
 
+#include "stringhelper.h"
+
 #include <iostream>
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -52,7 +54,7 @@ void MainWindow::on_STEPFileSelector_clicked()
     fileNames = QFileDialog::getOpenFileNames(this, tr("Open File"),"/path/to/file/",tr("STP File (*.stp)"));
     if(fileNames.size()==1){
         stpFile = fileNames.first();
-        ui->STEPFileInput->setText(this->cropText(ui->STEPFileInput, stpFile));
+        ui->STEPFileInput->setText(StringHelper::cropText(ui->STEPFileInput, stpFile));
         ui->STEPFileInput->setStyleSheet("QLabel { Color : black }");
     }else{
         ui->STEPFileInput->setText("Select ONE stp input file!");
@@ -66,19 +68,12 @@ void MainWindow::on_IGSFileSelector_clicked()
     fileNames = QFileDialog::getOpenFileNames(this, tr("Open File"),"/path/to/file/",tr("IGS File (*.igs)"));
     if(fileNames.size()==1){
         igsFile = fileNames.first();
-        ui->IGSFileInput->setText(this->cropText(ui->IGSFileInput, igsFile));
+        ui->IGSFileInput->setText(StringHelper::cropText(ui->IGSFileInput, igsFile));
         ui->IGSFileInput->setStyleSheet("QLabel { Color : black }");
     }else{
         ui->IGSFileInput->setText("Select ONE igs input file!");
         ui->IGSFileInput->setStyleSheet("QLabel { Color : red }");
     }
-}
-
-QString MainWindow::cropText(QLabel* curLabel, QString toCropString){
-    int width = curLabel->width();
-    QFontMetrics metrics = curLabel->fontMetrics();
-    QString croppedText = metrics.elidedText(toCropString, Qt::ElideLeft, width);
-    return croppedText;
 }
 
 void MainWindow::on_runButton_clicked()
@@ -89,8 +84,8 @@ void MainWindow::on_runButton_clicked()
     QString igsPath, igsName;
     QString stpPath, stpName;
 
-    this->getPathAndName(stpFile, stpName, stpPath);
-    this->getPathAndName(igsFile, igsName, igsPath);
+    StringHelper::getPathAndName(stpFile, stpName, stpPath);
+    StringHelper::getPathAndName(igsFile, igsName, igsPath);
 
     if(this->checkInput(igsName, igsPath, stpName, stpPath) & this->checkInputSurfaceFitting()){
 
@@ -228,18 +223,6 @@ bool MainWindow::checkInput(QString igsName, QString igsPath, QString stpName, Q
     return flag;
 }
 
-void MainWindow::getPathAndName(QString fullPath, QString &name, QString &path){
-    QStringList igsPathParsed = fullPath.split( "/" );
-    path = "";
-    for (int i = 0; i < igsPathParsed.length() - 1; i++){
-        path.push_back(igsPathParsed.value(i) + "/");
-    }
-
-    name = igsPathParsed.value(igsPathParsed.length() - 1);
-    name = name.left(name.length() - 4);
-
-}
-
 void MainWindow::on_Output_selector_clicked()
 {
     QString fileName;
@@ -249,7 +232,7 @@ void MainWindow::on_Output_selector_clicked()
             fileName = fileName + tr(".step");
         }
         stepOutputFile = fileName;
-        ui->STEPOutput->setText(this->cropText(ui->STEPOutput, stepOutputFile));
+        ui->STEPOutput->setText(StringHelper::cropText(ui->STEPOutput, stepOutputFile));
         ui->STEPOutput->setStyleSheet("QLabel { Color : black }");
     }else{
         ui->STEPOutput->setText("Select ONE stp input file!");
