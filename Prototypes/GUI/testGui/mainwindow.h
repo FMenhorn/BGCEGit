@@ -51,6 +51,8 @@ private slots:
 
     void on_VertsPerPatch_textChanged(const QString &arg1);
 
+    bool checkInputSurfaceFitting();
+
 private:
     Ui::MainWindow *ui;
 
