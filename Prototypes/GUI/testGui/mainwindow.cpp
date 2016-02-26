@@ -93,39 +93,25 @@ void MainWindow::on_runButton_clicked()
         QString refinementLevel = ui->RefinementEdit->text();
 
         std::string parameterString = stpPath.toStdString() + " " + stpName.toStdString() + " " + forceScaling.toStdString() + " " + refinementLevel.toStdString();
-        std::string script = "./../../CADTopOp.sh " + parameterString;
-        std::cout << script << std::endl;
+        std::string scriptCADToVoxel = "./../../CADTopOp.sh " + parameterString;
+        std::cout << scriptCADToVoxel << std::endl;
 
         this->ui->progressBar->show();
-        QFuture<void> future = QtConcurrent::run(&this->scriptCaller, &ScriptCaller::callScript, script);
-        this->FutureWatcher.setFuture(future);
-        //system(script.c_str());
+        system(scriptCADToVoxel.c_str());
+
+        //QFuture<void> future = QtConcurrent::run(&this->scriptCaller, &ScriptCaller::callScript, scriptCADToVoxel);
+        //this->FutureWatcher.setFuture(future);
+
+        std::string cellsAndDimensionsPath = "./../../PYTHON/NURBSReconstruction";
+        std::string outputFileString = stepOutputFile.toStdString();
+        std::string booleanFileString = booleanFile.toStdString();
+        std::string fairnessWeight = ui->FairnessWeight->text().toStdString();
+        std::string coarseningFactor = ui->Coarsening->text().toStdString();
+        parameterString = cellsAndDimensionsPath + " " + outputFileString + " " + fairnessWeight + " " + coarseningFactor + " " + booleanFileString;
+        std::string scriptPython = "python ./../../PYTHON/NURBSReconstruction/runningScript.py " + parameterString;
+        std::cout << scriptPython << std::endl;
+        system(scriptPython.c_str());
     }
-}
-
-void MainWindow::on_ForceEdit_textChanged(const QString &arg1)
-{
-    ui->ForceEdit->setText(arg1);
-}
-
-void MainWindow::on_RefinementEdit_textChanged(const QString &arg1)
-{
-    ui->RefinementEdit->setText(arg1);
-}
-
-void MainWindow::on_Coarsening_textChanged(const QString &arg1)
-{
-    ui->Coarsening->setText(arg1);
-}
-
-void MainWindow::on_FairnessWeight_textChanged(const QString &arg1)
-{
-    ui->FairnessWeight->setText(arg1);
-}
-
-void MainWindow::on_VertsPerPatch_textChanged(const QString &arg1)
-{
-    ui->VertsPerPatch->setText(arg1);
 }
 
 bool MainWindow::checkInputSurfaceFitting(){
@@ -237,5 +223,20 @@ void MainWindow::on_Output_selector_clicked()
     }else{
         ui->STEPOutput->setText("Select ONE stp input file!");
         ui->STEPOutput->setStyleSheet("QLabel { Color : red }");
+    }
+}
+
+void MainWindow::on_BooleanFileSelector_clicked()
+{
+    QStringList fileNames;
+    fileNames = QFileDialog::getOpenFileNames(this, tr("Open File"),"/path/to/file/",tr("STEP File (*.step)"));
+    if(fileNames.size() == 1 && fileNames.first().size() > 0){
+        booleanFile = fileNames.first();
+        ui->BooleanFileInput->setText(StringHelper::cropText(ui->BooleanFileInput, booleanFile));
+        ui->BooleanFileInput->setStyleSheet("QLabel { Color : black }");
+    }else{
+        booleanFile = "";
+        ui->BooleanFileInput->setText("Select ONE step input file!");
+        ui->BooleanFileInput->setStyleSheet("QLabel { Color : red }");
     }
 }
