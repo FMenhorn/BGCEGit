@@ -118,7 +118,6 @@ void MainWindow::on_RefinementEdit_textChanged(const QString &arg1)
     ui->RefinementEdit->setText(arg1);
 }
 
-
 void MainWindow::on_Coarsening_textChanged(const QString &arg1)
 {
     ui->Coarsening->setText(arg1);
@@ -237,4 +236,21 @@ void MainWindow::getPathAndName(QString fullPath, QString &name, QString &path){
     name = igsPathParsed.value(igsPathParsed.length() - 1);
     name = name.left(name.length() - 4);
 
+}
+
+void MainWindow::on_Output_selector_clicked()
+{
+    QString fileName;
+    fileName = QFileDialog::getSaveFileName(this, tr("Save File"), QDir::currentPath(),tr("STEP File (*.step)"));
+    if(fileName.size()>=1){
+        if(!(fileName.endsWith(".step"))){
+            fileName = fileName + tr(".step");
+        }
+        stepOutputFile = fileName;
+        ui->STEPOutput->setText(this->cropText(ui->STEPOutput, stepOutputFile));
+        ui->STEPOutput->setStyleSheet("QLabel { Color : black }");
+    }else{
+        ui->STEPOutput->setText("Select ONE stp input file!");
+        ui->STEPOutput->setStyleSheet("QLabel { Color : red }");
+    }
 }
