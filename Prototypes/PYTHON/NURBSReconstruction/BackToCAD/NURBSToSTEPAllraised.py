@@ -58,8 +58,8 @@ def generate_bspline_patch(vertices, n_nodes, degree, knots):
     return patch.toShape()
 
 
-#def export_step(nurbs_idx, nurbs_pts, output_file_name, nonchanging_file_name, allowed_domain_names):
-def export_step(nurbs_idx, nurbs_pts, output_file_name, nonchanging_file_name):
+def export_step(nurbs_idx, nurbs_pts, output_file_name, nonchanging_file_name, allowed_domains_file_name):
+#def export_step(nurbs_idx, nurbs_pts, output_file_name, nonchanging_file_name):
 
     knots = [0, 0, 0, 0, 0.25, 0.25, 0.25, 0.5, 0.5, 0.5, 0.75, 0.75, 0.75, 1, 1, 1, 1]
     degree = 3
@@ -96,13 +96,56 @@ def export_step(nurbs_idx, nurbs_pts, output_file_name, nonchanging_file_name):
 
     Part.show(solidHolder)
 
-    print "Exporting file..."
+    print "Exporting RAW file..."
     __objs__ = FreeCAD.getDocument("tmp").findObjects()
-    Import.export(__objs__, output_file_name)
-    print "Output file " + output_file_name + " exported."
+    Import.export(__objs__, "./"+output_file_name+"_RAW.step")
+    print "Output file " + output_file_name+"_RAW.step" + " exported."
 
-#    for domain_name in allowed_domain_names:
-#        Import.insert(domain_name, "tmp")
+#    for obj in __objs__:
+#        FreeCAD.getDocument("tmp").removeObject(obj.Name)
+
+#    Import.insert("./"+output_file_name, "tmp")
+
+    if len(allowed_domains_file_name) != 0:
+        print "Checking allowed domains..."
+        # take the intersection of allowed domains
+        # read in step file for allowed domains
+        Import.insert(allowed_domains_file_name, "tmp")
+        __objs__ = FreeCAD.getDocument("tmp").findObjects()
+
+        # - take intersection of each allowed domain with original Peter's output 
+        # - store as separate "Common" object
+        # - delete loaded allowed domains
+        for i in range(1, len(__objs__)):
+            FreeCAD.getDocument("tmp").addObject("Part::MultiCommon", "Common"+str(i))
+            FreeCAD.getDocument("tmp").findObjects()[-1].Shapes = [__objs__[0], __objs__[i]]
+            FreeCAD.getDocument("tmp").recompute()
+            FreeCAD.getDocument("tmp").removeObject(__objs__[i].Name)
+
+        # update __objs__
+        __objs__ = FreeCAD.getDocument("tmp").findObjects()
+
+        if len(__objs__) > 2:
+            # create a fuse object and union all "Common"s
+            FreeCAD.getDocument("tmp").addObject("Part::MultiFuse", "Fuse")
+            FreeCAD.getDocument("tmp").Fuse.Shapes = __objs__[1: len(__objs__)]
+            print FreeCAD.getDocument("tmp").Fuse.Shapes
+            FreeCAD.getDocument("tmp").recompute()
+
+            # remove "Commons"s
+            for i in range(0, len(__objs__)):
+                FreeCAD.getDocument("tmp").removeObject(__objs__[i].Name)
+
+        # update __objs__
+        __objs__ = FreeCAD.getDocument("tmp").findObjects()
+
+        # remove Peter's original version
+        FreeCAD.getDocument("tmp").removeObject(__objs__[0].Name)
+
+        print "Exporting ALLOWED file..."
+        __objs__ = FreeCAD.getDocument("tmp").findObjects()
+        Import.export(__objs__, "./"+output_file_name+"_ALLOWED.step")
+        print "Output file " + output_file_name+"_ALLOWED.step" + " exported."
 
     if len(nonchanging_file_name) != 0:
         print "Loading non-changing component..."
@@ -112,17 +155,17 @@ def export_step(nurbs_idx, nurbs_pts, output_file_name, nonchanging_file_name):
         __objs__ = FreeCAD.getDocument("tmp").findObjects()
 
         # create fusion object
-        FreeCAD.getDocument("tmp").addObject("Part::MultiFuse", "FusionForBoolean")
+        FreeCAD.getDocument("tmp").addObject("Part::MultiFuse", "FusionTool")
 
-        # add objs to FusionForBoolean
-        FreeCAD.getDocument("tmp").FusionForBoolean.Shapes = __objs__
+        # add objs to FusionTool
+        FreeCAD.getDocument("tmp").FusionTool.Shapes = __objs__[0: len(__objs__)]
 
         # compute
         FreeCAD.getDocument("tmp").recompute()
 
-        print "Exporting file..."
-        finalWriteObjects = []
-        finalWriteObjects.append(FreeCAD.getDocument("tmp").getObject("FusionForBoolean"))
-        Import.export(finalWriteObjects, "./FusionForBoolean.step")
+        print "Exporting BOOLEANED file..."
+        __objs__.append(FreeCAD.getDocument("tmp").getObject("FusionTool"))
+        Import.export(__objs__, "./"+output_file_name+"_BOOLEANED.step")
+        print "Output file " + output_file_name+"_BOOLEANED.step" + " exported."
 
     print "Export done."

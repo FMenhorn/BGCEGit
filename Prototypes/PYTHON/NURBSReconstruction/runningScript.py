@@ -14,7 +14,8 @@ from PetersScheme.quadvertGenerator import quad_vert_generator
 
 #####TESTING PATHS ######
 path="./DualContouring/cantilever/"
-output_file_name = "./Cantilever_NURBS_AllRaised.step"
+output_file_name = "Cantilever_NURBS_AllRaised"
+allowed_domains_file_name = "./BlackWhiteCube.step"
 nonchanging_file_name = "./BackToCAD/Cone.step"
 coarsening_factor = 2
 fairnessWeight = 0.5
@@ -36,7 +37,7 @@ print "### Peters' Scheme DONE### "
 # TODO: nonchanging_file_name should be a zero string if not provided by the user
 
 print "### Generating Step File ###"
-export_step( NURBSIndices, NURBSMatrix, output_file_name, nonchanging_file_name)
+export_step( NURBSIndices, NURBSMatrix, output_file_name, nonchanging_file_name, allowed_domains_file_name)
 print "### Step File DONE### "
 
 
