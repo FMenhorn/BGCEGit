@@ -6,8 +6,8 @@ from bernsteinFramework import *
 def getBicubicBezierPointCoefs(localParams, coefs_raw):
     '''
 
-    :param localParams: 4-D matrix of some data ;) e.g. (4x4x4x4)
-    :param coefs_raw: 7x7 matrix of some data ;)
+    :param localParams: 2-element vector of parameters (u,v)
+    :param coefs_raw: 4x7x4x4 matrix of coefficients (k,l,i,j) from bezier point i,j to Peter's control point type k (0=A,1=B1,2=B2,3=C) on patch locally numbered l
     :return: mx4 matrix of the coefficients on the neighbouring (and central) vertex points to that in the center of the patch, for a point with the local parameters localParams on the patch. The first column is the A coef, the second the B1 coefs, the third the B2 coefs, and the fourth the C coefs.
     '''
 
