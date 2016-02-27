@@ -33,7 +33,23 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->RefinementEdit->setValidator(new QIntValidator(0, 10, this));
     ui->Coarsening->setValidator(new QIntValidator(0, 10000000, this));
 
+   /* ui->IGSFileInput->setText("/home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/TestGeometry/CantileverColoredNew/CantiLeverWithLoadAtEndSmallerMovedLoad.igs");
+    ui->STEPFileInput->setText("/home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/TestGeometry/CantileverColoredNew/CantiLeverWithLoadAtEndSmallerMovedLoad.stp");
+
+    ui->BooleanFileInput->setText("/home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/PYTHON/Back2CAD/Cone.step");
+    ui->STEPOutput->setText("/home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/GUI/build-testGui-Desktop-Debug/testBitch.step");
+    igsFile = ui->IGSFileInput->text();
+    stpFile = ui->STEPFileInput->text();
+    booleanFile = ui->BooleanFileInput->text();
+    stepOutputFile = ui->STEPFileInput->text();
+    ui->RefinementEdit->setText("0");
+    ui->ForceEdit->setText("1");
+    ui->Coarsening->setText("2");
+    ui->FairnessWeight->setText("0.5");*/
     this->hide_ErrorFields();
+    //this->ui->progressBar->setMinimum(0);
+    //this->ui->progressBar->setMaximum(0);
+    //this->ui->progressBar->hide();
     this->ui->startFreeCadButton->hide();
 
     this->ui->VoxelizerDial->setValue(0);
@@ -41,6 +57,7 @@ MainWindow::MainWindow(QWidget *parent) :
     this->ui->ToPyDial->setValue(0);
     this->ui->ToPyDial->setDisabled(true);
     this->ui->NurbsDial->setValue(0);
+
     this->ui->NurbsDial->setDisabled(true);
     //connect(&this->FutureWatcher, SIGNAL (finished()), this, SLOT (slot_finished()));
 
@@ -72,6 +89,7 @@ MainWindow::~MainWindow()
 void MainWindow::on_STEPFileSelector_clicked()
 {
     QStringList fileNames;
+
     fileNames = QFileDialog::getOpenFileNames(this, tr("Open File"),"/path/to/file/",tr("STEP File (*.step)"));
     if(fileNames.size()==1){
         stpFile = fileNames.first();
@@ -86,6 +104,7 @@ void MainWindow::on_STEPFileSelector_clicked()
 void MainWindow::on_IGSFileSelector_clicked()
 {
     QStringList fileNames;
+
     fileNames = QFileDialog::getOpenFileNames(this, tr("Open File"),"/path/to/file/",tr("IGES File (*.iges)"));
     if(fileNames.size()==1){
         igsFile = fileNames.first();
@@ -109,6 +128,8 @@ void MainWindow::on_runButton_clicked()
 
     StringHelper::getPathAndName(stpFile, stpName, stpPath);
     StringHelper::getPathAndName(igsFile, igsName, igsPath);
+
+    //if (this->checkInput(igsName, stpName)){
 
     //std::cout << "CHECK STILL DISABLED" << std::endl;
     //this->checkInput(igsName, stpName)
@@ -151,6 +172,11 @@ void MainWindow::on_runButton_clicked()
         std::string coarseningFactor = ui->Coarsening->text().toStdString();
         parameterString = cellsAndDimensionsPath + " " + outputFileString + " " + fairnessWeight + " " + coarseningFactor + " " + booleanFileString;
         std::string scriptPython = "python ./../../PYTHON/NURBSReconstruction/runningScript.py " + parameterString;
+
+        std::cout << scriptPython << std::endl;
+        system(scriptPython.c_str());
+   //}
+
 
         future = QtConcurrent::run(&qpool, &this->scriptCaller, &ScriptCaller::callScript, scriptPython);
 
@@ -200,14 +226,18 @@ void MainWindow::setValueOfToPyDial(int value){
 
 bool MainWindow::checkInput(QString igsName, QString stpName){
     InputVerificator verificator;
+    QString boolName, boolPath;
+    StringHelper::getPathAndName(booleanFile, boolName, boolPath);
+
     bool flag = true;
 
-    flag = flag && verificator.isEmpty(ui->Coarsening, ui->ErrorField_coarsening, "Please enter the coarsening!");
+    flag = flag && verificator.isEmpty(ui->Coarsening, ui->ErrorField_coarsening, "Please enter the coarsening");
     flag = verificator.isEmpty(ui->FairnessWeight, ui->ErrorField_fairness, "Please enter the fairness weight") && flag;
     flag = verificator.isEmpty(ui->ForceEdit, ui->ErrorField_force, "Please enter the force") && flag;
     flag = verificator.isEmpty(ui->RefinementEdit, ui->ErrorField_refinement, "Please enter the refinement") && flag;
 
     flag = verificator.areSame(stpName, igsName, ui->STEPFileInput, ui->IGSFileInput) && flag;
+
     flag = verificator.checkFileName(this->stpFile, stpName, ".step", ui->STEPFileInput) && flag;
     flag = verificator.checkFileName(this->igsFile, igsName, ".iges", ui->IGSFileInput) && flag;
     return flag;
@@ -234,11 +264,11 @@ void MainWindow::on_BooleanFileSelector_clicked()
 {
     QStringList fileNames;
     fileNames = QFileDialog::getOpenFileNames(this, tr("Open File"),"/path/to/file/",tr("STEP File (*.step)"));
-    if(fileNames.size() == 1 && fileNames.first().size() > 0){
+    if (fileNames.size() == 1 && fileNames.first().size() > 0) {
         booleanFile = fileNames.first();
         ui->BooleanFileInput->setText(StringHelper::cropText(ui->BooleanFileInput, booleanFile));
         ui->BooleanFileInput->setStyleSheet("QLabel { Color : black }");
-    }else{
+    } else {
         booleanFile = "";
         ui->BooleanFileInput->setText("Select ONE step input file!");
         ui->BooleanFileInput->setStyleSheet("QLabel { Color : red }");
