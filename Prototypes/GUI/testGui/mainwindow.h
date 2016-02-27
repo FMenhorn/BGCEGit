@@ -50,6 +50,8 @@ private slots:
 
     void resetDials();
 
+    void on_checkBox_stateChanged(int arg1);
+
 private:
     Ui::MainWindow *ui;
 
@@ -58,6 +60,7 @@ private:
     QString igsFile;
     QString booleanFile = "";
     QString stepOutputFile;
+    bool isFixtureFileSupplied = 0;
 
     ScriptCaller scriptCaller;
 

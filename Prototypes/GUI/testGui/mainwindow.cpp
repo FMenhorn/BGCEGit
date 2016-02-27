@@ -37,8 +37,11 @@ MainWindow::MainWindow(QWidget *parent) :
     this->ui->startFreeCadButton->hide();
 
     this->ui->VoxelizerDial->setValue(0);
+    this->ui->VoxelizerDial->setDisabled(true);
     this->ui->ToPyDial->setValue(0);
+    this->ui->ToPyDial->setDisabled(true);
     this->ui->NurbsDial->setValue(0);
+    this->ui->NurbsDial->setDisabled(true);
     //connect(&this->FutureWatcher, SIGNAL (finished()), this, SLOT (slot_finished()));
 
     this->ui->logoView->setScene(&logoScene);
@@ -69,13 +72,13 @@ MainWindow::~MainWindow()
 void MainWindow::on_STEPFileSelector_clicked()
 {
     QStringList fileNames;
-    fileNames = QFileDialog::getOpenFileNames(this, tr("Open File"),"/path/to/file/",tr("STP File (*.stp)"));
+    fileNames = QFileDialog::getOpenFileNames(this, tr("Open File"),"/path/to/file/",tr("STEP File (*.step)"));
     if(fileNames.size()==1){
         stpFile = fileNames.first();
         ui->STEPFileInput->setText(StringHelper::cropText(ui->STEPFileInput, stpFile));
         ui->STEPFileInput->setStyleSheet("QLabel { Color : black }");
     }else{
-        ui->STEPFileInput->setText("Select ONE stp input file!");
+        ui->STEPFileInput->setText("Select ONE step input file!");
         ui->STEPFileInput->setStyleSheet("QLabel { Color : red }");
     }
 }
@@ -83,13 +86,13 @@ void MainWindow::on_STEPFileSelector_clicked()
 void MainWindow::on_IGSFileSelector_clicked()
 {
     QStringList fileNames;
-    fileNames = QFileDialog::getOpenFileNames(this, tr("Open File"),"/path/to/file/",tr("IGS File (*.igs)"));
+    fileNames = QFileDialog::getOpenFileNames(this, tr("Open File"),"/path/to/file/",tr("IGES File (*.iges)"));
     if(fileNames.size()==1){
         igsFile = fileNames.first();
         ui->IGSFileInput->setText(StringHelper::cropText(ui->IGSFileInput, igsFile));
         ui->IGSFileInput->setStyleSheet("QLabel { Color : black }");
     }else{
-        ui->IGSFileInput->setText("Select ONE igs input file!");
+        ui->IGSFileInput->setText("Select ONE iges input file!");
         ui->IGSFileInput->setStyleSheet("QLabel { Color : red }");
     }
 }
@@ -118,9 +121,8 @@ void MainWindow::on_runButton_clicked()
         QThreadPool qpool;
         QFuture<void> future;
 
-
         /** Start the Voxelization Script **/
-        std::string parameterString = stpPath.toStdString() + " " + stpName.toStdString() + " " + forceScaling.toStdString() + " " + refinementLevel.toStdString();
+        std::string parameterString = stpPath.toStdString() + " " + stpName.toStdString() + " " + forceScaling.toStdString() + " " + refinementLevel.toStdString() + " " + (isFixtureFileSupplied ? "1" : "0");
         std::string scriptCADToVoxel = "./../../CADTopOp.sh " + parameterString;
 
         future = QtConcurrent::run(&qpool, &this->scriptCaller, &ScriptCaller::callScript, scriptCADToVoxel);
@@ -206,8 +208,8 @@ bool MainWindow::checkInput(QString igsName, QString stpName){
     flag = verificator.isEmpty(ui->RefinementEdit, ui->ErrorField_refinement, "Please enter the refinement") && flag;
 
     flag = verificator.areSame(stpName, igsName, ui->STEPFileInput, ui->IGSFileInput) && flag;
-    flag = verificator.checkFileName(this->stpFile, stpName, ".stp", ui->STEPFileInput) && flag;
-    flag = verificator.checkFileName(this->igsFile, igsName, ".igs", ui->IGSFileInput) && flag;
+    flag = verificator.checkFileName(this->stpFile, stpName, ".step", ui->STEPFileInput) && flag;
+    flag = verificator.checkFileName(this->igsFile, igsName, ".iges", ui->IGSFileInput) && flag;
     return flag;
 }
 
@@ -257,4 +259,16 @@ void MainWindow::on_startFreeCadButton_clicked()
     StringHelper::getPathAndName(stepOutputFile, outputFile, outputPath);
     std::string freeCADCommand = "freecad " + outputFile.toStdString() + ".step " + " FusionForBoolean.step &";
     system(freeCADCommand.c_str());
+}
+
+void MainWindow::on_checkBox_stateChanged(int newState)
+{
+    if(newState){
+        this->ui->checkBoxWarningLabel->setText("Make sure that fixture file name is of the form \'StepFileName\'_Fixed.step!");
+        this->ui->checkBoxWarningLabel->setStyleSheet("QLabel { Color : red }");
+        this->isFixtureFileSupplied = 1;
+    }else{
+        this->ui->checkBoxWarningLabel->setText("");
+        this->isFixtureFileSupplied = 0;
+    }
 }
