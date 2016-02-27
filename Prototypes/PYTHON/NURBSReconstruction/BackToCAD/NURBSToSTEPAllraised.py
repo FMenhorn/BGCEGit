@@ -98,7 +98,7 @@ def export_step(nurbs_idx, nurbs_pts, output_file_name, nonchanging_file_name, a
 
     print "Exporting RAW file..."
     __objs__ = FreeCAD.getDocument("tmp").findObjects()
-    Import.export(__objs__, "./"+output_file_name+"_RAW.step")
+    Import.export(__objs__, output_file_name+"_RAW.step")
     print "Output file " + output_file_name+"_RAW.step" + " exported."
 
 #    for obj in __objs__:
@@ -144,7 +144,7 @@ def export_step(nurbs_idx, nurbs_pts, output_file_name, nonchanging_file_name, a
 
         print "Exporting ALLOWED file..."
         __objs__ = FreeCAD.getDocument("tmp").findObjects()
-        Import.export(__objs__, "./"+output_file_name+"_ALLOWED.step")
+        Import.export(__objs__, output_file_name+"_ALLOWED.step")
         print "Output file " + output_file_name+"_ALLOWED.step" + " exported."
 
     if len(nonchanging_file_name) != 0:
@@ -165,7 +165,7 @@ def export_step(nurbs_idx, nurbs_pts, output_file_name, nonchanging_file_name, a
 
         print "Exporting BOOLEANED file..."
         __objs__.append(FreeCAD.getDocument("tmp").getObject("FusionTool"))
-        Import.export(__objs__, "./"+output_file_name+"_BOOLEANED.step")
+        Import.export(__objs__, output_file_name+"_BOOLEANED.step")
         print "Output file " + output_file_name+"_BOOLEANED.step" + " exported."
 
     print "Export done."
