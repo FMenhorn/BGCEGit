@@ -22,6 +22,9 @@ cube_edges = [[0,1],[0,2],[1,3],[2,3],
 
 
 def coarsen_dataset(coarsening_steps, fine_dataset, res, dims):
+
+    coarsening_threshold = 0.0
+
     if coarsening_steps > 0:
         coarse_res = 2.0 * res
         #shrinking dimensions in coarsening step
@@ -53,7 +56,7 @@ def coarsen_dataset(coarsening_steps, fine_dataset, res, dims):
             new_o = o+.5*res*np.array([1,1,1])
             key = tuple(new_o)
 
-            if np.mean(new_data) > 0.125:
+            if np.mean(new_data) > coarsening_threshold:
                 coarse_dataset[key] = -1
 
         #recursively coarsen
