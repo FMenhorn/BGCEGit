@@ -51,6 +51,7 @@ ColorHandler::ColorHandler() {
     Handle_XCAFApp_Application anApp = XCAFApp_Application::GetApplication();
     anApp->NewDocument("MDTV-XCAF", aDocStep);
     anApp->NewDocument("MDTV-XCAF", aDocIges);
+    anApp->NewDocument("MDTV-XCAF", aDocStepActive);
 
     if(!areDocumentsValid()){
     	std::cout << "ColorHandler::ColorHandler: Documents not valid!!" << std::endl;
@@ -71,6 +72,10 @@ Handle_TDocStd_Document& ColorHandler::getDocIges(){
 	return aDocIges;
 }
 
+Handle_TDocStd_Document& ColorHandler::getDocStepActive(){
+	return aDocStepActive;
+}
+
 void ColorHandler::initializeMembers() {
 	buildShapesFromDocs();
 }
@@ -78,6 +83,10 @@ void ColorHandler::initializeMembers() {
 void ColorHandler::buildShapesFromDocs(){
 	buildShapeFromDoc(aDocStep, shapeStep);
 	buildShapeFromDoc(aDocIges, shapeIges);
+}
+
+void ColorHandler::buildActiveShapeFromDocs(){
+	buildShapeFromDoc(aDocStepActive, shapeStepActive);
 }
 
 void ColorHandler::buildShapeFromDoc(const Handle_TDocStd_Document& doc, TopoDS_Shape& shape) {
@@ -109,10 +118,8 @@ void ColorHandler::getFixtureShapes(ListOfShape& listOfShapes) {
 	getColoredFaces(listOfShapes, unusedVec, red, false);
 }
 
-void ColorHandler::getActiveShapes(ListOfShape& listOfShapes) {
-	Quantity_Color green(0,1,0,Quantity_TOC_RGB);
-	std::vector<std::vector<double>> unusedVec;
-	getColoredFaces(listOfShapes, unusedVec, green, false);
+void ColorHandler::getActiveShape(TopoDS_Shape& topoDSShape) {
+	topoDSShape = shapeStepActive;
 }
 
 void ColorHandler::getLoadShapes(ListOfShape& listOfShapes, std::vector<std::vector<double>>& listOfLoads) {
