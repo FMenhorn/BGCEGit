@@ -35,8 +35,9 @@ void Voxelizer::voxelize(const TopoDS_Shape topoDSShape,const int refinementLeve
     std::vector<int> voxelDimension(3);
     getBoundingBox(topoDSShape, origin, shapeDimensions);
 
-    for (size_t i = 0; i < 3; i++)
+    for (size_t i = 0; i < 3; i++){
     	voxelDimension[i] = pow(2, refinementLevel) * shapeDimensions[i];
+	}
 
     //Voxel_BoolDS* voxelShapeOCE = new Voxel_BoolDS(); // Result holder of the voxelization
     Standard_Integer progress; // Progress of voxelization (useful in case of parallel code)
