@@ -28,27 +28,29 @@ def fit_NURBS(A, B1, B2, C, regularPoints, vertices, quads, fine_vertices, param
     print "fair_coefs.shape = "+str(fair_coefs.shape)
     print "Done."
 
-    print "Sparsify..."
+    print "Sparsifying..."
     sparse_coefs = sp.csr_matrix(coefs)
     sparse_fair_coefs = sp.csr_matrix(fair_coefs)
     print "Done."
 
-    print "Concatenating matrices."
+    print "Concatenating matrices...."
 
     joined_verts = sp.vstack([scipy.array(fine_vertices), scipy.zeros([fair_coefs.shape[0], 3])]).todense()
     joined_coefs = sp.vstack([sparse_coefs, fairnessWeight * sparse_fair_coefs])
     print "Done."
 
-    print "Least squares..."
+    print "Solving least-squares problem..."
     vertices = solve_least_squares_problem(joined_coefs, joined_verts)
     print "Done."
+    print "Writing files..."
     write_matrix_to_csv(vertices,'vertices.csv')
     write_matrix_to_asc(vertices,'vertices.asc')
     write_matrix_to_asc(fine_vertices,'vertices_fine.asc')
-
+    print "Done."
+    print "Calculating NURBS control points..."
 
     NURBSMatrix, NURBSIndices = createNURBSMatricesAllraised(quads,newA,newB1,newB2,newC,regularPoints,vertices)
-
+    print "Done."
     return NURBSMatrix, NURBSIndices
 
 

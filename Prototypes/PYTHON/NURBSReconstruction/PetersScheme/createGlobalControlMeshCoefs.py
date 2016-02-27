@@ -8,15 +8,27 @@ from getBezierPointCoefs import getBezierPointCoefs
 from getBicubicBezierPointCoefs import getBicubicBezierPointCoefs
 from getExtraOrdCornerIndexMask import getExtraOrdCornerIndexMask
 
+
 def createGlobalControlMeshCoefs(parameterCoordinates, quad_list, AVertexList, B1VertexList, B2VertexList, CVertexList,
                                      quad_control_point_indices):
-    """
+    '''
     Takes, for N datapoints, an array parameterCoordinates[Nx3](for every
-    datapoint: first entry the quad index, second and third parameterson a patch that spans over [0,1]x[0,1]
+    datapoint: first entry the quad index, second and third parameters
+    on a patch that spans over [0,1]x[0,1]
     for the quad. The function computes the coefficient matrix for between
     each datapoint and the array of M/16 quads x [4x4] vertex control points,
-    outputting the coefficients as an N x M matrix.
-    """
+    outputting the coefficients as an N x M numpy.ndarray
+
+    @param parameterCoordinates: Nx3 numpy.ndarray of datapoint parameters
+    @param quad_list:
+    @param AVertexList:
+    @param B1VertexList:
+    @param B2VertexList:
+    @param CVertexList:
+    @param quad_control_point_indices: (M/16)x16 numpy.ndarray of control points on each quad
+    @return: NxM numpy.ndarray of coefficients, maximum 22 nonzero entries per row
+    '''
+
 
     N = parameterCoordinates.shape[0]
     M = quad_control_point_indices.shape[0] * quad_control_point_indices.shape[1]
@@ -44,7 +56,7 @@ def createGlobalControlMeshCoefs(parameterCoordinates, quad_list, AVertexList, B
 
     coefsRawTemp = np.zeros((4,7,4,4))
 
-    print "Main Loop Coeffs"
+    print "Main Loop Coefs"
     for p in range(N):
         if p%100 == 0:
             print "processing point %d of %d..." % (p, N)
