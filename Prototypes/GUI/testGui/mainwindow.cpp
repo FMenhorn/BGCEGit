@@ -175,12 +175,12 @@ void MainWindow::on_runButton_clicked()
         start = std::chrono::system_clock::now();
         /** Start the Surface Fitting, Extraction and Back2CAD **/
         std::string cellsAndDimensionsPath = "./../../PYTHON/NURBSReconstruction";
-        std::string outputFileString = stpOutputPath.toStdString()+"/"+stpOutputName.toStdString();
+        std::string outputFileString = stpOutputPath.toStdString()+stpOutputName.toStdString();
         std::string fairnessWeight = ui->FairnessWeight->text().toStdString();
         std::string coarseningFactor = ui->Coarsening->text().toStdString();
         std::string fixedFileFullPathNameString = this->isFixtureFileSupplied ? stpPath.toStdString() + stpName.toStdString() + "_Fixed.step" : "";
         std::string booleanFileString = this->isOptimizationDomainSupplied ? stpPath.toStdString() + stpName.toStdString() + "_ToOptimize.step" : "";
-        parameterString = cellsAndDimensionsPath + " " + outputFileString + " " + fairnessWeight + " " + coarseningFactor + " "+ fixedFileFullPathNameString + " " + booleanFileString;
+        parameterString = cellsAndDimensionsPath + " " + stpFile.toStdString() + " " + outputFileString + " " + fairnessWeight + " " + coarseningFactor + " "+ fixedFileFullPathNameString + " " + booleanFileString;
         std::string scriptPython = "python ./../../PYTHON/NURBSReconstruction/runningScript.py " + parameterString;
 
         std::cout << scriptPython << std::endl;
@@ -284,7 +284,9 @@ void MainWindow::on_startFreeCadButton_clicked()
     QString outputFile;
     QString outputPath;
     StringHelper::getPathAndName(stepOutputFile, outputFile, outputPath);
-    std::string freeCADCommand = "freecad " + outputFile.toStdString() + ".step " + " FusionForBoolean.step &";
+    std::string freeCADCommand = "freecad " + outputFile.toStdString() + "_RAW.step " +
+            (isFixtureFileSupplied ? outputFile.toStdString() + "_BOOLEANED.step " : "") +
+            (isOptimizationDomainSupplied ? outputFile.toStdString() + "_ALLOWED.step" : "");
     system(freeCADCommand.c_str());
 }
 
