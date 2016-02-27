@@ -7,26 +7,22 @@ from PetersScheme.fitting import fit_NURBS
 from PetersScheme.quadvertGenerator import quad_vert_generator
 
 
-parser = argparse.ArgumentParser(description='Includes 5 arguments: '
-                                             '1)path to Cells and Dimensions 2)path to the output file '
-                                             '3)path to nonchanging file 4)fairnessWeight 5)coarsening_factor')
-parser.add_argument('path', type=str, help='path to Cells and Dimensions')
-parser.add_argument('output_file_name', type=str, help='path to the output file--given by the user')
-parser.add_argument('fairnessWeight', type=float, help='fairnessWeight')
-parser.add_argument('coarsening_factor', type=int, help='coarsening_factor')
-parser.add_argument('nonchanging_file_name', type=str, help='path to nonchanging file --given by the user')
-args, leftovers = parser.parse_known_args()
-if args.nonchanging_file_name is None:
-    nonchanging_file_name = ''
 
+#parser = argparse.ArgumentParser(description='Include path to Cells and Dimensions.')
+#parser.add_argument('path', type=str, help='path to Cells and Dimensions')
 #args = parser.parse_args()
 
 #####TESTING PATHS ######
-#path="./DualContouring/cantilever/"
-#output_file_name = "./Cantilever_NURBS_AllRaised.step"
-#fairnessWeight = 0.5
-#coarsening_factor = 2
-#nonchanging_file_name = "./BackToCAD/Cone.step"
+path="./DualContouring/cantilever/"
+output_file_name = "Cantilever_NURBS_AllRaised"
+
+# file holding domain bounds (as geometry) that restrict the RAW output from Peter's scheme
+allowed_domains_file_name = "./BlackWhiteCube.step"
+
+# file holding domains that (as geometry) that need to be as they are
+nonchanging_file_name = "./BackToCAD/Cone.step"
+coarsening_factor = 2
+fairnessWeight = 0.5
 #######
 
 
@@ -42,8 +38,10 @@ print "### Peters' Scheme ### "
 NURBSMatrix, NURBSIndices = fit_NURBS(A, B1, B2, C, regularPoints, vertices, quads, fine_vertices, parameters, args.fairnessWeight)
 print "### Peters' Scheme DONE### "
 
+# TODO: nonchanging_file_name should be a zero string if not provided by the user
+
 print "### Generating Step File ###"
-export_step( NURBSIndices, NURBSMatrix, args.output_file_name, args.nonchanging_file_name)
+export_step( NURBSIndices, NURBSMatrix, output_file_name, nonchanging_file_name, allowed_domains_file_name)
 print "### Step File DONE### "
 
 
