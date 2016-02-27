@@ -47,8 +47,8 @@ def extraction_algorithm(fine_data, resolutions, dimensions):
     print "### Projecting Datapoints onto coarse quads ###"
     # do projection of fine verts on coarse quads
     param = create_parameters(verts, quads)
-    print "### Projecting Datapoints onto coarse quads DONE ###"
 
+    print "### Projecting Datapoints onto coarse quads DONE ###"
     return verts_out_dc, quads_out_dc, quads, param
 
 

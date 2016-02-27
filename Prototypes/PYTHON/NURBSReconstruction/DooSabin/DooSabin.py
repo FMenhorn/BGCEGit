@@ -133,7 +133,6 @@ def DooSabin(vertices, faces, alpha, iter):
         face_ordered = [vertices_children[vert._id][0][1]]
         parent_faces_ordered = [vertices_children[vert._id][0][0]]
         current_face = parent_faces[0]
-
         for i in range(1, n, 1):
             j = 0
             while (not current_face.isAdjacent(parent_faces[j])) or (new_face_vertices[j] in face_ordered):

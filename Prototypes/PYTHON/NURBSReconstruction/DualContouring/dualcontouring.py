@@ -20,6 +20,58 @@ cube_edges = [[0,1],[0,2],[1,3],[2,3],
               [4,6],[4,5],[6,7],[5,7],
               [1,5],[3,7],[0,4],[2,6]]
 
+
+def coarsen_dataset(coarsening_steps, fine_dataset, res, dims):
+
+    coarsening_threshold = 0.0
+
+    if coarsening_steps > 0:
+        coarse_res = 2.0 * res
+        #shrinking dimensions in coarsening step
+        coarse_dims={}
+        coarse_dims['xmin']=dims['xmin']+.5 * res
+        coarse_dims['xmax']=dims['xmax']-.5 * res
+        coarse_dims['ymin']=dims['ymin']+.5 * res
+        coarse_dims['ymax']=dims['ymax']-.5 * res
+        coarse_dims['zmin']=dims['zmin']+.5 * res
+        coarse_dims['zmax']=dims['zmax']-.5 * res
+
+        coarse_dataset = {}
+        # traverse all cells (each one has 4 datavalues) and combine all 4 values into one
+        for x, y, z in it.product(np.arange(dims['xmin'], dims['xmax'], res),
+                                  np.arange(dims['ymin'], dims['ymax'], res),
+                                  np.arange(dims['zmin'], dims['zmax'], res)):
+            o = np.array([float(x), float(y), float(z)])
+
+            new_data = []
+            for v in cube_verts:
+                position = (o + v * res)
+                key = tuple(position)
+                if key in fine_dataset:
+                    c = 1.0
+                else:
+                    c = 0.0
+                new_data.append(c)
+
+            new_o = o+.5*res*np.array([1,1,1])
+            key = tuple(new_o)
+
+            if np.mean(new_data) > coarsening_threshold:
+                coarse_dataset[key] = -1
+
+        #recursively coarsen
+        return coarsen_dataset(coarsening_steps-1, coarse_dataset, coarse_res, coarse_dims)
+    else:
+        #on last level surround structure with empty cells by extending dims
+        dims['xmin']=dims['xmin']-.5 * res
+        dims['xmax']=dims['xmax']+.5 * res
+        dims['ymin']=dims['ymin']-.5 * res
+        dims['ymax']=dims['ymax']+.5 * res
+        dims['zmin']=dims['zmin']-.5 * res
+        dims['zmax']=dims['zmax']+.5 * res
+
+        return fine_dataset, res, dims
+
 # Use non-linear root finding to compute intersection point
 def estimate_hermite_easy(data, v0, v1, res, res_fine, coarse_level):
     t0 = .5
@@ -52,17 +104,26 @@ def estimate_hermite(data, v0, v1, res, res_fine, coarse_level):
     return x0
 
 
-def tworesolution_dual_contour(dataset, resolutions, dims):
-    [dc_verts_fine, dc_quads_fine, dc_manifold_edges_fine] = dual_contour(dataset,
+def tworesolution_dual_contour(fine_dataset, resolutions, dims):
+    [dc_verts_fine, dc_quads_fine, dc_manifold_edges_fine] = dual_contour(fine_dataset,
                                                                           resolutions['fine'],
                                                                           resolutions['fine'],
                                                                           dims,
                                                                           coarse_level=False,
                                                                           do_manifold_treatment=False)
-    [dc_verts_coarse, dc_quads_coarse, dc_manifold_edges_coarse] = dual_contour(dataset,
-                                                                                resolutions['coarse'],
+
+    # compute necessary coarsening steps from given coarse resolution.
+    coarsening_steps = int(np.log(resolutions['coarse'])/np.log(2))
+    assert coarsening_steps > 0 # at least one coarsening step has to be done!
+    coarse_dataset, coarse_res, coarse_dims = coarsen_dataset(coarsening_steps,
+                                                              fine_dataset,
+                                                              resolutions['fine'],
+                                                              dims)
+
+    [dc_verts_coarse, dc_quads_coarse, dc_manifold_edges_coarse] = dual_contour(coarse_dataset,
+                                                                                coarse_res,
                                                                                 resolutions['fine'],
-                                                                                dims,
+                                                                                coarse_dims,
                                                                                 coarse_level=True,
                                                                                 do_manifold_treatment=True)
 
