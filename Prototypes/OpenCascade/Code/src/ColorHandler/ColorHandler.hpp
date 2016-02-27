@@ -45,9 +45,20 @@ public:
 	Handle_TDocStd_Document& getDocIges();
 
 	/**
+	 * Returns the Document aDocStepActive
+	 * @return
+	 */
+	Handle_TDocStd_Document& getDocStepActive();
+
+	/**
 	 * Initializes the other members of the class
 	 */
 	void initializeMembers();
+
+	/**
+	 * if we have an active shape
+	 */
+	void buildActiveShapeFromDocs();
 
 	/**
 	 * Calls getColoredFaces with color red
@@ -59,7 +70,7 @@ public:
 	 * Calls getColoredFaces with color blue
 	 * @param listOfShapes holds all shapes with the color blue
 	 */
-	void getActiveShapes(ListOfShape& listOfShapes);
+	void getActiveShape(TopoDS_Shape& topoDSShape);
 
 	/**
 	 * Calls getColoredFaces with color green
@@ -70,13 +81,15 @@ public:
 	/**
      * Returns the faces of the geometry as a TopoDS_Shape.
      */
-	void getCompleteShape(TopoDS_Shape& TopoDSShape);
+	void getCompleteShape(TopoDS_Shape& topoDSShape);
 
 private:
     Handle_TDocStd_Document aDocStep;
+    Handle_TDocStd_Document aDocStepActive;
     Handle_TDocStd_Document aDocIges;
     Handle_XCAFDoc_ColorTool myColors;
     TopoDS_Shape shapeStep;
+    TopoDS_Shape shapeStepActive;
     TopoDS_Shape shapeIges;
 
     /**

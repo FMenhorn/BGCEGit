@@ -37,10 +37,14 @@
 int main(int argc, char** argv){
 
 	std::cout << "Starting CADToVoxel Pipeline..." << std::endl;
-	if ( argc != 5 )
+	if ( argc != 6 )
 	{
 		std::cout << std::endl;
-		std::cout << "CADToVoxel: Usage: " << argv[0] << " /path/to/file/ fileName forceScalingFactor refinementLevel" << std::endl;
+		std::cout << "CADToVoxel: Usage: " << argv[0] << " /path/to/file/ fileName forceScalingFactor refinementLevel activeFileSpecified" << std::endl;
+		std::cout << "And not: " << std::endl;
+		for(int i = 0; i < argc; i++){
+			std::cout << argv[i];
+		}
 		std::cout << std::endl;
 
 		return -1;
@@ -50,10 +54,10 @@ int main(int argc, char** argv){
 	std::string filePath = argv[1];
 	std::string fileName = argv[2];
 	double forceScalingFactor = atof(argv[3]);
-	std::cout << forceScalingFactor << std::endl;
 	assert(forceScalingFactor>0);
     int refinementLevel = atoi(argv[4]);
     assert(refinementLevel>=0);
+    bool activeFileSpecified = atoi(argv[5]);
 
 	/**
 	 *  INPUT
@@ -61,16 +65,32 @@ int main(int argc, char** argv){
 	Reader reader(filePath, fileName);
 	reader.read();
 
+	STEPCAFReader activeReader;
+	if(activeFileSpecified){
+		activeReader.read(filePath+fileName+"_Fixed.step");
+	}
+
     /**
      * FACE DETECTION
      */
     ColorHandler colorDetector;
     reader.transfer(colorDetector);
+
+    if(activeFileSpecified){
+    	activeReader.transfer(colorDetector.getDocStepActive());
+    	colorDetector.buildActiveShapeFromDocs();
+    }
+
     colorDetector.initializeMembers();
 	std::vector<TopoDS_Face> facesVector;
 
     TopoDS_Shape fullShape;
     colorDetector.getCompleteShape(fullShape);
+
+    TopoDS_Shape activeShape;
+    if(activeFileSpecified){
+    	colorDetector.getActiveShape(activeShape);
+    }
 
 	ListOfShape fixtureFacesList;
 	colorDetector.getFixtureShapes(fixtureFacesList);
@@ -84,29 +104,30 @@ int main(int argc, char** argv){
 		}
 	}
 
-	ListOfShape activeFacesList;
-	colorDetector.getActiveShapes(activeFacesList);
+	/*ListOfShape activeFacesList;
+	colorDetector.getActiveShapes(activeFacesList);*/
 
     /**
      * VOXELIZE
      */
     Voxelizer voxelizer;
-	VoxelShape voxelShape;
 	std::vector<std::vector<VoxelShape>> outputVoxelVector;
     VoxelIndexCalculator voxelIndexCalculator;
 
     /**Full Body Treatment**/
+    std::cout << "###Full Body###" << std::endl;
+	VoxelShape voxelShape;
+	std::vector<VoxelShape> bodyVector;
     voxelizer.voxelize(fullShape, refinementLevel, voxelShape);
     voxelIndexCalculator.setDimensions(voxelShape.getVoxelDimension());
     voxelIndexCalculator.setOrigin(voxelShape.getOrigin());
     voxelizer.fillVolume(voxelShape);
     voxelIndexCalculator.calculateIndexForVoxelShape(voxelShape, true);
-
-	std::vector<VoxelShape> bodyVector;
 	bodyVector.push_back(voxelShape);
     outputVoxelVector.push_back(bodyVector);
 
 	/**Fixture Treatment**/
+    std::cout << "###Fixture Body###" << std::endl;
 	std::vector<VoxelShape> fixtureVector;
 	fixtureVector.resize(fixtureFacesList.getSize());
 	voxelizer.voxelizeWholeVector(refinementLevel, false, fixtureFacesList, fixtureVector);
@@ -114,20 +135,34 @@ int main(int argc, char** argv){
     outputVoxelVector.push_back(fixtureVector);
 
     /**Load Treatment**/
+    std::cout << "###Load Body###" << std::endl;
 	std::vector<VoxelShape> loadVector;
-	std::vector<VoxelShape> activeVector; /**Treat Loadelements as active cells aswell**/
-	activeVector.resize(loadFacesList.getSize()+activeFacesList.getSize());
+	//std::vector<VoxelShape> activeVector; /**Treat Loadelements as active cells aswell**/
+	//activeVector.resize(loadFacesList.getSize()+activeFacesList.getSize());
 	loadVector.resize(loadFacesList.getSize());
 	voxelizer.voxelizeWholeVector(refinementLevel, false, loadFacesList, loadVector);
 	voxelIndexCalculator.calculateIndicesForWholeVector(loadVector, false);
-	voxelizer.voxelizeWholeVector(refinementLevel, true, loadFacesList, activeVector);
+	//voxelizer.voxelizeWholeVector(refinementLevel, true, loadFacesList, activeVector);
     outputVoxelVector.push_back(loadVector);
 
     /**Active Treatment**/
-    voxelizer.voxelizeWholeVector(refinementLevel, true, activeFacesList, activeVector, loadFacesList.getSize());
-    voxelIndexCalculator.calculateIndicesForWholeVector(activeVector, true);
-    outputVoxelVector.push_back(activeVector);
+    std::cout << "###Active Body###" << std::endl;
+	VoxelShape voxelShapeActive;
+	std::vector<VoxelShape> activeVector;
+	if(activeFileSpecified){
+		voxelizer.voxelize(activeShape, refinementLevel, voxelShapeActive);
+		voxelizer.fillVolume(voxelShapeActive);
+		voxelIndexCalculator.calculateIndexForVoxelShape(voxelShapeActive, true);
+		activeVector.push_back(voxelShapeActive);
+	}
+	outputVoxelVector.push_back(activeVector);
 
+    /*voxelizer.voxelizeWholeVector(refinementLevel, true, activeFacesList, activeVector, loadFacesList.getSize());
+    voxelIndexCalculator.calculateIndicesForWholeVector(activeVector, true);
+    outputVoxelVector.push_back(activeVector);*/
+
+	/**Passive Treatment**/
+    std::cout << "###Passive Body###" << std::endl;
     VoxelShape passiveShape;
     voxelIndexCalculator.calculatePassiveIndexFromBody(bodyVector[0], passiveShape);
     std::vector<VoxelShape> passiveVector;
