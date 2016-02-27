@@ -19,6 +19,8 @@
 #include <time.h>
 #include <unistd.h>
 
+#include <chrono>
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -143,13 +145,19 @@ void MainWindow::on_runButton_clicked()
         this->ui->topologyOptimizationLabel->setFont( normalFont );
         /**                                 **/
 
+
+        std::chrono::time_point<std::chrono::system_clock> start;
+        std::chrono::time_point<std::chrono::system_clock> end;
+        std::chrono::duration<double> elapsedSeconds;
+        start = std::chrono::system_clock::now();
         /** Start the Surface Fitting, Extraction and Back2CAD **/
         std::string cellsAndDimensionsPath = "./../../PYTHON/NURBSReconstruction";
         std::string outputFileString = stepOutputFile.toStdString();
-        std::string booleanFileString = booleanFile.toStdString();
         std::string fairnessWeight = ui->FairnessWeight->text().toStdString();
         std::string coarseningFactor = ui->Coarsening->text().toStdString();
-        parameterString = cellsAndDimensionsPath + " " + outputFileString + " " + fairnessWeight + " " + coarseningFactor + " " + booleanFileString;
+        std::string fixedFileFullPathNameString = this->isFixtureFileSupplied ? stpPath.toStdString() + stpName.toStdString() + "_Fixed.step" : "";
+        std::string booleanFileString = this->isOptimizationDomainSupplied ? stpPath.toStdString() + stpName.toStdString() + "_ToOptimize.step" : "";
+        parameterString = cellsAndDimensionsPath + " " + outputFileString + " " + fairnessWeight + " " + coarseningFactor + " "+ fixedFileFullPathNameString + " " + booleanFileString;
         std::string scriptPython = "python ./../../PYTHON/NURBSReconstruction/runningScript.py " + parameterString;
 
         future = QtConcurrent::run(&qpool, &this->scriptCaller, &ScriptCaller::callScript, scriptPython);
@@ -158,6 +166,9 @@ void MainWindow::on_runButton_clicked()
         this->rotateDial(this->ui->NurbsDial, future);
         this->ui->surfaceFittingLabel->setFont( normalFont );
         /**                                 **/
+        end = std::chrono::system_clock::now();
+        elapsedSeconds = end-start;
+        std::cout << "###SURFACE-Fitting: Elapsed Time: " << elapsedSeconds.count() << " Ref: " << refinementLevel.toStdString() << std::endl;
 
         this->ui->startFreeCadButton->show();
     }
@@ -230,21 +241,6 @@ void MainWindow::on_Output_selector_clicked()
     }
 }
 
-void MainWindow::on_BooleanFileSelector_clicked()
-{
-    QStringList fileNames;
-    fileNames = QFileDialog::getOpenFileNames(this, tr("Open File"),"/path/to/file/",tr("STEP File (*.step)"));
-    if(fileNames.size() == 1 && fileNames.first().size() > 0){
-        booleanFile = fileNames.first();
-        ui->BooleanFileInput->setText(StringHelper::cropText(ui->BooleanFileInput, booleanFile));
-        ui->BooleanFileInput->setStyleSheet("QLabel { Color : black }");
-    }else{
-        booleanFile = "";
-        ui->BooleanFileInput->setText("Select ONE step input file!");
-        ui->BooleanFileInput->setStyleSheet("QLabel { Color : red }");
-    }
-}
-
 void MainWindow::hide_ErrorFields(){
     ui->ErrorField_force->hide();
     ui->ErrorField_refinement->hide();
@@ -270,5 +266,17 @@ void MainWindow::on_checkBox_stateChanged(int newState)
     }else{
         this->ui->checkBoxWarningLabel->setText("");
         this->isFixtureFileSupplied = 0;
+    }
+}
+
+void MainWindow::on_checkBox_2_stateChanged(int newState)
+{
+    if(newState){
+        this->ui->checkBoxWarningLabel_2->setText("Make sure that fixture file name is of the form \'StepFileName\'_ToOptimize.step!");
+        this->ui->checkBoxWarningLabel_2->setStyleSheet("QLabel { Color : red }");
+        this->isOptimizationDomainSupplied = 1;
+    }else{
+        this->ui->checkBoxWarningLabel_2->setText("");
+        this->isOptimizationDomainSupplied = 0;
     }
 }

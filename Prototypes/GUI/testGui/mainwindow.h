@@ -38,8 +38,6 @@ private slots:
 
     void on_Output_selector_clicked();
 
-    void on_BooleanFileSelector_clicked();
-
     void hide_ErrorFields();
 
     void setValueOfToPyDial(int value);
@@ -52,15 +50,17 @@ private slots:
 
     void on_checkBox_stateChanged(int arg1);
 
+    void on_checkBox_2_stateChanged(int arg1);
+
 private:
     Ui::MainWindow *ui;
 
     QFutureWatcher<void> futureWatcher;
     QString stpFile;
     QString igsFile;
-    QString booleanFile = "";
     QString stepOutputFile;
     bool isFixtureFileSupplied = 0;
+    bool isOptimizationDomainSupplied = 0;
 
     ScriptCaller scriptCaller;
 
