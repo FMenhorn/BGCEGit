@@ -12,7 +12,8 @@
 #include <QGraphicsPixmapItem>
 #include <QGraphicsScene>
 
-#include "ScriptCaller.h"
+
+#include "scriptcaller.h"
 
 namespace Ui {
 class MainWindow;
@@ -33,8 +34,6 @@ private slots:
 
     void on_runButton_clicked();
 
-    void slot_finished();
-
     bool checkInput(QString igsName, QString stpName);
 
     void on_Output_selector_clicked();
@@ -43,10 +42,18 @@ private slots:
 
     void hide_ErrorFields();
 
+    void setValueOfToPyDial(int value);
+
+    void on_startFreeCadButton_clicked();
+
+    void rotateDial(QDial* dial,const QFuture<void>& future);
+
+    void resetDials();
+
 private:
     Ui::MainWindow *ui;
 
-    QFutureWatcher<void> FutureWatcher;
+    QFutureWatcher<void> futureWatcher;
     QString stpFile;
     QString igsFile;
     QString booleanFile = "";
