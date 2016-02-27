@@ -15,9 +15,20 @@ parser.add_argument('output_file_name', type=str, help='path to the output file-
 parser.add_argument('fairnessWeight', type=float, help='fairnessWeight')
 parser.add_argument('coarsening_factor', type=int, help='coarsening_factor')
 parser.add_argument('nonchanging_file_name', type=str, help='path to nonchanging file --given by the user')
+parser.add_argument('allowed_domains_file_name', type=str, help='path to allowed domains file --given by the user')
 args, leftovers = parser.parse_known_args()
+
+## todo JC fix this!
 if args.nonchanging_file_name is None:
     nonchanging_file_name = ''
+else:
+    nonchanging_file_name = args.nonchanging_file_name
+
+## todo JC fix this!
+if args.allowed_domains_file_name is None:
+    allowed_domains_file_name = ''
+else:
+    allowed_domains_file_name = args.allowed_domains_file_name
 
 #args = parser.parse_args()
 
@@ -42,8 +53,10 @@ print "### Peters' Scheme ### "
 NURBSMatrix, NURBSIndices = fit_NURBS(A, B1, B2, C, regularPoints, vertices, quads, fine_vertices, parameters, args.fairnessWeight)
 print "### Peters' Scheme DONE### "
 
+# TODO: nonchanging_file_name should be a zero string if not provided by the user
+
 print "### Generating Step File ###"
-export_step( NURBSIndices, NURBSMatrix, args.output_file_name, args.nonchanging_file_name)
+export_step( NURBSIndices, NURBSMatrix, args.output_file_name, nonchanging_file_name, allowed_domains_file_name)
 print "### Step File DONE### "
 
 
