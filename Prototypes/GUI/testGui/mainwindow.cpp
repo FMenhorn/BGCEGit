@@ -35,23 +35,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->RefinementEdit->setValidator(new QIntValidator(0, 10, this));
     ui->Coarsening->setValidator(new QIntValidator(0, 10000000, this));
 
-   /* ui->IGSFileInput->setText("/home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/TestGeometry/CantileverColoredNew/CantiLeverWithLoadAtEndSmallerMovedLoad.igs");
-    ui->STEPFileInput->setText("/home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/TestGeometry/CantileverColoredNew/CantiLeverWithLoadAtEndSmallerMovedLoad.stp");
-
-    ui->BooleanFileInput->setText("/home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/PYTHON/Back2CAD/Cone.step");
-    ui->STEPOutput->setText("/home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/GUI/build-testGui-Desktop-Debug/testBitch.step");
-    igsFile = ui->IGSFileInput->text();
-    stpFile = ui->STEPFileInput->text();
-    booleanFile = ui->BooleanFileInput->text();
-    stepOutputFile = ui->STEPFileInput->text();
-    ui->RefinementEdit->setText("0");
-    ui->ForceEdit->setText("1");
-    ui->Coarsening->setText("2");
-    ui->FairnessWeight->setText("0.5");*/
     this->hide_ErrorFields();
-    //this->ui->progressBar->setMinimum(0);
-    //this->ui->progressBar->setMaximum(0);
-    //this->ui->progressBar->hide();
     this->ui->startFreeCadButton->hide();
 
     this->ui->VoxelizerDial->setValue(0);
@@ -59,9 +43,7 @@ MainWindow::MainWindow(QWidget *parent) :
     this->ui->ToPyDial->setValue(0);
     this->ui->ToPyDial->setDisabled(true);
     this->ui->NurbsDial->setValue(0);
-
     this->ui->NurbsDial->setDisabled(true);
-    //connect(&this->FutureWatcher, SIGNAL (finished()), this, SLOT (slot_finished()));
 
     this->ui->logoView->setScene(&logoScene);
     logoItem.setPixmap(*logoPicture);
@@ -157,6 +139,11 @@ void MainWindow::on_runButton_clicked()
         this->ui->voxelizationLabel->setFont( normalFont );
         /**                                 **/
 
+        /*std::string vtkPath = "./../../OpenCascade/Code/";
+        parameterString = "python ./../../OpenCascade/Code/vtkToPngPrototype.py " + vtkPath + " " + stpName.toStdString();
+        std::cout << parameterString << std::endl;
+        scriptCaller.callScript(parameterString);*/
+
         /** Start ToPy **/
         parameterString = stpName.toStdString();
         std::string scriptToPy = "./../../ToPyRunner.sh " + parameterString;
@@ -185,7 +172,6 @@ void MainWindow::on_runButton_clicked()
 
         std::cout << scriptPython << std::endl;
         system(scriptPython.c_str());
-   //}
 
 
         future = QtConcurrent::run(&qpool, &this->scriptCaller, &ScriptCaller::callScript, scriptPython);
