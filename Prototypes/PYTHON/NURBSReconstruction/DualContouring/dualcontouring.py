@@ -23,7 +23,7 @@ cube_edges = [[0, 1], [0, 2], [1, 3], [2, 3],
 
 
 def coarsen_dataset(coarsening_steps, fine_dataset):
-    coarsening_threshold = 0.5
+    coarsening_threshold = 0.125
 
     if coarsening_steps > 0:
         # calculate coarse resolution
