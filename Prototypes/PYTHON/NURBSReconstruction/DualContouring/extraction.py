@@ -44,6 +44,8 @@ def extraction_algorithm(fine_data, resolutions, dimensions):
     for i in range(N_quads['coarse']):
         quads['coarse'][i]=Quad(i,quads_out_dc['coarse'],verts_out_dc['coarse'])
 
+    assert quads['coarse'].__len__() > 0
+
     print "### Projecting Datapoints onto coarse quads ###"
     # do projection of fine verts on coarse quads
     param = create_parameters(verts, quads)
