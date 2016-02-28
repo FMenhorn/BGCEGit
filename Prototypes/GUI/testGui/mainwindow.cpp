@@ -115,6 +115,10 @@ void MainWindow::on_runButton_clicked()
     StringHelper::getPathAndName(stepOutputFile, stpOutputName, stpOutputPath);
     StringHelper::getPathAndName(igsFile, igsName, igsPath);
 
+    std::chrono::time_point<std::chrono::system_clock> start;
+    std::chrono::time_point<std::chrono::system_clock> end;
+    std::chrono::duration<double> elapsedSeconds;
+
     //if (this->checkInput(igsName, stpName)){
 
     //std::cout << "CHECK STILL DISABLED" << std::endl;
@@ -128,6 +132,7 @@ void MainWindow::on_runButton_clicked()
         QThreadPool qpool;
         QFuture<void> future;
 
+        start = std::chrono::system_clock::now();
         /** Start the Voxelization Script **/
         std::string parameterString = stpPath.toStdString() + " " + stpName.toStdString() + " " + forceScaling.toStdString() + " " + refinementLevel.toStdString() + " " + (isFixtureFileSupplied ? "1" : "0");
         std::string scriptCADToVoxel = "./../../CADTopOp.sh " + parameterString;
@@ -138,12 +143,16 @@ void MainWindow::on_runButton_clicked()
         this->rotateDial(this->ui->VoxelizerDial, future);
         this->ui->voxelizationLabel->setFont( normalFont );
         /**                                 **/
+        end = std::chrono::system_clock::now();
+        elapsedSeconds = end - start;
+        double voxelizerTime = elapsedSeconds.count();
 
         /*std::string vtkPath = "./../../OpenCascade/Code/";
         parameterString = "python ./../../OpenCascade/Code/vtkToPngPrototype.py " + vtkPath + " " + stpName.toStdString();
         std::cout << parameterString << std::endl;
         scriptCaller.callScript(parameterString);*/
 
+        start = std::chrono::system_clock::now();
         /** Start ToPy **/
         parameterString = stpName.toStdString();
         std::string scriptToPy = "./../../ToPyRunner.sh " + parameterString;
@@ -154,11 +163,10 @@ void MainWindow::on_runButton_clicked()
         this->rotateDial(this->ui->ToPyDial, future);
         this->ui->topologyOptimizationLabel->setFont( normalFont );
         /**                                 **/
+        end = std::chrono::system_clock::now();
+        elapsedSeconds = end - start;
+        double topyTime = elapsedSeconds.count();
 
-
-        std::chrono::time_point<std::chrono::system_clock> start;
-        std::chrono::time_point<std::chrono::system_clock> end;
-        std::chrono::duration<double> elapsedSeconds;
         start = std::chrono::system_clock::now();
         /** Start the Surface Fitting, Extraction and Back2CAD **/
         std::string cellsAndDimensionsPath = "./../../PYTHON/NURBSReconstruction";
@@ -182,7 +190,11 @@ void MainWindow::on_runButton_clicked()
         /**                                 **/
         end = std::chrono::system_clock::now();
         elapsedSeconds = end-start;
-        std::cout << "###SURFACE-Fitting: Elapsed Time: " << elapsedSeconds.count() << " Ref: " << refinementLevel.toStdString() << std::endl;
+        double surfaceFittingTime = elapsedSeconds.count();
+
+        std::cout << "###Voxelizer: Elapsed Time: " << voxelizerTime << std::endl;
+        std::cout << "###Topology Optimization: Elapsed Time: " << topyTime << std::endl;
+        std::cout << "###SURFACE-Fitting: Elapsed Time: " << surfaceFittingTime << std::endl;
 
         this->ui->startFreeCadButton->show();
     }
