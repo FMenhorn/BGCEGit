@@ -1,3 +1,6 @@
+from __future__ import division
+import numpy as np
+
 __author__ = 'benjamin'
 
 
@@ -12,7 +15,7 @@ def sample_data(f, res, dims):
 
 
 def sample_data3D(f, res, dims):
-    import numpy as np
+
     import itertools as it
 
     data = {}
@@ -100,3 +103,22 @@ def doubletorus_f_y(x):
 def doubletorus_f_x(x):
     import numpy as np
     return doubletorus_f(np.array([x[1],x[2]+2.5,x[0]-1.5]))
+
+
+def normalize_resolution(old_data,old_res,old_dims):
+    normalized_res = 1
+    scaling_factor = normalized_res/old_res
+
+    normalized_dims = {}
+    for key,value in old_dims.items():
+        normalized_dims[key] = scaling_factor*old_dims[key]
+
+    normalized_data = {}
+    for key,value in old_data.items():
+        if old_data[key]<0:
+            normalized_key = tuple(np.array(key) * scaling_factor)
+            normalized_data[normalized_key] = -1
+    print normalized_data
+    return normalized_data, normalized_res, normalized_dims, scaling_factor
+
+

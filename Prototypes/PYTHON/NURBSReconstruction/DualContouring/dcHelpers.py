@@ -11,13 +11,6 @@ __author__ = 'benjamin'
 ###################
 
 
-def is_inside(data, key):
-    c = True
-    if key in data:
-        c = data[key] > 0
-    return c
-
-
 def generate_vertex_usage_dict(dc_edges):
     vertex_usage_dict = {}  # here we save the edges using a certain node
 

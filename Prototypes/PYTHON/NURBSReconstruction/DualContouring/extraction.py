@@ -20,7 +20,7 @@ def read_from_path(path, coarse_scale):
     dimensions = cPickle.load(wfFile)
     wfFile.close()
 
-    res_fine = 1.0
+    res_fine = 1
     res_coarse = res_fine * coarse_scale
 
     resolutions = {'fine': res_fine,'coarse': res_coarse}
@@ -32,7 +32,7 @@ def read_from_path(path, coarse_scale):
 
 def extraction_algorithm(fine_data, resolutions, dimensions):
     print "### Dual Contouring ###"
-    [verts_out_dc, quads_out_dc, manifolds] = tworesolution_dual_contour(fine_data, resolutions, dimensions)
+    [verts_out_dc, quads_out_dc, manifolds, datasets] = tworesolution_dual_contour(fine_data, resolutions, dimensions)
     print "### Dual Contouring DONE ###"
 
     N_quads = {'coarse': quads_out_dc['coarse'].__len__(), 'fine': quads_out_dc['fine'].__len__()}
@@ -49,22 +49,24 @@ def extraction_algorithm(fine_data, resolutions, dimensions):
     param = create_parameters(verts, quads)
 
     print "### Projecting Datapoints onto coarse quads DONE ###"
-    return verts_out_dc, quads_out_dc, quads, param
+    print verts_out_dc
+    print quads_out_dc
+    return verts_out_dc, quads_out_dc, quads, param, datasets
 
 
 def extract_surface_from_path_w_plot(path, coarse_scale):
 
     fine_data, dimensions, resolutions = read_from_path(path, coarse_scale)
-    verts, quads, quad_objs, params = extraction_algorithm(fine_data=fine_data,
-                                                  resolutions=resolutions,
-                                                  dimensions=dimensions)
-    return verts, quads, params, dimensions, quad_objs
+    verts, quads, quad_objs, params, datasets = extraction_algorithm(fine_data=fine_data,
+                                                                     resolutions=resolutions,
+                                                                     dimensions=dimensions)
+    return verts, quads, params, dimensions, quad_objs, datasets
 
 
 def extract_surface_from_path_wrapped(path):
-    verts, quads, params, notused, notused = extract_surface_from_path_w_plot(path)
+    verts, quads, params, notused, notused, notused = extract_surface_from_path_w_plot(path)
     return verts, quads, params
 
 def extract_surface(path, coarse_scale):
-    verts, quads, params, notused, notused = extract_surface_from_path_w_plot(path, coarse_scale)
+    verts, quads, params, notused, notused, notused = extract_surface_from_path_w_plot(path, coarse_scale)
     return verts['coarse'], quads['coarse'], verts['fine'], params

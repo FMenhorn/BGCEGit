@@ -15,37 +15,44 @@ if __EXAMPLE__ == "Path":
     print "initializition is done later"
 
 elif __EXAMPLE__ == "Doubletorus":
-    dimensions = {'xmin': 0.0, 'xmax': 6.0, 'ymin': 2.0, 'ymax': 6.0, 'zmin': 3.0, 'zmax': 5.0}
-    plot_dims = {'xmin': 2.0, 'xmax': 6.0, 'ymin': 2.0, 'ymax': 5.0, 'zmin': 3.0, 'zmax': 5.0}
+    dimensions = {'xmin': 0.0, 'xmax': 8.0, 'ymin': 0.0, 'ymax': 8.0, 'zmin': 0.0, 'zmax': 8.0}
 
     res_fine = 1.0 / 8.0
-    res_coarse = 1.0 / 4.0
+    res_coarse = 1.0 / 2.0
+
+    fine_data = testing.dcSample.sample_data(testing.dcSample.doubletorus_f, res_fine, dimensions)
+
+    fine_data, res_fine, dimensions, scaling_factor = testing.dcSample.normalize_resolution(fine_data,res_fine,dimensions)
+    res_coarse = int(scaling_factor * res_coarse)
 
     resolutions = {'fine': res_fine, 'coarse': res_coarse}
-
-    fine_data = testing.dcSample.sample_data(testing.dcSample.doubletorus_f, resolutions['fine'], dimensions)
 
 elif __EXAMPLE__ == "Sphere":
     dimensions = {'xmin': 0.0, 'xmax': 8.0, 'ymin': 0.0, 'ymax': 8.0, 'zmin': 0.0, 'zmax': 8.0}
     plot_dims = {'xmin': 2.0, 'xmax': 6.0, 'ymin': 2.0, 'ymax': 6.0, 'zmin': 2.0, 'zmax': 6.0}
 
-    res_fine = 1.0 / 2.0
+    res_fine = 1.0 / 4.0
     res_coarse = 1.0
 
-    resolutions = {'fine': res_fine, 'coarse': res_coarse}
+    fine_data = testing.dcSample.sample_data(testing.dcSample.sphere_f, res_fine, dimensions)
 
-    fine_data = testing.dcSample.sample_data(testing.dcSample.sphere_f, resolutions['fine'], dimensions)
+    fine_data, res_fine, dimensions, scaling_factor = testing.dcSample.normalize_resolution(fine_data,res_fine,dimensions)
+    res_coarse = int(scaling_factor * res_coarse)
+
+    resolutions = {'fine': res_fine, 'coarse': res_coarse}
 
 elif __EXAMPLE__ == "Torus":
     dimensions = {'xmin': 0.0, 'xmax': 8.0, 'ymin': 0.0, 'ymax': 8.0, 'zmin': 0.0, 'zmax': 8.0}
-    plot_dims = {'xmin': 2.0, 'xmax': 6.0, 'ymin': 2.0, 'ymax': 6.0, 'zmin': 2.0, 'zmax': 6.0}
 
     res_fine = 1.0 / 4.0
-    res_coarse = 2.0
+    res_coarse = 1.0
+
+    fine_data = testing.dcSample.sample_data(testing.dcSample.torus_f, res_fine, dimensions)
+
+    fine_data, res_fine, dimensions, scaling_factor = testing.dcSample.normalize_resolution(fine_data,res_fine,dimensions)
+    res_coarse = int(scaling_factor * res_coarse)
 
     resolutions = {'fine': res_fine, 'coarse': res_coarse}
-
-    fine_data = testing.dcSample.sample_data(testing.dcSample.torus_f, resolutions['fine'], dimensions)
 
 else:
     print "Example " + __EXAMPLE__ + " not known!"
@@ -53,9 +60,9 @@ else:
 
 if __EXAMPLE__ == "Path":
     print "Example: Path"
-    path = "bridge"
-    coarse_scale = 2.0
-    [verts, quads, params, plot_dims, quads_objs] = extraction.extract_surface_from_path_w_plot(path, coarse_scale)
+    path = "cantilever"
+    coarse_scale = 8
+    [verts, quads, params, dimensions, quads_objs, datasets] = extraction.extract_surface_from_path_w_plot(path, coarse_scale)
 else:
     [verts, quads, quads_objs, params] = extraction.extraction_algorithm(fine_data, resolutions, dimensions)
 
@@ -77,7 +84,9 @@ for e in nonmanifold:
 
 fig = plt.figure()
 ax = Axes3D(fig)
-ax.set_aspect('equal')
+
+datasets['fine'].plot(ax,'r',1)
+datasets['coarse'].plot(ax,'b',.25)
 
 plane_oo = [False] * quads['coarse'].__len__()
 for q in quads_objs['coarse']:
@@ -97,8 +106,8 @@ for q in quads_objs['coarse']:
     poly = Poly3DCollection(vtx_orig)
     poly.set_color('b')
     poly.set_edgecolor('k')
-    #poly.set_alpha(.25)
-    ax.add_collection3d(poly)
+    poly.set_alpha(.25)
+    #ax.add_collection3d(poly)
 
 for nonmanifold_edge in nonmanifold:
     vtx = verts['coarse'][list(nonmanifold_edge)]
@@ -109,7 +118,7 @@ for nonmanifold_edge in nonmanifold:
     line = Line3DCollection(vtx)
     line.set_color('r')
     line.set_linewidth(5)
-    ax.add_collection3d(line)
+    #ax.add_collection3d(line)
 
 for q in quads_objs['fine']:
     vtx = verts['fine'][q]
@@ -120,13 +129,29 @@ for q in quads_objs['fine']:
     poly = Poly3DCollection(vtx)
     poly.set_color('r')
     poly.set_edgecolor('k')
-    poly.set_alpha(.25)
+    poly.set_alpha(.5)
     #ax.add_collection3d(poly)
 
-ax.set_xlim3d(plot_dims['xmin'], plot_dims['xmax'])
-ax.set_ylim3d(plot_dims['ymin'], plot_dims['ymax'])
-ax.set_zlim3d(plot_dims['zmin'], plot_dims['zmax'])
-plt.axis('off')
+x_mean = (dimensions['xmax']-dimensions['xmin'])/2.0
+y_mean = (dimensions['ymax']-dimensions['ymin'])/2.0
+z_mean = (dimensions['zmax']-dimensions['zmin'])/2.0
+
+x_min = dimensions['xmin']
+y_min = dimensions['ymin']
+z_min = dimensions['zmin']
+minmin = min([x_min, y_min, z_min])
+
+x_max = dimensions['xmax']
+y_max = dimensions['ymax']
+z_max = dimensions['zmax']
+maxmax = max([x_max, y_max, z_max])
+
+width = maxmax-minmin
+
+ax.set_xlim3d(x_mean-width*.5, x_mean+width*.5)
+ax.set_ylim3d(y_mean-width*.5, y_mean+width*.5)
+ax.set_zlim3d(z_mean-width*.5, z_mean+width*.5)
+ax.set_aspect('equal')
 plt.show()
 
 print "###Plotting DONE###"
