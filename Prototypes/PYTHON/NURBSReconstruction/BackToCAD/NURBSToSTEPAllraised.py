@@ -58,7 +58,7 @@ def generate_bspline_patch(vertices, n_nodes, degree, knots):
     return patch.toShape()
 
 
-def export_step(nurbs_idx, nurbs_pts, output_file_name, nonchanging_file_name, allowed_domains_file_name):
+def export_step(nurbs_idx, nurbs_pts, input_file_name, output_file_name, nonchanging_file_name, allowed_domains_file_name):
 #def export_step(nurbs_idx, nurbs_pts, output_file_name, nonchanging_file_name):
 
     knots = [0, 0, 0, 0, 0.25, 0.25, 0.25, 0.5, 0.5, 0.5, 0.75, 0.75, 0.75, 1, 1, 1, 1]
