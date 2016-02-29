@@ -73,7 +73,7 @@ def generate_edge_usage_dict(_dc_quads):
 
 
 # creates a list of manifold edges in a quad surface
-def create_manifold_edges(_dc_quads, _dc_vindex, _dataset, _resolution):
+def create_manifold_edges(_dc_quads, _dc_vindex, _dataset):
     edge_usage_dict = generate_edge_usage_dict(_dc_quads)  # here we save the quads using a certain edge
 
     manifold_edges = {}  # here we save all the edges which are connected to more than two quads (manifold edges)
@@ -96,7 +96,6 @@ def create_manifold_edges(_dc_quads, _dc_vindex, _dataset, _resolution):
                                            _manifold_vertex_quad_ids_dict=vertex_usage_dict,
                                            _dc_vindex=_dc_vindex,
                                            _dataset=_dataset,
-                                           _resolution=_resolution,
                                            _manifold_edge_set=manifold_edge_set)
 
     return manifold_edges
@@ -104,9 +103,9 @@ def create_manifold_edges(_dc_quads, _dc_vindex, _dataset, _resolution):
 
 # resolves manifold edges in a quad surface. After this step no more manifold edges occur in the surface and the surface
 # is still closed and conforming.
-def resolve_manifold_edges(_dc_verts, _dc_vindex, _dc_quads, _data, _resolution):
+def resolve_manifold_edges(_dc_verts, _dc_vindex, _dc_quads, _data):
     # create manifold edges for the whole surface
-    manifold_edges = create_manifold_edges(_dc_quads, _dc_vindex, _data, _resolution)
+    manifold_edges = create_manifold_edges(_dc_quads, _dc_vindex, _data)
 
     # in those lists we save the edges/nodes added and edges deleted after resolving the manifold vertices. We do
     # not want to do this on the fly, because otherwise the references to vertices will as well as to edges would be

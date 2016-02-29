@@ -182,7 +182,7 @@ def dual_contour(dataset, res_fine, is_coarse_level, do_manifold_treatment):
     voxel_total = dataset.get_total_voxels()
     for x, y, z in dataset.get_grid_iterator():
         if voxel_count % ((voxel_total+100)/100) == 0:
-            print "processing voxel %d of %d."%(voxel_count, voxel_total)
+            print "%d%%: processing voxel %d of %d."%(100*voxel_count/voxel_total,voxel_count, voxel_total)
         voxel_count += 1
         o = np.array([float(x), float(y), float(z)])
 
@@ -191,10 +191,7 @@ def dual_contour(dataset, res_fine, is_coarse_level, do_manifold_treatment):
         for v in cube_verts:
             position = (o + v * res)
             key = tuple(position)
-            c = True
-            if dataset.valid_point(key):
-                c = dataset[key]
-            cube_signs.append(c)
+            cube_signs.append(dataset[key])
 
         if all(cube_signs) or not any(cube_signs):
             continue
@@ -214,10 +211,6 @@ def dual_contour(dataset, res_fine, is_coarse_level, do_manifold_treatment):
             counter += 1
 
         v /= 1.0 * counter
-
-        # Throw out failed solutions
-        if la.norm(v - o) > 2 * res:
-            continue
 
         # Emit one vertex per every cube that crosses
         vindex[tuple(o)] = len(dc_verts)
@@ -253,9 +246,8 @@ def dual_contour(dataset, res_fine, is_coarse_level, do_manifold_treatment):
                                          vindex[tuple(o + res * dirs[j])]])
 
     if do_manifold_treatment:
-        dc_verts, dc_quads, dc_manifold_edges = resolve_manifold_edges(dc_verts, vindex, dc_quads, dataset,
-                                                                       res)
+        dc_verts, dc_quads, dc_manifold_edges = resolve_manifold_edges(dc_verts, vindex, dc_quads, dataset)
     else:
-        dc_manifold_edges = create_manifold_edges(dc_quads, vindex, dataset, res)
+        dc_manifold_edges = create_manifold_edges(dc_quads, vindex, dataset)
 
     return np.array(dc_verts), np.array(dc_quads), dc_manifold_edges

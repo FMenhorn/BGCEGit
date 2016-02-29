@@ -5,10 +5,9 @@ __author__ = 'benjamin'
 
 
 class ManifoldEdge:
-    def __init__(self, _manifold_edge_key, _manifold_edge_quad_ids, _manifold_vertex_quad_ids_dict, _dc_vindex, _dataset,
-                 _resolution, _manifold_edge_set):
+    def __init__(self, _manifold_edge_key, _manifold_edge_quad_ids, _manifold_vertex_quad_ids_dict, _dc_vindex, _dataset, _manifold_edge_set):
         # resolution of the grid
-        self.resolution = _resolution
+        self.resolution = _dataset._resolution
 
         # key corresponding to the vertices of the edge
         self.v_key = [None] * 2
