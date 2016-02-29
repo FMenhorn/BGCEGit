@@ -1,5 +1,6 @@
 import itertools as it
 import numpy as np
+from vtk_parsing import parse_file_vtk
 
 
 def voxel(edge_length, center):
@@ -82,6 +83,13 @@ class VoxelDataset():
     which is needed for ambiguity resolution.
     """
     def __init__(self, dims, resolution, data):
+        """
+        constructor called with dict or set data
+        :param dims:
+        :param resolution:
+        :param data:
+        :return:
+        """
         assert type(dims) is dict
         self._dimensions = parse_dims(dims, resolution)
 
@@ -91,18 +99,43 @@ class VoxelDataset():
 
         self._data = parse_data(data)
 
+    @classmethod
+    def from_filename(cls, filepath):
+        """
+        constructor called with a filepath to a csv holding a vector of cell data
+        :param filepath:
+        :return:
+        """
+
+        dims_from_file, origin_from_file, spacing_from_file, points_from_file = parse_file_vtk(filename=filepath)
+        dims = {'min':3*[None], 'max':3*[None]}
+        res = int(spacing_from_file[0])
+
+        for d in range(3):
+            assert spacing_from_file[d] == res
+            dims['min'][d] = origin_from_file[d]
+            dims['max'][d] = spacing_from_file[d] * dims_from_file[d] + origin_from_file[d]
+
+        data_matrix = np.array(points_from_file,dtype=bool).reshape(dims_from_file,order='F')
+
+        print data_matrix.sum()
+
+        data = set()
+        for i in range(data_matrix.shape[0]):
+            for j in range(data_matrix.shape[1]):
+                for k in range(data_matrix.shape[2]):
+                    if data_matrix[i,j,k]:
+                        key = tuple(origin_from_file + np.array([i,j,k]) * spacing_from_file)
+                        data.add(key)
+                        print key
+        print data.__len__()
+        return cls(dims,res,data)
+
     def align(self):
         """
         Aligns the dataset to integer values. Assumes, that the resolution is equal to 1. Non integer points are just
         cropped.
         """
-        # align dataset
-        aligned_dataset = set()
-        aligned_key = np.zeros(3)
-        for key in self._data:
-            for d in range(3):
-                aligned_key[d] = np.floor(key[d])
-            aligned_dataset.add(tuple(aligned_key))
 
         # align dimensions
         aligned_dims={'min':3*[None],'max':3*[None]}
@@ -110,11 +143,18 @@ class VoxelDataset():
             aligned_dims['min'][d] = np.floor(self._dimensions['min'][d])
             aligned_dims['max'][d] = np.floor(self._dimensions['max'][d])
 
-        # overwrite old dataset and dimensions
-        self._data = aligned_dataset
-        self._dimensions = aligned_dims
+        # align data
+        aligned_data = set()
+        aligned_key = np.zeros(3)
+        for key in self._data:
+            for d in range(3):
+                aligned_key[d] = np.floor(key[d])
+            aligned_data.add(tuple(aligned_key))
 
-        assert self._resolution == 1
+
+        # overwrite old dataset and dimensions
+        self._data = aligned_data
+        self._dimensions = aligned_dims
 
     def surround(self):
         """

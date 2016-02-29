@@ -1,9 +1,9 @@
 import export_results
 import numpy as np
-import numpy.linalg as la
-import itertools as it
 from dcHelpers import resolve_manifold_edges, create_manifold_edges
 from VoxelDataset import VoxelDataset
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 
 #########################
 #### DUAL CONTOURING ####
@@ -126,9 +126,10 @@ def estimate_hermite(data, v0, v1, res, res_fine):
     return x0
 
 
-def tworesolution_dual_contour(dataset, resolutions, dims):
+def tworesolution_dual_contour(data, resolutions, dims):
 
-    fine_dataset = VoxelDataset(dims, resolutions['fine'], dataset)
+    fine_dataset = VoxelDataset.from_filename('GE_white_big.vtk') # use for GE bracket
+    #fine_dataset = VoxelDataset(dims, resolutions['fine'], data) # use for topy files
     print "++ Aligning Dataset ++"
     fine_dataset.align()
     fine_dataset.surround()
