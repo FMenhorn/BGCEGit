@@ -357,6 +357,4 @@ def search_vertex_key_from_index(_dc_vindex, idx):
     for key in _dc_vindex:
         if int(_dc_vindex[key]) == int(idx):
             return key
-
-    print "ERROR! INDEX %d not found" % idx
-    quit()
+    raise Exception("ERROR! INDEX %d not found" % idx)

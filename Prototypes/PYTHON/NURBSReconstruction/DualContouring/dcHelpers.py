@@ -148,8 +148,7 @@ def resolve_manifold_edges(_dc_verts, _dc_vindex, _dc_quads, _data):
             elif used.__len__() == 1:
                 not_consistent1_edges[edge] = used
             else:
-                print "ERROR!"
-                quit()
+                raise Exception("ERROR!")
 
     _dc_verts, _dc_quads = resolve_not_consistent4(_dc_verts, _dc_quads, not_consistent4_edges)
 
@@ -161,8 +160,7 @@ def resolve_manifold_edges(_dc_verts, _dc_vindex, _dc_quads, _data):
             if used.__len__() == 1:
                 not_consistent1_edges[edge] = used
             else:
-                print "ERROR!"
-                quit()
+                raise Exception("ERROR!")
 
     _dc_verts, _dc_quads = resolve_not_consistent1(_dc_verts, _dc_quads, not_consistent1_edges)
 
@@ -208,9 +206,7 @@ def resolve_not_consistent1(_dc_verts, _dc_quads, _not_consistent_edges):
             elif remaining_edge[::-1] in _not_consistent_edges.keys():
                 _not_consistent_edges.__delitem__(remaining_edge[::-1])
             else:
-                print "ERROR!"
-                assert(False)
-                quit()
+                raise Exception("ERROR!")
 
             _dc_quads.append(new_quad)
 
