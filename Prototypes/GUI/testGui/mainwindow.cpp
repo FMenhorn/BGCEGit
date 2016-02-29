@@ -19,6 +19,8 @@
 #include <time.h>
 #include <unistd.h>
 
+#include <chrono>
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -33,23 +35,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->RefinementEdit->setValidator(new QIntValidator(0, 10, this));
     ui->Coarsening->setValidator(new QIntValidator(0, 10000000, this));
 
-   /* ui->IGSFileInput->setText("/home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/TestGeometry/CantileverColoredNew/CantiLeverWithLoadAtEndSmallerMovedLoad.igs");
-    ui->STEPFileInput->setText("/home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/TestGeometry/CantileverColoredNew/CantiLeverWithLoadAtEndSmallerMovedLoad.stp");
-
-    ui->BooleanFileInput->setText("/home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/PYTHON/Back2CAD/Cone.step");
-    ui->STEPOutput->setText("/home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/GUI/build-testGui-Desktop-Debug/testBitch.step");
-    igsFile = ui->IGSFileInput->text();
-    stpFile = ui->STEPFileInput->text();
-    booleanFile = ui->BooleanFileInput->text();
-    stepOutputFile = ui->STEPFileInput->text();
-    ui->RefinementEdit->setText("0");
-    ui->ForceEdit->setText("1");
-    ui->Coarsening->setText("2");
-    ui->FairnessWeight->setText("0.5");*/
     this->hide_ErrorFields();
-    //this->ui->progressBar->setMinimum(0);
-    //this->ui->progressBar->setMaximum(0);
-    //this->ui->progressBar->hide();
     this->ui->startFreeCadButton->hide();
 
     this->ui->VoxelizerDial->setValue(0);
@@ -57,9 +43,7 @@ MainWindow::MainWindow(QWidget *parent) :
     this->ui->ToPyDial->setValue(0);
     this->ui->ToPyDial->setDisabled(true);
     this->ui->NurbsDial->setValue(0);
-
     this->ui->NurbsDial->setDisabled(true);
-    //connect(&this->FutureWatcher, SIGNAL (finished()), this, SLOT (slot_finished()));
 
     this->ui->logoView->setScene(&logoScene);
     logoItem.setPixmap(*logoPicture);
@@ -125,9 +109,15 @@ void MainWindow::on_runButton_clicked()
 
     QString igsPath, igsName;
     QString stpPath, stpName;
+    QString stpOutputPath, stpOutputName;
 
     StringHelper::getPathAndName(stpFile, stpName, stpPath);
+    StringHelper::getPathAndName(stepOutputFile, stpOutputName, stpOutputPath);
     StringHelper::getPathAndName(igsFile, igsName, igsPath);
+
+    std::chrono::time_point<std::chrono::system_clock> start;
+    std::chrono::time_point<std::chrono::system_clock> end;
+    std::chrono::duration<double> elapsedSeconds;
 
     //if (this->checkInput(igsName, stpName)){
 
@@ -142,6 +132,7 @@ void MainWindow::on_runButton_clicked()
         QThreadPool qpool;
         QFuture<void> future;
 
+        start = std::chrono::system_clock::now();
         /** Start the Voxelization Script **/
         std::string parameterString = stpPath.toStdString() + " " + stpName.toStdString() + " " + forceScaling.toStdString() + " " + refinementLevel.toStdString() + " " + (isFixtureFileSupplied ? "1" : "0");
         std::string scriptCADToVoxel = "./../../CADTopOp.sh " + parameterString;
@@ -152,7 +143,16 @@ void MainWindow::on_runButton_clicked()
         this->rotateDial(this->ui->VoxelizerDial, future);
         this->ui->voxelizationLabel->setFont( normalFont );
         /**                                 **/
+        end = std::chrono::system_clock::now();
+        elapsedSeconds = end - start;
+        double voxelizerTime = elapsedSeconds.count();
 
+        /*std::string vtkPath = "./../../OpenCascade/Code/";
+        parameterString = "python ./../../OpenCascade/Code/vtkToPngPrototype.py " + vtkPath + " " + stpName.toStdString();
+        std::cout << parameterString << std::endl;
+        scriptCaller.callScript(parameterString);*/
+
+        start = std::chrono::system_clock::now();
         /** Start ToPy **/
         parameterString = stpName.toStdString();
         std::string scriptToPy = "./../../ToPyRunner.sh " + parameterString;
@@ -163,19 +163,23 @@ void MainWindow::on_runButton_clicked()
         this->rotateDial(this->ui->ToPyDial, future);
         this->ui->topologyOptimizationLabel->setFont( normalFont );
         /**                                 **/
+        end = std::chrono::system_clock::now();
+        elapsedSeconds = end - start;
+        double topyTime = elapsedSeconds.count();
 
+        start = std::chrono::system_clock::now();
         /** Start the Surface Fitting, Extraction and Back2CAD **/
         std::string cellsAndDimensionsPath = "./../../PYTHON/NURBSReconstruction";
-        std::string outputFileString = stepOutputFile.toStdString();
-        std::string booleanFileString = booleanFile.toStdString();
+        std::string outputFileString = stpOutputPath.toStdString()+stpOutputName.toStdString();
         std::string fairnessWeight = ui->FairnessWeight->text().toStdString();
         std::string coarseningFactor = ui->Coarsening->text().toStdString();
-        parameterString = cellsAndDimensionsPath + " " + outputFileString + " " + fairnessWeight + " " + coarseningFactor + " " + booleanFileString;
+        std::string fixedFileFullPathNameString = this->isFixtureFileSupplied ? stpPath.toStdString() + stpName.toStdString() + "_Fixed.step" : "";
+        std::string booleanFileString = this->isOptimizationDomainSupplied ? stpPath.toStdString() + stpName.toStdString() + "_ToOptimize.step" : "";
+        parameterString = cellsAndDimensionsPath + " " + stpFile.toStdString() + " " + outputFileString + " " + fairnessWeight + " " + coarseningFactor + " "+ fixedFileFullPathNameString + " " + booleanFileString;
         std::string scriptPython = "python ./../../PYTHON/NURBSReconstruction/runningScript.py " + parameterString;
 
         std::cout << scriptPython << std::endl;
         system(scriptPython.c_str());
-   //}
 
 
         future = QtConcurrent::run(&qpool, &this->scriptCaller, &ScriptCaller::callScript, scriptPython);
@@ -184,6 +188,13 @@ void MainWindow::on_runButton_clicked()
         this->rotateDial(this->ui->NurbsDial, future);
         this->ui->surfaceFittingLabel->setFont( normalFont );
         /**                                 **/
+        end = std::chrono::system_clock::now();
+        elapsedSeconds = end-start;
+        double surfaceFittingTime = elapsedSeconds.count();
+
+        std::cout << "###Voxelizer: Elapsed Time: " << voxelizerTime << std::endl;
+        std::cout << "###Topology Optimization: Elapsed Time: " << topyTime << std::endl;
+        std::cout << "###SURFACE-Fitting: Elapsed Time: " << surfaceFittingTime << std::endl;
 
         this->ui->startFreeCadButton->show();
     }
@@ -227,7 +238,6 @@ void MainWindow::setValueOfToPyDial(int value){
 bool MainWindow::checkInput(QString igsName, QString stpName){
     InputVerificator verificator;
     QString boolName, boolPath;
-    StringHelper::getPathAndName(booleanFile, boolName, boolPath);
 
     bool flag = true;
 
@@ -260,21 +270,6 @@ void MainWindow::on_Output_selector_clicked()
     }
 }
 
-void MainWindow::on_BooleanFileSelector_clicked()
-{
-    QStringList fileNames;
-    fileNames = QFileDialog::getOpenFileNames(this, tr("Open File"),"/path/to/file/",tr("STEP File (*.step)"));
-    if (fileNames.size() == 1 && fileNames.first().size() > 0) {
-        booleanFile = fileNames.first();
-        ui->BooleanFileInput->setText(StringHelper::cropText(ui->BooleanFileInput, booleanFile));
-        ui->BooleanFileInput->setStyleSheet("QLabel { Color : black }");
-    } else {
-        booleanFile = "";
-        ui->BooleanFileInput->setText("Select ONE step input file!");
-        ui->BooleanFileInput->setStyleSheet("QLabel { Color : red }");
-    }
-}
-
 void MainWindow::hide_ErrorFields(){
     ui->ErrorField_force->hide();
     ui->ErrorField_refinement->hide();
@@ -287,7 +282,9 @@ void MainWindow::on_startFreeCadButton_clicked()
     QString outputFile;
     QString outputPath;
     StringHelper::getPathAndName(stepOutputFile, outputFile, outputPath);
-    std::string freeCADCommand = "freecad " + outputFile.toStdString() + ".step " + " FusionForBoolean.step &";
+    std::string freeCADCommand = "freecad " + outputFile.toStdString() + "_RAW.step " +
+            (isFixtureFileSupplied ? outputFile.toStdString() + "_BOOLEANED.step " : "") +
+            (isOptimizationDomainSupplied ? outputFile.toStdString() + "_ALLOWED.step" : "");
     system(freeCADCommand.c_str());
 }
 
@@ -300,5 +297,17 @@ void MainWindow::on_checkBox_stateChanged(int newState)
     }else{
         this->ui->checkBoxWarningLabel->setText("");
         this->isFixtureFileSupplied = 0;
+    }
+}
+
+void MainWindow::on_checkBox_2_stateChanged(int newState)
+{
+    if(newState){
+        this->ui->checkBoxWarningLabel_2->setText("Make sure that fixture file name is of the form \'StepFileName\'_ToOptimize.step!");
+        this->ui->checkBoxWarningLabel_2->setStyleSheet("QLabel { Color : red }");
+        this->isOptimizationDomainSupplied = 1;
+    }else{
+        this->ui->checkBoxWarningLabel_2->setText("");
+        this->isOptimizationDomainSupplied = 0;
     }
 }

@@ -33,7 +33,9 @@ bool Writer_ToPy::write(std::string _filename, std::vector<std::vector<VoxelShap
 	writeNodes("LOAD_NODE_Z",outfile,voxelShape[2],dimensions);
 
 	//outfile << "LOAD_VALU_Y: " << "-1@" << noLoadVoxelsY << "\n";
-	writeForces(outfile, forces, numberOfLoadVoxelsY);
+	if(numberOfLoadVoxelsY.size()>0){
+		writeForces(outfile, forces, numberOfLoadVoxelsY);
+	}
     outfile.close();
 
     std::cout << "Writer_ToPy: .. done!" << std::endl;
