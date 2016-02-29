@@ -75,18 +75,39 @@ def coarsen_dataset(coarsening_steps, fine_dataset):
 
 
 # Use non-linear root finding to compute intersection point
-def estimate_hermite_easy(data, v0, v1, res, res_fine, coarse_level):
+def estimate_hermite_easy(data, v0, v1, res, res_fine):
+    """
+    Just assumes the root lies in the middle of the edge between v0 and v1
+    :param data: dataset
+    :param v0: first point of edge
+    :param v1: second point of edge
+    :param res: not used
+    :param res_fine: not used
+    :return:
+    """
     t0 = .5
     x0 = (1. - t0) * v0 + t0 * v1
     return x0
 
 
-def estimate_hermite(data, v0, v1, res, res_fine, coarse_level):
+def estimate_hermite(data, v0, v1, res, res_fine):
+    """
+    Searches for the root on the edge between v0 and v1 using bisection. The dataset has more values than its actual
+    resolution. We can go down to 2*res_fine. The fine dataset is not aligned with the coarse one, therefore, we cannot
+    go down to res_fine.
+    :param data: dataset
+    :param v0: first point of edge
+    :param v1: second point of edge
+    :param res: starting resolution (if res = res_fine, no bisection is used. We just assume the root to be in the middle)
+    :param res_fine: fine resolution
+    :return:
+    """
     data_v0 = data[tuple(v0)]
     data_v1 = data[tuple(v1)]
 
+    coarse_level = (not res == res_fine)
     if coarse_level:
-        res_min = res_fine * 2
+        res_min = res_fine * 2  # fine resolution grid is not aligned! There is no data!
     else:
         res_min = res
 
@@ -138,14 +159,21 @@ def tworesolution_dual_contour(dataset, resolutions, dims):
     return dc_verts, dc_quads, dc_manifolds, datasets
 
 
-# Input:
-# data = voxel data
-# res = resolution
-# dims = dimension of data
 def dual_contour(dataset, res_fine, is_coarse_level, do_manifold_treatment):
+    """
+    Applies the dual contouring algorithm to the dataset
+    :param dataset: input dataset
+    :param res_fine: resolution of the finest level
+    :param is_coarse_level: bool gives information whether this is the coarse level
+    :param do_manifold_treatment: bool states whether manifold edges should be resolved
+    :return: vertices, quads and manifold edges
+    """
+
     # Compute vertices
     dc_verts = []
     vindex = {}
+
+    res = dataset._resolution
 
     for x, y, z in dataset.get_grid_iterator():
 
@@ -154,7 +182,7 @@ def dual_contour(dataset, res_fine, is_coarse_level, do_manifold_treatment):
         cube_signs = []
         # Get signs for cube
         for v in cube_verts:
-            position = (o + v * dataset._resolution)
+            position = (o + v * res)
             key = tuple(position)
             c = True
             if dataset.valid_point(key):
@@ -168,9 +196,8 @@ def dual_contour(dataset, res_fine, is_coarse_level, do_manifold_treatment):
         h_data = []
         for e in cube_edges:
             if cube_signs[e[0]] != cube_signs[e[1]]:
-                h_data.append(estimate_hermite(dataset, o + cube_verts[e[0]] * dataset._resolution,
-                                               o + cube_verts[e[1]] * dataset._resolution, dataset._resolution,
-                                               res_fine, is_coarse_level))
+                h_data.append(
+                    estimate_hermite(dataset, o + cube_verts[e[0]] * res, o + cube_verts[e[1]] * res, res, res_fine))
 
         counter = 0
         v = np.array([0.0, 0.0, 0.0])
@@ -182,7 +209,7 @@ def dual_contour(dataset, res_fine, is_coarse_level, do_manifold_treatment):
         v /= 1.0 * counter
 
         # Throw out failed solutions
-        if la.norm(v - o) > 2 * dataset._resolution:
+        if la.norm(v - o) > 2 * res:
             continue
 
         # Emit one vertex per every cube that crosses
@@ -199,31 +226,29 @@ def dual_contour(dataset, res_fine, is_coarse_level, do_manifold_treatment):
         o = np.array([float(x), float(y), float(z)])
         for i in range(3):
             for j in range(i):
-                if tuple(o + dataset._resolution * dirs[i]) in vindex and \
-                                tuple(o + dataset._resolution * dirs[j]) in vindex and \
-                                tuple(o + dataset._resolution * (dirs[i] + dirs[j])) \
+                if tuple(o + res * dirs[i]) in vindex and \
+                                tuple(o + res * dirs[j]) in vindex and \
+                                tuple(o + res * (dirs[i] + dirs[j])) \
                                 in vindex:
                     k = 3 - (i + j)  # normal id
                     c = True
                     d = True
-                    key_ij = tuple(o + dataset._resolution * dirs[i] + dataset._resolution * dirs[j])
-                    key_ijk = tuple(
-                        o + dataset._resolution * dirs[i] + dataset._resolution * dirs[j] + dataset._resolution * dirs[
-                            k])
+                    key_ij = tuple(o + res * dirs[i] + res * dirs[j])
+                    key_ijk = tuple(o + res * dirs[i] + res * dirs[j] + res * dirs[k])
                     if dataset.point_is_inside(key_ij):
                         c = dataset[key_ij]
                     if dataset.point_is_inside(key_ijk):
                         d = dataset[key_ijk]
                     if c != d:
-                        dc_quads.append([vindex[tuple(o)], vindex[tuple(o + dataset._resolution * dirs[i])],
-                                         vindex[
-                                             tuple(o + dataset._resolution * dirs[i] + dataset._resolution * dirs[j])],
-                                         vindex[tuple(o + dataset._resolution * dirs[j])]])
+                        dc_quads.append([vindex[tuple(o)],
+                                         vindex[tuple(o + res * dirs[i])],
+                                         vindex[tuple(o + res * dirs[i] + res * dirs[j])],
+                                         vindex[tuple(o + res * dirs[j])]])
 
     if do_manifold_treatment:
         dc_verts, dc_quads, dc_manifold_edges = resolve_manifold_edges(dc_verts, vindex, dc_quads, dataset,
-                                                                       dataset._resolution)
+                                                                       res)
     else:
-        dc_manifold_edges = create_manifold_edges(dc_quads, vindex, dataset, dataset._resolution)
+        dc_manifold_edges = create_manifold_edges(dc_quads, vindex, dataset, res)
 
     return np.array(dc_verts), np.array(dc_quads), dc_manifold_edges
