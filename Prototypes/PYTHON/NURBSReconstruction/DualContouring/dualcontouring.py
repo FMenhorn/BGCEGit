@@ -37,28 +37,27 @@ def coarsen_dataset(coarsening_steps, fine_dataset):
             coarse_dims['min'][d] = fine_dataset._dimensions['min'][d] + .5 * fine_dataset._resolution
             coarse_dims['max'][d] = fine_dataset._dimensions['max'][d] - .5 * fine_dataset._resolution
 
-        coarse_data = set()
+        coarse_data = set(fine_dataset._data)
         # traverse all cells (each one has 4 datavalues) and combine all 4 values into one
-        no_cube_verts = cube_verts.__len__()
+        no_cube_verts = np.size(cube_verts,0)
 
         for x, y, z in fine_dataset.get_grid_iterator():
             o = np.array([float(x), float(y), float(z)])
 
             new_data = np.zeros(no_cube_verts, dtype=bool)
 
-            for i in np.arange(no_cube_verts):
+            for i in range(no_cube_verts):
                 position = (o + cube_verts[i, :] * fine_dataset._resolution)
                 key = tuple(position)
                 new_data[i] = fine_dataset.value_at(key)
-                if new_data[i]:
-                    coarse_data.add(key)
 
             new_o = o + fine_dataset._resolution * np.array([.5, .5, .5])
             new_key = tuple(new_o)
-            coarse_data.discard(new_key)
 
-            if np.mean(new_data) > coarsening_threshold:
+            if np.sum(new_data) > 8*coarsening_threshold:
                 coarse_data.add(new_key)
+            else:
+                coarse_data.discard(new_key)
 
         coarse_dataset = VoxelDataset(coarse_dims, coarse_res, coarse_data)
         # recursively coarsen
