@@ -23,6 +23,7 @@ cube_edges = [[0, 1], [0, 2], [1, 3], [2, 3],
 
 
 def coarsen_dataset(coarsening_steps, fine_dataset):
+    print "%d coarsening_steps left."%coarsening_steps
     coarsening_threshold = 0.125
 
     if coarsening_steps > 0:
@@ -127,7 +128,7 @@ def estimate_hermite(data, v0, v1, res, res_fine):
 
 
 def tworesolution_dual_contour(dataset, resolutions, dims):
-    print "fine resolution DC..."
+    print "++ Fine Resolution DC ++"
     fine_dataset = VoxelDataset(dims, resolutions['fine'], dataset)
     print "resolution: %d"%(fine_dataset._resolution)
     [dc_verts_fine, dc_quads_fine, dc_manifold_edges_fine] = dual_contour(fine_dataset,
@@ -138,14 +139,14 @@ def tworesolution_dual_contour(dataset, resolutions, dims):
     # compute necessary coarsening steps from given coarse resolution.
     print "fine quads produced: %d"%(dc_quads_fine.__len__())
 
-    print "coarsening..."
+    print "++ Coarsening Dataset ++"
     coarsening_steps = int(np.log(resolutions['coarse']) / np.log(2))
     assert coarsening_steps > 0  # at least one coarsening step has to be done!
     assert type(coarsening_steps) is int  # coarsening steps have to be integer!
 
     coarse_dataset = coarsen_dataset(coarsening_steps, fine_dataset)
 
-    print "coarse resolution DC..."
+    print "++ Fine Resolution DC ++"
     print "resolution: %d"%(coarse_dataset._resolution)
     [dc_verts_coarse, dc_quads_coarse, dc_manifold_edges_coarse] = dual_contour(coarse_dataset,
                                                                                 resolutions['fine'],

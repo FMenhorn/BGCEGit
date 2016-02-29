@@ -17,7 +17,12 @@ def create_parameters(verts, quads):
     param = []
     N_closest_candidates = 4 # compute list of N_closest_candidates closest quads
 
+    vertex_count=0
+    vertices_total = verts['fine'].__len__()
     for vertex in verts['fine']:
+        vertex_count+=1
+        if vertex_count % ((vertices_total+100)/100) == 0:
+            print "projecting vertex %d of %d..."%(vertex_count, vertices_total)
         closest_idx_candidates = find_closest_quads(vertex, quads['coarse'], N_closest_candidates) # find N closest quads with fast criterion: distance to centroid
 
         distance_min = np.inf
