@@ -180,7 +180,7 @@ def dual_contour(dataset, res_fine, is_coarse_level, do_manifold_treatment):
     voxel_count = 0
     voxel_total = dataset.get_total_voxels()
     for x, y, z in dataset.get_grid_iterator():
-        if voxel_count % (voxel_total/100) == 0:
+        if voxel_count % ((voxel_total+100)/100) == 0:
             print "processing voxel %d of %d."%(voxel_count, voxel_total)
         voxel_count += 1
         o = np.array([float(x), float(y), float(z)])
