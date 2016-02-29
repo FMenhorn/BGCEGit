@@ -1,4 +1,5 @@
 import numpy as np
+import scipy.sparse as ssp
 
 from get3x3ControlPointIndexMask import get3x3ControlPointIndexMask
 from getBezierPointCoefs import getBiquadraticPatchCoefs
@@ -23,7 +24,11 @@ def createFairnessControlMeshCoefs(quad_list, AVertexList, B1VertexList, B2Verte
     """
     N = quad_control_point_indices.shape[0] * quad_control_point_indices.shape[1] * 3
     M = quad_control_point_indices.shape[0] * quad_control_point_indices.shape[1]
-    coefsMatrix = np.zeros((N, M))
+    max_size = N*14 #(4x7)x4 for extr. vertices, 12x9 for ordinary, then averaged => 13, one extra for safety (large estimate)
+    rows = np.zeros(max_size, dtype=int)
+    cols = np.zeros(max_size, dtype=int)
+    data = np.zeros(max_size)
+    #coefsMatrix = np.zeros((N, M))
 
     """
     precalculate the coefficients between all the vertex control points and
@@ -64,6 +69,8 @@ def createFairnessControlMeshCoefs(quad_list, AVertexList, B1VertexList, B2Verte
 
     whichCornerList = np.array([[0, 3], [1, 2]], dtype=int)
 
+    indexCounter = 0
+
     p = 0
     print "Main Loop Fairness Coeffs"
     for q in range(quad_list.shape[0]):
@@ -82,24 +89,38 @@ def createFairnessControlMeshCoefs(quad_list, AVertexList, B1VertexList, B2Verte
                     coefsRawTemp[2, 0:numberOfEdges, :, :] = B2CoefsRaw[numberOfEdges - 1, 0:numberOfEdges, :, :]
                     coefsRawTemp[3, 0:numberOfEdges, :, :] = CCoefsRaw[numberOfEdges - 1, 0:numberOfEdges, :, :]
 
+                    numberOfEntries = numberOfEdges*4
+
                     for matType in range(3):
                         bezier_points = np.squeeze(bicBezCoefs[matType, :, :])  # squeeze
-                        patchCoefsMatrix = getPetersControlPointCoefs(bezier_points,
-                                                                      coefsRawTemp[:, 0:numberOfEdges, :, :])
-                        coefsMatrix[p][indexMask[:]] = patchCoefsMatrix[:]
+                        data[indexCounter:(indexCounter + numberOfEntries)] = getPetersControlPointCoefs(bezier_points,
+                                                                      coefsRawTemp[:, 0:numberOfEdges, :, :]).flatten()
+
+                        rows[indexCounter:(indexCounter + numberOfEntries)] = p
+                        cols[indexCounter:(indexCounter + numberOfEntries)] = indexMask.flatten()[:]
+                        indexCounter += numberOfEntries
+
                         p += 1
+
+
 
                 else:  # biquadratic patches
                     neighbourMask = get3x3ControlPointIndexMask(quad_list=quad_list,
                                                                 quad_control_point_indices=quad_control_point_indices,
                                                                 quad_index=q,
                                                                 localIndexXY=np.array([i, j])).astype(int)  # correct??
+                    numberOfEntries = 9
 
                     for matType in range(3):
                         bezier_points = np.squeeze(biqBezCoefs[matType, :, :])
-                        ordinaryPatchCoefsMatrix = getPetersControlPointCoefs(bezier_points,
-                                                                              ordinaryCoefsRaw)
-                        coefsMatrix[p][neighbourMask[:]] = ordinaryPatchCoefsMatrix[:]
+
+                        data[indexCounter:(indexCounter + numberOfEntries)] = getPetersControlPointCoefs(bezier_points,
+                                                                              ordinaryCoefsRaw).flatten()
+
+                        rows[indexCounter:(indexCounter + numberOfEntries)] = p
+                        cols[indexCounter:(indexCounter + numberOfEntries)] = neighbourMask.flatten()[:]
                         p += 1
 
-    return coefsMatrix
+                        indexCounter += numberOfEntries
+
+    return ssp.coo_matrix((data, (rows, cols)), shape=(N, M))
