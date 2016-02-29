@@ -1,16 +1,19 @@
+import itertools as it
+import numpy as np
+
+
 def voxel(edge_length, center):
     from mpl_toolkits.mplot3d.art3d import Poly3DCollection
-    import numpy as np
 
     center = np.array(center)
-    x0 = (center + edge_length * .45 * np.array([-1,-1,-1])).tolist()
-    x1 = (center + edge_length * .45 * np.array([-1,1,-1])).tolist()
-    x2 = (center + edge_length * .45 * np.array([1,1,-1])).tolist()
-    x3 = (center + edge_length * .45 * np.array([1,-1,-1])).tolist()
-    x4 = (center + edge_length * .45 * np.array([-1,-1,1])).tolist()
-    x5 = (center + edge_length * .45 * np.array([-1,1,1])).tolist()
-    x6 = (center + edge_length * .45 * np.array([1,1,1])).tolist()
-    x7 = (center + edge_length * .45 * np.array([1,-1,1])).tolist()
+    x0 = (center + edge_length * .45 * np.array([-1, -1, -1])).tolist()
+    x1 = (center + edge_length * .45 * np.array([-1, 1, -1])).tolist()
+    x2 = (center + edge_length * .45 * np.array([1, 1, -1])).tolist()
+    x3 = (center + edge_length * .45 * np.array([1, -1, -1])).tolist()
+    x4 = (center + edge_length * .45 * np.array([-1, -1, 1])).tolist()
+    x5 = (center + edge_length * .45 * np.array([-1, 1, 1])).tolist()
+    x6 = (center + edge_length * .45 * np.array([1, 1, 1])).tolist()
+    x7 = (center + edge_length * .45 * np.array([1, -1, 1])).tolist()
 
     poly = Poly3DCollection([[x0, x1, x2, x3],
                              [x4, x5, x6, x7],
@@ -22,27 +25,26 @@ def voxel(edge_length, center):
     return poly
 
 
-
 def parse_dims(dims, res):
-    if dims.__len__()==6:
-        dims_return = {'min':3*[None],'max': 3*[None]}
-        dims_return['min'][0]=dims['xmin']
-        dims_return['min'][1]=dims['ymin']
-        dims_return['min'][2]=dims['zmin']
-        dims_return['max'][0]=dims['xmax']
-        dims_return['max'][1]=dims['ymax']
-        dims_return['max'][2]=dims['zmax']
-    elif dims.__len__()==2:
+    if dims.__len__() == 6:
+        dims_return = {'min': 3 * [None], 'max': 3 * [None]}
+        dims_return['min'][0] = dims['xmin']
+        dims_return['min'][1] = dims['ymin']
+        dims_return['min'][2] = dims['zmin']
+        dims_return['max'][0] = dims['xmax']
+        dims_return['max'][1] = dims['ymax']
+        dims_return['max'][2] = dims['zmax']
+    elif dims.__len__() == 2:
         dims_return = dims
     else:
         raise Exception("dims has wrong length!")
 
     print dims_return
 
-    for d in range(3): # check if dimensions match with resolution
-        gap = (dims_return['max'][d]-dims_return['min'][d])%res # if dimensions match, this is equal to 0!
+    for d in range(3):  # check if dimensions match with resolution
+        gap = (dims_return['max'][d] - dims_return['min'][d]) % res  # if dimensions match, this is equal to 0!
         print gap
-        dims_return['max'][d]+=(res-gap)%res
+        dims_return['max'][d] += (res - gap) % res
 
     print dims_return
 
@@ -71,7 +73,7 @@ class VoxelDataset():
 
         assert type(resolution) is int
         assert resolution >= 1
-        self._resolution = resolution
+        self._resolution = int(resolution)
 
         self._dataset = parse_dataset(dataset)
 
@@ -80,7 +82,7 @@ class VoxelDataset():
         assert point.__len__() == 3
 
         for d in range(3):
-            if not (self._dimensions['min'][d]<=point[d]<=self._dimensions['max'][d]):
+            if not (self._dimensions['min'][d] <= point[d] <= self._dimensions['max'][d]):
                 # point is in one dimensions not inside
                 return False
         # point is in all dimensions inside bounding box
@@ -91,7 +93,7 @@ class VoxelDataset():
         assert point.__len__() == 3
 
         for d in range(3):
-            if(abs(point[d]-self._dimensions['min'][d]) % (self._resolution*.5)) != 0: # point is not aligned
+            if (abs(point[d] - self._dimensions['min'][d]) % (self._resolution * .5)) != 0:  # point is not aligned
                 return False
         # all points are obviously aligned
         return True
@@ -106,32 +108,31 @@ class VoxelDataset():
             return True
 
     def value_at(self, point):
-
         if self.valid_point(point):
             return point in self._dataset
         else:
             if not self.point_is_inside(point):
-                raise Exception("invalid point! Point %s is not inside %s."%(point,self._dimensions))
+                raise Exception("invalid point! Point %s is not inside %s." % (point, self._dimensions))
 
     def __getitem__(self, item):
         assert type(item) is tuple
         assert item.__len__() == 3
         return self.value_at(item)
 
+    def get_grid_iterator(self):
+        """
+        :return: Iterator for the grid of the dataset.
+        """
+        return it.product(np.arange(self._dimensions['min'][0], self._dimensions['max'][0], self._resolution),
+                          np.arange(self._dimensions['min'][1], self._dimensions['max'][1], self._resolution),
+                          np.arange(self._dimensions['min'][2], self._dimensions['max'][2], self._resolution))
+
     def plot(self, axis, color, alpha):
-        import numpy as np
-        import itertools as it
-        for x, y, z in it.product(
-            np.arange(self._dimensions['min'][0], self._dimensions['max'][0], self._resolution),
-            np.arange(self._dimensions['min'][1], self._dimensions['max'][1], self._resolution),
-            np.arange(self._dimensions['min'][2], self._dimensions['max'][2], self._resolution)):
-            key=(x,y,z)
+        for x, y, z in self.get_grid_iterator():
+            key = (x, y, z)
             if key in self._dataset:
                 vox = voxel(edge_length=self._resolution, center=key)
                 vox.set_color(color)
                 vox.set_alpha(alpha)
                 vox.set_edgecolor('k')
                 axis.add_collection3d(vox)
-
-
-

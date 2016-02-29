@@ -61,7 +61,7 @@ else:
 if __EXAMPLE__ == "Path":
     print "Example: Path"
     path = "cantilever"
-    coarse_scale = 8
+    coarse_scale = 4
     [verts, quads, params, dimensions, quads_objs, datasets] = extraction.extract_surface_from_path_w_plot(path, coarse_scale)
 else:
     [verts, quads, quads_objs, params] = extraction.extraction_algorithm(fine_data, resolutions, dimensions)
@@ -85,29 +85,26 @@ for e in nonmanifold:
 fig = plt.figure()
 ax = Axes3D(fig)
 
-datasets['fine'].plot(ax,'r',1)
-datasets['coarse'].plot(ax,'b',.25)
+#datasets['fine'].plot(ax,'r',1)
+#datasets['coarse'].plot(ax,'b',.25)
 
-plane_oo = [False] * quads['coarse'].__len__()
-for q in quads_objs['coarse']:
-    vtx = q.vertices_plane
-    vtx_orig = verts['coarse'][q.vertex_ids]
-    M = vtx[1:4, :] - vtx[0, :]
-    plane_oo[q.quad_id] = abs(np.linalg.det(M)) < 10 ** -10
+#plane_oo = [False] * quads['coarse'].__len__()
 
-    x = vtx[:, 0].tolist()
-    y = vtx[:, 1].tolist()
-    z = vtx[:, 2].tolist()
+for q in quads['coarse']:
+    if None in q.tolist():
+        continue
+    q = np.array(q,dtype=int)
+    vtx_orig = verts['coarse'][q]
+
     x_orig = vtx_orig[:, 0].tolist()
     y_orig = vtx_orig[:, 1].tolist()
     z_orig = vtx_orig[:, 2].tolist()
-    vtx = [zip(x, y, z)]
     vtx_orig = [zip(x_orig, y_orig, z_orig)]
     poly = Poly3DCollection(vtx_orig)
     poly.set_color('b')
     poly.set_edgecolor('k')
     poly.set_alpha(.25)
-    #ax.add_collection3d(poly)
+    ax.add_collection3d(poly)
 
 for nonmanifold_edge in nonmanifold:
     vtx = verts['coarse'][list(nonmanifold_edge)]
@@ -118,10 +115,11 @@ for nonmanifold_edge in nonmanifold:
     line = Line3DCollection(vtx)
     line.set_color('r')
     line.set_linewidth(5)
-    #ax.add_collection3d(line)
+    ax.add_collection3d(line)
+'''
+for q in quads['coarse']:
 
-for q in quads_objs['fine']:
-    vtx = verts['fine'][q]
+    vtx = verts['coarse'][q]
     x = vtx[:, 0].tolist()
     y = vtx[:, 1].tolist()
     z = vtx[:, 2].tolist()
@@ -130,8 +128,8 @@ for q in quads_objs['fine']:
     poly.set_color('r')
     poly.set_edgecolor('k')
     poly.set_alpha(.5)
-    #ax.add_collection3d(poly)
-
+    ax.add_collection3d(poly)
+'''
 x_mean = (dimensions['xmax']-dimensions['xmin'])/2.0
 y_mean = (dimensions['ymax']-dimensions['ymin'])/2.0
 z_mean = (dimensions['zmax']-dimensions['zmin'])/2.0
