@@ -127,29 +127,31 @@ def estimate_hermite(data, v0, v1, res, res_fine):
 
 
 def tworesolution_dual_contour(dataset, resolutions, dims):
-    print "fine resolution:"
-    print resolutions['fine']
-    print dims
+    print "fine resolution DC..."
     fine_dataset = VoxelDataset(dims, resolutions['fine'], dataset)
+    print "resolution: %d"%(fine_dataset._resolution)
     [dc_verts_fine, dc_quads_fine, dc_manifold_edges_fine] = dual_contour(fine_dataset,
                                                                           resolutions['fine'],
                                                                           is_coarse_level=False,
                                                                           do_manifold_treatment=False)
 
     # compute necessary coarsening steps from given coarse resolution.
-    print "coarsening:"
+    print "fine quads produced: %d"%(dc_quads_fine.__len__())
+
+    print "coarsening..."
     coarsening_steps = int(np.log(resolutions['coarse']) / np.log(2))
     assert coarsening_steps > 0  # at least one coarsening step has to be done!
     assert type(coarsening_steps) is int  # coarsening steps have to be integer!
 
     coarse_dataset = coarsen_dataset(coarsening_steps, fine_dataset)
 
-    print "coarse resolution:"
+    print "coarse resolution DC..."
+    print "resolution: %d"%(coarse_dataset._resolution)
     [dc_verts_coarse, dc_quads_coarse, dc_manifold_edges_coarse] = dual_contour(coarse_dataset,
                                                                                 resolutions['fine'],
                                                                                 is_coarse_level=True,
                                                                                 do_manifold_treatment=True)
-
+    print "coarse quads produced: %d"%(dc_quads_coarse.__len__())
     dc_verts = {'fine': dc_verts_fine, 'coarse': dc_verts_coarse}
     dc_quads = {'fine': dc_quads_fine, 'coarse': dc_quads_coarse}
     dc_manifolds = {'fine': dc_manifold_edges_fine, 'coarse': dc_manifold_edges_coarse}
