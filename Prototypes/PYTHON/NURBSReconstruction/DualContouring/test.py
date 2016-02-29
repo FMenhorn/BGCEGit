@@ -6,10 +6,44 @@ from mpl_toolkits.mplot3d import Axes3D
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection, Line3DCollection
 import dcHelpers
 
-__author__ = 'benjamin'
+def plot_surface(axis, quads, verts, color, alpha):
+    for q in quads:
+        vtx = verts[q]
+        x = vtx[:, 0].tolist()
+        y = vtx[:, 1].tolist()
+        z = vtx[:, 2].tolist()
+        vtx = [zip(x, y, z)]
+        poly = Poly3DCollection(vtx)
+        poly.set_color(color)
+        poly.set_edgecolor('k')
+        poly.set_alpha(alpha)
+        axis.add_collection3d(poly)
+
+def plot_hairs(axis, quads_objs, verts, params, color):
+    lines_data = []
+    points_data_x = []
+    points_data_y = []
+    points_data_z = []
+    for i in range(verts.__len__()):
+        q_id = int(params[i][0])
+        q = quads_objs[q_id]
+        v = verts[i]
+        base_v, d = q.projection_onto_plane(v)
+
+        lines_data.append([v.tolist(),base_v.tolist()])
+        points_data_x.append(v[0])
+        points_data_y.append(v[1])
+        points_data_z.append(v[2])
+    line = Line3DCollection(lines_data)
+    line.color(color)
+    axis.add_collection3d(line)
+    #axis.scatter(points_data_x, points_data_y, points_data_z,color='k')
+
+
+__author__ = 'benjamin der Starke'
 
 # choose example here
-__EXAMPLE__ = "Path"
+__EXAMPLE__ = "Torus"
 
 if __EXAMPLE__ == "Path":
     print "initializition is done later"
@@ -44,8 +78,8 @@ elif __EXAMPLE__ == "Sphere":
 elif __EXAMPLE__ == "Torus":
     dimensions = {'xmin': 0.0, 'xmax': 8.0, 'ymin': 0.0, 'ymax': 8.0, 'zmin': 0.0, 'zmax': 8.0}
 
-    res_fine = 1.0 / 4.0
-    res_coarse = 1.0
+    res_fine = 1.0 / 2.0
+    res_coarse = 2.0
 
     fine_data = testing.dcSample.sample_data(testing.dcSample.torus_f, res_fine, dimensions)
 
@@ -61,10 +95,10 @@ else:
 if __EXAMPLE__ == "Path":
     print "Example: Path"
     path = "cantilever"
-    coarse_scale = 4
+    coarse_scale = 8
     [verts, quads, params, dimensions, quads_objs, datasets] = extraction.extract_surface_from_path_w_plot(path, coarse_scale)
 else:
-    [verts, quads, quads_objs, params] = extraction.extraction_algorithm(fine_data, resolutions, dimensions)
+    [verts, quads, quads_objs, params, datasets] = extraction.extraction_algorithm(fine_data, resolutions, dimensions)
 
 print "###Plotting###"
 
@@ -85,26 +119,13 @@ for e in nonmanifold:
 fig = plt.figure()
 ax = Axes3D(fig)
 
-#datasets['fine'].plot(ax,'r',1)
-#datasets['coarse'].plot(ax,'b',.25)
+#datasets['fine'].plot(axis=ax,color='r',alpha=1)
+#datasets['coarse'].plot(axis=ax,color='k',alpha=0)
 
-#plane_oo = [False] * quads['coarse'].__len__()
+plot_surface(axis=ax, quads=quads['coarse'], verts=verts['coarse'], color='b', alpha=.5)
+#plot_surface(axis=ax, quads=quads['fine'], verts=verts['fine'], color='r', alpha=.5)
 
-for q in quads['coarse']:
-    if None in q.tolist():
-        continue
-    q = np.array(q,dtype=int)
-    vtx_orig = verts['coarse'][q]
-
-    x_orig = vtx_orig[:, 0].tolist()
-    y_orig = vtx_orig[:, 1].tolist()
-    z_orig = vtx_orig[:, 2].tolist()
-    vtx_orig = [zip(x_orig, y_orig, z_orig)]
-    poly = Poly3DCollection(vtx_orig)
-    poly.set_color('b')
-    poly.set_edgecolor('k')
-    poly.set_alpha(.25)
-    ax.add_collection3d(poly)
+plot_hairs(axis=ax, quads_objs=quads_objs['coarse'], verts=verts['fine'], params=params, color='k')
 
 for nonmanifold_edge in nonmanifold:
     vtx = verts['coarse'][list(nonmanifold_edge)]
@@ -115,21 +136,8 @@ for nonmanifold_edge in nonmanifold:
     line = Line3DCollection(vtx)
     line.set_color('r')
     line.set_linewidth(5)
-    ax.add_collection3d(line)
-'''
-for q in quads['coarse']:
+    #ax.add_collection3d(line)
 
-    vtx = verts['coarse'][q]
-    x = vtx[:, 0].tolist()
-    y = vtx[:, 1].tolist()
-    z = vtx[:, 2].tolist()
-    vtx = [zip(x, y, z)]
-    poly = Poly3DCollection(vtx)
-    poly.set_color('r')
-    poly.set_edgecolor('k')
-    poly.set_alpha(.5)
-    ax.add_collection3d(poly)
-'''
 x_mean = (dimensions['xmax']-dimensions['xmin'])/2.0
 y_mean = (dimensions['ymax']-dimensions['ymin'])/2.0
 z_mean = (dimensions['zmax']-dimensions['zmin'])/2.0

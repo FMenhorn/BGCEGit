@@ -3,26 +3,23 @@ import numpy as np
 
 
 def voxel(edge_length, center):
-    from mpl_toolkits.mplot3d.art3d import Poly3DCollection
-
     center = np.array(center)
-    x0 = (center + edge_length * .45 * np.array([-1, -1, -1])).tolist()
-    x1 = (center + edge_length * .45 * np.array([-1, 1, -1])).tolist()
-    x2 = (center + edge_length * .45 * np.array([1, 1, -1])).tolist()
-    x3 = (center + edge_length * .45 * np.array([1, -1, -1])).tolist()
-    x4 = (center + edge_length * .45 * np.array([-1, -1, 1])).tolist()
-    x5 = (center + edge_length * .45 * np.array([-1, 1, 1])).tolist()
-    x6 = (center + edge_length * .45 * np.array([1, 1, 1])).tolist()
-    x7 = (center + edge_length * .45 * np.array([1, -1, 1])).tolist()
+    scale = 1
+    x0 = (center + edge_length * scale * .5 * np.array([-1, -1, -1])).tolist()
+    x1 = (center + edge_length * scale * .5 * np.array([-1, 1, -1])).tolist()
+    x2 = (center + edge_length * scale * .5 * np.array([1, 1, -1])).tolist()
+    x3 = (center + edge_length * scale * .5 * np.array([1, -1, -1])).tolist()
+    x4 = (center + edge_length * scale * .5 * np.array([-1, -1, 1])).tolist()
+    x5 = (center + edge_length * scale * .5 * np.array([-1, 1, 1])).tolist()
+    x6 = (center + edge_length * scale * .5 * np.array([1, 1, 1])).tolist()
+    x7 = (center + edge_length * scale * .5 * np.array([1, -1, 1])).tolist()
 
-    poly = Poly3DCollection([[x0, x1, x2, x3],
-                             [x4, x5, x6, x7],
-                             [x0, x1, x5, x4],
-                             [x2, x3, x7, x6],
-                             [x0, x3, x7, x4],
-                             [x1, x2, x6, x5]])
-
-    return poly
+    return [[x0, x1, x2, x3, x0],
+            [x4, x5, x6, x7, x4],
+            [x0, x1, x5, x4, x0],
+            [x2, x3, x7, x6, x2],
+            [x0, x3, x7, x4, x0],
+            [x1, x2, x6, x5, x1]]
 
 
 def parse_dims(dims, res):
@@ -39,14 +36,9 @@ def parse_dims(dims, res):
     else:
         raise Exception("dims has wrong length!")
 
-    print dims_return
-
     for d in range(3):  # check if dimensions match with resolution
         gap = (dims_return['max'][d] - dims_return['min'][d]) % res  # if dimensions match, this is equal to 0!
-        print gap
         dims_return['max'][d] += (res - gap) % res
-
-    print dims_return
 
     return dims_return
 
@@ -128,11 +120,17 @@ class VoxelDataset():
                           np.arange(self._dimensions['min'][2], self._dimensions['max'][2], self._resolution))
 
     def plot(self, axis, color, alpha):
+        from mpl_toolkits.mplot3d.art3d import Poly3DCollection, Line3DCollection
         for x, y, z in self.get_grid_iterator():
             key = (x, y, z)
             if key in self._dataset:
-                vox = voxel(edge_length=self._resolution, center=key)
-                vox.set_color(color)
-                vox.set_alpha(alpha)
-                vox.set_edgecolor('k')
-                axis.add_collection3d(vox)
+                voxel_data = voxel(edge_length=self._resolution, center=key)
+                if alpha != 0:
+                    vox = Poly3DCollection(voxel_data)
+                    vox.set_color(color)
+                    vox.set_alpha(alpha)
+                    vox.set_edgecolor('k')
+                    axis.add_collection3d(vox)
+                else:
+                    mesh = Line3DCollection(voxel_data,colors=color)
+                    axis.add_collection3d(mesh)
