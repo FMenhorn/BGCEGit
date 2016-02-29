@@ -39,14 +39,14 @@ def coarsen_dataset(coarsening_steps, fine_dataset):
 
         coarse_data = set(fine_dataset._data)
         # traverse all cells (each one has 4 datavalues) and combine all 4 values into one
-        no_cube_verts = np.size(cube_verts,0)
+        number_of_cube_verts = np.size(cube_verts,0)
 
         for x, y, z in fine_dataset.get_grid_iterator():
             o = np.array([float(x), float(y), float(z)])
 
-            new_data = np.zeros(no_cube_verts, dtype=bool)
+            new_data = np.zeros(number_of_cube_verts, dtype=bool)
 
-            for i in range(no_cube_verts):
+            for i in range(number_of_cube_verts):
                 position = (o + cube_verts[i, :] * fine_dataset._resolution)
                 key = tuple(position)
                 new_data[i] = fine_dataset.value_at(key)
@@ -192,6 +192,7 @@ def dual_contour(dataset, res_fine, is_coarse_level, do_manifold_treatment):
     print "+ generating vertices +"
     voxel_count = 0
     voxel_total = dataset.get_total_voxels()
+    number_of_cube_verts = np.size(cube_verts,0)
     for x, y, z in dataset.get_grid_iterator():
         if voxel_count % ((voxel_total + 100) / 100) == 0:
             print "%d%% generating vertices: processing voxel %d of %d." % (
@@ -199,12 +200,12 @@ def dual_contour(dataset, res_fine, is_coarse_level, do_manifold_treatment):
         voxel_count += 1
         o = np.array([float(x), float(y), float(z)])
 
-        cube_signs = []
+        cube_signs = np.zeros(number_of_cube_verts, dtype=bool)
         # Get signs for cube
-        for v in cube_verts:
-            position = (o + v * res)
+        for i in range(number_of_cube_verts):
+            position = (o + cube_verts[i, :] * res)
             key = tuple(position)
-            cube_signs.append(dataset[key])
+            cube_signs[i] = dataset[key]
 
         if all(cube_signs) or not any(cube_signs):
             continue
