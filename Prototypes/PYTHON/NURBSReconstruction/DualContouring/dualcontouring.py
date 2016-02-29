@@ -182,11 +182,12 @@ def dual_contour(dataset, res_fine, is_coarse_level, do_manifold_treatment):
 
     res = dataset._resolution
 
+    print "+ generating vertices +"
     voxel_count = 0
     voxel_total = dataset.get_total_voxels()
     for x, y, z in dataset.get_grid_iterator():
         if voxel_count % ((voxel_total+100)/100) == 0:
-            print "%d%%: processing voxel %d of %d."%(100*voxel_count/voxel_total,voxel_count, voxel_total)
+            print "%d%% generating vertices: processing voxel %d of %d."%(100*voxel_count/voxel_total,voxel_count, voxel_total)
         voxel_count += 1
         o = np.array([float(x), float(y), float(z)])
 
@@ -220,38 +221,44 @@ def dual_contour(dataset, res_fine, is_coarse_level, do_manifold_treatment):
         vindex[tuple(o)] = len(dc_verts)
         dc_verts.append(v)
 
-    # Construct faces
     dc_quads = []
-    for x, y, z in dataset.get_grid_iterator():
-        if not (x, y, z) in vindex:
-            continue
+    if is_coarse_level:
+        # Construct faces
+        print "+ generating faces +"
+        voxel_count = 0
+        for x, y, z in dataset.get_grid_iterator():
+            if voxel_count % ((voxel_total+100)/100) == 0:
+                print "%d%% generating faces: processing voxel %d of %d."%(100*voxel_count/voxel_total,voxel_count, voxel_total)
+            voxel_count += 1
+            if not (x, y, z) in vindex:
+                continue
 
-        # Emit one edge per each edge that crosses
-        o = np.array([float(x), float(y), float(z)])
-        for i in range(3):
-            for j in range(i):
-                if tuple(o + res * dirs[i]) in vindex and \
-                                tuple(o + res * dirs[j]) in vindex and \
-                                tuple(o + res * (dirs[i] + dirs[j])) \
-                                in vindex:
-                    k = 3 - (i + j)  # normal id
-                    c = True
-                    d = True
-                    key_ij = tuple(o + res * dirs[i] + res * dirs[j])
-                    key_ijk = tuple(o + res * dirs[i] + res * dirs[j] + res * dirs[k])
-                    if dataset.point_is_inside(key_ij):
-                        c = dataset[key_ij]
-                    if dataset.point_is_inside(key_ijk):
-                        d = dataset[key_ijk]
-                    if c != d:
-                        dc_quads.append([vindex[tuple(o)],
-                                         vindex[tuple(o + res * dirs[i])],
-                                         vindex[tuple(o + res * dirs[i] + res * dirs[j])],
-                                         vindex[tuple(o + res * dirs[j])]])
+            # Emit one edge per each edge that crosses
+            o = np.array([float(x), float(y), float(z)])
+            for i in range(3):
+                for j in range(i):
+                    if tuple(o + res * dirs[i]) in vindex and \
+                                    tuple(o + res * dirs[j]) in vindex and \
+                                    tuple(o + res * (dirs[i] + dirs[j])) \
+                                    in vindex:
+                        k = 3 - (i + j)  # normal id
+                        c = True
+                        d = True
+                        key_ij = tuple(o + res * dirs[i] + res * dirs[j])
+                        key_ijk = tuple(o + res * dirs[i] + res * dirs[j] + res * dirs[k])
+                        if dataset.point_is_inside(key_ij):
+                            c = dataset[key_ij]
+                        if dataset.point_is_inside(key_ijk):
+                            d = dataset[key_ijk]
+                        if c != d:
+                            dc_quads.append([vindex[tuple(o)],
+                                             vindex[tuple(o + res * dirs[i])],
+                                             vindex[tuple(o + res * dirs[i] + res * dirs[j])],
+                                             vindex[tuple(o + res * dirs[j])]])
 
+    dc_manifold_edges = []
     if do_manifold_treatment:
+        print "+ manifold treatment +"
         dc_verts, dc_quads, dc_manifold_edges = resolve_manifold_edges(dc_verts, vindex, dc_quads, dataset)
-    else:
-        dc_manifold_edges = create_manifold_edges(dc_quads, vindex, dataset)
 
     return np.array(dc_verts), np.array(dc_quads), dc_manifold_edges
