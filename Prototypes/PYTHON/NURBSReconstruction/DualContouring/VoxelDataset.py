@@ -168,11 +168,17 @@ class VoxelDataset():
         :param point:
         :return:
         """
+        return self._value_at_wo_checks(point)
+
+    def _value_at_w_checks(self, point):
         if self.valid_point(point):
             return point in self._dataset
         else:
             if not self.point_is_inside(point):
                 raise Exception("invalid point! Point %s is not inside %s." % (point, self._dimensions))
+
+    def _value_at_wo_checks(self, point):
+        return point in self._dataset
 
     def __getitem__(self, item):
         assert type(item) is tuple
