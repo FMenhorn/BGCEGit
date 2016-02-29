@@ -7,41 +7,41 @@ from PetersScheme.fitting import fit_NURBS
 from PetersScheme.quadvertGenerator import quad_vert_generator
 
 
-#parser = argparse.ArgumentParser(description='Includes 7 arguments: '
-#                                             '1)path to Cells and Dimensions 2)path to the input step file'
-#                                             '3)path to the output file 4)fairnessWeight 5)coarsening_factor'
-#                                             '6)path to nonchanging file 7)path to allowed domains file')
-#parser.add_argument('path', type=str, help='path to Cells and Dimensions')
-#parser.add_argument('input_file_name', type=str, help='path to the input files--given by the user')
-#parser.add_argument('output_file_name', type=str, help='path to the output file--given by the user')
-#parser.add_argument('fairnessWeight', type=float, help='fairnessWeight')
-#parser.add_argument('coarsening_factor', type=int, help='coarsening_factor')
-#parser.add_argument('nonchanging_file_name', type=str, help='path to nonchanging file --given by the user')
-#parser.add_argument('allowed_domains_file_name', type=str, help='path to allowed domains file --given by the user')
-#args, leftovers = parser.parse_known_args()
+parser = argparse.ArgumentParser(description='Includes 7 arguments: '
+                                             '1)path to Cells and Dimensions 2)path to the input step file'
+                                             '3)path to the output file 4)fairnessWeight 5)coarsening_factor'
+                                             '6)path to nonchanging file 7)path to allowed domains file')
+parser.add_argument('path', type=str, help='path to Cells and Dimensions')
+parser.add_argument('input_file_name', type=str, help='path to the input files--given by the user')
+parser.add_argument('output_file_name', type=str, help='path to the output file--given by the user')
+parser.add_argument('fairnessWeight', type=float, help='fairnessWeight')
+parser.add_argument('coarsening_factor', type=int, help='coarsening_factor')
+parser.add_argument('nonchanging_file_name', type=str, help='path to nonchanging file --given by the user')
+parser.add_argument('allowed_domains_file_name', type=str, help='path to allowed domains file --given by the user')
+args, leftovers = parser.parse_known_args()
 
 ## todo JC fix this!
-#if args.nonchanging_file_name is None:
-#    nonchanging_file_name = ''
-#else:
-#    nonchanging_file_name = args.nonchanging_file_name
+if args.nonchanging_file_name is None:
+    nonchanging_file_name = ''
+else:
+    nonchanging_file_name = args.nonchanging_file_name
 
 ## todo JC fix this!
-#if args.allowed_domains_file_name is None:
-#    allowed_domains_file_name = ''
-#else:
-#    allowed_domains_file_name = args.allowed_domains_file_name
+if args.allowed_domains_file_name is None:
+    allowed_domains_file_name = ''
+else:
+    allowed_domains_file_name = args.allowed_domains_file_name
 
-#args = parser.parse_args()
+args = parser.parse_args()
 
 #####TESTING PATHS ######
-path="./DualContouring/Cantilever/"
-input_file_name = "../../OpenCascade/TestGeometry/ActiveVolumeTest/Cantilever.step"
-output_file_name = "./Cantilever"
-fairnessWeight = 0.5
-coarsening_factor = 2
-nonchanging_file_name = "../../OpenCascade/TestGeometry/ActiveVolumeTest/Cantilever_Fixed.step"
-allowed_domains_file_name = "../../OpenCascade/TestGeometry/ActiveVolumeTest/Cantilever_ToOptimize.step"
+#path="./DualContouring/Cantilever/"
+#input_file_name = "../../OpenCascade/TestGeometry/ActiveVolumeTest/Cantilever.step"
+#output_file_name = "./Cantilever"
+#fairnessWeight = 0.5
+#coarsening_factor = 2
+#nonchanging_file_name = "../../OpenCascade/TestGeometry/ActiveVolumeTest/Cantilever_Fixed.step"
+#allowed_domains_file_name = "../../OpenCascade/TestGeometry/ActiveVolumeTest/Cantilever_ToOptimize.step"
 #######
 
 
