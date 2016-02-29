@@ -1,3 +1,4 @@
+import export_results
 import numpy as np
 import numpy.linalg as la
 import itertools as it
@@ -143,6 +144,10 @@ def tworesolution_dual_contour(dataset, resolutions, dims):
     # compute necessary coarsening steps from given coarse resolution.
     print "fine quads produced: %d"%(dc_quads_fine.__len__())
 
+    print "exporting intermediate results."
+    export_results.export_as_csv(dc_verts_fine,'dc_verts_fine')
+    export_results.export_as_csv(dc_quads_fine,'dc_quads_fine')
+
     print "++ Coarsening Dataset ++"
     coarsening_steps = int(np.log(resolutions['coarse']) / np.log(2))
     assert coarsening_steps > 0  # at least one coarsening step has to be done!
@@ -150,7 +155,7 @@ def tworesolution_dual_contour(dataset, resolutions, dims):
 
     coarse_dataset = coarsen_dataset(coarsening_steps, fine_dataset)
 
-    print "++ Fine Resolution DC ++"
+    print "++ Coarse Resolution DC ++"
     print "resolution: %d"%(coarse_dataset._resolution)
     [dc_verts_coarse, dc_quads_coarse, dc_manifold_edges_coarse] = dual_contour(coarse_dataset,
                                                                                 resolutions['fine'],
@@ -160,6 +165,10 @@ def tworesolution_dual_contour(dataset, resolutions, dims):
     dc_verts = {'fine': dc_verts_fine, 'coarse': dc_verts_coarse}
     dc_quads = {'fine': dc_quads_fine, 'coarse': dc_quads_coarse}
     dc_manifolds = {'fine': dc_manifold_edges_fine, 'coarse': dc_manifold_edges_coarse}
+
+    print "exporting intermediate results."
+    export_results.export_as_csv(dc_verts_coarse,'dc_verts_coarse')
+    export_results.export_as_csv(dc_quads_coarse,'dc_quads_coarse')
 
     datasets = {'fine': fine_dataset, 'coarse': coarse_dataset}
 
