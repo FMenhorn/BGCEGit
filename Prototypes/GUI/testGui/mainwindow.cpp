@@ -102,6 +102,18 @@ void MainWindow::on_IGSFileSelector_clicked()
 
 void MainWindow::on_runButton_clicked()
 {
+    //Disable all buttons
+    ui->STEPFileSelector->setDisabled(true);
+    ui->IGSFileSelector->setDisabled(true);
+    ui->checkBox->setDisabled(true);
+    ui->checkBox_2->setDisabled(true);
+    ui->ForceEdit->setDisabled(true);
+    ui->RefinementEdit->setDisabled(true);
+    ui->FairnessWeight->setDisabled(true);
+    ui->Coarsening->setDisabled(true);
+    ui->Output_selector->setDisabled(true);
+    ui->runButton->setDisabled(true);
+
     ui->IGSFileInput->setStyleSheet("QLabel { Color : black }");
     ui->STEPFileInput->setStyleSheet("QLabel { Color : black }");
     this->hide_ErrorFields();
@@ -172,15 +184,16 @@ void MainWindow::on_runButton_clicked()
         std::string cellsAndDimensionsPath = "./../../PYTHON/NURBSReconstruction";
         std::string outputFileString = stpOutputPath.toStdString()+stpOutputName.toStdString();
         std::string fairnessWeight = ui->FairnessWeight->text().toStdString();
-        std::string coarseningFactor = ui->Coarsening->text().toStdString();
-        std::string fixedFileFullPathNameString = this->isFixtureFileSupplied ? stpPath.toStdString() + stpName.toStdString() + "_Fixed.step" : "";
-        std::string booleanFileString = this->isOptimizationDomainSupplied ? stpPath.toStdString() + stpName.toStdString() + "_ToOptimize.step" : "";
+        int coarseningFactorInt = ui->Coarsening->text().toInt();
+        coarseningFactorInt = pow(2, coarseningFactorInt);
+        std::string coarseningFactor = std::to_string(coarseningFactorInt);
+        std::string fixedFileFullPathNameString = this->isFixtureFileSupplied ? stpPath.toStdString() + stpName.toStdString() + "_Fixed.step" : "\"\"";
+        std::string booleanFileString = this->isOptimizationDomainSupplied ? stpPath.toStdString() + stpName.toStdString() + "_ToOptimize.step" : "\"\"";
         parameterString = cellsAndDimensionsPath + " " + stpFile.toStdString() + " " + outputFileString + " " + fairnessWeight + " " + coarseningFactor + " "+ fixedFileFullPathNameString + " " + booleanFileString;
         std::string scriptPython = "python ./../../PYTHON/NURBSReconstruction/runningScript.py " + parameterString;
 
         std::cout << scriptPython << std::endl;
         system(scriptPython.c_str());
-
 
         future = QtConcurrent::run(&qpool, &this->scriptCaller, &ScriptCaller::callScript, scriptPython);
 
@@ -195,6 +208,18 @@ void MainWindow::on_runButton_clicked()
         std::cout << "###Voxelizer: Elapsed Time: " << voxelizerTime << std::endl;
         std::cout << "###Topology Optimization: Elapsed Time: " << topyTime << std::endl;
         std::cout << "###SURFACE-Fitting: Elapsed Time: " << surfaceFittingTime << std::endl;
+
+
+        ui->STEPFileSelector->setEnabled(true);
+        ui->IGSFileSelector->setEnabled(true);
+        ui->checkBox->setEnabled(true);
+        ui->checkBox_2->setEnabled(true);
+        ui->ForceEdit->setEnabled(true);
+        ui->RefinementEdit->setEnabled(true);
+        ui->FairnessWeight->setEnabled(true);
+        ui->Coarsening->setEnabled(true);
+        ui->Output_selector->setEnabled(true);
+        ui->runButton->setEnabled(true);
 
         this->ui->startFreeCadButton->show();
     }
@@ -291,7 +316,7 @@ void MainWindow::on_startFreeCadButton_clicked()
 void MainWindow::on_checkBox_stateChanged(int newState)
 {
     if(newState){
-        this->ui->checkBoxWarningLabel->setText("Make sure that fixture file name is of the form \'StepFileName\'_Fixed.step!");
+        this->ui->checkBoxWarningLabel->setText("Make sure file name is of the form \'StepFileName\'_Fixed.step!");
         this->ui->checkBoxWarningLabel->setStyleSheet("QLabel { Color : red }");
         this->isFixtureFileSupplied = 1;
     }else{
@@ -303,7 +328,7 @@ void MainWindow::on_checkBox_stateChanged(int newState)
 void MainWindow::on_checkBox_2_stateChanged(int newState)
 {
     if(newState){
-        this->ui->checkBoxWarningLabel_2->setText("Make sure that fixture file name is of the form \'StepFileName\'_ToOptimize.step!");
+        this->ui->checkBoxWarningLabel_2->setText("Make sure file name is of the form \'StepFileName\'_ToOptimize.step!");
         this->ui->checkBoxWarningLabel_2->setStyleSheet("QLabel { Color : red }");
         this->isOptimizationDomainSupplied = 1;
     }else{

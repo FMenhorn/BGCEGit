@@ -516,7 +516,7 @@
      <rect>
       <x>50</x>
       <y>300</y>
-      <width>141</width>
+      <width>81</width>
       <height>26</height>
      </rect>
     </property>
@@ -527,7 +527,7 @@
    <widget class="QLabel" name="checkBoxWarningLabel">
     <property name="geometry">
      <rect>
-      <x>180</x>
+      <x>220</x>
       <y>303</y>
       <width>491</width>
       <height>21</height>
@@ -540,9 +540,9 @@
    <widget class="QLabel" name="checkBoxWarningLabel_2">
     <property name="geometry">
      <rect>
-      <x>270</x>
+      <x>220</x>
       <y>333</y>
-      <width>401</width>
+      <width>451</width>
       <height>21</height>
      </rect>
     </property>
