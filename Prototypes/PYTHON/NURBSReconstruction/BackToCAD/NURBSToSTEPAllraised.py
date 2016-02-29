@@ -11,6 +11,7 @@ import Import
 
 from get_faces_from_points import get_faces_from_points
 from process_allowed_domains import process_allowed_domains
+from process_nonchanging_domains import process_nonchanging_domains
 from reorient_object import reorient_object
 
 def export_step(nurbs_idx, nurbs_pts, input_file_name, output_file_name, nonchanging_file_name, allowed_domains_file_name):

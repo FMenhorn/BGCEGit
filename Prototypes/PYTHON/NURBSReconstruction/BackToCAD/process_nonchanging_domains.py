@@ -2,7 +2,7 @@ import FreeCAD
 import Import
 import Part
 
-def process_nonchanging_domains(nonchanging_file_name, output_file_name)
+def process_nonchanging_domains(nonchanging_file_name, output_file_name):
 	if len(nonchanging_file_name) != 0:
 		print "Loading non-changing component..."
 		Import.insert(nonchanging_file_name, "tmp")
@@ -28,7 +28,7 @@ def process_nonchanging_domains(nonchanging_file_name, output_file_name)
 			FreeCAD.getDocument("tmp").removeObject(__objs__[i].Name)
 
 		print "Exporting BOOLEANED file..."
-		__objs__.append(FreeCAD.getDocument("tmp").getObject("FusionTool"))
+		__objs__ = FreeCAD.getDocument("tmp").findObjects()
 		Part.export(__objs__, output_file_name+"_BOOLEANED.step")
 		print "Output file " + output_file_name+"_BOOLEANED.step" + " exported."
 
