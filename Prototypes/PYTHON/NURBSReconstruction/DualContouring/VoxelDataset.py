@@ -119,6 +119,12 @@ class VoxelDataset():
                           np.arange(self._dimensions['min'][1], self._dimensions['max'][1], self._resolution),
                           np.arange(self._dimensions['min'][2], self._dimensions['max'][2], self._resolution))
 
+    def get_total_voxels(self):
+        return np.arange(self._dimensions['min'][0], self._dimensions['max'][0], self._resolution).__len__() * \
+               np.arange(self._dimensions['min'][1], self._dimensions['max'][1], self._resolution).__len__() * \
+               np.arange(self._dimensions['min'][2], self._dimensions['max'][2], self._resolution).__len__()
+
+
     def plot(self, axis, color, alpha):
         from mpl_toolkits.mplot3d.art3d import Poly3DCollection, Line3DCollection
         for x, y, z in self.get_grid_iterator():
