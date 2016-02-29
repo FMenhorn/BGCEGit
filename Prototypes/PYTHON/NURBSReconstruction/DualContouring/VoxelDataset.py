@@ -55,23 +55,23 @@ def parse_dims(dims, res):
     return dims_return
 
 
-def parse_dataset(dataset):
+def parse_data(data):
     """
-    parses the dataset in the correct format for the VoxelDataset object.
-    :param dataset: dataset might have a different format (e.g. dict)
+    parses the data in the correct format for the VoxelDataset object.
+    :param data: data might have a different format (e.g. dict)
     :return: a set containing all the points which lie inside the geometry
     """
-    if type(dataset) is set:
-        return_dataset = dataset
-    elif type(dataset) is dict:
-        return_dataset = set()
-        for key, value in dataset.items():
+    if type(data) is set:
+        return_data = data
+    elif type(data) is dict:
+        return_data = set()
+        for key, value in data.items():
             if value == -1:
-                return_dataset.add(key)
+                return_data.add(key)
     else:
-        raise Exception("dataset of wrong type!")
+        raise Exception("data of wrong type!")
 
-    return return_dataset
+    return return_data
 
 
 class VoxelDataset():
@@ -81,7 +81,7 @@ class VoxelDataset():
     set containing those points which are inside. Some additional data (not on the uniform grid) might be in the set,
     which is needed for ambiguity resolution.
     """
-    def __init__(self, dims, resolution, dataset):
+    def __init__(self, dims, resolution, data):
         assert type(dims) is dict
         self._dimensions = parse_dims(dims, resolution)
 
@@ -89,7 +89,7 @@ class VoxelDataset():
         assert resolution >= 1
         self._resolution = int(resolution)
 
-        self._dataset = parse_dataset(dataset)
+        self._data = parse_data(data)
 
     def align(self):
         """
@@ -98,20 +98,20 @@ class VoxelDataset():
         """
         # align dataset
         aligned_dataset = set()
-        for key in self._dataset:
-            aligned_key = 3*[None]
+        aligned_key = np.zeros(3)
+        for key in self._data:
             for d in range(3):
-                aligned_key[d] = int(key[d])
+                aligned_key[d] = np.floor(key[d])
             aligned_dataset.add(tuple(aligned_key))
 
         # align dimensions
         aligned_dims={'min':3*[None],'max':3*[None]}
         for d in range(3):
-            aligned_dims['min'][d] = int(self._dimensions['min'][d])
-            aligned_dims['max'][d] = int(self._dimensions['max'][d])
+            aligned_dims['min'][d] = np.floor(self._dimensions['min'][d])
+            aligned_dims['max'][d] = np.floor(self._dimensions['max'][d])
 
         # overwrite old dataset and dimensions
-        self._dataset = aligned_dataset
+        self._data = aligned_dataset
         self._dimensions = aligned_dims
 
         assert self._resolution == 1
@@ -172,13 +172,13 @@ class VoxelDataset():
 
     def _value_at_w_checks(self, point):
         if self.valid_point(point):
-            return point in self._dataset
+            return point in self._data
         else:
             if not self.point_is_inside(point):
                 raise Exception("invalid point! Point %s is not inside %s." % (point, self._dimensions))
 
     def _value_at_wo_checks(self, point):
-        return point in self._dataset
+        return point in self._data
 
     def __getitem__(self, item):
         assert type(item) is tuple
@@ -212,7 +212,7 @@ class VoxelDataset():
         from mpl_toolkits.mplot3d.art3d import Poly3DCollection, Line3DCollection
         for x, y, z in self.get_grid_iterator():
             key = (x, y, z)
-            if key in self._dataset:
+            if key in self._data:
                 voxel_data = voxel(edge_length=self._resolution, center=key)
                 if alpha != 0:
                     vox = Poly3DCollection(voxel_data)

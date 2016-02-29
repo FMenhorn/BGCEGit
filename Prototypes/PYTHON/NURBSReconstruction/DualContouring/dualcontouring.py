@@ -1,7 +1,7 @@
-import export_results
 import numpy as np
 import numpy.linalg as la
 import itertools as it
+import export_results
 from dcHelpers import resolve_manifold_edges, create_manifold_edges
 from VoxelDataset import VoxelDataset
 
@@ -12,10 +12,10 @@ from VoxelDataset import VoxelDataset
 dirs = [np.array([0.0, 0.0, 1.0]), np.array([0.0, 1.0, 0.0]), np.array([1.0, 0.0, 0.0])]
 
 # Vertices of cube
-cube_verts = [np.array([x, y, z])
-              for x in range(2)
-              for y in range(2)
-              for z in range(2)]
+cube_verts = np.array([np.array([x, y, z])
+                       for x in range(2)
+                       for y in range(2)
+                       for z in range(2)])
 
 # Edges of cube
 cube_edges = [[0, 1], [0, 2], [1, 3], [2, 3],
@@ -24,7 +24,7 @@ cube_edges = [[0, 1], [0, 2], [1, 3], [2, 3],
 
 
 def coarsen_dataset(coarsening_steps, fine_dataset):
-    print "%d coarsening_steps left."%coarsening_steps
+    print "%d coarsening_steps left." % coarsening_steps
     coarsening_threshold = 0.125
 
     if coarsening_steps > 0:
@@ -42,21 +42,19 @@ def coarsen_dataset(coarsening_steps, fine_dataset):
         for x, y, z in fine_dataset.get_grid_iterator():
             o = np.array([float(x), float(y), float(z)])
 
-            new_data = []
-            for v in cube_verts:
+            new_data = np.zeros(cube_verts.__len__(),dtype=bool)
+            for i in range(cube_verts.__len__()):
+                v = cube_verts[i,:]
                 position = (o + v * fine_dataset._resolution)
                 key = tuple(position)
-                if fine_dataset.value_at(key):
+                new_data[i] = fine_dataset.value_at(key)
+                if new_data[i]:
                     coarse_data.add(key)
-                    c = 1.0
-                else:
-                    c = 0.0
-                new_data.append(c)
 
             new_o = o + .5 * fine_dataset._resolution * np.array([1, 1, 1])
             key = tuple(new_o)
 
-            if np.mean(new_data) > coarsening_threshold:
+            if new_data.sum() > (coarsening_threshold*8):
                 coarse_data.add(key)
             elif key in coarse_data:
                 coarse_data.remove(key)
@@ -71,7 +69,7 @@ def coarsen_dataset(coarsening_steps, fine_dataset):
             coarse_dims['min'][d] = fine_dataset._dimensions['min'][d] - .5 * fine_dataset._resolution
             coarse_dims['max'][d] = fine_dataset._dimensions['max'][d] + .5 * fine_dataset._resolution
 
-        coarse_dataset = VoxelDataset(coarse_dims, fine_dataset._resolution, fine_dataset._dataset)
+        coarse_dataset = VoxelDataset(coarse_dims, fine_dataset._resolution, fine_dataset._data)
 
         return coarse_dataset
 
@@ -142,11 +140,11 @@ def tworesolution_dual_contour(dataset, resolutions, dims):
                                                                           do_manifold_treatment=False)
 
     # compute necessary coarsening steps from given coarse resolution.
-    print "fine quads produced: %d"%(dc_quads_fine.__len__())
+    print "fine quads produced: %d" % (dc_quads_fine.__len__())
 
     print "exporting intermediate results."
-    export_results.export_as_csv(dc_verts_fine,'dc_verts_fine')
-    export_results.export_as_csv(dc_quads_fine,'dc_quads_fine')
+    export_results.export_as_csv(dc_verts_fine, 'dc_verts_fine')
+    export_results.export_as_csv(dc_quads_fine, 'dc_quads_fine')
 
     print "++ Coarsening Dataset ++"
     coarsening_steps = int(np.log(resolutions['coarse']) / np.log(2))
@@ -156,19 +154,19 @@ def tworesolution_dual_contour(dataset, resolutions, dims):
     coarse_dataset = coarsen_dataset(coarsening_steps, fine_dataset)
 
     print "++ Coarse Resolution DC ++"
-    print "resolution: %d"%(coarse_dataset._resolution)
+    print "resolution: %d" % (coarse_dataset._resolution)
     [dc_verts_coarse, dc_quads_coarse, dc_manifold_edges_coarse] = dual_contour(coarse_dataset,
                                                                                 resolutions['fine'],
                                                                                 is_coarse_level=True,
                                                                                 do_manifold_treatment=True)
-    print "coarse quads produced: %d"%(dc_quads_coarse.__len__())
+    print "coarse quads produced: %d" % (dc_quads_coarse.__len__())
     dc_verts = {'fine': dc_verts_fine, 'coarse': dc_verts_coarse}
     dc_quads = {'fine': dc_quads_fine, 'coarse': dc_quads_coarse}
     dc_manifolds = {'fine': dc_manifold_edges_fine, 'coarse': dc_manifold_edges_coarse}
 
     print "exporting intermediate results."
-    export_results.export_as_csv(dc_verts_coarse,'dc_verts_coarse')
-    export_results.export_as_csv(dc_quads_coarse,'dc_quads_coarse')
+    export_results.export_as_csv(dc_verts_coarse, 'dc_verts_coarse')
+    export_results.export_as_csv(dc_quads_coarse, 'dc_quads_coarse')
 
     datasets = {'fine': fine_dataset, 'coarse': coarse_dataset}
 
@@ -195,8 +193,9 @@ def dual_contour(dataset, res_fine, is_coarse_level, do_manifold_treatment):
     voxel_count = 0
     voxel_total = dataset.get_total_voxels()
     for x, y, z in dataset.get_grid_iterator():
-        if voxel_count % ((voxel_total+100)/100) == 0:
-            print "%d%% generating vertices: processing voxel %d of %d."%(100*voxel_count/voxel_total,voxel_count, voxel_total)
+        if voxel_count % ((voxel_total + 100) / 100) == 0:
+            print "%d%% generating vertices: processing voxel %d of %d." % (
+            100 * voxel_count / voxel_total, voxel_count, voxel_total)
         voxel_count += 1
         o = np.array([float(x), float(y), float(z)])
 
@@ -232,12 +231,14 @@ def dual_contour(dataset, res_fine, is_coarse_level, do_manifold_treatment):
 
     dc_quads = []
     if is_coarse_level:
+    # Construct faces
         # Construct faces
         print "+ generating faces +"
         voxel_count = 0
         for x, y, z in dataset.get_grid_iterator():
-            if voxel_count % ((voxel_total+100)/100) == 0:
-                print "%d%% generating faces: processing voxel %d of %d."%(100*voxel_count/voxel_total,voxel_count, voxel_total)
+            if voxel_count % ((voxel_total + 100) / 100) == 0:
+                print "%d%% generating faces: processing voxel %d of %d." % (
+                100 * voxel_count / voxel_total, voxel_count, voxel_total)
             voxel_count += 1
             if not (x, y, z) in vindex:
                 continue
@@ -269,5 +270,7 @@ def dual_contour(dataset, res_fine, is_coarse_level, do_manifold_treatment):
     if do_manifold_treatment:
         print "+ manifold treatment +"
         dc_verts, dc_quads, dc_manifold_edges = resolve_manifold_edges(dc_verts, vindex, dc_quads, dataset)
+    else:
+        dc_manifold_edges = create_manifold_edges(dc_quads, vindex, dataset)
 
     return np.array(dc_verts), np.array(dc_quads), dc_manifold_edges
