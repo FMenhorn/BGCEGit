@@ -128,8 +128,12 @@ def estimate_hermite(data, v0, v1, res, res_fine):
 
 
 def tworesolution_dual_contour(dataset, resolutions, dims):
-    print "++ Fine Resolution DC ++"
+
     fine_dataset = VoxelDataset(dims, resolutions['fine'], dataset)
+    print "++ Aligning Dataset ++"
+    fine_dataset.align()
+
+    print "++ Fine Resolution DC ++"
     print "resolution: %d"%(fine_dataset._resolution)
     [dc_verts_fine, dc_quads_fine, dc_manifold_edges_fine] = dual_contour(fine_dataset,
                                                                           resolutions['fine'],

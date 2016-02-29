@@ -69,6 +69,24 @@ class VoxelDataset():
 
         self._dataset = parse_dataset(dataset)
 
+    def align(self):
+        aligned_dataset = set()
+        for key in self._dataset:
+            aligned_key = 3*[None]
+            for d in range(3):
+                aligned_key[d] = int(key[d])
+            aligned_dataset.add(tuple(aligned_key))
+
+        aligned_dims={'min':3*[None],'max':3*[None]}
+        for d in range(3):
+            aligned_dims['min'][d] = int(self._dimensions['min'][d])
+            aligned_dims['max'][d] = int(self._dimensions['max'][d])
+
+        self._dataset = aligned_dataset
+        self._dimensions = aligned_dims
+
+        assert self._resolution == 1
+
     def point_is_inside(self, point):
         assert type(point) is tuple
         assert point.__len__() == 3
