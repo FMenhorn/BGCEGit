@@ -3,6 +3,12 @@ import numpy as np
 
 
 def voxel(edge_length, center):
+    """
+    returns the data which is needed for plotting the faces of one voxel (a cube)
+    :param edge_length: edge length of the cube
+    :param center: center of gravity of the cube
+    :return: list with list containing the four vertices of the six faces of the cube
+    """
     center = np.array(center)
     scale = 1
     x0 = (center + edge_length * scale * .5 * np.array([-1, -1, -1])).tolist()
@@ -23,6 +29,12 @@ def voxel(edge_length, center):
 
 
 def parse_dims(dims, res):
+    """
+    parses the dimensions in the correct format for the VoxelDataset object
+    :param dims: dimensions
+    :param res: resolution
+    :return:
+    """
     if dims.__len__() == 6:
         dims_return = {'min': 3 * [None], 'max': 3 * [None]}
         dims_return['min'][0] = dims['xmin']
@@ -44,6 +56,11 @@ def parse_dims(dims, res):
 
 
 def parse_dataset(dataset):
+    """
+    parses the dataset in the correct format for the VoxelDataset object.
+    :param dataset: dataset might have a different format (e.g. dict)
+    :return: a set containing all the points which lie inside the geometry
+    """
     if type(dataset) is set:
         return_dataset = dataset
     elif type(dataset) is dict:
@@ -58,7 +75,12 @@ def parse_dataset(dataset):
 
 
 class VoxelDataset():
-
+    """
+    Object which has a dataset containing inside/outside information along with the dimensionality of the bounding box
+    and the spacing of the gridpoints. The inside/outside information is stored on a uniform grid and represented by a
+    set containing those points which are inside. Some additional data (not on the uniform grid) might be in the set,
+    which is needed for ambiguity resolution.
+    """
     def __init__(self, dims, resolution, dataset):
         assert type(dims) is dict
         self._dimensions = parse_dims(dims, resolution)
@@ -70,6 +92,11 @@ class VoxelDataset():
         self._dataset = parse_dataset(dataset)
 
     def align(self):
+        """
+        Aligns the dataset to integer values. Assumes, that the resolution is equal to 1. Non integer points are just
+        cropped.
+        """
+        # align dataset
         aligned_dataset = set()
         for key in self._dataset:
             aligned_key = 3*[None]
@@ -77,17 +104,24 @@ class VoxelDataset():
                 aligned_key[d] = int(key[d])
             aligned_dataset.add(tuple(aligned_key))
 
+        # align dimensions
         aligned_dims={'min':3*[None],'max':3*[None]}
         for d in range(3):
             aligned_dims['min'][d] = int(self._dimensions['min'][d])
             aligned_dims['max'][d] = int(self._dimensions['max'][d])
 
+        # overwrite old dataset and dimensions
         self._dataset = aligned_dataset
         self._dimensions = aligned_dims
 
         assert self._resolution == 1
 
     def point_is_inside(self, point):
+        """
+        Checks whether a point is inside the bounding box.
+        :param point: point for which we want to get information
+        :return: boolean value
+        """
         assert type(point) is tuple
         assert point.__len__() == 3
 
@@ -99,6 +133,11 @@ class VoxelDataset():
         return True
 
     def point_is_aligned(self, point):
+        """
+        Checks if the point is aligned to the uniform grid defined by self._dimensions and self._resolution.
+        :param point:
+        :return:
+        """
         assert type(point) is tuple
         assert point.__len__() == 3
 
@@ -109,6 +148,11 @@ class VoxelDataset():
         return True
 
     def valid_point(self, point):
+        """
+        Checks if the point is valid. This means if it is lying inside the bounding box defined by self._dimensions
+        :param point:
+        :return:
+        """
         assert type(point) is tuple
         assert point.__len__() == 3
 
@@ -118,6 +162,12 @@ class VoxelDataset():
             return True
 
     def value_at(self, point):
+        """
+        Checks whether a point is an inside point. Only points, which are contained in self._dataset are inside. All
+        other points are defined as outside (Therefore, one should only iterate over the uniform grid!).
+        :param point:
+        :return:
+        """
         if self.valid_point(point):
             return point in self._dataset
         else:
@@ -131,19 +181,28 @@ class VoxelDataset():
 
     def get_grid_iterator(self):
         """
-        :return: Iterator for the grid of the dataset.
+        :return: Iterator for the uniform grid of the dataset.
         """
         return it.product(np.arange(self._dimensions['min'][0], self._dimensions['max'][0], self._resolution),
                           np.arange(self._dimensions['min'][1], self._dimensions['max'][1], self._resolution),
                           np.arange(self._dimensions['min'][2], self._dimensions['max'][2], self._resolution))
 
     def get_total_voxels(self):
+        """
+        :return: Total number of voxels covered by this dataset
+        """
         return np.arange(self._dimensions['min'][0], self._dimensions['max'][0], self._resolution).__len__() * \
                np.arange(self._dimensions['min'][1], self._dimensions['max'][1], self._resolution).__len__() * \
                np.arange(self._dimensions['min'][2], self._dimensions['max'][2], self._resolution).__len__()
 
 
     def plot(self, axis, color, alpha):
+        """
+        Plots the whole dataset to the given axis. Only inside voxels are plotted and represented by cubes.
+        :param axis: axis where we draw the plot
+        :param color: color of the cubes
+        :param alpha: alpha value, if alpha is 0 just the edges of the cubes are drawn
+        """
         from mpl_toolkits.mplot3d.art3d import Poly3DCollection, Line3DCollection
         for x, y, z in self.get_grid_iterator():
             key = (x, y, z)
