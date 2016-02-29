@@ -131,6 +131,7 @@ def tworesolution_dual_contour(dataset, resolutions, dims):
     fine_dataset = VoxelDataset(dims, resolutions['fine'], dataset)
     print "++ Aligning Dataset ++"
     fine_dataset.align()
+    fine_dataset.surround()
 
     print "++ Fine Resolution DC ++"
     print "resolution: %d"%(fine_dataset._resolution)

@@ -116,6 +116,16 @@ class VoxelDataset():
 
         assert self._resolution == 1
 
+    def surround(self):
+        """
+        surrounds the dataset with outside data values by extending dimensions by one layer
+        :return:
+        """
+        for d in range(3):
+            self._dimensions['min'][d] = self._dimensions['min'][d] - self._resolution
+            self._dimensions['max'][d] = self._dimensions['max'][d] + self._resolution
+
+
     def point_is_inside(self, point):
         """
         Checks whether a point is inside the bounding box.
