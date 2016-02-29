@@ -12,10 +12,10 @@ from VoxelDataset import VoxelDataset
 dirs = [np.array([0.0, 0.0, 1.0]), np.array([0.0, 1.0, 0.0]), np.array([1.0, 0.0, 0.0])]
 
 # Vertices of cube
-cube_verts = [np.array([x, y, z])
+cube_verts = np.array([np.array([x, y, z])
               for x in range(2)
               for y in range(2)
-              for z in range(2)]
+              for z in range(2)])
 
 # Edges of cube
 cube_edges = [[0, 1], [0, 2], [1, 3], [2, 3],
@@ -39,27 +39,26 @@ def coarsen_dataset(coarsening_steps, fine_dataset):
 
         coarse_data = set()
         # traverse all cells (each one has 4 datavalues) and combine all 4 values into one
+        no_cube_verts = cube_verts.__len__()
+
         for x, y, z in fine_dataset.get_grid_iterator():
             o = np.array([float(x), float(y), float(z)])
 
-            new_data = []
-            for v in cube_verts:
-                position = (o + v * fine_dataset._resolution)
-                key = tuple(position)
-                if fine_dataset.value_at(key):
-                    coarse_data.add(key)
-                    c = 1.0
-                else:
-                    c = 0.0
-                new_data.append(c)
+            new_data = np.zeros(no_cube_verts, dtype=bool)
 
-            new_o = o + .5 * fine_dataset._resolution * np.array([1, 1, 1])
-            key = tuple(new_o)
+            for i in np.arange(no_cube_verts):
+                position = (o + cube_verts[i, :] * fine_dataset._resolution)
+                key = tuple(position)
+                new_data[i] = fine_dataset.value_at(key)
+                if new_data[i]:
+                    coarse_data.add(key)
+
+            new_o = o + fine_dataset._resolution * np.array([.5, .5, .5])
+            new_key = tuple(new_o)
+            coarse_data.discard(new_key)
 
             if np.mean(new_data) > coarsening_threshold:
-                coarse_data.add(key)
-            elif key in coarse_data:
-                coarse_data.remove(key)
+                coarse_data.add(new_key)
 
         coarse_dataset = VoxelDataset(coarse_dims, coarse_res, coarse_data)
         # recursively coarsen
