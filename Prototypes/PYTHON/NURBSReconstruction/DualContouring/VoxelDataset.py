@@ -118,8 +118,6 @@ class VoxelDataset():
 
         data_matrix = np.array(points_from_file,dtype=bool).reshape(dims_from_file,order='F')
 
-        print data_matrix.sum()
-
         data = set()
         for i in range(data_matrix.shape[0]):
             for j in range(data_matrix.shape[1]):
@@ -127,8 +125,7 @@ class VoxelDataset():
                     if data_matrix[i,j,k]:
                         key = tuple(origin_from_file + np.array([i,j,k]) * spacing_from_file)
                         data.add(key)
-                        print key
-        print data.__len__()
+
         return cls(dims,res,data)
 
     def align(self):
