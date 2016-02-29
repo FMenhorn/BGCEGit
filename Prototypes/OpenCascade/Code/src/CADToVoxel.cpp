@@ -43,7 +43,7 @@ int main(int argc, char** argv){
 		std::cout << "CADToVoxel: Usage: " << argv[0] << " /path/to/file/ fileName forceScalingFactor refinementLevel activeFileSpecified" << std::endl;
 		std::cout << "And not: " << std::endl;
 		for(int i = 0; i < argc; i++){
-			std::cout << argv[i];
+			std::cout << argv[i] <<" ";
 		}
 		std::cout << std::endl;
 
