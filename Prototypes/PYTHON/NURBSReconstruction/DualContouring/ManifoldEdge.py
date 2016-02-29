@@ -5,10 +5,9 @@ __author__ = 'benjamin'
 
 
 class ManifoldEdge:
-    def __init__(self, _manifold_edge_key, _manifold_edge_quad_ids, _manifold_vertex_quad_ids_dict, _dc_vindex, _dataset,
-                 _resolution, _manifold_edge_set):
+    def __init__(self, _manifold_edge_key, _manifold_edge_quad_ids, _manifold_vertex_quad_ids_dict, _dc_vindex, _dataset, _manifold_edge_set):
         # resolution of the grid
-        self.resolution = _resolution
+        self.resolution = _dataset._resolution
 
         # key corresponding to the vertices of the edge
         self.v_key = [None] * 2
@@ -83,15 +82,8 @@ class ManifoldEdge:
         perp_signs = 4 * [None] # check the four signs perpendicular to the edge direction
         for idx in range(4):
             edge_dir_perpendicular_key = tuple(np.array(edge_dir_value_key) + self.resolution * edge_dir_perpendicular[idx])
-            if edge_dir_perpendicular_key in _dataset:
-                perp_signs[idx] = _dataset[edge_dir_perpendicular_key] < 0
-            else:
-                perp_signs[idx] = False
-
-        if edge_dir_value_key in _dataset:
-            edge_dir_sign = _dataset[edge_dir_value_key] < 0
-        else:
-            edge_dir_sign = False
+            perp_signs[idx] = _dataset[edge_dir_perpendicular_key]
+            edge_dir_sign = _dataset[edge_dir_value_key]
 
         if not edge_dir_sign:
             return "outside" # (3.)
@@ -102,10 +94,7 @@ class ManifoldEdge:
 
     def calculate_middle_sign(self, _dataset):
         key = self.middle_value_key
-        if key in _dataset:
-            return _dataset[key] > 0
-        else:
-            return False
+        return _dataset[key]
 
     def calculate_edge_dir01(self):
         v_o = [None] * 2
@@ -162,9 +151,7 @@ class ManifoldEdge:
             # key of the node
             sign_key = tuple(np.array(self.middle_value_key) + self.resolution * .5 * sign_direction)
             # value of the node
-            sign = True
-            if sign_key in _dataset:
-                sign = _dataset[sign_key] > 0
+            sign = _dataset.value_at(sign_key)
 
             # resolves ambiguous case: if sign is equal to middle sign, we don't want to create a quad in between, which
             # separates the two nodes. If the signs are not equal, we want to separate them with two new quads
