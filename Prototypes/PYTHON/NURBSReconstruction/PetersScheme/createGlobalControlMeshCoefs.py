@@ -1,4 +1,5 @@
 import numpy as np
+import scipy.sparse as ssp
 
 from helper_functions import get_num_edges_meeting
 from createBicubicCoefMatrices import createBicubicCoefMatrices
@@ -17,7 +18,7 @@ def createGlobalControlMeshCoefs(parameterCoordinates, quad_list, AVertexList, B
     on a patch that spans over [0,1]x[0,1]
     for the quad. The function computes the coefficient matrix for between
     each datapoint and the array of M/16 quads x [4x4] vertex control points,
-    outputting the coefficients as an N x M numpy.ndarray
+    outputting the coefficients as an N x M scipy.sparse COO-type sparse matrix
 
     @param parameterCoordinates: Nx3 numpy.ndarray of datapoint parameters
     @param quad_list:
@@ -26,13 +27,16 @@ def createGlobalControlMeshCoefs(parameterCoordinates, quad_list, AVertexList, B
     @param B2VertexList:
     @param CVertexList:
     @param quad_control_point_indices: (M/16)x16 numpy.ndarray of control points on each quad
-    @return: NxM numpy.ndarray of coefficients, maximum 22 nonzero entries per row
+    @return: NxM scipy.sparse COO-type sparse matrix of coefficients, maximum 22 nonzero entries per row
     '''
 
 
     N = parameterCoordinates.shape[0]
     M = quad_control_point_indices.shape[0] * quad_control_point_indices.shape[1]
-    coefsMatrix = np.zeros((N,M))
+    max_size = N*28 #4 types of vertices times maximum 7 quads around an extraordinary vertex (large estimate)
+    rows = np.zeros(max_size, dtype=int)
+    cols = np.zeros(max_size, dtype=int)
+    data = np.zeros(max_size)
 
     """
     Precalculate the coefficients between all the vertex control points and
@@ -55,6 +59,8 @@ def createGlobalControlMeshCoefs(parameterCoordinates, quad_list, AVertexList, B
          CCoefsRaw[num_quads-1, 0:num_quads, :, :]] = createBicubicCoefMatrices(num_quads) # compared to matlab by Saumi & Benni -> VALID
 
     coefsRawTemp = np.zeros((4,7,4,4))
+
+    indexCounter = 0
 
     print "Main Loop Coefs"
     for p in range(N):
@@ -83,7 +89,14 @@ def createGlobalControlMeshCoefs(parameterCoordinates, quad_list, AVertexList, B
 
             patchCoefsMatrix = getBicubicBezierPointCoefs(localCoords, coefsRawTemp[:, 0:numberOfEdges, :, :])
 
-            coefsMatrix[p][indexMask[:]] = patchCoefsMatrix[:]
+            numberOfEntries = numberOfEdges*4
+
+            rows[indexCounter:(indexCounter + numberOfEntries)] = p
+            cols[indexCounter:(indexCounter + numberOfEntries)] = indexMask.flatten()[:]
+            data[indexCounter:(indexCounter + numberOfEntries)] = patchCoefsMatrix.flatten()[:]
+
+            indexCounter += numberOfEntries
+
 
         else:
             neighbourMask = get3x3ControlPointIndexMask(quad_list=quad_list,
@@ -92,10 +105,15 @@ def createGlobalControlMeshCoefs(parameterCoordinates, quad_list, AVertexList, B
                                                         localIndexXY=whichPatch)
             neighbourCoefs = getBezierPointCoefs(localCoords)
 
-            for j in range(3):
-                for i in range(3):
-                    coefsMatrix[p, neighbourMask[i, j]] = neighbourCoefs[i, j]
+            numberOfEntries = 9
+
+            rows[indexCounter:(indexCounter + numberOfEntries)] = p
+            cols[indexCounter:(indexCounter + numberOfEntries)] = neighbourMask.flatten()[:]
+            data[indexCounter:(indexCounter + numberOfEntries)] = neighbourCoefs.flatten()[:]
+
+            indexCounter += numberOfEntries
+
     print "Main Loop Coeffs Done."
 
-    return coefsMatrix
+    return ssp.coo_matrix((data, (rows, cols)), shape=(N, M))
 
