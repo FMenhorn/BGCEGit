@@ -31,16 +31,16 @@ def parse_file_vtk(filename):
             if 'POINT_DATA' in line:
                 linesplit = line.rsplit()
                 num_cells = int(linesplit[1])
+                break
 
-        line_index = -1
-        for index, line in enumerate(aFile):
-            print index
+        for line in aFile:
             if 'LOOKUP_TABLE' in line:
                 break
 
         array_index = 0
         values = np.zeros(num_cells, dtype=bool)
 
+        print values
         for line in aFile:
             for word in line.rsplit():
                 if array_index < num_cells:
