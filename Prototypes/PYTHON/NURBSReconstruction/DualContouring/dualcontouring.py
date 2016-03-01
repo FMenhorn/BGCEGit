@@ -1,6 +1,6 @@
 import export_results
 import numpy as np
-from dcHelpers import resolve_manifold_edges, create_manifold_edges
+from dcHelpers import resolve_manifold_edges, create_manifold_edges, generate_edge_usage_dict
 from VoxelDataset import VoxelDataset
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
@@ -25,7 +25,7 @@ cube_edges = [[0, 1], [0, 2], [1, 3], [2, 3],
 
 def coarsen_dataset(coarsening_steps, fine_dataset):
     print "%d coarsening_steps left." % coarsening_steps
-    coarsening_threshold = 0.125
+    coarsening_threshold = 0.25
 
     if coarsening_steps > 0:
         # calculate coarse resolution
@@ -128,13 +128,13 @@ def estimate_hermite(data, v0, v1, res, res_fine):
 
 def tworesolution_dual_contour(data, resolutions, dims):
 
-    fine_dataset = VoxelDataset.from_filename('GE_white_big.vtk') # use for GE bracket
-    #fine_dataset = VoxelDataset(dims, resolutions['fine'], data) # use for topy files
+    #fine_dataset = VoxelDataset.from_filename('GE_white_big.vtk') # use for GE bracket
+    fine_dataset = VoxelDataset(dims, resolutions['fine'], data) # use for topy files
     print "++ Aligning Dataset ++"
     fine_dataset.align()
-    fine_dataset.surround()
+    #fine_dataset.surround()
 
-    pre_coarsening_steps = 1
+    pre_coarsening_steps = 0
     if pre_coarsening_steps > 0:
         print "PRESMOOTHING OF DATASET APPLIED!"
         print "++ Precoarsening of dataset ++"
@@ -173,9 +173,22 @@ def tworesolution_dual_contour(data, resolutions, dims):
     dc_quads = {'fine': dc_quads_fine, 'coarse': dc_quads_coarse}
     dc_manifolds = {'fine': dc_manifold_edges_fine, 'coarse': dc_manifold_edges_coarse}
 
-    print "exporting intermediate results."
-    export_results.export_as_csv(dc_verts_coarse, 'dc_verts_coarse')
-    export_results.export_as_csv(dc_quads_coarse, 'dc_quads_coarse')
+    print "checking for remaining non-manifold edges on coarse level:"
+    nonmanifold=[]
+    edge_usage = generate_edge_usage_dict(dc_quads_coarse)
+    for edge_identifier, used_by_quads in edge_usage.items():
+        if used_by_quads.__len__() != 2:
+            nonmanifold.append(np.array(edge_identifier))
+
+    try:
+        assert nonmanifold.__len__() == 0
+    except AssertionError:
+        print "Error found. exporting intermediate results."
+        export_results.export_as_csv(dc_verts_coarse, 'dc_verts_coarse')
+        export_results.export_as_csv(dc_quads_coarse, 'dc_quads_coarse')
+        export_results.export_as_csv(np.array(nonmanifold), 'dc_non_manifold_edges')
+        print "dc_non_manifold_edges references all the vertices connected by a non-manifold edge."
+        raise Exception("Not all manifold edges have been successfully resolved! Aborting.")
 
     datasets = {'fine': fine_dataset, 'coarse': coarse_dataset}
 
