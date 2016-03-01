@@ -187,6 +187,7 @@ def tworesolution_dual_contour(data, resolutions, dims):
         export_results.export_as_csv(dc_verts_coarse, 'dc_verts_coarse')
         export_results.export_as_csv(dc_quads_coarse, 'dc_quads_coarse')
         export_results.export_as_csv(np.array(nonmanifold), 'dc_non_manifold_edges')
+        export_results.export_as_csv([coarse_dataset._dimensions['min'],coarse_dataset._dimensions['max']], 'dc_dimensions')
         print "dc_non_manifold_edges references all the vertices connected by a non-manifold edge."
         raise Exception("Not all manifold edges have been successfully resolved! Aborting.")
 
