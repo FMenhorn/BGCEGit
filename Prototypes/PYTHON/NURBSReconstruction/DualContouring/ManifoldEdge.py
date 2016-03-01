@@ -4,6 +4,13 @@ from quadHelpers import quad_has_edge
 __author__ = 'benjamin'
 
 
+class NonManifoldPointNotResolvedException(Exception):
+    """
+    is raised, if a point cannot be resolved
+    """
+    pass
+
+
 class ManifoldEdge:
     def __init__(self, _manifold_edge_key, _manifold_edge_quad_ids, _manifold_vertex_quad_ids_dict, _dc_vindex, _dataset, _manifold_edge_set):
         # resolution of the grid
@@ -216,23 +223,28 @@ class ManifoldEdge:
         # this depends on the self.v_kind of the vertex!
 
         for i in range(2):
-            kind = self.v_kind[i]
-            if kind == "outside":
-                new_quads, new_nodes, delete_quads, o_idx_nodes = self.resolve_outside_vertex(i, _dc_quads, _dc_verts, o_idx_nodes)
-            elif kind == "inside":
-                new_quads, delete_quads = self.resolve_inside_vertex(i, _dc_quads)
-                new_nodes = []
-            elif kind == "manifold":  # manifold vertices do not have to be treaten separately!
-                new_quads = []
-                new_nodes = []
-                delete_quads = []
-            else:
-                print "unknown type! aborting..."
-                quit()
-
-            new_nodes_list += new_nodes
-            new_quads_list += new_quads
-            delete_quads_list += delete_quads
+            try:
+                kind = self.v_kind[i]
+                if kind == "outside":
+                    new_quads, new_nodes, delete_quads, o_idx_nodes = self.resolve_outside_vertex(i, _dc_quads, _dc_verts, o_idx_nodes)
+                elif kind == "inside":
+                    new_quads, delete_quads = self.resolve_inside_vertex(i, _dc_quads)
+                    new_nodes = []
+                elif kind == "manifold":  # manifold vertices do not have to be treaten separately!
+                    new_quads = []
+                    new_nodes = []
+                    delete_quads = []
+                else:
+                    print "unknown type! aborting..."
+                    quit()
+                new_nodes_list += new_nodes
+                new_quads_list += new_quads
+                delete_quads_list += delete_quads
+            except NonManifoldPointNotResolvedException:
+                print "One of the manifold points wasn't resolved correctly. WHOLE EDGE NOT RESOLVED!"
+                new_nodes_list = []
+                new_quads_list = []
+                delete_quads_list = []
 
         return new_quads_list, new_nodes_list, delete_quads_list, o_idx_nodes, vindex_mapping
 
@@ -285,6 +297,17 @@ class ManifoldEdge:
                     quad_plane_id = q_id
                     quad_plane = quad
                     break
+
+            try:
+                assert quad_plane in locals()
+            except:
+                new_quads_list = []
+                new_nodes_list = []
+                delete_quads_list = []
+                raise NonManifoldPointNotResolvedException("EDGE NOT RESOLVED! EXCEPTION UNCAUGHT!")
+                print "One non-manifold edge is not resolved in the correct way."
+                return new_quads_list, new_nodes_list, delete_quads_list, o_idx_nodes
+
 
             # add four new quads and one new point
             centroid = np.zeros([3])
