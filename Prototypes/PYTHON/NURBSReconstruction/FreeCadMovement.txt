@@ -1,4 +1,0 @@
-
->>> Draft.rotate(FreeCAD.ActiveDocument.Objects[0], 180.0, FreeCAD.Vector(0.0,0.0,0.0),axis=FreeCAD.Vector(1.0,0.0,0.0),copy=False)
->>> Draft.rotate(FreeCAD.ActiveDocument.Objects[0], 90.0, FreeCAD.Vector(0.0,0.0,0.0),axis=FreeCAD.Vector(0.0,-1.0,0.0),copy=False)
->>> Draft.move(FreeCAD.ActiveDocument.Objects[0],FreeCAD.Vector(0.0,10.0,0.0),copy=False)
