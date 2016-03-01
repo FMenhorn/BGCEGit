@@ -46,8 +46,8 @@ args = parser.parse_args()
 
 
 print "### Surface Extraction ###"
-#verts_coarse, quads_coarse, verts_fine, parameters = extract_surface(args.path, args.coarsening_factor)
-verts_coarse, quads_coarse, verts_fine, parameters = extract_surface(path, coarsening_factor)
+verts_coarse, quads_coarse, verts_fine, parameters = extract_surface(args.path, args.coarsening_factor)
+#verts_coarse, quads_coarse, verts_fine, parameters = extract_surface(path, coarsening_factor)
 vertices, quads, fine_vertices = quad_vert_generator(verts_coarse, quads_coarse, verts_fine, parameters)
 
 print "### DooSabin ###"
@@ -55,14 +55,14 @@ A, B1, B2, C, regularPoints = dooSabin_ABC(vertices, quads)
 print "### DooSabin DONE ###"
 
 print "### Peters' Scheme ### "
-#NURBSMatrix, NURBSIndices = fit_NURBS(A, B1, B2, C, regularPoints, vertices, quads, fine_vertices, parameters, args.fairnessWeight)
-NURBSMatrix, NURBSIndices = fit_NURBS(A, B1, B2, C, regularPoints, vertices, quads, fine_vertices, parameters, fairnessWeight)
+NURBSMatrix, NURBSIndices = fit_NURBS(A, B1, B2, C, regularPoints, vertices, quads, fine_vertices, parameters, args.fairnessWeight)
+#NURBSMatrix, NURBSIndices = fit_NURBS(A, B1, B2, C, regularPoints, vertices, quads, fine_vertices, parameters, fairnessWeight)
 print "### Peters' Scheme DONE### "
 
 # TODO: nonchanging_file_name should be a zero string if not provided by the user
 
 print "### Generating Step File ###"
-#export_step( NURBSIndices, NURBSMatrix, args.input_file_name, args.output_file_name, nonchanging_file_name, allowed_domains_file_name)
-export_step( NURBSIndices, NURBSMatrix, input_file_name, output_file_name, nonchanging_file_name, allowed_domains_file_name)
+export_step( NURBSIndices, NURBSMatrix, args.input_file_name, args.output_file_name, nonchanging_file_name, allowed_domains_file_name)
+#export_step( NURBSIndices, NURBSMatrix, input_file_name, output_file_name, nonchanging_file_name, allowed_domains_file_name)
 print "### Step File DONE### "
 

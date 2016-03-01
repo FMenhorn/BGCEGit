@@ -52,6 +52,10 @@ private slots:
 
     void on_checkBox_2_stateChanged(int arg1);
 
+    void disableAllElements();
+
+    void enableAllElements();
+
 private:
     Ui::MainWindow *ui;
 
