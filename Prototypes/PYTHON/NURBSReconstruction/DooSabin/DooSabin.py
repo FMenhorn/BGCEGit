@@ -11,7 +11,12 @@ def DooSabin(vertices, faces, alpha, iter):
     edges = []
 
     #get list of edges
+    faces_total = faces.__len__()
+    face_count = 0
     for face in faces:
+        face_count += 1
+        if face_count % 100 == 0:
+            print "getting list of edges: face %d of %d."%(face_count,faces_total)
         for edge in face.getEdges():
             if not ((edge in edges) or ([edge[1], edge[0]] in edges)):
                 edges.append(edge)
