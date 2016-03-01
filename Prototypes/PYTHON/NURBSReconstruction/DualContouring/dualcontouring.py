@@ -25,7 +25,7 @@ cube_edges = [[0, 1], [0, 2], [1, 3], [2, 3],
 
 def coarsen_dataset(coarsening_steps, fine_dataset):
     print "%d coarsening_steps left." % coarsening_steps
-    coarsening_threshold = 0.25
+    minimum_number_of_inner_cells = 1
 
     if coarsening_steps > 0:
         # calculate coarse resolution
@@ -54,7 +54,7 @@ def coarsen_dataset(coarsening_steps, fine_dataset):
             new_o = o + fine_dataset._resolution * np.array([.5, .5, .5])
             new_key = tuple(new_o)
 
-            if np.sum(new_data) > 8*coarsening_threshold:
+            if np.sum(new_data) > minimum_number_of_inner_cells:
                 coarse_data.add(new_key)
             else:
                 coarse_data.discard(new_key)
