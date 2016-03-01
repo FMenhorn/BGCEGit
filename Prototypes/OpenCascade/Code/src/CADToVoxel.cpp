@@ -37,10 +37,10 @@
 int main(int argc, char** argv){
 
 	std::cout << "Starting CADToVoxel Pipeline..." << std::endl;
-	if ( argc != 6 )
+	if ( argc != 7 )
 	{
 		std::cout << std::endl;
-		std::cout << "CADToVoxel: Usage: " << argv[0] << " /path/to/file/ fileName forceScalingFactor refinementLevel activeFileSpecified" << std::endl;
+		std::cout << "CADToVoxel: Usage: " << argv[0] << " /path/to/file/ fileName forceScalingFactor refinementLevel volFraction activeFileSpecified" << std::endl;
 		std::cout << "And not: " << std::endl;
 		for(int i = 0; i < argc; i++){
 			std::cout << argv[i] <<" ";
@@ -57,7 +57,8 @@ int main(int argc, char** argv){
 	assert(forceScalingFactor>0);
     int refinementLevel = atoi(argv[4]);
     assert(refinementLevel>=0);
-    bool activeFileSpecified = atoi(argv[5]);
+    std::string volFraction = argv[5];
+    bool activeFileSpecified = atoi(argv[6]);
 
 	/**
 	 *  INPUT
@@ -175,7 +176,7 @@ int main(int argc, char** argv){
      * OUTPUT
      */
     Writer_ToPy writerToPy;
-    writerToPy.write("topy_"+fileName, outputVoxelVector, loadList);
+    writerToPy.write("topy_"+fileName, outputVoxelVector, loadList, volFraction);
 
     Writer_VTK writerVTK;
     writerVTK.write("vtk_"+fileName, outputVoxelVector, loadList);

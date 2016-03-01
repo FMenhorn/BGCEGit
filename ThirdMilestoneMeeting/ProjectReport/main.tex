@@ -1,0 +1,129 @@
+ % The main file for CAMP reports
+ % Don't put any content in here. 
+ % Don't even include content files by using \input or \inlcude. 
+ % Put your content to TEXT.TEX or include it there using \input.
+ % Uses:
+ %		SETTINGS.TEX		contains the settings for this document
+ %		COMMANDS.TEX		contains commands which can be used while writing
+ %		INFO.TEX			contains the author, title and so on for the cover
+ %		COVER.TEX			formats the front cover of the document
+ %		ABSTRACT.TEX		contains the abstract to be included (if needed)
+ %		TEXT.TEX			contains the actual content of the document
+ %		BIB.BIB				containt the BibTeX entries for the document
+ 
+
+
+%% Draft document mode (with todos, no pictures just bounding box)
+%\documentclass[draft,11pt,a4paper,bibtotoc,idxtotoc,headsepline,footsepline,footexclude,DIV13,oneside]{scrbook}
+%% Final document mode (no todos, with pictures)
+%\documentclass[final,11pt,a4paper,bibtotoc,idxtotoc,headsepline,footsepline,footexclude,DIV13,oneside]{scrbook}
+%% Intermediate document mode (todos and pictures)
+\documentclass[11pt,a4paper,bibtotoc,idxtotoc,headsepline,footsepline,footexclude,DIV13,oneside]{scrbook}
+
+%\usepackage{epstopdf}
+% KOMA-Optionen:
+%  bibtotoc: include bibliography in table of contents
+%  idxtotoc: include index in table of contents
+%  headsepline: use horizontalline under heading
+%  BCOR: binding correcion (Bindungskorrektur) (e.g.: BCOR5mm)
+%  DIV: Number of sheet sections (used for layout) (e.g.: DIV12) 
+
+
+
+% include title and author information for the cover
+\input{components/info}
+
+% include settings
+\input{components/settings}
+
+% include commands
+\input{components/commands}
+
+% include acronyms and glossary
+\input{components/acronyms}
+
+\makeglossary
+
+\begin{document}
+
+	\frontmatter
+	
+	\input{components/titlepage}
+	
+	\input{components/preface}
+	
+	%\input{components/disclaimer}
+	
+	\input{components/acknowledgements}
+	
+	%\input{components/abstract}
+	\listoftodos
+	\tableofcontents
+  	%outline and overview
+   	\input{components/outline}
+
+	\mainmatter
+	
+				
+		% ---------------------------------------------------------------------------
+		%
+		%Introduction 
+		%
+ 		%---------------------------------------------------------------------------
+		\input{chapters/Introduction}
+		
+ 		%---------------------------------------------------------------------------
+		%
+		% and Background Theory
+		%
+		%---------------------------------------------------------------------------
+		\input{chapters/Background}
+		
+ 		%---------------------------------------------------------------------------
+		%
+		% Implementation 
+		%
+		%--------------------------------------------------------------------------
+		\input{chapters/Implementation}
+		
+ 		%---------------------------------------------------------------------------
+		%
+		% Summary and discussion 
+		%
+ 		%-------------------------------------------------------------------------
+		%\input{chapters/Discussion}
+		
+		%---------------------------------------------------------------------------
+		%
+		% Appendix
+		%
+ 		%---------------------------------------------------------------------------
+		%\chapter{Appendix}
+	%	\addcontentsline{toc}{part}{Appendix}
+%		\appendix 
+		
+		%---------------------------------------
+%		\chapter{Source Code}
+%		\label{chapter:source}
+%		\input{chapters/sourceCodeAppendix}
+		
+		%\chapter{Next Appendix}
+		
+
+
+  	\clearemptydoublepage
+  
+	\bibliography{bibliography/literature}
+	\todo[inline]{insert all the acronym stuff for final delivery of report}
+	%\cleardoublepage
+	%\printacronyms[	include-classes=abbrev,
+	%				name=Abbreviations,
+	%				sort = true]
+	%
+	%\printacronyms[	include-classes=nomencl,
+	%				name=Nomenclature,
+	%				sort = true]
+	
+ 
+\end{document}
+
