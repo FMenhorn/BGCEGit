@@ -131,8 +131,8 @@ void VoxelIndexCalculator::calculateIndexForVoxelShape(VoxelShape& voxelShape, b
 	std::cout << "voxelShape.GetOrigin: " << voxelShape.getOriginX() << "," << voxelShape.getOriginY() << "," << voxelShape.getOriginZ() << std::endl;
 	std::cout << "origin: " << origin[0] << "," << origin[1] << "," << origin[2] << std::endl;
 	originX =origin[0]+voxelShape.getOriginX()-origin[0];
-	originY =origin[0]+voxelShape.getOriginY()-origin[1];
-	originZ =origin[0]+voxelShape.getOriginZ()-origin[2];
+	originY =origin[1]+voxelShape.getOriginY()-origin[1];
+	originZ =origin[2]+voxelShape.getOriginZ()-origin[2];
 	voxelSizeX = voxelShape.getXLen()/voxelShape.getNbX();
 	voxelSizeY = voxelShape.getYLen()/voxelShape.getNbY();
 	voxelSizeZ = voxelShape.getZLen()/voxelShape.getNbZ();
