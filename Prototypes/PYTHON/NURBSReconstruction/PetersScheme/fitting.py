@@ -10,21 +10,21 @@ from leastSquares import solve_least_squares_problem
 from createFairnessControlMeshCoefs import createFairnessControlMeshCoefs
 from createGlobalControlMeshCoefs import createGlobalControlMeshCoefs
 
-def fit_NURBS(A, B1, B2, C, regularPoints, vertices, quads, fine_vertices, parameters, fairnessWeight):
+def fit_NURBS(As, B1s, B2s, Cs, regularPoints, vertices, quads, fine_vertices, parameters, fairnessWeight):
     print "### Preprocessing ###"
     # Throw away any datapoints which are NaN or outside the parameter range [0,1]
     # since these cause trouble. (+ Scale the resulting ones so that max and min
     # param values are 1 and 0 repspectively in both u and v)
 
     [parameters, fine_vertices] = scaleAwayParameters(parameters, fine_vertices)
-    [newA, newB1, newB2, newC] = sortAB1B2VIndices(A, B1, B2, C)
+    # [As, B1s, B2s, Cs] = sortAB1B2VIndices(As, B1s, B2s, C) # not needed with new sorting of points
     print "Done."
 
     print "Calculating coefs."
-    coefs = createGlobalControlMeshCoefs(parameters, quads, newA, newB1, newB2, newC, regularPoints)
+    coefs = createGlobalControlMeshCoefs(parameters, quads, As, B1s, B2s, Cs, regularPoints)
     print "Done."
     print "Calculating fair coefs."
-    fair_coefs = createFairnessControlMeshCoefs(quads, newA, newB1, newB2, newC, regularPoints)
+    fair_coefs = createFairnessControlMeshCoefs(quads, As, B1s, B2s, Cs, regularPoints)
     print "fair_coefs.shape = "+str(fair_coefs.shape)
     print "Done."
 
@@ -49,7 +49,7 @@ def fit_NURBS(A, B1, B2, C, regularPoints, vertices, quads, fine_vertices, param
     print "Done."
     print "Calculating NURBS control points..."
 
-    NURBSMatrix, NURBSIndices = createNURBSMatricesAllraised(quads,newA,newB1,newB2,newC,regularPoints,vertices)
+    NURBSMatrix, NURBSIndices = createNURBSMatricesAllraised(quads,As,B1s,B2s,Cs,regularPoints,vertices)
     print "Done."
     return NURBSMatrix, NURBSIndices
 
