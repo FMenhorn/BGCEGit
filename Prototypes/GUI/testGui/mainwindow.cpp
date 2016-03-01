@@ -298,9 +298,10 @@ void MainWindow::on_startFreeCadButton_clicked()
     QString outputFile;
     QString outputPath;
     StringHelper::getPathAndName(stepOutputFile, outputFile, outputPath);
-    std::string freeCADCommand = "freecad " + outputFile.toStdString() + ".step " +
-            (isFixtureFileSupplied ? outputFile.toStdString() + "_BOOLEANED.step " : "") +
-            (isOptimizationDomainSupplied ? outputFile.toStdString() + "_ALLOWED.step" : "");
+    std::string freeCADCommand = "freecad " + stepOutputFile.toStdString();// + ".step ";
+    std::cout << freeCADCommand << std::endl;//+
+         //   (isFixtureFileSupplied ? outputFile.toStdString() + "_BOOLEANED.step " : "") +
+          //  (isOptimizationDomainSupplied ? outputFile.toStdString() + "_ALLOWED.step" : "");
     system(freeCADCommand.c_str());
 }
 
