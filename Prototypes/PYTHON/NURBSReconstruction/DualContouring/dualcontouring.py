@@ -28,6 +28,7 @@ def coarsen_dataset(coarsening_steps, fine_dataset):
     minimum_number_of_inner_cells = 1
 
     if coarsening_steps > 0:
+        fine_dataset.surround()
         # calculate coarse resolution
         coarse_res = 2 * fine_dataset._resolution
 
@@ -132,7 +133,7 @@ def tworesolution_dual_contour(data, resolutions, dims):
     fine_dataset = VoxelDataset(dims, resolutions['fine'], data) # use for topy files
     print "++ Aligning Dataset ++"
     fine_dataset.align()
-    #fine_dataset.surround()
+    fine_dataset.surround()
 
     pre_coarsening_steps = 0
     if pre_coarsening_steps > 0:
