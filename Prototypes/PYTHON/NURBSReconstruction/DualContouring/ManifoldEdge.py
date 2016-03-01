@@ -11,6 +11,12 @@ class NonManifoldPointNotResolvedException(Exception):
     """
     pass
 
+class NonManifoldEdgeNotResolvedException(Exception):
+    """
+    is raised, if an edge cannot be resolved
+    """
+    pass
+
 
 class ManifoldEdge:
     def __init__(self, _manifold_edge_key, _manifold_edge_quad_ids, _manifold_vertex_quad_ids_dict, _dc_vindex,
@@ -250,6 +256,7 @@ class ManifoldEdge:
                 delete_quads_list += delete_quads
             except NonManifoldPointNotResolvedException:
                 print PColors.WARNING + "One of the non manifold points wasn't resolved correctly. WHOLE EDGE NOT RESOLVED!" + PColors.ENDC
+                raise NonManifoldEdgeNotResolvedException("Edge not resolved!")
                 new_nodes_list = []
                 new_quads_list = []
                 delete_quads_list = []

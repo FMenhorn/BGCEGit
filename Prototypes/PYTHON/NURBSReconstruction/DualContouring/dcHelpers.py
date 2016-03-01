@@ -1,4 +1,4 @@
-from ManifoldEdge import ManifoldEdge
+from ManifoldEdge import ManifoldEdge, NonManifoldEdgeNotResolvedException
 import numpy as np
 from pColors import PColors
 
@@ -125,17 +125,26 @@ def resolve_manifold_edges(_dc_verts, _dc_vindex, _dc_quads, _data):
 
     # in this dict we will save the mapping from old indices of removed manifold vertices to their children
     vindex_mapping = {}
-
+    exceptional_edges = []
     for manifold_edge_key, manifold_edge in manifold_edges.items():
-        new_quads, new_nodes, delete_quads, o_idx_nodes, vindex_mapping = manifold_edge.resolve(_data,
-                                                                                                _dc_vindex,
-                                                                                                _dc_quads,
-                                                                                                _dc_verts,
-                                                                                                o_idx_nodes,
-                                                                                                vindex_mapping)
-        new_nodes_list += new_nodes
-        new_quads_list += new_quads
-        delete_quads_list += delete_quads
+        try:
+            new_quads, new_nodes, delete_quads, o_idx_return, vindex_mapping = manifold_edge.resolve(_data,
+                                                                                                    _dc_vindex,
+                                                                                                    _dc_quads,
+                                                                                                    _dc_verts,
+                                                                                                    o_idx_nodes,
+                                                                                                    vindex_mapping)
+            new_nodes_list += new_nodes
+            new_quads_list += new_quads
+            delete_quads_list += delete_quads
+
+        except NonManifoldEdgeNotResolvedException:
+            print PColors.WARNING + "Edge " + str(manifold_edge) + "has not been resolved. Key:" + str(manifold_edge_key) + PColors.ENDC
+            o_idx_return = o_idx_nodes
+            exceptional_edges.append(manifold_edge_key)
+
+        finally:
+            o_idx_nodes = o_idx_return
 
     _dc_verts, _dc_quads = update_mesh_3d(_dc_verts,
                                           _dc_quads,
@@ -148,7 +157,7 @@ def resolve_manifold_edges(_dc_verts, _dc_vindex, _dc_quads, _data):
     not_consistent4_edges = {}
     not_consistent1_edges = {}
     for edge, used in edge_usage_dict.items():
-        if not used.__len__() == 2:
+        if not used.__len__() == 2 and edge not in exceptional_edges:
             if used.__len__() == 4:
                 not_consistent4_edges[edge] = used
             elif used.__len__() == 1:
@@ -163,7 +172,7 @@ def resolve_manifold_edges(_dc_verts, _dc_vindex, _dc_quads, _data):
     not_consistent1_edges = {}
     not_resolved_edges = {}
     for edge, used in edge_usage_dict.items():
-        if not used.__len__() == 2:
+        if not used.__len__() == 2 and edge not in exceptional_edges:
             if used.__len__() == 1:
                 not_consistent1_edges[edge] = used
             else:
