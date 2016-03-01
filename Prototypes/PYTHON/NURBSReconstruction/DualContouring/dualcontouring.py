@@ -4,6 +4,7 @@ from dcHelpers import resolve_manifold_edges, create_manifold_edges, generate_ed
 from VoxelDataset import VoxelDataset
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
+from pColors import PColors
 
 #########################
 #### DUAL CONTOURING ####
@@ -13,9 +14,9 @@ dirs = [np.array([0.0, 0.0, 1.0]), np.array([0.0, 1.0, 0.0]), np.array([1.0, 0.0
 
 # Vertices of cube
 cube_verts = np.array([np.array([x, y, z])
-              for x in range(2)
-              for y in range(2)
-              for z in range(2)])
+                       for x in range(2)
+                       for y in range(2)
+                       for z in range(2)])
 
 # Edges of cube
 cube_edges = [[0, 1], [0, 2], [1, 3], [2, 3],
@@ -40,7 +41,7 @@ def coarsen_dataset(coarsening_steps, fine_dataset):
 
         coarse_data = set(fine_dataset._data)
         # traverse all cells (each one has 4 datavalues) and combine all 4 values into one
-        number_of_cube_verts = np.size(cube_verts,0)
+        number_of_cube_verts = np.size(cube_verts, 0)
 
         for x, y, z in fine_dataset.get_grid_iterator():
             o = np.array([float(x), float(y), float(z)])
@@ -128,9 +129,8 @@ def estimate_hermite(data, v0, v1, res, res_fine):
 
 
 def tworesolution_dual_contour(data, resolutions, dims):
-
-    #fine_dataset = VoxelDataset.from_filename('GE_white_big.vtk') # use for GE bracket
-    fine_dataset = VoxelDataset(dims, resolutions['fine'], data) # use for topy files
+    # fine_dataset = VoxelDataset.from_filename('GE_white_big.vtk') # use for GE bracket
+    fine_dataset = VoxelDataset(dims, resolutions['fine'], data)  # use for topy files
     print "++ Aligning Dataset ++"
     fine_dataset.align()
     fine_dataset.surround()
@@ -143,18 +143,14 @@ def tworesolution_dual_contour(data, resolutions, dims):
         fine_dataset = coarsen_dataset(pre_coarsening_steps, fine_dataset)
 
     print "++ Fine Resolution DC ++"
-    print "resolution: %d"%(fine_dataset._resolution)
-    [dc_verts_fine, dc_quads_fine, dc_manifold_edges_fine] = dual_contour(fine_dataset,
-                                                                          resolutions['fine'],
-                                                                          is_coarse_level=False,
-                                                                          do_manifold_treatment=False)
+    print "resolution: %d" % (fine_dataset._resolution)
+    [dc_verts_fine, dc_quads_fine, dc_manifold_edges_fine, not_resolved_edges_fine] = dual_contour(fine_dataset,
+                                                                                                   resolutions['fine'],
+                                                                                                   is_coarse_level=False,
+                                                                                                   do_manifold_treatment=False)
 
     # compute necessary coarsening steps from given coarse resolution.
     print "fine quads produced: %d" % (dc_quads_fine.__len__())
-
-    print "exporting intermediate results."
-    export_results.export_as_csv(dc_verts_fine, 'dc_verts_fine')
-    export_results.export_as_csv(dc_quads_fine, 'dc_quads_fine')
 
     print "++ Coarsening Dataset ++"
     coarsening_steps = int(np.log(resolutions['coarse']) / np.log(2)) - pre_coarsening_steps
@@ -165,17 +161,19 @@ def tworesolution_dual_contour(data, resolutions, dims):
 
     print "++ Coarse Resolution DC ++"
     print "resolution: %d" % (coarse_dataset._resolution)
-    [dc_verts_coarse, dc_quads_coarse, dc_manifold_edges_coarse] = dual_contour(coarse_dataset,
-                                                                                resolutions['fine'],
-                                                                                is_coarse_level=True,
-                                                                                do_manifold_treatment=True)
+    [dc_verts_coarse, dc_quads_coarse, dc_manifold_edges_coarse, not_resolved_edges_coarse] = dual_contour(
+        coarse_dataset,
+        resolutions['fine'],
+        is_coarse_level=True,
+        do_manifold_treatment=True)
+
     print "coarse quads produced: %d" % (dc_quads_coarse.__len__())
     dc_verts = {'fine': dc_verts_fine, 'coarse': dc_verts_coarse}
     dc_quads = {'fine': dc_quads_fine, 'coarse': dc_quads_coarse}
     dc_manifolds = {'fine': dc_manifold_edges_fine, 'coarse': dc_manifold_edges_coarse}
 
     print "checking for remaining non-manifold edges on coarse level:"
-    nonmanifold=[]
+    nonmanifold = []
     edge_usage = generate_edge_usage_dict(dc_quads_coarse)
     for edge_identifier, used_by_quads in edge_usage.items():
         if used_by_quads.__len__() != 2:
@@ -184,13 +182,17 @@ def tworesolution_dual_contour(data, resolutions, dims):
     try:
         assert nonmanifold.__len__() == 0
     except AssertionError:
-        print "Error found. exporting intermediate results."
+        print "ERROR found. exporting intermediate results."
+        export_results.export_as_csv(dc_verts_fine, 'dc_verts_fine')
+        export_results.export_as_csv(dc_quads_fine, 'dc_quads_fine')
         export_results.export_as_csv(dc_verts_coarse, 'dc_verts_coarse')
         export_results.export_as_csv(dc_quads_coarse, 'dc_quads_coarse')
         export_results.export_as_csv(np.array(nonmanifold), 'dc_non_manifold_edges')
-        export_results.export_as_csv([coarse_dataset._dimensions['min'],coarse_dataset._dimensions['max']], 'dc_dimensions')
+        export_results.export_as_csv([coarse_dataset._dimensions['min'], coarse_dataset._dimensions['max']],
+                                     'dc_dimensions')
         print "dc_non_manifold_edges references all the vertices connected by a non-manifold edge."
-        raise Exception("Not all manifold edges have been successfully resolved! Aborting.")
+        print PColors.FAIL + "ERROR: Not all manifold edges have been successfully resolved! Aborting." + PColors.ENDC
+        quit()
 
     datasets = {'fine': fine_dataset, 'coarse': coarse_dataset}
 
@@ -216,11 +218,11 @@ def dual_contour(dataset, res_fine, is_coarse_level, do_manifold_treatment):
     print "+ generating vertices +"
     voxel_count = 0
     voxel_total = dataset.get_total_voxels()
-    number_of_cube_verts = np.size(cube_verts,0)
+    number_of_cube_verts = np.size(cube_verts, 0)
     for x, y, z in dataset.get_grid_iterator():
         if voxel_count % ((voxel_total + 100) / 100) == 0:
             print "%d%% generating vertices: processing voxel %d of %d." % (
-            100 * voxel_count / voxel_total, voxel_count, voxel_total)
+                100 * voxel_count / voxel_total, voxel_count, voxel_total)
         voxel_count += 1
         o = np.array([float(x), float(y), float(z)])
 
@@ -262,7 +264,7 @@ def dual_contour(dataset, res_fine, is_coarse_level, do_manifold_treatment):
         for x, y, z in dataset.get_grid_iterator():
             if voxel_count % ((voxel_total + 100) / 100) == 0:
                 print "%d%% generating faces: processing voxel %d of %d." % (
-                100 * voxel_count / voxel_total, voxel_count, voxel_total)
+                    100 * voxel_count / voxel_total, voxel_count, voxel_total)
             voxel_count += 1
             if not (x, y, z) in vindex:
                 continue
@@ -293,8 +295,10 @@ def dual_contour(dataset, res_fine, is_coarse_level, do_manifold_treatment):
     dc_manifold_edges = []
     if do_manifold_treatment:
         print "+ manifold treatment +"
-        dc_verts, dc_quads, dc_manifold_edges = resolve_manifold_edges(dc_verts, vindex, dc_quads, dataset)
+        dc_verts, dc_quads, dc_manifold_edges, not_resolved_edges = resolve_manifold_edges(dc_verts, vindex, dc_quads,
+                                                                                           dataset)
     else:
-        dc_manifold_edges = create_manifold_edges(dc_quads, vindex, dataset)
+        dc_manifold_edges = []
+        not_resolved_edges = []
 
-    return np.array(dc_verts), np.array(dc_quads), dc_manifold_edges
+    return np.array(dc_verts), np.array(dc_quads), dc_manifold_edges, not_resolved_edges

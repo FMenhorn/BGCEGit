@@ -1,5 +1,6 @@
 import numpy as np
 from quadHelpers import quad_has_edge
+from pColors import PColors
 
 __author__ = 'benjamin'
 
@@ -241,7 +242,7 @@ class ManifoldEdge:
                 new_quads_list += new_quads
                 delete_quads_list += delete_quads
             except NonManifoldPointNotResolvedException:
-                print "One of the manifold points wasn't resolved correctly. WHOLE EDGE NOT RESOLVED!"
+                print PColors.WARNING + "One of the non manifold points wasn't resolved correctly. WHOLE EDGE NOT RESOLVED!" + PColors.ENDC
                 new_nodes_list = []
                 new_quads_list = []
                 delete_quads_list = []
@@ -299,13 +300,13 @@ class ManifoldEdge:
                     break
 
             try:
-                assert quad_plane in locals()
-            except:
+                assert False#quad_plane in locals()
+            except AssertionError:
                 new_quads_list = []
                 new_nodes_list = []
                 delete_quads_list = []
                 raise NonManifoldPointNotResolvedException("EDGE NOT RESOLVED! EXCEPTION UNCAUGHT!")
-                print "One non-manifold edge is not resolved in the correct way."
+                print PColors.WARNING + "One non-manifold edge is not resolved in the correct way." + PColors.ENDC
                 return new_quads_list, new_nodes_list, delete_quads_list, o_idx_nodes
 
 
