@@ -134,6 +134,13 @@ def tworesolution_dual_contour(data, resolutions, dims):
     fine_dataset.align()
     fine_dataset.surround()
 
+    pre_coarsening_steps = 1
+    if pre_coarsening_steps > 0:
+        print "PRESMOOTHING OF DATASET APPLIED!"
+        print "++ Precoarsening of dataset ++"
+        print "coarsening steps: %d" % (pre_coarsening_steps)
+        fine_dataset = coarsen_dataset(pre_coarsening_steps, fine_dataset)
+
     print "++ Fine Resolution DC ++"
     print "resolution: %d"%(fine_dataset._resolution)
     [dc_verts_fine, dc_quads_fine, dc_manifold_edges_fine] = dual_contour(fine_dataset,
@@ -149,7 +156,7 @@ def tworesolution_dual_contour(data, resolutions, dims):
     export_results.export_as_csv(dc_quads_fine, 'dc_quads_fine')
 
     print "++ Coarsening Dataset ++"
-    coarsening_steps = int(np.log(resolutions['coarse']) / np.log(2))
+    coarsening_steps = int(np.log(resolutions['coarse']) / np.log(2)) - pre_coarsening_steps
     assert coarsening_steps > 0  # at least one coarsening step has to be done!
     assert type(coarsening_steps) is int  # coarsening steps have to be integer!
 
