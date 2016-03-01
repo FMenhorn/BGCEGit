@@ -1,0 +1,197 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{calc}
+\input{petersCommands}
+
+\begin{document}
+
+% This file was created by matlab2tikz.
+%
+%The latest updates can be retrieved from
+%  http://www.mathworks.com/matlabcentral/fileexchange/22022-matlab2tikz-matlab2tikz
+%where you can also make suggestions and rate matlab2tikz.
+%
+\definecolor{mycolor1}{rgb}{0.00000,0.7,0.93}%
+\definecolor{localmeshcolor}{rgb}{.3,.6,.1}
+\definecolor{localbeziercolor}{rgb}{1.0,0.0,0.0}
+%
+\begin{tikzpicture}
+
+\begin{axis}[%
+anchor=origin, % Shift the axis so its origin is at (0,0)
+rotate around={90:(current axis.origin)}, % Rotate around the origin
+width=4.214in,
+height=3.277in,
+at={(0.707in,0.442in)},
+scale only axis,
+xmin=-1.6,
+xmax=-0.6,
+ymin=-3,
+ymax=3,
+hide axis,
+axis x line*=bottom,
+axis y line*=left
+]
+
+\addplot[area legend, solid, draw=black, fill=mycolor1, fill opacity=0.2, forget plot]
+table[row sep=crcr] {%
+x	y\\
+-0.749999999999999	1.29903810567666\\
+-0.75	-1.29903810567666\\
+-1.5	-2.59807621135332\\
+-1.5	2.59807621135332\\
+}--cycle;
+\addplot[area legend, solid, draw=red, thick, fill=mycolor1, fill opacity=0.5, forget plot]
+table[row sep=crcr] {%
+x	y\\
+-1.125	1.94289029309402e-16\\
+-1.3125	2.22044604925031e-16\\
+-1.3125	-1.13665834246708\\
+-1.125	-0.974278579257493\\
+}--cycle;
+\addplot [color=black,dashed,forget plot]
+  table[row sep=crcr]{%
+-0.75	0.649519052838329\\
+-1.5	1.29903810567666\\
+};
+\addplot [color=black,dashed,forget plot]
+  table[row sep=crcr]{%
+-0.937499999999999	1.62379763209582\\
+-0.937500000000001	-1.62379763209582\\
+};
+\addplot [color=black,dashed,forget plot]
+  table[row sep=crcr]{%
+-0.75	2.22044604925031e-16\\
+-1.5	2.22044604925031e-16\\
+};
+\addplot [color=black,dashed,forget plot]
+  table[row sep=crcr]{%
+-1.125	1.94855715851499\\
+-1.125	-1.94855715851499\\
+};
+\addplot [color=black,dashed,forget plot]
+  table[row sep=crcr]{%
+-0.75	-0.649519052838329\\
+-1.5	-1.29903810567666\\
+};
+\addplot [color=black,dashed,forget plot]
+  table[row sep=crcr]{%
+-1.3125	2.27331668493415\\
+-1.3125	-2.27331668493415\\
+};
+\addplot [color=black,mark size=2.5pt,only marks,mark=x,mark options={solid},forget plot]
+  table[row sep=crcr]{%
+-0.84375	1.09606340166468\\
+};
+\addplot [color=black,mark size=2.5pt,only marks,mark=x,mark options={solid},forget plot]
+  table[row sep=crcr]{%
+-1.03125	1.33963304647905\\
+};
+\addplot [color=black,mark size=2.5pt,only marks,mark=x,mark options={solid},forget plot]
+  table[row sep=crcr]{%
+-1.21875	1.58320269129343\\
+};
+\addplot [color=black,mark size=2.5pt,only marks,mark=x,mark options={solid},forget plot]
+  table[row sep=crcr]{%
+-1.40625	1.8267723361078\\
+};
+\addplot [color=black,mark size=2.5pt,only marks,mark=x,mark options={solid},forget plot]
+  table[row sep=crcr]{%
+-0.84375	0.36535446722156\\
+};
+\addplot [color=localmeshcolor,mark size=2.5pt,only marks,mark=x,mark options={solid},forget plot]
+  table[row sep=crcr]{%
+-1.03125	0.446544348826351\\
+};
+\addplot [color=localmeshcolor,mark size=2.5pt,only marks,mark=x,mark options={solid},forget plot]
+  table[row sep=crcr]{%
+-1.21875	0.527734230431142\\
+};
+\addplot [color=localmeshcolor,mark size=2.5pt,only marks,mark=x,mark options={solid},forget plot]
+  table[row sep=crcr]{%
+-1.40625	0.608924112035934\\
+};
+\addplot [color=black,mark size=2.5pt,only marks,mark=x,mark options={solid},forget plot]
+  table[row sep=crcr]{%
+-0.84375	-0.36535446722156\\
+};
+\addplot [color=localmeshcolor,mark size=2.5pt,only marks,mark=x,mark options={solid},forget plot]
+  table[row sep=crcr]{%
+-1.03125	-0.446544348826351\\
+};
+\addplot [color=localmeshcolor,mark size=2.5pt,only marks,mark=x,mark options={solid},forget plot]
+  table[row sep=crcr]{%
+-1.21875	-0.527734230431142\\
+};
+\addplot [color=localmeshcolor,mark size=2.5pt,only marks,mark=x,mark options={solid},forget plot]
+  table[row sep=crcr]{%
+-1.40625	-0.608924112035933\\
+};
+\addplot [color=black,mark size=2.5pt,only marks,mark=x,mark options={solid},forget plot]
+  table[row sep=crcr]{%
+-0.84375	-1.09606340166468\\
+};
+\addplot [color=localmeshcolor,mark size=2.5pt,only marks,mark=x,mark options={solid},forget plot]
+  table[row sep=crcr]{%
+-1.03125	-1.33963304647905\\
+};
+\addplot [color=localmeshcolor,mark size=2.5pt,only marks,mark=x,mark options={solid},forget plot]
+  table[row sep=crcr]{%
+-1.21875	-1.58320269129343\\
+};
+\addplot [color=localmeshcolor,mark size=2.5pt,only marks,mark=x,mark options={solid},forget plot]
+  table[row sep=crcr]{%
+-1.40625	-1.8267723361078\\
+};
+\addplot[only marks,mark=o,color=localbeziercolor,mark options={},mark size=2.5000pt] plot table[row sep=crcr]{%
+-1.125	1.94289029309402e-16\\
+-1.21875	1.66533453693773e-16\\
+-1.3125	2.22044604925031e-16\\
+-1.125	-0.487139289628746\\
+-1.21875	-0.527734230431142\\
+-1.3125	-0.568329171233538\\
+-1.125	-0.974278579257493\\
+-1.21875	-1.05546846086228\\
+-1.3125	-1.13665834246708\\
+};
+
+\tikzstyle{dot}=[draw,shape=circle, inner sep = 2pt, outer sep = -2pt]
+\tikzstyle{localbezier}=[inner sep = 2pt, outer sep = -2pt]
+\tikzstyle{localmesh}=[inner sep = 2pt, outer sep = -2pt]
+\tikzstyle{meshdot}=[dot, fill=black]
+
+\node[meshdot, label={above left:D}] at (axis cs:-0.74999999999999,1.29903810567666){};
+\node[meshdot, label={above right:C}] at (axis cs: -0.75,	-1.29903810567666){};
+\node[meshdot, label={below right:B}] at (axis cs:-1.5,	-2.59807621135332){};
+\node[meshdot, label={below left:A}] at (axis cs:-1.5,	2.59807621135332){};
+
+\node[localbezier,label={[localbeziercolor]above left:$\petersLocalBezPointIndices{-1,1}$}] at (axis cs:-1.125, 1.94289029309402e-16){};
+\node[localbezier,label={[localbeziercolor]above left:$\petersLocalBezPointIndices{-1,0}$}] at (axis cs:-1.21875, 1.66533453693773e-16){};
+\node[localbezier,label={[localbeziercolor]below left:$\petersLocalBezPointIndices{-1,-1}$}] at (axis cs:
+-1.3125,2.22044604925031e-16){};
+\node[localbezier,label={[localbeziercolor]above:$\petersLocalBezPointIndices{0,1}$}] at (axis cs:-1.125,-0.487139289628746){};
+\node[localbezier,label={[localbeziercolor]$\petersLocalBezPointIndices{0,0}$}] at (axis cs:-1.21875,-0.527734230431142){};
+\node[localbezier,label={[localbeziercolor]below:$\petersLocalBezPointIndices{0,-1}$}] at (axis cs:-1.3125,-0.568329171233538){};
+\node[localbezier,label={[localbeziercolor]above right:$\petersLocalBezPointIndices{1,1}$}] at (axis cs:-1.125,-0.974278579257493){};
+\node[localbezier,label={[localbeziercolor]above right:$\petersLocalBezPointIndices{1,0}$}] at (axis cs:-1.21875,-1.05546846086228){};
+\node[localbezier,label={[localbeziercolor]below right:$\petersLocalBezPointIndices{1,-1}$}] at (axis cs:-1.3125,-1.13665834246708){};
+
+\node[localmesh,label={[localmeshcolor]below:$\petersLocalPatchPointIndices{1,0}$}] at (axis cs:-1.21875,	-1.58320269129343){};
+\node[localmesh,label={[localmeshcolor]below:$\petersLocalPatchPointIndices{0,-1}$}] at (axis cs:-1.40625, -0.608924112035933){};
+\node[localmesh,label={[localmeshcolor]below:$\petersLocalPatchPointIndices{0,0}$}] at (axis cs:-1.21875,	-0.527734230431142){};
+\node[localmesh,label={[localmeshcolor]above:$\petersLocalPatchPointIndices{0,1}$}] at (axis cs:-1.03125,	-0.446544348826351){};
+\node[localmesh,label={[localmeshcolor]below:$\petersLocalPatchPointIndices{-1,0}$}] at (axis cs:-1.21875,	0.527734230431142){};
+\node[localmesh,label={[localmeshcolor]above:$\petersLocalPatchPointIndices{-1,1}$}] at (axis cs:-1.03125,	0.446544348826351){};
+\node[localmesh,label={[localmeshcolor]below:$\petersLocalPatchPointIndices{-1,-1}$}] at (axis cs:-1.40625,	0.608924112035934){};
+\node[localmesh,label={[localmeshcolor]above:$\petersLocalPatchPointIndices{1,1}$}] at (axis cs:-1.03125,	-1.33963304647905){};
+\node[localmesh,label={[localmeshcolor]below:$\petersLocalPatchPointIndices{1,-1}$}] at (axis cs:-1.40625,	-1.8267723361078){};
+
+
+\end{axis}
+
+\end{tikzpicture}%
+
+\end{document}
