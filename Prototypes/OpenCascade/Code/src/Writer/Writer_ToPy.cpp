@@ -8,7 +8,7 @@
 #include "Writer_ToPy.hpp"
 
 
-bool Writer_ToPy::write(std::string _filename, std::vector<std::vector<VoxelShape>> &voxelShape, std::vector<std::vector<double>>& forces){
+bool Writer_ToPy::write(std::string _filename, std::vector<std::vector<VoxelShape>> &voxelShape, std::vector<std::vector<double>>& forces, std::string volFraction){
     std::vector<int> dimensions(3);
     dimensions[0]=voxelShape[0][0].getNbX();
     dimensions[1]=voxelShape[0][0].getNbY();
@@ -18,7 +18,7 @@ bool Writer_ToPy::write(std::string _filename, std::vector<std::vector<VoxelShap
     std::cout << "Writer_ToPy: with dimensions: " << dimensions[0] << "," << dimensions[1] << "," << dimensions[2] << std::endl;
     outfile.open(_filename + ".tpd", ios::out | ios::trunc);
 
-    writeHeader(outfile, _filename);
+    writeHeader(outfile, _filename, volFraction);
     writeDimensions(outfile, dimensions);
     writeGreyScaleFilters(outfile);
 	//Write active nodes
@@ -44,7 +44,7 @@ bool Writer_ToPy::write(std::string _filename, std::vector<std::vector<VoxelShap
 
 }
 
-void Writer_ToPy::writeHeader(std::ofstream &outfile, std::string outputName){
+void Writer_ToPy::writeHeader(std::ofstream &outfile, std::string outputName, std::string volFraction){
 	outfile << "[ToPy Problem Definition File v2007]\n";
 	outfile << "\n";
 
@@ -52,7 +52,7 @@ void Writer_ToPy::writeHeader(std::ofstream &outfile, std::string outputName){
 	outfile << "PROB_NAME:   " << outputName << "\n";
 	outfile << "ETA:         0.4\n";
 	outfile << "DOF_PN:      3\n";
-	outfile << "VOL_FRAC:    0.15\n";
+	outfile << "VOL_FRAC:    "+volFraction+"\n";
 	outfile << "FILT_RAD:    2.5\n";
 	outfile << "ELEM_K:      H8\n";
 	outfile << "NUM_ITER:    100\n";
