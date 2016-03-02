@@ -11,14 +11,14 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>CADTOPCAD</string>
+   <string>CADO</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QPushButton" name="STEPFileSelector">
     <property name="geometry">
      <rect>
       <x>15</x>
-      <y>195</y>
+      <y>185</y>
       <width>111</width>
       <height>31</height>
      </rect>
@@ -31,7 +31,7 @@
     <property name="geometry">
      <rect>
       <x>150</x>
-      <y>200</y>
+      <y>190</y>
       <width>521</width>
       <height>21</height>
      </rect>
@@ -47,7 +47,7 @@
     <property name="geometry">
      <rect>
       <x>15</x>
-      <y>235</y>
+      <y>225</y>
       <width>111</width>
       <height>31</height>
      </rect>
@@ -60,39 +60,39 @@
     <property name="geometry">
      <rect>
       <x>150</x>
-      <y>240</y>
+      <y>230</y>
       <width>521</width>
       <height>21</height>
      </rect>
     </property>
     <property name="text">
-     <string>IGS File</string>
+     <string>IGES File</string>
     </property>
    </widget>
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>250</x>
-      <y>390</y>
-      <width>181</width>
-      <height>35</height>
+      <x>40</x>
+      <y>420</y>
+      <width>292</width>
+      <height>21</height>
      </rect>
     </property>
     <layout class="QFormLayout" name="formLayout_2">
      <property name="horizontalSpacing">
-      <number>16</number>
+      <number>128</number>
      </property>
      <item row="0" column="0">
       <widget class="QLabel" name="label_2">
        <property name="font">
         <font>
-         <pointsize>14</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
+         <pointsize>13</pointsize>
+         <weight>50</weight>
+         <bold>false</bold>
         </font>
        </property>
        <property name="text">
-        <string>Refinement:</string>
+        <string>Resolution:</string>
        </property>
       </widget>
      </item>
@@ -105,7 +105,7 @@
     <property name="geometry">
      <rect>
       <x>15</x>
-      <y>610</y>
+      <y>585</y>
       <width>99</width>
       <height>27</height>
      </rect>
@@ -117,10 +117,10 @@
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>390</y>
-      <width>221</width>
-      <height>35</height>
+      <x>40</x>
+      <y>380</y>
+      <width>291</width>
+      <height>21</height>
      </rect>
     </property>
     <layout class="QFormLayout" name="formLayout">
@@ -128,19 +128,19 @@
       <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
      </property>
      <property name="horizontalSpacing">
-      <number>72</number>
+      <number>51</number>
      </property>
      <item row="0" column="0">
       <widget class="QLabel" name="label">
        <property name="font">
         <font>
-         <pointsize>14</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
+         <pointsize>13</pointsize>
+         <weight>50</weight>
+         <bold>false</bold>
         </font>
        </property>
        <property name="text">
-        <string>Force:</string>
+        <string>Force scaling:</string>
        </property>
       </widget>
      </item>
@@ -152,8 +152,8 @@
    <widget class="QLabel" name="ErrorField_force">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>420</y>
+      <x>40</x>
+      <y>400</y>
       <width>221</width>
       <height>16</height>
      </rect>
@@ -170,8 +170,8 @@
    <widget class="QLabel" name="ErrorField_refinement">
     <property name="geometry">
      <rect>
-      <x>250</x>
-      <y>420</y>
+      <x>40</x>
+      <y>440</y>
       <width>181</width>
       <height>16</height>
      </rect>
@@ -201,8 +201,8 @@
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>360</y>
+      <x>30</x>
+      <y>350</y>
       <width>321</width>
       <height>21</height>
      </rect>
@@ -210,6 +210,8 @@
     <property name="font">
      <font>
       <pointsize>14</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
      </font>
     </property>
     <property name="text">
@@ -219,15 +221,17 @@
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>440</y>
-      <width>321</width>
+      <x>400</x>
+      <y>350</y>
+      <width>251</width>
       <height>21</height>
      </rect>
     </property>
     <property name="font">
      <font>
       <pointsize>14</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
      </font>
     </property>
     <property name="text">
@@ -237,8 +241,8 @@
    <widget class="QLabel" name="ErrorField_coarsening">
     <property name="geometry">
      <rect>
-      <x>250</x>
-      <y>500</y>
+      <x>410</x>
+      <y>440</y>
       <width>221</width>
       <height>16</height>
      </rect>
@@ -258,23 +262,26 @@
    <widget class="QWidget" name="layoutWidget_3">
     <property name="geometry">
      <rect>
-      <x>250</x>
-      <y>470</y>
-      <width>184</width>
-      <height>35</height>
+      <x>410</x>
+      <y>420</y>
+      <width>221</width>
+      <height>21</height>
      </rect>
     </property>
     <layout class="QFormLayout" name="formLayout_4">
      <property name="horizontalSpacing">
-      <number>16</number>
+      <number>49</number>
+     </property>
+     <property name="leftMargin">
+      <number>0</number>
      </property>
      <item row="0" column="0">
       <widget class="QLabel" name="Coarsening_label">
        <property name="font">
         <font>
-         <pointsize>14</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
+         <pointsize>13</pointsize>
+         <weight>50</weight>
+         <bold>false</bold>
         </font>
        </property>
        <property name="text">
@@ -290,10 +297,10 @@
    <widget class="QWidget" name="layoutWidget_4">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>470</y>
-      <width>226</width>
-      <height>35</height>
+      <x>410</x>
+      <y>380</y>
+      <width>221</width>
+      <height>21</height>
      </rect>
     </property>
     <layout class="QFormLayout" name="formLayout_5">
@@ -301,19 +308,19 @@
       <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
      </property>
      <property name="horizontalSpacing">
-      <number>18</number>
+      <number>41</number>
      </property>
      <item row="0" column="0">
       <widget class="QLabel" name="label_6">
        <property name="font">
         <font>
-         <pointsize>14</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
+         <pointsize>13</pointsize>
+         <weight>50</weight>
+         <bold>false</bold>
         </font>
        </property>
        <property name="text">
-        <string>Fairness weight:</string>
+        <string>Smoothness:</string>
        </property>
       </widget>
      </item>
@@ -328,8 +335,8 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>500</y>
+      <x>410</x>
+      <y>400</y>
       <width>221</width>
       <height>16</height>
      </rect>
@@ -346,8 +353,8 @@
    <widget class="QLabel" name="label_8">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>515</y>
+      <x>16</x>
+      <y>506</y>
       <width>321</width>
       <height>21</height>
      </rect>
@@ -355,6 +362,8 @@
     <property name="font">
      <font>
       <pointsize>14</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
      </font>
     </property>
     <property name="text">
@@ -365,7 +374,7 @@
     <property name="geometry">
      <rect>
       <x>15</x>
-      <y>545</y>
+      <y>530</y>
       <width>111</width>
       <height>31</height>
      </rect>
@@ -378,7 +387,7 @@
     <property name="geometry">
      <rect>
       <x>150</x>
-      <y>550</y>
+      <y>530</y>
       <width>521</width>
       <height>21</height>
      </rect>
@@ -394,7 +403,7 @@
     <property name="geometry">
      <rect>
       <x>160</x>
-      <y>600</y>
+      <y>575</y>
       <width>50</width>
       <height>64</height>
      </rect>
@@ -407,7 +416,7 @@
     <property name="geometry">
      <rect>
       <x>340</x>
-      <y>600</y>
+      <y>575</y>
       <width>50</width>
       <height>64</height>
      </rect>
@@ -420,7 +429,7 @@
     <property name="geometry">
      <rect>
       <x>520</x>
-      <y>600</y>
+      <y>575</y>
       <width>50</width>
       <height>64</height>
      </rect>
@@ -433,7 +442,7 @@
     <property name="geometry">
      <rect>
       <x>133</x>
-      <y>660</y>
+      <y>635</y>
       <width>101</width>
       <height>21</height>
      </rect>
@@ -449,7 +458,7 @@
     <property name="geometry">
      <rect>
       <x>290</x>
-      <y>660</y>
+      <y>635</y>
       <width>161</width>
       <height>21</height>
      </rect>
@@ -465,7 +474,7 @@
     <property name="geometry">
      <rect>
       <x>467</x>
-      <y>660</y>
+      <y>635</y>
       <width>161</width>
       <height>21</height>
      </rect>
@@ -484,7 +493,7 @@
     <property name="geometry">
      <rect>
       <x>15</x>
-      <y>650</y>
+      <y>625</y>
       <width>99</width>
       <height>27</height>
      </rect>
@@ -497,7 +506,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>170</y>
+      <y>160</y>
       <width>321</width>
       <height>21</height>
      </rect>
@@ -505,18 +514,20 @@
     <property name="font">
      <font>
       <pointsize>14</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
      </font>
     </property>
     <property name="text">
-     <string>Input Files</string>
+     <string>Input Files:</string>
     </property>
    </widget>
    <widget class="QCheckBox" name="checkBox">
     <property name="geometry">
      <rect>
       <x>50</x>
-      <y>300</y>
-      <width>81</width>
+      <y>280</y>
+      <width>141</width>
       <height>26</height>
      </rect>
     </property>
@@ -527,8 +538,8 @@
    <widget class="QLabel" name="checkBoxWarningLabel">
     <property name="geometry">
      <rect>
-      <x>220</x>
-      <y>303</y>
+      <x>180</x>
+      <y>283</y>
       <width>491</width>
       <height>21</height>
      </rect>
@@ -540,9 +551,9 @@
    <widget class="QLabel" name="checkBoxWarningLabel_2">
     <property name="geometry">
      <rect>
-      <x>220</x>
-      <y>333</y>
-      <width>451</width>
+      <x>270</x>
+      <y>313</y>
+      <width>401</width>
       <height>21</height>
      </rect>
     </property>
@@ -554,7 +565,7 @@
     <property name="geometry">
      <rect>
       <x>50</x>
-      <y>330</y>
+      <y>310</y>
       <width>171</width>
       <height>26</height>
      </rect>
@@ -567,13 +578,183 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>280</y>
+      <y>260</y>
       <width>171</width>
       <height>21</height>
      </rect>
     </property>
     <property name="text">
      <string>Additional Specifications:</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="layoutWidget_2">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>460</y>
+      <width>293</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <layout class="QFormLayout" name="formLayout_3">
+     <property name="horizontalSpacing">
+      <number>44</number>
+     </property>
+     <item row="0" column="0">
+      <widget class="QLabel" name="label_9">
+       <property name="font">
+        <font>
+         <pointsize>13</pointsize>
+         <weight>50</weight>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Volume Fraction Limit:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLineEdit" name="VolumeFractionEdit"/>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QLabel" name="ErrorField_volumefraction">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>480</y>
+      <width>181</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:8pt; color:#ff0000;&quot;&gt;text&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+    <property name="textFormat">
+     <enum>Qt::RichText</enum>
+    </property>
+   </widget>
+   <widget class="Line" name="line">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>340</y>
+      <width>20</width>
+      <height>161</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Vertical</enum>
+    </property>
+   </widget>
+   <widget class="Line" name="line_2">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>330</y>
+      <width>341</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+   <widget class="Line" name="line_3">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>340</y>
+      <width>20</width>
+      <height>161</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Vertical</enum>
+    </property>
+   </widget>
+   <widget class="Line" name="line_4">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>490</y>
+      <width>341</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+   <widget class="Line" name="line_5">
+    <property name="geometry">
+     <rect>
+      <x>380</x>
+      <y>340</y>
+      <width>20</width>
+      <height>161</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Vertical</enum>
+    </property>
+   </widget>
+   <widget class="Line" name="line_6">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>330</y>
+      <width>271</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+   <widget class="Line" name="line_7">
+    <property name="geometry">
+     <rect>
+      <x>650</x>
+      <y>340</y>
+      <width>20</width>
+      <height>161</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Vertical</enum>
+    </property>
+   </widget>
+   <widget class="Line" name="line_8">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>490</y>
+      <width>271</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+   <widget class="Line" name="line_9">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>570</y>
+      <width>641</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
     </property>
    </widget>
   </widget>
@@ -583,7 +764,7 @@
      <x>0</x>
      <y>0</y>
      <width>689</width>
-     <height>27</height>
+     <height>25</height>
     </rect>
    </property>
   </widget>

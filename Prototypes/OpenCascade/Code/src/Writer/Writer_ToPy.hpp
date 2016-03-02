@@ -27,21 +27,22 @@
 /**
  * Writes ToPy output file .tpd
  */
-class Writer_ToPy: public Writer{
+class Writer_ToPy/*: public Writer*/{
 public:
-    Writer_ToPy() : Writer(){};
+    Writer_ToPy() /*: Writer()*/{};
 
-    ~Writer_ToPy() {this->~Writer();};
+    ~Writer_ToPy() {/*this->~Writer();*/};
 
-    bool write(std::string _filename, std::vector<std::vector<VoxelShape>> &voxelShape, std::vector<std::vector<double>>& forces);
+    bool write(std::string _filename, std::vector<std::vector<VoxelShape>> &voxelShape, std::vector<std::vector<double>>& forces, std::string volFraction);
 
 private:
     /**
      * Writes the header based on ToPy documentation
      * @param outfile
      * @param _filename
+     * @param volFraction
      */
-    void writeHeader(std::ofstream &outfile, std::string _filename);
+    void writeHeader(std::ofstream &outfile, std::string _filename, std::string volFraction);
 
     /**
      * Write some parameters based on ToPy documentations

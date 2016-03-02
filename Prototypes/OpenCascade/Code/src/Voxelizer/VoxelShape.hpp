@@ -19,7 +19,7 @@ public:
 	VoxelShape();
 	VoxelShape(Voxel_BoolDS voxelShape);
 
-	virtual ~VoxelShape();
+	~VoxelShape();
 
 	/**
 	 * Returns the origin of the voxelShape in the corresponding dimension

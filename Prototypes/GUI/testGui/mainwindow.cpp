@@ -34,6 +34,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->FairnessWeight->setValidator(doubleValidator);
     ui->RefinementEdit->setValidator(new QIntValidator(0, 10, this));
     ui->Coarsening->setValidator(new QIntValidator(0, 10000000, this));
+    ui->VolumeFractionEdit->setValidator(doubleValidator);
 
     this->hide_ErrorFields();
     this->ui->startFreeCadButton->hide();
@@ -49,6 +50,8 @@ MainWindow::MainWindow(QWidget *parent) :
     logoItem.setPixmap(*logoPicture);
     logoScene.addItem(&logoItem);
     this->ui->logoView->show();
+
+    isFixtureFileSupplied = 0;
 
     /*ui->IGSFileInput->setText("/home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/TestGeometry/CantileverColoredNew/CantiLeverWithLoadAtEndSmallerMovedLoad.igs");
     ui->STEPFileInput->setText("/home/friedrich/Documents/Studium/Master_CSE/BGCE/BGCEGit/Prototypes/OpenCascade/TestGeometry/CantileverColoredNew/CantiLeverWithLoadAtEndSmallerMovedLoad.stp");
@@ -102,18 +105,7 @@ void MainWindow::on_IGSFileSelector_clicked()
 
 void MainWindow::on_runButton_clicked()
 {
-    //Disable all buttons
-    ui->STEPFileSelector->setDisabled(true);
-    ui->IGSFileSelector->setDisabled(true);
-    ui->checkBox->setDisabled(true);
-    ui->checkBox_2->setDisabled(true);
-    ui->ForceEdit->setDisabled(true);
-    ui->RefinementEdit->setDisabled(true);
-    ui->FairnessWeight->setDisabled(true);
-    ui->Coarsening->setDisabled(true);
-    ui->Output_selector->setDisabled(true);
-    ui->runButton->setDisabled(true);
-
+    this->disableAllElements();
     ui->IGSFileInput->setStyleSheet("QLabel { Color : black }");
     ui->STEPFileInput->setStyleSheet("QLabel { Color : black }");
     this->hide_ErrorFields();
@@ -138,6 +130,7 @@ void MainWindow::on_runButton_clicked()
     if (this->checkInput(igsName, stpName)){
         QString forceScaling = ui->ForceEdit->text();
         QString refinementLevel = ui->RefinementEdit->text();
+        QString volFraction = ui->VolumeFractionEdit->text();
 
         QFont boldFont("Cantarell", 11, QFont::Bold);
         QFont normalFont("Cantarell", 11, QFont::Normal);
@@ -146,8 +139,14 @@ void MainWindow::on_runButton_clicked()
 
         start = std::chrono::system_clock::now();
         /** Start the Voxelization Script **/
-        std::string parameterString = stpPath.toStdString() + " " + stpName.toStdString() + " " + forceScaling.toStdString() + " " + refinementLevel.toStdString() + " " + (isFixtureFileSupplied ? "1" : "0");
+        std::string parameterString = stpPath.toStdString() + " " +
+                                      stpName.toStdString() + " " +
+                                      forceScaling.toStdString() + " " +
+                                      refinementLevel.toStdString() + " " +
+                                      volFraction.toStdString() + " " +
+                                      (isFixtureFileSupplied ? "1" : "0");
         std::string scriptCADToVoxel = "./../../CADTopOp.sh " + parameterString;
+        std::cout << scriptCADToVoxel << std::endl;
 
         future = QtConcurrent::run(&qpool, &this->scriptCaller, &ScriptCaller::callScript, scriptCADToVoxel);
 
@@ -182,18 +181,19 @@ void MainWindow::on_runButton_clicked()
         start = std::chrono::system_clock::now();
         /** Start the Surface Fitting, Extraction and Back2CAD **/
         std::string cellsAndDimensionsPath = "./../../PYTHON/NURBSReconstruction";
-        std::string outputFileString = stpOutputPath.toStdString()+stpOutputName.toStdString();
+       // std::string outputFileString = stepOutputFile.toStdString();
         std::string fairnessWeight = ui->FairnessWeight->text().toStdString();
-        int coarseningFactorInt = ui->Coarsening->text().toInt();
-        coarseningFactorInt = pow(2, coarseningFactorInt);
-        std::string coarseningFactor = std::to_string(coarseningFactorInt);
+        int coarseningFactor = ui->Coarsening->text().toInt();
+        coarseningFactor = pow(2, coarseningFactor);
+        std::string coarseningFactorString = std::to_string(coarseningFactor);
+        std::string outputFile = stpOutputPath.toStdString()+stpOutputName.toStdString();
         std::string fixedFileFullPathNameString = this->isFixtureFileSupplied ? stpPath.toStdString() + stpName.toStdString() + "_Fixed.step" : "\"\"";
         std::string booleanFileString = this->isOptimizationDomainSupplied ? stpPath.toStdString() + stpName.toStdString() + "_ToOptimize.step" : "\"\"";
-        parameterString = cellsAndDimensionsPath + " " + stpFile.toStdString() + " " + outputFileString + " " + fairnessWeight + " " + coarseningFactor + " "+ fixedFileFullPathNameString + " " + booleanFileString;
+        parameterString = cellsAndDimensionsPath + " " + stpFile.toStdString() + " " + outputFile + " " + fairnessWeight + " " + coarseningFactorString + " "+ fixedFileFullPathNameString + " " + booleanFileString;
         std::string scriptPython = "python ./../../PYTHON/NURBSReconstruction/runningScript.py " + parameterString;
 
         std::cout << scriptPython << std::endl;
-        system(scriptPython.c_str());
+        //system(scriptPython.c_str());
 
         future = QtConcurrent::run(&qpool, &this->scriptCaller, &ScriptCaller::callScript, scriptPython);
 
@@ -209,20 +209,9 @@ void MainWindow::on_runButton_clicked()
         std::cout << "###Topology Optimization: Elapsed Time: " << topyTime << std::endl;
         std::cout << "###SURFACE-Fitting: Elapsed Time: " << surfaceFittingTime << std::endl;
 
-
-        ui->STEPFileSelector->setEnabled(true);
-        ui->IGSFileSelector->setEnabled(true);
-        ui->checkBox->setEnabled(true);
-        ui->checkBox_2->setEnabled(true);
-        ui->ForceEdit->setEnabled(true);
-        ui->RefinementEdit->setEnabled(true);
-        ui->FairnessWeight->setEnabled(true);
-        ui->Coarsening->setEnabled(true);
-        ui->Output_selector->setEnabled(true);
-        ui->runButton->setEnabled(true);
-
         this->ui->startFreeCadButton->show();
     }
+    this->enableAllElements();
 }
 
 void MainWindow::resetDials(){
@@ -270,6 +259,7 @@ bool MainWindow::checkInput(QString igsName, QString stpName){
     flag = verificator.isEmpty(ui->FairnessWeight, ui->ErrorField_fairness, "Please enter the fairness weight") && flag;
     flag = verificator.isEmpty(ui->ForceEdit, ui->ErrorField_force, "Please enter the force") && flag;
     flag = verificator.isEmpty(ui->RefinementEdit, ui->ErrorField_refinement, "Please enter the refinement") && flag;
+    flag = verificator.isEmpty(ui->VolumeFractionEdit, ui->ErrorField_volumefraction, "Please enter the volume fraction") && flag;
 
     flag = verificator.areSame(stpName, igsName, ui->STEPFileInput, ui->IGSFileInput) && flag;
 
@@ -300,6 +290,7 @@ void MainWindow::hide_ErrorFields(){
     ui->ErrorField_refinement->hide();
     ui->ErrorField_coarsening->hide();
     ui->ErrorField_fairness->hide();
+    ui->ErrorField_volumefraction->hide();
 }
 
 void MainWindow::on_startFreeCadButton_clicked()
@@ -307,16 +298,17 @@ void MainWindow::on_startFreeCadButton_clicked()
     QString outputFile;
     QString outputPath;
     StringHelper::getPathAndName(stepOutputFile, outputFile, outputPath);
-    std::string freeCADCommand = "freecad " + outputFile.toStdString() + "_RAW.step " +
-            (isFixtureFileSupplied ? outputFile.toStdString() + "_BOOLEANED.step " : "") +
-            (isOptimizationDomainSupplied ? outputFile.toStdString() + "_ALLOWED.step" : "");
+    std::string freeCADCommand = "freecad " + stepOutputFile.toStdString();// + ".step ";
+    std::cout << freeCADCommand << std::endl;//+
+         //   (isFixtureFileSupplied ? outputFile.toStdString() + "_BOOLEANED.step " : "") +
+          //  (isOptimizationDomainSupplied ? outputFile.toStdString() + "_ALLOWED.step" : "");
     system(freeCADCommand.c_str());
 }
 
 void MainWindow::on_checkBox_stateChanged(int newState)
 {
     if(newState){
-        this->ui->checkBoxWarningLabel->setText("Make sure file name is of the form \'StepFileName\'_Fixed.step!");
+        this->ui->checkBoxWarningLabel->setText("Make sure that fixture file name is of the form \'StepFileName\'_Fixed.step!");
         this->ui->checkBoxWarningLabel->setStyleSheet("QLabel { Color : red }");
         this->isFixtureFileSupplied = 1;
     }else{
@@ -328,11 +320,39 @@ void MainWindow::on_checkBox_stateChanged(int newState)
 void MainWindow::on_checkBox_2_stateChanged(int newState)
 {
     if(newState){
-        this->ui->checkBoxWarningLabel_2->setText("Make sure file name is of the form \'StepFileName\'_ToOptimize.step!");
+        this->ui->checkBoxWarningLabel_2->setText("Make sure that fixture file name is of the form \'StepFileName\'_ToOptimize.step!");
         this->ui->checkBoxWarningLabel_2->setStyleSheet("QLabel { Color : red }");
         this->isOptimizationDomainSupplied = 1;
     }else{
         this->ui->checkBoxWarningLabel_2->setText("");
         this->isOptimizationDomainSupplied = 0;
     }
+}
+
+void MainWindow::disableAllElements(){
+    this->ui->STEPFileSelector->setDisabled(true);
+    this->ui->IGSFileSelector->setDisabled(true);
+    this->ui->checkBox->setDisabled(true);
+    this->ui->checkBox_2->setDisabled(true);
+    this->ui->ForceEdit->setDisabled(true);
+    this->ui->RefinementEdit->setDisabled(true);
+    this->ui->VolumeFractionEdit->setDisabled(true);
+    this->ui->FairnessWeight->setDisabled(true);
+    this->ui->Coarsening->setDisabled(true);
+    this->ui->Output_selector->setDisabled(true);
+    this->ui->runButton->setDisabled(true);
+}
+
+void MainWindow::enableAllElements(){
+    this->ui->STEPFileSelector->setEnabled(true);
+    this->ui->IGSFileSelector->setEnabled(true);
+    this->ui->checkBox->setEnabled(true);
+    this->ui->checkBox_2->setEnabled(true);
+    this->ui->ForceEdit->setEnabled(true);
+    this->ui->RefinementEdit->setEnabled(true);
+    this->ui->VolumeFractionEdit->setEnabled(true);
+    this->ui->FairnessWeight->setEnabled(true);
+    this->ui->Coarsening->setEnabled(true);
+    this->ui->Output_selector->setEnabled(true);
+    this->ui->runButton->setEnabled(true);
 }

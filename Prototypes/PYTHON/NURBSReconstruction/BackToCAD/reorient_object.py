@@ -36,6 +36,6 @@ def reorient_object(input_file_name, output_file_name):
 	FreeCAD.getDocument("tmp").removeObject(originalGeom)
 
 	print "Exporting RAW file..."
-	Part.export(__objToExport__, output_file_name+"_RAW.step")
-	print "Output file " + output_file_name+"_RAW.step" + " exported."
+	Part.export(__objToExport__, output_file_name+".step")
+	print "Output file " + output_file_name+".step" + " exported."
 
