@@ -59,9 +59,15 @@ MainWindow::MainWindow(QWidget *parent) :
     this->ui->NurbsDial->setValue(0);
     this->ui->NurbsDial->setDisabled(true);
 
+
+
+
+    //logoScene->setSceneRect(ui->logoView->Rect());
     this->ui->logoView->setScene(&logoScene);
     logoItem.setPixmap(*logoPicture);
     logoScene.addItem(&logoItem);
+  //  ui->logoView->fitInView(logoScene.sceneRect(),Qt::KeepAspectRatioByExpanding);
+   // ui->logoView->fitInView();
     this->ui->logoView->show();
 
     isFixtureFileSupplied = 0;
@@ -116,6 +122,9 @@ void MainWindow::on_IGSFileSelector_clicked()
     }
 }
 
+void MainWindow::showEvent(QShowEvent *) {
+    ui->logoView->fitInView(logoScene.sceneRect(),Qt::KeepAspectRatio);
+}
 void MainWindow::on_runButton_clicked()
 {
     this->disableAllElements();
@@ -265,7 +274,9 @@ void MainWindow::setValueOfToPyDial(int value){
 
 bool MainWindow::checkInput(QString igsName, QString stpName){
     InputVerificator verificator;
-    QString boolName, boolPath;
+    QString outputName, outputPath;
+    StringHelper::getPathAndName(stepOutputFile, outputName, outputPath);
+
 
     bool flag = true;
 
@@ -279,6 +290,7 @@ bool MainWindow::checkInput(QString igsName, QString stpName){
 
     flag = verificator.checkFileName(this->stpFile, stpName, ".step", ui->STEPFileInput) && flag;
     flag = verificator.checkFileName(this->igsFile, igsName, ".iges", ui->IGSFileInput) && flag;
+    flag = verificator.checkFileName(this->stepOutputFile, outputName, ".step", ui->STEPOutput) && flag;
     return flag;
 }
 
@@ -321,7 +333,7 @@ void MainWindow::on_startFreeCadButton_clicked()
 void MainWindow::on_checkBox_stateChanged(int newState)
 {
     if(newState){
-        this->ui->checkBoxWarningLabel->setText("Make sure that fixture file name is of the form \'StepFileName\'_Fixed.step!");
+        this->ui->checkBoxWarningLabel->setText("Specify as \'StepFileName\'_Fixed.step");
         this->ui->checkBoxWarningLabel->setStyleSheet("QLabel { Color : red }");
         this->isFixtureFileSupplied = 1;
     }else{
@@ -333,7 +345,7 @@ void MainWindow::on_checkBox_stateChanged(int newState)
 void MainWindow::on_checkBox_2_stateChanged(int newState)
 {
     if(newState){
-        this->ui->checkBoxWarningLabel_2->setText("Make sure that fixture file name is of the form \'StepFileName\'_ToOptimize.step!");
+        this->ui->checkBoxWarningLabel_2->setText("Specify as \'StepFileName\'_ToOptimize.step");
         this->ui->checkBoxWarningLabel_2->setStyleSheet("QLabel { Color : red }");
         this->isOptimizationDomainSupplied = 1;
     }else{

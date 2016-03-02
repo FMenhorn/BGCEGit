@@ -55,6 +55,7 @@ private slots:
     void disableAllElements();
 
     void enableAllElements();
+    void showEvent(QShowEvent *);
 
   //  void on_VolumeFractionEdit_textEdited(const QString &arg1);
 
@@ -71,7 +72,7 @@ private:
     ScriptCaller scriptCaller;
 
     QGraphicsScene logoScene;
-    QPixmap* logoPicture = new QPixmap("../testGui/images/bgceCSEsccs_logo.png");
+    QPixmap* logoPicture = new QPixmap("../testGui/images/LOGO.png");
     QGraphicsPixmapItem logoItem;
 };
 

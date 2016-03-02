@@ -65,7 +65,7 @@ bool InputVerificator::areSame(QString stpName, QString igsName, QLabel*& STEPFi
     if(stpName.compare(igsName)!=0){
         STEPFileInput->setStyleSheet(styleSheet);
         IGSFileInput->setStyleSheet(styleSheet);
-        messageBox.critical(0, "Error", "Filenames are not equal!");
+        messageBox.critical(0, "Error", "Filenames are not equal");
         messageBox.setFixedSize(500,200);
         flag = false;
     }
@@ -77,12 +77,12 @@ bool InputVerificator::checkFileName(QString file, QString name, QString type, Q
     bool flag = true;
 
     if (!file.endsWith(type)){
-        errorField->setText("Please choose the " + type + " file!");
+        errorField->setText("Please choose the " + type + " file");
         errorField->setStyleSheet(styleSheet);
         flag = false;
     } else {
         if (name.contains(".")){
-            errorField->setText("Filename can not contain a dot!");
+            errorField->setText("Filename can not contain a dot");
             errorField->setStyleSheet(styleSheet);
             flag = false;
         }
