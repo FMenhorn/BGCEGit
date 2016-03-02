@@ -235,14 +235,14 @@ class ManifoldEdge:
         # change remaining references to removed edge -> treat vertices!
         # this depends on the self.v_kind of the vertex!
 
-        o_idx_return = o_idx_nodes
+        o_idx_return = o_idx_nodes + o_idx_shift
         for i in range(2):
             try:
                 kind = self.v_kind[i]
                 if kind == "outside":
                     new_quads, new_nodes, delete_quads, o_idx_return = self.resolve_outside_vertex(i, _dc_quads,
                                                                                                    _dc_verts,
-                                                                                                   o_idx_return + o_idx_shift)
+                                                                                                   o_idx_return)
                 elif kind == "inside":
                     new_quads, delete_quads = self.resolve_inside_vertex(i, _dc_quads)
                     new_nodes = []
@@ -262,7 +262,7 @@ class ManifoldEdge:
                 new_nodes_list = []
                 new_quads_list = []
                 delete_quads_list = []
-                o_idx_return = o_idx_nodes
+                o_idx_return = o_idx_nodes + o_idx_shift
 
         return new_quads_list, new_nodes_list, delete_quads_list, o_idx_return, vindex_mapping
 
