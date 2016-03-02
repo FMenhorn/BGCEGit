@@ -181,7 +181,7 @@ def tworesolution_dual_contour(data, resolutions, dims):
             nonmanifold.append(np.array(edge_identifier))
 
     try:
-        assert nonmanifold.__len__() == 0
+        assert nonmanifold.__len__() == 0 and not_resolved_edges_coarse.__len__() == 0
     except AssertionError as e:
         import traceback, os.path
         top = traceback.extract_stack()[-1]

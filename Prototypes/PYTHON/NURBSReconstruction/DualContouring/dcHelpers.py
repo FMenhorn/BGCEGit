@@ -180,7 +180,7 @@ def resolve_manifold_edges(_dc_verts, _dc_vindex, _dc_quads, _data):
     not_consistent1_edges = {}
     not_resolved_edges = {}
     for edge, used in edge_usage_dict.items():
-        if not used.__len__() == 2 and edge not in exceptional_edges:
+        if not used.__len__() == 2:
             if used.__len__() == 1:
                 not_consistent1_edges[edge] = used
             else:
@@ -199,7 +199,6 @@ def resolve_manifold_edges(_dc_verts, _dc_vindex, _dc_quads, _data):
 
 
 def resolve_not_consistent4(_dc_verts, _dc_quads, _not_consistent_edges):
-    print "resolve_not_consistent4"
     not_consistent_quad_clusters = []
     for edge, used in _not_consistent_edges.items():
         if used.__len__() == 4:
@@ -217,7 +216,6 @@ def resolve_not_consistent4(_dc_verts, _dc_quads, _not_consistent_edges):
 
 
 def resolve_not_consistent1(_dc_verts, _dc_quads, _not_consistent_edges):
-    print "resolve_not_consistent1"
     new_quads = []
     for edge in _not_consistent_edges.keys():
         if edge in _not_consistent_edges:
