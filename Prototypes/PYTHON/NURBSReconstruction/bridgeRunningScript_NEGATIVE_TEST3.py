@@ -10,10 +10,10 @@ from DooSabin.DualCont_toABC_simple import dualCont_to_ABC_simpl
 #####TESTING PATHS ######
 allowed_domains_file_name = './ActiveVolumeTest/Cantilever_ToOptimize.step'
 input_file_name='./ActiveVolumeTest/Cantilever.step'
-path="./DualContouring/cantilever"
-output_file_name = "./Cantilever"
+path="./DualContouring/bridge"
+output_file_name = "./Bridge"
 fairnessWeight = 0.5
-coarsening_factor = 2
+coarsening_factor = 8
 nonchanging_file_name = "./ActiveVolumeTest/Cantilever_Fixed.step"
 #######
 
