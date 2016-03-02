@@ -153,6 +153,7 @@ class ManifoldEdge:
         return neighbor_keys, neighbor_directions
 
     def resolve(self, _dataset, _vindex, _dc_quads, _dc_verts, o_idx_nodes, vindex_mapping):
+        print "resolving manifold edge: "+str(self)
         new_quads_list = []  # new quads contributed by this edge are stored here
         new_nodes_list = []  # new nodes introduced by manifold edge splitting are stored here
         delete_quads_list = self.manifold_edge_quads_ids  # the old quads connected to the manifold edge are deleted in any case!

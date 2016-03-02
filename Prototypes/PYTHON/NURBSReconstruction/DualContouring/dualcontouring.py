@@ -152,12 +152,13 @@ def tworesolution_dual_contour(data, resolutions, dims):
     # compute necessary coarsening steps from given coarse resolution.
     print "fine quads produced: %d" % (dc_quads_fine.__len__())
 
-    print "++ Coarsening Dataset ++"
     coarsening_steps = int(np.log(resolutions['coarse']) / np.log(2)) - pre_coarsening_steps
-    assert coarsening_steps > 0  # at least one coarsening step has to be done!
-    assert type(coarsening_steps) is int  # coarsening steps have to be integer!
-
-    coarse_dataset = coarsen_dataset(coarsening_steps, fine_dataset)
+    if coarsening_steps > 0:
+        print "++ Coarsening Dataset ++"
+        assert type(coarsening_steps) is int  # coarsening steps have to be integer!
+        coarse_dataset = coarsen_dataset(coarsening_steps, fine_dataset)
+    else:
+        coarse_dataset = fine_dataset
 
     print "++ Coarse Resolution DC ++"
     print "resolution: %d" % (coarse_dataset._resolution)
@@ -183,13 +184,13 @@ def tworesolution_dual_contour(data, resolutions, dims):
         assert nonmanifold.__len__() == 0
     except AssertionError:
         print "ERROR found. exporting intermediate results."
-        export_results.export_as_csv(dc_verts_fine, 'dc_verts_fine')
-        export_results.export_as_csv(dc_quads_fine, 'dc_quads_fine')
-        export_results.export_as_csv(dc_verts_coarse, 'dc_verts_coarse')
-        export_results.export_as_csv(dc_quads_coarse, 'dc_quads_coarse')
-        export_results.export_as_csv(np.array(nonmanifold), 'dc_non_manifold_edges')
+        export_results.export_as_csv(dc_verts_fine, './DualContouring/plotting/dc_verts_fine')
+        export_results.export_as_csv(dc_quads_fine, './DualContouring/plotting/dc_quads_fine')
+        export_results.export_as_csv(dc_verts_coarse, './DualContouring/plotting/dc_verts_coarse')
+        export_results.export_as_csv(dc_quads_coarse, './DualContouring/plotting/dc_quads_coarse')
+        export_results.export_as_csv(np.array(nonmanifold), './DualContouring/plotting/dc_non_manifold_edges')
         export_results.export_as_csv([coarse_dataset._dimensions['min'], coarse_dataset._dimensions['max']],
-                                     'dc_dimensions')
+                                     './DualContouring/plotting/dc_dimensions')
         print "dc_non_manifold_edges references all the vertices connected by a non-manifold edge."
         print PColors.FAIL + "ERROR: Not all manifold edges have been successfully resolved! Aborting." + PColors.ENDC
         quit()

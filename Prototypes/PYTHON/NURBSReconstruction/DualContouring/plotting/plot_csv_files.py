@@ -20,6 +20,8 @@ reader=csv.reader(open("./dc_dimensions.csv","rb"),delimiter=';')
 x=list(reader)
 dims_raw = numpy.array(x).astype('float')
 
+print quads
+
 dimensions = {}
 dimensions['xmin']=dims_raw[0,0]
 dimensions['ymin']=dims_raw[0,1]
