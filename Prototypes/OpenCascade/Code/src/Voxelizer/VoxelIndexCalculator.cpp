@@ -140,9 +140,9 @@ void VoxelIndexCalculator::calculateIndexForVoxelShape(VoxelShape& voxelShape, b
 	nbX = isElem ? dimensions[0] : dimensions[0] + 1;
 	nbY = isElem ? dimensions[1] : dimensions[1] + 1;
 	nbZ = isElem ? dimensions[2] : dimensions[2] + 1;
-	originVoxelX = originX * 1./voxelSizeX + 1 - (int)origin[0];
-	originVoxelY = originY * 1./voxelSizeY + 1 - (int)origin[1];
-	originVoxelZ = originZ * 1./voxelSizeZ + 1 - (int)origin[2];
+	originVoxelX = originX * 1./voxelSizeX + 1 - ((int)origin[0]*1./voxelSizeX);
+	originVoxelY = originY * 1./voxelSizeY + 1 - ((int)origin[1]*1./voxelSizeY);
+	originVoxelZ = originZ * 1./voxelSizeZ + 1 - ((int)origin[2]*1./voxelSizeZ);
 	localNbX = voxelShape.getNbX();
 	localNbY = voxelShape.getNbY();
 	localNbZ = voxelShape.getNbZ();
@@ -192,9 +192,9 @@ void VoxelIndexCalculator::calculatePassiveIndexFromBody(VoxelShape& bodyVoxelSh
 	voxelSizeX = bodyVoxelShape.getXLen()/nbX;
 	voxelSizeY = bodyVoxelShape.getYLen()/nbY;
 	voxelSizeZ = bodyVoxelShape.getZLen()/nbZ;
-	originVoxelX = originX * 1./voxelSizeX + 1 - (int)origin[0];
-	originVoxelY = originY * 1./voxelSizeY + 1 - (int)origin[1];
-	originVoxelZ = originZ * 1./voxelSizeZ + 1 - (int)origin[2];
+	originVoxelX = originX * 1./voxelSizeX + 1 - ((int)origin[0]*1./voxelSizeX);
+	originVoxelY = originY * 1./voxelSizeY + 1 - ((int)origin[1]*1./voxelSizeY);
+	originVoxelZ = originZ * 1./voxelSizeZ + 1 - ((int)origin[2]*1./voxelSizeZ);
 
 	int curIndex;
 	for (int k = 0; k < bodyVoxelShape.getNbZ(); k++){
