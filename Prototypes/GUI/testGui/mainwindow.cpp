@@ -28,16 +28,26 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    QDoubleValidator* doubleValidator = new QDoubleValidator(0, 10000000000, 5, this);
-    doubleValidator->setNotation(QDoubleValidator::StandardNotation);
-    ui->ForceEdit->setValidator(doubleValidator);
-    ui->FairnessWeight->setValidator(doubleValidator);
-    ui->RefinementEdit->setValidator(new QIntValidator(0, 10, this));
-    ui->Coarsening->setValidator(new QIntValidator(0, 10000000, this));
-    QDoubleValidator* doubleValidatorFraction = new QDoubleValidator();
-    doubleValidatorFraction->setNotation(QDoubleValidator::StandardNotation);
-    doubleValidatorFraction->setRange(0, 1, 3);
-    ui->VolumeFractionEdit->setValidator(doubleValidatorFraction);
+    ui->ForceDoubleSpinBox->setMinimum(0);
+    ui->ForceDoubleSpinBox->setMaximum(1000000);
+    ui->ForceDoubleSpinBox->setSingleStep(0.5);
+    ui->ForceDoubleSpinBox->setValue(1.5);
+
+    ui->SmoothnessDoubleSpinBox->setMinimum(0);
+    ui->SmoothnessDoubleSpinBox->setMaximum(10000);
+    ui->SmoothnessDoubleSpinBox->setSingleStep(0.1);
+    ui->SmoothnessDoubleSpinBox->setValue(0.5);
+
+    ui->ResolutionSpinBox->setMinimum(1);
+    ui->ResolutionSpinBox->setMaximum(10);
+
+    ui->CoarseningSpinBox->setMinimum(1);
+    ui->CoarseningSpinBox->setMaximum(50);
+
+    ui->VolumeFractionDoubleSpinBox->setMinimum(0);
+    ui->VolumeFractionDoubleSpinBox->setMaximum(1);
+    ui->VolumeFractionDoubleSpinBox->setSingleStep(0.05);
+    ui->VolumeFractionDoubleSpinBox->setValue(0.2);
 
     this->hide_ErrorFields();
     this->ui->startFreeCadButton->hide();
@@ -49,9 +59,15 @@ MainWindow::MainWindow(QWidget *parent) :
     this->ui->NurbsDial->setValue(0);
     this->ui->NurbsDial->setDisabled(true);
 
+
+
+
+    //logoScene->setSceneRect(ui->logoView->Rect());
     this->ui->logoView->setScene(&logoScene);
     logoItem.setPixmap(*logoPicture);
     logoScene.addItem(&logoItem);
+  //  ui->logoView->fitInView(logoScene.sceneRect(),Qt::KeepAspectRatioByExpanding);
+   // ui->logoView->fitInView();
     this->ui->logoView->show();
 
     isFixtureFileSupplied = 0;
@@ -106,6 +122,9 @@ void MainWindow::on_IGSFileSelector_clicked()
     }
 }
 
+void MainWindow::showEvent(QShowEvent *) {
+    ui->logoView->fitInView(logoScene.sceneRect(),Qt::KeepAspectRatio);
+}
 void MainWindow::on_runButton_clicked()
 {
     this->disableAllElements();
@@ -131,14 +150,15 @@ void MainWindow::on_runButton_clicked()
     //std::cout << "CHECK STILL DISABLED" << std::endl;
     //this->checkInput(igsName, stpName)
     if (this->checkInput(igsName, stpName)){
-        QString forceScaling = ui->ForceEdit->text();
-        QString refinementLevel = ui->RefinementEdit->text();
-        QString volFraction = ui->VolumeFractionEdit->text();
+        QString forceScaling = ui->ForceDoubleSpinBox->text();
+        QString refinementLevel = ui->ResolutionSpinBox->text();
+        QString volFraction = ui->VolumeFractionDoubleSpinBox->text();
 
         QFont boldFont("Cantarell", 11, QFont::Bold);
         QFont normalFont("Cantarell", 11, QFont::Normal);
         QThreadPool qpool;
         QFuture<void> future;
+
 
         start = std::chrono::system_clock::now();
         /** Start the Voxelization Script **/
@@ -185,8 +205,8 @@ void MainWindow::on_runButton_clicked()
         /** Start the Surface Fitting, Extraction and Back2CAD **/
         std::string cellsAndDimensionsPath = "./../../PYTHON/NURBSReconstruction";
        // std::string outputFileString = stepOutputFile.toStdString();
-        std::string fairnessWeight = ui->FairnessWeight->text().toStdString();
-        int coarseningFactor = ui->Coarsening->text().toInt();
+        std::string fairnessWeight = ui->SmoothnessDoubleSpinBox->text().toStdString();
+        int coarseningFactor = ui->CoarseningSpinBox->text().toInt();
         coarseningFactor = pow(2, coarseningFactor);
         std::string coarseningFactorString = std::to_string(coarseningFactor);
         std::string outputFile = stpOutputPath.toStdString()+stpOutputName.toStdString();
@@ -254,20 +274,23 @@ void MainWindow::setValueOfToPyDial(int value){
 
 bool MainWindow::checkInput(QString igsName, QString stpName){
     InputVerificator verificator;
-    QString boolName, boolPath;
+    QString outputName, outputPath;
+    StringHelper::getPathAndName(stepOutputFile, outputName, outputPath);
+
 
     bool flag = true;
 
-    flag = flag && verificator.isEmpty(ui->Coarsening, ui->ErrorField_coarsening, "Please enter the coarsening");
-    flag = verificator.isEmpty(ui->FairnessWeight, ui->ErrorField_fairness, "Please enter the fairness weight") && flag;
-    flag = verificator.isEmpty(ui->ForceEdit, ui->ErrorField_force, "Please enter the force") && flag;
-    flag = verificator.isEmpty(ui->RefinementEdit, ui->ErrorField_refinement, "Please enter the refinement") && flag;
-    flag = verificator.isEmpty(ui->VolumeFractionEdit, ui->ErrorField_volumefraction, "Please enter the volume fraction") && flag;
+    flag = flag && verificator.isEmpty(ui->CoarseningSpinBox, ui->ErrorField_coarsening, "Please enter the coarsening");
+    flag = verificator.isEmpty(ui->SmoothnessDoubleSpinBox, ui->ErrorField_fairness, "Please enter the fairness weight") && flag;
+    flag = verificator.isEmpty(ui->ForceDoubleSpinBox, ui->ErrorField_force, "Please enter the force") && flag;
+    flag = verificator.isEmpty(ui->ResolutionSpinBox, ui->ErrorField_refinement, "Please enter the refinement") && flag;
+    flag = verificator.isEmpty(ui->VolumeFractionDoubleSpinBox, ui->ErrorField_volumefraction, "Please enter the volume fraction") && flag;
 
     flag = verificator.areSame(stpName, igsName, ui->STEPFileInput, ui->IGSFileInput) && flag;
 
     flag = verificator.checkFileName(this->stpFile, stpName, ".step", ui->STEPFileInput) && flag;
     flag = verificator.checkFileName(this->igsFile, igsName, ".iges", ui->IGSFileInput) && flag;
+    flag = verificator.checkFileName(this->stepOutputFile, outputName, ".step", ui->STEPOutput) && flag;
     return flag;
 }
 
@@ -301,9 +324,8 @@ void MainWindow::on_startFreeCadButton_clicked()
     QString outputFile;
     QString outputPath;
     StringHelper::getPathAndName(stepOutputFile, outputFile, outputPath);
-    std::string freeCADCommand = "freecad " + stepOutputFile.toStdString();// + ".step ";
-    std::cout << freeCADCommand << std::endl;//+
-         //   (isFixtureFileSupplied ? outputFile.toStdString() + "_BOOLEANED.step " : "") +
+    std::string freeCADCommand = "freecad " + stepOutputFile.toStdString() +
+            (isFixtureFileSupplied ? outputPath.toStdString() + outputFile.toStdString() + "_BOOLEANED.step " : ""); //+
           //  (isOptimizationDomainSupplied ? outputFile.toStdString() + "_ALLOWED.step" : "");
     system(freeCADCommand.c_str());
 }
@@ -311,7 +333,7 @@ void MainWindow::on_startFreeCadButton_clicked()
 void MainWindow::on_checkBox_stateChanged(int newState)
 {
     if(newState){
-        this->ui->checkBoxWarningLabel->setText("Make sure that fixture file name is of the form \'StepFileName\'_Fixed.step!");
+        this->ui->checkBoxWarningLabel->setText("Specify as \'StepFileName\'_Fixed.step");
         this->ui->checkBoxWarningLabel->setStyleSheet("QLabel { Color : red }");
         this->isFixtureFileSupplied = 1;
     }else{
@@ -323,7 +345,7 @@ void MainWindow::on_checkBox_stateChanged(int newState)
 void MainWindow::on_checkBox_2_stateChanged(int newState)
 {
     if(newState){
-        this->ui->checkBoxWarningLabel_2->setText("Make sure that fixture file name is of the form \'StepFileName\'_ToOptimize.step!");
+        this->ui->checkBoxWarningLabel_2->setText("Specify as \'StepFileName\'_ToOptimize.step");
         this->ui->checkBoxWarningLabel_2->setStyleSheet("QLabel { Color : red }");
         this->isOptimizationDomainSupplied = 1;
     }else{
@@ -337,11 +359,11 @@ void MainWindow::disableAllElements(){
     this->ui->IGSFileSelector->setDisabled(true);
     this->ui->checkBox->setDisabled(true);
     this->ui->checkBox_2->setDisabled(true);
-    this->ui->ForceEdit->setDisabled(true);
-    this->ui->RefinementEdit->setDisabled(true);
-    this->ui->VolumeFractionEdit->setDisabled(true);
-    this->ui->FairnessWeight->setDisabled(true);
-    this->ui->Coarsening->setDisabled(true);
+    this->ui->ForceDoubleSpinBox->setDisabled(true);
+    this->ui->ResolutionSpinBox->setDisabled(true);
+    this->ui->VolumeFractionDoubleSpinBox->setDisabled(true);
+    this->ui->SmoothnessDoubleSpinBox->setDisabled(true);
+    this->ui->CoarseningSpinBox->setDisabled(true);
     this->ui->Output_selector->setDisabled(true);
     this->ui->runButton->setDisabled(true);
 }
@@ -351,11 +373,13 @@ void MainWindow::enableAllElements(){
     this->ui->IGSFileSelector->setEnabled(true);
     this->ui->checkBox->setEnabled(true);
     this->ui->checkBox_2->setEnabled(true);
-    this->ui->ForceEdit->setEnabled(true);
-    this->ui->RefinementEdit->setEnabled(true);
-    this->ui->VolumeFractionEdit->setEnabled(true);
-    this->ui->FairnessWeight->setEnabled(true);
-    this->ui->Coarsening->setEnabled(true);
+    this->ui->ForceDoubleSpinBox->setEnabled(true);
+    this->ui->ResolutionSpinBox->setEnabled(true);
+    this->ui->VolumeFractionDoubleSpinBox->setEnabled(true);
+    this->ui->SmoothnessDoubleSpinBox->setEnabled(true);
+    this->ui->CoarseningSpinBox->setEnabled(true);
     this->ui->Output_selector->setEnabled(true);
     this->ui->runButton->setEnabled(true);
 }
+
+
