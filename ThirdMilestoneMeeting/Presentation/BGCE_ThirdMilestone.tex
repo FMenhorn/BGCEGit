@@ -61,7 +61,8 @@ cross/.default={2pt}}
 %\usepackage{amstext}
 %\usepackage{hyperref} 
 %\usepackage{comment}
-%\usepackage{subcaption}
+\usepackage{caption}
+\captionsetup[figure]{labelformat=empty}%to no have figure
 %\renewcommand*{\figureautorefname}{fig.}
 %\renewcommand*{\equationautorefname}{eq.}
 \usepackage{bm}
@@ -102,6 +103,7 @@ S. Reiz, B. Rüth, E. Wannerberg, A. Yurova} %[displayed in footer]{displayed on
 
 
 \begin{document}
+\setbeamertemplate{caption}{\raggedright\insertcaption\par}
 \setbeamertemplate{caption}{\raggedright\insertcaption\par} % removes "figure" label at figures
 \frame{\maketitle}
 

@@ -75,7 +75,7 @@
       <x>40</x>
       <y>420</y>
       <width>292</width>
-      <height>31</height>
+      <height>33</height>
      </rect>
     </property>
     <layout class="QFormLayout" name="formLayout_2">
@@ -97,7 +97,11 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QSpinBox" name="ResolutionSpinBox"/>
+      <widget class="QSpinBox" name="ResolutionSpinBox">
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>
@@ -120,7 +124,7 @@
       <x>40</x>
       <y>380</y>
       <width>291</width>
-      <height>29</height>
+      <height>33</height>
      </rect>
     </property>
     <layout class="QFormLayout" name="formLayout">
@@ -145,7 +149,14 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QDoubleSpinBox" name="ForceDoubleSpinBox"/>
+      <widget class="QDoubleSpinBox" name="ForceDoubleSpinBox">
+       <property name="locale">
+        <locale language="English" country="UnitedStates"/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>
@@ -271,7 +282,7 @@
       <x>410</x>
       <y>420</y>
       <width>221</width>
-      <height>29</height>
+      <height>33</height>
      </rect>
     </property>
     <layout class="QFormLayout" name="formLayout_4">
@@ -296,7 +307,11 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QSpinBox" name="CoarseningSpinBox"/>
+      <widget class="QSpinBox" name="CoarseningSpinBox">
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>
@@ -306,7 +321,7 @@
       <x>410</x>
       <y>380</y>
       <width>221</width>
-      <height>29</height>
+      <height>33</height>
      </rect>
     </property>
     <layout class="QFormLayout" name="formLayout_5">
@@ -331,7 +346,11 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QDoubleSpinBox" name="SmoothnessDoubleSpinBox"/>
+      <widget class="QDoubleSpinBox" name="SmoothnessDoubleSpinBox">
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>
@@ -557,9 +576,9 @@
    <widget class="QLabel" name="checkBoxWarningLabel_2">
     <property name="geometry">
      <rect>
-      <x>270</x>
+      <x>250</x>
       <y>313</y>
-      <width>401</width>
+      <width>421</width>
       <height>21</height>
      </rect>
     </property>
@@ -599,7 +618,7 @@
       <x>40</x>
       <y>460</y>
       <width>293</width>
-      <height>29</height>
+      <height>33</height>
      </rect>
     </property>
     <layout class="QFormLayout" name="formLayout_3">
@@ -621,7 +640,11 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QDoubleSpinBox" name="VolumeFractionDoubleSpinBox"/>
+      <widget class="QDoubleSpinBox" name="VolumeFractionDoubleSpinBox">
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>
@@ -770,7 +793,7 @@
      <x>0</x>
      <y>0</y>
      <width>689</width>
-     <height>25</height>
+     <height>27</height>
     </rect>
    </property>
   </widget>

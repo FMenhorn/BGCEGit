@@ -108,7 +108,7 @@
 \end{columns}
 \end{overlayarea}
 \end{frame}
-\begin{frame}{Long way to smoothness -- Peter's scheme}
+\begin{frame}{Peters' Scheme revisited}
 %\begin{block}{Peters' scheme:}
 %Given the control mesh $M_{x}$
 %\begin{enumerate}
@@ -116,66 +116,74 @@
 %\item Construct a tensor product Bezier patches (biquadratic or bicubic) centred on the each vertex of the refined \textit{control mesh}
 %\end{enumerate}
 %\end{block}
-\begin{overlayarea}{\textwidth}{.1\textheight}
-	\only<1>{Control mesh}
-	\only<2>{Refined control mesh}
-	\only<3>{Bezier control points}
-	\only<4>{B-Spline patch}
-	\only<5>{Peters' surface}
-\end{overlayarea}
+%\begin{overlayarea}{\textwidth}{.1\textheight}
+%	\only<1>{Control mesh}
+%	\only<2>{Refined control mesh}
+%	\only<3>{Bezier control points}
+%	\only<4>{B-Spline patch}
+%	\only<5>{Peters' surface}
+%\end{overlayarea}
 \begin{overlayarea}{\textwidth}{.9\textheight}
     \begin{center}
 		\begin{tikzpicture} 
-        \uncover<+->{
+        
         \node at (0,3.5)[inner sep=0pt, scale = 0.5](N1)
                 {\includegraphics[width=5cm]{Pictures/NURBS/tikz/control_mesh.pdf}};
-        }
-        \uncover<+->{
+        
         \node at (3.5,3.5) [inner sep=0pt, scale = 0.5](N2)
         			{\includegraphics[width=5cm]{Pictures/NURBS/tikz/patch_points.pdf}};
         			                  
         \draw[thick,->] (N1) -- (N2);
-        }
-        \uncover<+->{
+        
+        
         \node at (7,2)[inner sep=0pt, scale = 0.5](N3)
                   {\includegraphics[width=5cm]{Pictures/NURBS/tikz/bezier_points.pdf}};
         \draw[thick,->] (N2) -- (N3);
-        }
-        \uncover<+->{
+        
+        
         \node at (3.5, 0)[inner sep=0pt, scale = 0.5](N4)
                 {\includegraphics[width=5cm]{Pictures/NURBS/tikz/bspline_patches.pdf}};
         \draw[thick,->] (N3) -- (N4);
-        }
-        \uncover<+->{
+        
+        
         \node at (0, 0)[inner sep=0pt, scale = 0.5](N5)
                  {\includegraphics{Pictures/NURBS/tikz/torus_peters.pdf}};
         \draw[thick,->] (N4) -- (N5);
-        }
+        
         \end{tikzpicture}
 	\end{center}
 \end{overlayarea}
 %\textbf{{\color{red} According to Peters obtained surface is $G^{1}$ smooth}}
 \end{frame}
 
-\begin{frame}{Long way to smoothness}
-\begin{block}{Main ideas}
-\begin{itemize}
-\item Use the mesh obtained from Dual Contouring as a \textit{control mesh}
-\item Modify the fitting step to take advantage of the \textbf{Peters' scheme}
-\end{itemize}
+\begin{frame}{Fitting Problem: Peters’ Scheme}
+
+\only<1>{\begin{equation*}
+ ||D - C(u, v) \ P||^2  \rightarrow min %\sum_{i=1}^{N}\norm{P_{i} - y_{i}V_{x}}^{2} \rightarrow min,
+\end{equation*}}
+\only<2>{\begin{equation*}
+ ||D - C(u, v) \ P||^2 + \textcolor{red}{\lambda ||0-C^{fair}P||}  \rightarrow min %\sum_{i=1}^{N}\norm{P_{i} - y_{i}V_{x}}^{2} \rightarrow min,
+\end{equation*}}
+\begin{block}{Notation}
+$D$ - Data  points object to surface fitting\\
+$C(u,v)$ - Control Point Matrix \\
+$P$ - B-Spline Control Points  \\
+\only<2>{\color{red}{$C^{fair}$ - Fairness coefficients}}
 \end{block}
-$$\downarrow$$
-\begin{equation*}
-E_{dist}(V_{x}) = \sum_{i=1}^{N}\norm{P_{i} - y_{i}V_{x}}^{2} \rightarrow min,
-\end{equation*}
-$y_{i}$ - coefficients obtained from the Peters' scheme theory.
-\pause
-\begin{block}{What is achieved?}
-\begin{itemize}
-\item Smoothness of the fitted surface is now guaranteed by construction
-\item Fitting of more complex shapes achieved
-\end{itemize}
-\end{block}
+%\begin{block}{Main ideas}
+%\begin{itemize}
+%\item Use the mesh  as a \textit{control mesh}
+%\item Modify the fitting step to take advantage of the \textbf{Peters' scheme}
+%\end{itemize}
+%\end{block}
+
+%\pause
+%\begin{block}{What is achieved?}
+%\begin{itemize}
+%\item Smoothness of the fitted surface is now %guaranteed by construction
+%\item Fitting of more complex shapes achieved
+%\end{itemize}
+%\end{block}
 \end{frame}
 
 \begin{frame}

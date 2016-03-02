@@ -2,7 +2,7 @@
 	\begin{overlayarea}{\textwidth}{.1\textheight}
 	\only<1>{What the user sees:}
     \only<2>{CAD design including specification of loads and fixtures}
-	\only<3>{Voxelized topology}
+	\only<3>{Voxelized geometry}
 	\only<4>{Optimized topology}
 	\only<5>{Extracted isosurface}
 	\only<6>{B-Spline surface}
@@ -19,7 +19,7 @@
 		{\includegraphics[width=2.2cm,height=2.2cm]{Pictures/End.png}};                        
 		}        
         \uncover<1-1>{
-       \draw[thick,->] (N1) -- (N5); 
+       \path[dashed,thick, ->]<1-1> (N1) edge [bend right] (N5); 
 		 }     
         \uncover<3->{
         \node at (4.5,3)[inner sep=0pt](N2)             

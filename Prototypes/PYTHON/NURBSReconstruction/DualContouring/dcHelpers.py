@@ -1,5 +1,6 @@
-from ManifoldEdge import ManifoldEdge
+from ManifoldEdge import ManifoldEdge, NonManifoldEdgeNotResolvedException
 import numpy as np
+from pColors import PColors
 
 from quadHelpers import *
 
@@ -10,6 +11,11 @@ __author__ = 'benjamin'
 # GENERAL HELPERS #
 ###################
 
+class NonConsistentEdgesException(Exception):
+    """
+    is raised, if a non consistent edge cannot be treated in the correct way.
+    """
+    pass
 
 def generate_vertex_usage_dict(dc_edges):
     vertex_usage_dict = {}  # here we save the edges using a certain node
@@ -119,17 +125,30 @@ def resolve_manifold_edges(_dc_verts, _dc_vindex, _dc_quads, _data):
 
     # in this dict we will save the mapping from old indices of removed manifold vertices to their children
     vindex_mapping = {}
-
+    exceptional_edges = []
     for manifold_edge_key, manifold_edge in manifold_edges.items():
-        new_quads, new_nodes, delete_quads, o_idx_nodes, vindex_mapping = manifold_edge.resolve(_data,
-                                                                                                _dc_vindex,
-                                                                                                _dc_quads,
-                                                                                                _dc_verts,
-                                                                                                o_idx_nodes,
-                                                                                                vindex_mapping)
-        new_nodes_list += new_nodes
-        new_quads_list += new_quads
-        delete_quads_list += delete_quads
+        try:
+            new_quads, new_nodes, delete_quads, o_idx_return, vindex_mapping = manifold_edge.resolve(_data,
+                                                                                                    _dc_vindex,
+                                                                                                    _dc_quads,
+                                                                                                    _dc_verts,
+                                                                                                    o_idx_nodes,
+                                                                                                    vindex_mapping)
+            new_nodes_list += new_nodes
+            new_quads_list += new_quads
+            delete_quads_list += delete_quads
+
+        except NonManifoldEdgeNotResolvedException as e:
+            import traceback, os.path
+            top = traceback.extract_stack()[-1]
+            print ''
+            print ', '.join([os.path.basename(top[0]), str(top[1])])
+            print PColors.WARNING + "Edge " + str(manifold_edge) + "has not been resolved. Key:" + str(manifold_edge_key) + PColors.ENDC + '\n'
+            o_idx_return = o_idx_nodes
+            exceptional_edges.append(manifold_edge_key)
+
+        finally:
+            o_idx_nodes = o_idx_return
 
     _dc_verts, _dc_quads = update_mesh_3d(_dc_verts,
                                           _dc_quads,
@@ -142,31 +161,41 @@ def resolve_manifold_edges(_dc_verts, _dc_vindex, _dc_quads, _data):
     not_consistent4_edges = {}
     not_consistent1_edges = {}
     for edge, used in edge_usage_dict.items():
-        if not used.__len__() == 2:
+        if not used.__len__() == 2 and edge not in exceptional_edges:
             if used.__len__() == 4:
                 not_consistent4_edges[edge] = used
             elif used.__len__() == 1:
                 not_consistent1_edges[edge] = used
-            else:
-                print "ERROR!"
-                quit()
-
-    _dc_verts, _dc_quads = resolve_not_consistent4(_dc_verts, _dc_quads, not_consistent4_edges)
+    try:
+        _dc_verts, _dc_quads = resolve_not_consistent4(_dc_verts, _dc_quads, not_consistent4_edges)
+    except NonConsistentEdgesException as e:
+        import traceback, os.path
+        top = traceback.extract_stack()[-1]
+        print ''
+        print ', '.join([os.path.basename(top[0]), str(top[1])])
+        print PColors.WARNING+"some edges with 4 quads connected to them have not been resolved!"+PColors.ENDC+'\n'
 
     # we have to update the edge usage now
     edge_usage_dict = generate_edge_usage_dict(_dc_quads)  # here we save the quads using a certain edge
     not_consistent1_edges = {}
+    not_resolved_edges = {}
     for edge, used in edge_usage_dict.items():
         if not used.__len__() == 2:
             if used.__len__() == 1:
                 not_consistent1_edges[edge] = used
             else:
-                print "ERROR!"
-                quit()
+                not_resolved_edges[edge] = used
+    try:
+        _dc_verts, _dc_quads = resolve_not_consistent1(_dc_verts, _dc_quads, not_consistent1_edges)
+    except NonConsistentEdgesException:
+        import traceback, os.path
+        top = traceback.extract_stack()[-1]
+        print ''
+        print ', '.join([os.path.basename(top[0]), str(top[1])])
+        print PColors.WARNING+"some edges with 1 quad connected to them have not been resolved!"+PColors.ENDC+'\n'
 
-    _dc_verts, _dc_quads = resolve_not_consistent1(_dc_verts, _dc_quads, not_consistent1_edges)
 
-    return _dc_verts, _dc_quads, manifold_edges
+    return _dc_verts, _dc_quads, manifold_edges, not_resolved_edges
 
 
 def resolve_not_consistent4(_dc_verts, _dc_quads, _not_consistent_edges):
@@ -187,6 +216,7 @@ def resolve_not_consistent4(_dc_verts, _dc_quads, _not_consistent_edges):
 
 
 def resolve_not_consistent1(_dc_verts, _dc_quads, _not_consistent_edges):
+    new_quads = []
     for edge in _not_consistent_edges.keys():
         if edge in _not_consistent_edges:
             new_quad = 4*[None]
@@ -208,11 +238,12 @@ def resolve_not_consistent1(_dc_verts, _dc_quads, _not_consistent_edges):
             elif remaining_edge[::-1] in _not_consistent_edges.keys():
                 _not_consistent_edges.__delitem__(remaining_edge[::-1])
             else:
-                print "ERROR!"
-                assert(False)
-                quit()
+                raise NonConsistentEdgesException("ERROR!")
+                return _dc_verts, _dc_quads
 
-            _dc_quads.append(new_quad)
+            new_quads.append(new_quad)
+
+    _dc_quads += new_quads
 
     return _dc_verts, _dc_quads
 
