@@ -1,4 +1,3 @@
-
 \setbeamertemplate{caption}{\raggedright\insertcaption\par}
 \subsubsection{CAD input files}
 \begin{frame}{CAD input files}
@@ -10,7 +9,7 @@
 %One Byte: 0-126 negative, 127 zero, 128-255 positive direction
 \begin{figure}
 \centering
-\includegraphics[width=.7\textwidth]{Pictures/SecondHalf/files_input.png}
+\includegraphics[width=.72\textwidth]{Pictures/SecondHalf/four_files.png}
 \end{figure}
 \end{frame}
 
@@ -53,36 +52,53 @@
 \end{frame}
 
 \subsubsection{Black-Box Toplogy Optimizer}
-\begin{frame}{Topology Optimization}
-%Steps:
-%\begin{enumerate}
-%\item Geometry as voxel grid
-%\item Calculate stress on geometry
-%\item If stress in voxel below threshold %$\rightarrow$ remove voxel from active geometry
-%\end{enumerate}
+\begin{frame}{Topology Optimization Process}
+\begin{center}
+Provide geometry as voxel grid
+$$\downarrow$$
+Calculate stress on each voxel
+$$\downarrow$$
+Remove voxel from active geometry if stress is below threshold
+\end{center}
+\end{frame}
+
+\begin{frame}{Topology Optimization Example}
+
 \only<1>{
 \begin{figure}
 \centering
-\includegraphics[width=.25\textwidth]{Pictures/TopOp/Cantilever_Topy_0.pdf}
+%\vspace{-0.5cm}
+\includegraphics[width=1\textwidth]{Pictures/SecondHalf/Topology/Cantilever_Topy_0.png}
 \end{figure}}
 \only<2>{
 \begin{figure}
 \centering
-\includegraphics[width=.25\textwidth]{Pictures/TopOp/Cantilever_Topy_1.pdf}
+%\vspace{-0.5cm}
+\includegraphics[width=1\textwidth]{Pictures/SecondHalf/Topology/Cantilever_Topy_1.png}
 \end{figure}}
 \only<3>{
 \begin{figure}
 \centering
-\includegraphics[width=.25\textwidth]{Pictures/TopOp/Cantilever_Topy_2.pdf}
+%\vspace{-0.5cm}
+\includegraphics[width=1\textwidth]
+{Pictures/SecondHalf/Topology/Cantilever_Topy_2.png}
 \end{figure}}
 \only<4>{
 \begin{figure}
 \centering
-\includegraphics[width=.25\textwidth]{Pictures/TopOp/Cantilever_Topy_3.pdf}
+%\vspace{-0.5cm}
+\includegraphics[width=1\textwidth]{Pictures/SecondHalf/Topology/Cantilever_Topy_3.png}
 \end{figure}}
 \only<5>{
 \begin{figure}
 \centering
-\includegraphics[width=.25\textwidth]{Pictures/TopOp/Cantilever_Topy_4.pdf}
+%\vspace{-0.5cm}
+\includegraphics[width=1\textwidth]{Pictures/SecondHalf/Topology/Cantilever_Topy_4.png}
+\end{figure}}
+\only<6>{
+\begin{figure}
+\centering
+%\vspace{-0.5cm}
+\includegraphics[width=1\textwidth]{Pictures/SecondHalf/Topology/Cantilever_Topy_5.png}
 \end{figure}}
 \end{frame}
