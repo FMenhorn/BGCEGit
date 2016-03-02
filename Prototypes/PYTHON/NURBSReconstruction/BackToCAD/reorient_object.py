@@ -1,3 +1,8 @@
+import sys
+
+FREECADPATH = '/usr/lib/freecad/lib'
+sys.path.append(FREECADPATH)
+
 import FreeCAD
 import Import
 import Draft
