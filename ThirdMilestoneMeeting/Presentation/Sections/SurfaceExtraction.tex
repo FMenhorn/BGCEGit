@@ -64,32 +64,32 @@
 
 
 \begin{frame}
-	\frametitle{Dual Contouring}
-	T
-	\begin{overlayarea}{\textwidth}{.25 \textheight}
-	Dual contouring on two different scales:
-	\begin{itemize}
-	\item Coarse scale: \\
-	 Output: Closed surface made out of \textit{quads}; Parameter space
-	\only<2>{\item Fine scale: \\
-	Output: Vertices to fit for reconstructed geometry}
-	\end{itemize}	
-	\end{overlayarea}
-	
-	\begin{overlayarea}{\textwidth}{.75 \textheight}
-	
+	\frametitle{Two-grid Dual Contouring}
+	\begin{overlayarea}{\textwidth}{0.9 \textheight}
+	\begin{minipage}{0.45\textwidth}
+	\begin{block}{\centering Coarse grid}
+	\vspace{-0.5cm}
 	\begin{figure}
-	\includegraphics[scale=0.35]{Pictures/DC/DC_1.pdf}
+	\includegraphics[scale=0.35]{Pictures/DC/DC_1_Coarse.pdf}
 	\end{figure}
-	
-	
-%	\only<2>{
-%	\begin{figure}
-%	\includegraphics[scale=0.2]{Pictures/DC/doubleTorus.pdf}
-%	\end{figure}
-%	}
+	\begin{itemize}
+	\item Coarse quads used for parameter space
+	\end{itemize}
+	\end{block}
+	\end{minipage}
+	\hfill%
+	\begin{minipage}{0.45\textwidth}
+	\begin{block}{\centering Fine grid}
+	\vspace{-0.5cm}
+	\begin{figure}
+	\includegraphics[scale=0.35]{Pictures/DC/DC_1_Fine.pdf}
+	\end{figure}
+	\begin{itemize}
+	\item Fine vertices used for something
+	\end{itemize}
+	\end{block}
+	\end{minipage}
 	\end{overlayarea}
-	
 \end{frame}
 
 
