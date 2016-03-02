@@ -11,14 +11,24 @@ def DooSabin(vertices, faces, alpha, iter):
     edges = []
 
     #get list of edges
+    faces_total = faces.__len__()
+    face_count = 0
     for face in faces:
+        face_count += 1
+        if face_count % 100 == 0:
+            print "getting list of edges: face %d of %d."%(face_count,faces_total)
         for edge in face.getEdges():
             if not ((edge in edges) or ([edge[1], edge[0]] in edges)):
                 edges.append(edge)
 
     edges_children = [ [] for _ in range(len(edges))]
 
+    faces_total = faces.__len__()
+    face_count = 0
     for face in faces:
+        face_count += 1
+        if face_count % 100 == 0:
+            print "face %d of %d."%(face_count,faces_total)
         F = face.centroid
         numberOfVertices = len(face.vertex_ids)
 
@@ -124,8 +134,14 @@ def DooSabin(vertices, faces, alpha, iter):
 
         faces_refined.append(new_face)
 
+    vertices_total = vertices.__len__()
+    vertex_count = 0
     #Loop through vertices, getting the faces of the type "vertex"
     for vert in vertices:
+        vertex_count += 1
+        if vertex_count % 100 == 0:
+            print "vertex %d of %d."%(vertex_count,vertices_total)
+
         n = len(vertices_children[vert._id])
         new_face_vertices = [vertices_children[vert._id][i][1] for i in range(n)]
         parent_faces = [vertices_children[vert._id][i][0] for i in range(n)]
@@ -157,8 +173,12 @@ def DooSabin(vertices, faces, alpha, iter):
 
         faces_refined.append(face_object)
 
+    edges_total = edges.__len__()
     #Loop through edges, getting the faces of the type "edge"
     for i in range(len(edges)):
+        if i % 100 == 0:
+            print "edge %d of %d."%(i, edges_total)
+
         n = 4 #edge always has four children!
         new_face_vertices_positioning = [edges_children[i][j][1] for j in range(n)]
 

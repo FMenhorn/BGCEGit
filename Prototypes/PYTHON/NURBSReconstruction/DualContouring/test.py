@@ -1,43 +1,9 @@
 import testing.dcSample
-import numpy as np
 import extraction
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
-from mpl_toolkits.mplot3d.art3d import Poly3DCollection, Line3DCollection
 import dcHelpers
-
-def plot_surface(axis, quads, verts, color, alpha):
-    for q in quads:
-        vtx = verts[q]
-        x = vtx[:, 0].tolist()
-        y = vtx[:, 1].tolist()
-        z = vtx[:, 2].tolist()
-        vtx = [zip(x, y, z)]
-        poly = Poly3DCollection(vtx)
-        poly.set_color(color)
-        poly.set_edgecolor('k')
-        poly.set_alpha(alpha)
-        axis.add_collection3d(poly)
-
-def plot_hairs(axis, quads_objs, verts, params, color):
-    lines_data = []
-    points_data_x = []
-    points_data_y = []
-    points_data_z = []
-    for i in range(verts.__len__()):
-        q_id = int(params[i][0])
-        q = quads_objs[q_id]
-        v = verts[i]
-        base_v, d = q.projection_onto_plane(v)
-
-        lines_data.append([v.tolist(),base_v.tolist()])
-        points_data_x.append(v[0])
-        points_data_y.append(v[1])
-        points_data_z.append(v[2])
-    line = Line3DCollection(lines_data)
-    line.color(color)
-    axis.add_collection3d(line)
-    #axis.scatter(points_data_x, points_data_y, points_data_z,color='k')
+import plotting.DC_plotting
 
 
 __author__ = 'benjamin der Starke'
@@ -122,10 +88,10 @@ ax = Axes3D(fig)
 #datasets['fine'].plot(axis=ax,color='r',alpha=1)
 #datasets['coarse'].plot(axis=ax,color='k',alpha=0)
 
-plot_surface(axis=ax, quads=quads['coarse'], verts=verts['coarse'], color='b', alpha=.5)
-#plot_surface(axis=ax, quads=quads['fine'], verts=verts['fine'], color='r', alpha=.5)
+plotting.DC_plotting.plot_surface(axis=ax, quads=quads['coarse'], verts=verts['coarse'], color='b', alpha=.5)
+#plotting.DC_plotting.plot_surface(axis=ax, quads=quads['fine'], verts=verts['fine'], color='r', alpha=.5)
 
-plot_hairs(axis=ax, quads_objs=quads_objs['coarse'], verts=verts['fine'], params=params, color='k')
+plotting.DC_plotting.plot_hairs(axis=ax, quads_objs=quads_objs['coarse'], verts=verts['fine'], params=params, color='k')
 
 for nonmanifold_edge in nonmanifold:
     vtx = verts['coarse'][list(nonmanifold_edge)]
