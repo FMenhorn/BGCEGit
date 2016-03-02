@@ -1,125 +1,98 @@
-\begin{frame}{Status}
-\begin{block}{Last milestone}
-\begin{itemize}
-	\item[\textcolor{black}{\VarClock}] Surface reconstruction with the VTK Toolbox
-
-\end{itemize}
-\end{block}
-\begin{block}{Today}
-\begin{itemize}
-	\item[\textcolor{green}{\Checkmark}] Extraction of voxel data from Topy
-	\item[\textcolor{green}{\Checkmark}] 3D Dual Contouring implementation 
-	\item[\textcolor{green}{\Checkmark}] Coarsening and non-manifold edge treatment 
-	\item[\textcolor{green}{\Checkmark}] Projection of datapoints onto quads and respective parametrization
-	\item[\textcolor{black}{\VarClock}]  Interface to NURBS
-\end{itemize}
-\end{block}
-\end{frame}
-
-
-
-
-
 
 \subsection{Dual Contouring}
 
 \begin{frame}
-
 	\frametitle{From Voxel to Mesh Geometry}
-	
+	Task:
 	\begin{itemize}
 	\item Extract isosurface from voxel information
 	\item Algorithms: Marching Cubes, Dual Contouring, Extended Models
-	\item Problems with VTK's Marching Cube implementation
 	\end{itemize}
-	\begin{figure}
-	\includegraphics[scale=0.35]{Pictures/bunny_MC.pdf}
-	\caption{From [4],[5]}
-	\end{figure}
+	Steps: 
+	\begin{enumerate}
+		\item Locate the position of the vertex inside each cube which has at least one sign changing
+		edge
+		\item Join the vertices associated with four cubes sharing a common edge to form a quadrilateral face (quad)
+	\end{enumerate}
+	\begin{minipage}{0.49\textwidth}
+	\only<1>{
+	\begin{figure}	
+	\centering
+	\includegraphics[width=.35\textwidth]{Pictures/DC/MC1.png}\caption{Marching cube}
+	\end{figure}}
+	\only<2>{
+		\begin{figure}	
+		\centering
+		\includegraphics[width=.35\textwidth]{Pictures/DC/MC2.png}\caption{Marching cube}
+		\end{figure}}
+	\only<3>{
+		\begin{figure}	
+		\centering
+		\includegraphics[width=.35\textwidth]{Pictures/DC/MC3.png}\caption{Marching cube}
+		\end{figure}}
+			\only<4>{
+				\begin{figure}	
+				\centering
+				\includegraphics[width=.35\textwidth]{Pictures/DC/MC4.png}\caption{Marching cube}
+	\end{figure}}
+	\end{minipage}
+	\begin{minipage}{0.49\textwidth}
+	\only<1>{
+	\begin{figure}	
+	\centering
+	\includegraphics[width=.35\textwidth]{Pictures/DC/MC1.png}\caption{Dual Contouring}
+	\end{figure}}
+	\only<2>{
+		\begin{figure}	
+		\centering
+		\includegraphics[width=.35\textwidth]{Pictures/DC/MC2.png}\caption{Dual Contouring}
+		\end{figure}}
+	\only<3>{
+		\begin{figure}	
+		\centering
+		\includegraphics[width=.35\textwidth]{Pictures/DC/DC3.png}\caption{Dual Contouring}
+		\end{figure}}
+			\only<4>{
+				\begin{figure}	
+				\centering
+				\includegraphics[width=.35\textwidth]{Pictures/DC/DC4.png}\caption{Dual Contouring}
+	\end{figure}}
 	
+	\end{minipage}
+%	\caption{Comparision of MC and DC for identical datasets. The vertices are created on the edges of the cubes for MC  and inside the cubes for DC. Please note that the sharp feature in the top right cube can only be reconstructed by DC. Figure from %\cite{FromVoxelsToPolygons}.
 \end{frame}
 
 
 \begin{frame}
-
 	\frametitle{Dual Contouring}
-	
+	T
 	\begin{overlayarea}{\textwidth}{.25 \textheight}
+	Dual contouring on two different scales:
 	\begin{itemize}
-	\item Python implementation --- Use of powerful libraries, including VTK
-	\item Output: Closed surface made out of \textit{quads}
-	\item Coarsening is needed for surface fitting algorithms
+	\item Coarse scale: \\
+	 Output: Closed surface made out of \textit{quads}; Parameter space
+	\only<2>{\item Fine scale: \\
+	Output: Vertices to fit for reconstructed geometry}
 	\end{itemize}	
 	\end{overlayarea}
 	
 	\begin{overlayarea}{\textwidth}{.75 \textheight}
-	\only<1>{
+	
 	\begin{figure}
 	\includegraphics[scale=0.35]{Pictures/DC/DC_1.pdf}
 	\end{figure}
-	}
 	
-	\only<2>{
-	\begin{figure}
-	\includegraphics[scale=0.2]{Pictures/DC/doubleTorus.pdf}
-	\end{figure}
-	}
+	
+%	\only<2>{
+%	\begin{figure}
+%	\includegraphics[scale=0.2]{Pictures/DC/doubleTorus.pdf}
+%	\end{figure}
+%	}
 	\end{overlayarea}
 	
 \end{frame}
 
-\begin{frame}
 
-	\frametitle{Dual Contouring --- Problems}
-	
-	\begin{overlayarea}{\textwidth}{.25 \textheight}	
-	\begin{itemize}
-	\item  \textbf{Non--manifold edges} appear
-	\item One edge can only belong to two quads for the surface to be closed
-	\item Special treatments in the implementation to avoid them
-	\end{itemize}
-	\end{overlayarea}
-	
-	\begin{overlayarea}{\textwidth}{.75 \textheight}
-	\only<1>{
-	\begin{figure}
-	\includegraphics[scale=0.35]{Pictures/DC/manifolds.pdf}
-	\end{figure}
-	}
-	\only<2>{
-	\begin{figure}
-	\includegraphics[scale=0.35]{Pictures/DC/DC_3.pdf}
-	\end{figure}
-	}
-	\end{overlayarea}
-	
-\end{frame}
-
-\begin{frame}
-
-	\frametitle{Dual Contouring --- Input}
-	
-	\begin{overlayarea}{\textwidth}{.25 \textheight}
-	\begin{itemize}
-	\item Interface between Topology Optimization and Surface Extraction
-	\item Special implementation to use voxel data from ToPy as input
-	\end{itemize}
-	\end{overlayarea}
-
-	\begin{overlayarea}{\textwidth}{.75 \textheight}
-	\begin{figure}
-	\includegraphics[scale=0.35]{Pictures/DC/cantilever.pdf}
-	\end{figure}
-	\end{overlayarea}
-	
-\end{frame}
-
-\begin{frame}
-
-	\frametitle{Demo}
-	
-
-\end{frame}
 
 \subsection{Projection and Parametrization}
 
