@@ -169,6 +169,7 @@ class ManifoldEdge:
             sign_key = tuple(np.array(self.middle_value_key) + self.resolution * .5 * sign_direction)
             # value of the node
             sign = _dataset.value_at(sign_key)
+
             # resolves ambiguous case: if sign is equal to middle sign, we don't want to create a quad in between, which
             # separates the two nodes. If the signs are not equal, we want to separate them with two new quads
             if sign != self.middle_sign:
@@ -316,7 +317,7 @@ class ManifoldEdge:
                     break
 
             try:
-                assert False  # quad_plane in locals()
+                assert 'quad_plane' in locals()
             except AssertionError:
                 new_quads_list = []
                 new_nodes_list = []
@@ -324,6 +325,7 @@ class ManifoldEdge:
                 raise NonManifoldPointNotResolvedException("EDGE NOT RESOLVED! EXCEPTION UNCAUGHT!")
                 print PColors.WARNING + "One non-manifold edge is not resolved in the correct way." + PColors.ENDC
                 return new_quads_list, new_nodes_list, delete_quads_list, o_idx_nodes
+
 
             # add four new quads and one new point
             centroid = np.zeros([3])
