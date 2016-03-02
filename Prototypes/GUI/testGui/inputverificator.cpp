@@ -1,8 +1,11 @@
 #include "inputverificator.h"
 #include <QMessageBox>
 #include <QString>
+#include <sstream>
 #include <QLineEdit>
-
+#include <stdio.h>
+#include <iostream>
+//#include <QSpinBox>
 InputVerificator::InputVerificator()
 {
 
@@ -10,6 +13,36 @@ InputVerificator::InputVerificator()
 
 
 bool InputVerificator::isEmpty(QLineEdit*& qlineEdit, QLabel*& errorField, QString errorString){
+    QString text = qlineEdit->text();
+    errorField->hide();
+    bool flag = true;
+
+    if (text.isEmpty()){
+        errorField->setText(errorString);
+        errorField->setStyleSheet(styleSheet);
+        errorField->show();
+        flag = false;
+    }
+
+    return flag;
+}
+
+bool InputVerificator::isEmpty(QDoubleSpinBox*& qlineEdit, QLabel*& errorField, QString errorString){
+    QString text = qlineEdit->text();
+    errorField->hide();
+    bool flag = true;
+
+    if (text.isEmpty()){
+        errorField->setText(errorString);
+        errorField->setStyleSheet(styleSheet);
+        errorField->show();
+        flag = false;
+    }
+
+    return flag;
+}
+
+bool InputVerificator::isEmpty(QSpinBox*& qlineEdit, QLabel*& errorField, QString errorString){
     QString text = qlineEdit->text();
     errorField->hide();
     bool flag = true;
@@ -56,4 +89,26 @@ bool InputVerificator::checkFileName(QString file, QString name, QString type, Q
     }
     return flag;
 
+}
+
+bool InputVerificator::checkRange(const QString& input_string, QLabel*& errorField, double min, double max)
+{
+   // QString input_string = input->text();
+    double value = input_string.toDouble();
+    std::cout << value << std::endl;
+
+    bool flag = 1;
+    if ((value >= max) || (value <= min))
+    {
+        std::cout << "here!" << std::endl;
+        std::ostringstream error_message_stream;
+        error_message_stream << "The value should be between " << min << " and " << max;
+        std::string error_message = error_message_stream.str();
+        std::cout << error_message << std::endl;
+        errorField->setText("!!!");//setText(QString::fromUtf8(error_message.c_str()));
+        errorField->setStyleSheet(styleSheet);
+        errorField->update();
+        flag = 0;
+    }
+    return flag;
 }

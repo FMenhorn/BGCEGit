@@ -75,7 +75,7 @@
       <x>40</x>
       <y>420</y>
       <width>292</width>
-      <height>21</height>
+      <height>31</height>
      </rect>
     </property>
     <layout class="QFormLayout" name="formLayout_2">
@@ -97,7 +97,7 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QLineEdit" name="RefinementEdit"/>
+      <widget class="QSpinBox" name="ResolutionSpinBox"/>
      </item>
     </layout>
    </widget>
@@ -120,7 +120,7 @@
       <x>40</x>
       <y>380</y>
       <width>291</width>
-      <height>21</height>
+      <height>29</height>
      </rect>
     </property>
     <layout class="QFormLayout" name="formLayout">
@@ -145,7 +145,7 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QLineEdit" name="ForceEdit"/>
+      <widget class="QDoubleSpinBox" name="ForceDoubleSpinBox"/>
      </item>
     </layout>
    </widget>
@@ -242,7 +242,7 @@
     <property name="geometry">
      <rect>
       <x>410</x>
-      <y>440</y>
+      <y>450</y>
       <width>221</width>
       <height>16</height>
      </rect>
@@ -265,7 +265,7 @@
       <x>410</x>
       <y>420</y>
       <width>221</width>
-      <height>21</height>
+      <height>29</height>
      </rect>
     </property>
     <layout class="QFormLayout" name="formLayout_4">
@@ -290,7 +290,7 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QLineEdit" name="Coarsening"/>
+      <widget class="QSpinBox" name="CoarseningSpinBox"/>
      </item>
     </layout>
    </widget>
@@ -300,7 +300,7 @@
       <x>410</x>
       <y>380</y>
       <width>221</width>
-      <height>21</height>
+      <height>29</height>
      </rect>
     </property>
     <layout class="QFormLayout" name="formLayout_5">
@@ -325,7 +325,7 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QLineEdit" name="FairnessWeight"/>
+      <widget class="QDoubleSpinBox" name="SmoothnessDoubleSpinBox"/>
      </item>
     </layout>
    </widget>
@@ -593,7 +593,7 @@
       <x>40</x>
       <y>460</y>
       <width>293</width>
-      <height>21</height>
+      <height>29</height>
      </rect>
     </property>
     <layout class="QFormLayout" name="formLayout_3">
@@ -615,7 +615,7 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QLineEdit" name="VolumeFractionEdit"/>
+      <widget class="QDoubleSpinBox" name="VolumeFractionDoubleSpinBox"/>
      </item>
     </layout>
    </widget>

@@ -56,6 +56,8 @@ private slots:
 
     void enableAllElements();
 
+  //  void on_VolumeFractionEdit_textEdited(const QString &arg1);
+
 private:
     Ui::MainWindow *ui;
 
