@@ -19,11 +19,11 @@
 #include <Bnd_Box.hxx>
 #include <BRepBndLib.hxx>
 
-class Writer_VTK: public Writer{
+class Writer_VTK/*: public Writer*/{
 public:
-    Writer_VTK() : Writer() {}
+    Writer_VTK() /*: Writer() */{}
 
-    ~Writer_VTK() {this->~Writer();};
+    ~Writer_VTK() {/*this->~Writer();*/};
 
     bool write(std::string _filename,  std::vector<std::vector<VoxelShape>> &voxelShape, std::vector<std::vector<double>>& forces);
 

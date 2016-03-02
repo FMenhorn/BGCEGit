@@ -72,6 +72,7 @@ class Vertex(Coordinate):
     def get_quads(self):
         """
         :return: set of all quads connected to this Vertex
+        :rtype: PetersScheme.Edge
         """
         return self._quads
 

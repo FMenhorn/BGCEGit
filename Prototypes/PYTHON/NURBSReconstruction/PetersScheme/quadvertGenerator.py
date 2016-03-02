@@ -45,15 +45,19 @@ def quad_vert_generator(_verts, _quads, _fine_verts, _parameters ):
     # Erasing hanging nodes
     for i in range(vertex_list.__len__()):
         if not vertex_list[i].get_quads():
+            if vertex_list[i].get_edges():
+                print "ERROR, hanging vertex with edges"
+
             vertex_list[i] = None
+
 
     # New Id's of vertices
     new_id = 0
     new_vertex_list = []
     for i in range(vertex_list.__len__()):
         if vertex_list[i] is not None:
+            vertex_list[i]._id = new_id
             new_vertex_list.append(vertex_list[i])
-            vertex_list[i].id = new_id
             new_id += 1
 
     # Check if every edge has only two quads!
@@ -74,9 +78,9 @@ def quad_vert_generator(_verts, _quads, _fine_verts, _parameters ):
     fine_verts= [fine_vertex_list[i].get_coordinates()  for i in range(fine_vertex_list.__len__())]
 
     for i in range(quad_list.__len__()):
-        quads.append([quad_list[i].get_vertices()[j].id for j in range(4)])
+        quads.append([quad_list[i].get_vertices()[j].get_id() for j in range(4)])
 
-    return np.array(verts), np.array(quads), np.array(fine_verts)
+    return np.array(verts), np.array(quads), np.array(fine_verts), new_vertex_list, edge_dict, quad_list
 
 
 
