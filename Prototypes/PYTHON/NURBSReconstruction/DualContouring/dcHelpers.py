@@ -138,8 +138,12 @@ def resolve_manifold_edges(_dc_verts, _dc_vindex, _dc_quads, _data):
             new_quads_list += new_quads
             delete_quads_list += delete_quads
 
-        except NonManifoldEdgeNotResolvedException:
-            print PColors.WARNING + "Edge " + str(manifold_edge) + "has not been resolved. Key:" + str(manifold_edge_key) + PColors.ENDC
+        except NonManifoldEdgeNotResolvedException as e:
+            import traceback, os.path
+            top = traceback.extract_stack()[-1]
+            print ''
+            print ', '.join([os.path.basename(top[0]), str(top[1])])
+            print PColors.WARNING + "Edge " + str(manifold_edge) + "has not been resolved. Key:" + str(manifold_edge_key) + PColors.ENDC + '\n'
             o_idx_return = o_idx_nodes
             exceptional_edges.append(manifold_edge_key)
 
@@ -164,8 +168,12 @@ def resolve_manifold_edges(_dc_verts, _dc_vindex, _dc_quads, _data):
                 not_consistent1_edges[edge] = used
     try:
         _dc_verts, _dc_quads = resolve_not_consistent4(_dc_verts, _dc_quads, not_consistent4_edges)
-    except NonConsistentEdgesException:
-        print PColors.WARNING+"some edges with 4 quads connected to them have not been resolved!"+PColors.ENDC
+    except NonConsistentEdgesException as e:
+        import traceback, os.path
+        top = traceback.extract_stack()[-1]
+        print ''
+        print ', '.join([os.path.basename(top[0]), str(top[1])])
+        print PColors.WARNING+"some edges with 4 quads connected to them have not been resolved!"+PColors.ENDC+'\n'
 
     # we have to update the edge usage now
     edge_usage_dict = generate_edge_usage_dict(_dc_quads)  # here we save the quads using a certain edge
@@ -180,7 +188,11 @@ def resolve_manifold_edges(_dc_verts, _dc_vindex, _dc_quads, _data):
     try:
         _dc_verts, _dc_quads = resolve_not_consistent1(_dc_verts, _dc_quads, not_consistent1_edges)
     except NonConsistentEdgesException:
-        print PColors.WARNING+"some edges with 1 quad connected to them have not been resolved!"+PColors.ENDC
+        import traceback, os.path
+        top = traceback.extract_stack()[-1]
+        print ''
+        print ', '.join([os.path.basename(top[0]), str(top[1])])
+        print PColors.WARNING+"some edges with 1 quad connected to them have not been resolved!"+PColors.ENDC+'\n'
 
 
     return _dc_verts, _dc_quads, manifold_edges, not_resolved_edges

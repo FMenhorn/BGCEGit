@@ -256,8 +256,13 @@ class ManifoldEdge:
                 new_nodes_list += new_nodes
                 new_quads_list += new_quads
                 delete_quads_list += delete_quads
-            except NonManifoldPointNotResolvedException:
-                print PColors.WARNING + "One of the non manifold points wasn't resolved correctly. WHOLE EDGE NOT RESOLVED!" + PColors.ENDC
+                raise NonManifoldPointNotResolvedException("HEY!")
+            except NonManifoldPointNotResolvedException as e:
+                import traceback, os.path
+                top = traceback.extract_stack()[-1]
+                print ''
+                print ', '.join([os.path.basename(top[0]), str(top[1])])
+                print PColors.WARNING + "One of the non manifold points wasn't resolved correctly. WHOLE EDGE NOT RESOLVED!" + PColors.ENDC + "\n"
                 raise NonManifoldEdgeNotResolvedException("Edge not resolved!")
                 new_nodes_list = []
                 new_quads_list = []
@@ -318,12 +323,16 @@ class ManifoldEdge:
 
             try:
                 assert 'quad_plane' in locals()
-            except AssertionError:
+            except AssertionError as e:
+                import traceback, os.path
+                top = traceback.extract_stack()[-1]
+                print '\n'
+                print ', '.join([os.path.basename(top[0]), str(top[1])])
                 new_quads_list = []
                 new_nodes_list = []
                 delete_quads_list = []
                 raise NonManifoldPointNotResolvedException("EDGE NOT RESOLVED! EXCEPTION UNCAUGHT!")
-                print PColors.WARNING + "One non-manifold edge is not resolved in the correct way." + PColors.ENDC
+                print PColors.WARNING + "One non-manifold edge is not resolved in the correct way." + PColors.ENDC + '\n'
                 return new_quads_list, new_nodes_list, delete_quads_list, o_idx_nodes
 
 

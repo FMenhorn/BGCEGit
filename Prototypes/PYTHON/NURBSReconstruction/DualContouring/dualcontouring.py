@@ -182,7 +182,11 @@ def tworesolution_dual_contour(data, resolutions, dims):
 
     try:
         assert nonmanifold.__len__() == 0
-    except AssertionError:
+    except AssertionError as e:
+        import traceback, os.path
+        top = traceback.extract_stack()[-1]
+        print '\n'
+        print ', '.join([os.path.basename(top[0]), str(top[1])])
         print "ERROR found. exporting intermediate results."
         export_results.export_as_csv(dc_verts_fine, './DualContouring/plotting/dc_verts_fine')
         export_results.export_as_csv(dc_quads_fine, './DualContouring/plotting/dc_quads_fine')
