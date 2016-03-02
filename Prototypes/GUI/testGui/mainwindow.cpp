@@ -34,7 +34,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->FairnessWeight->setValidator(doubleValidator);
     ui->RefinementEdit->setValidator(new QIntValidator(0, 10, this));
     ui->Coarsening->setValidator(new QIntValidator(0, 10000000, this));
-    ui->VolumeFractionEdit->setValidator(doubleValidator);
+    QDoubleValidator* doubleValidatorFraction = new QDoubleValidator();
+    doubleValidatorFraction->setNotation(QDoubleValidator::StandardNotation);
+    doubleValidatorFraction->setRange(0, 1, 3);
+    ui->VolumeFractionEdit->setValidator(doubleValidatorFraction);
 
     this->hide_ErrorFields();
     this->ui->startFreeCadButton->hide();

@@ -35,5 +35,35 @@ One Byte: 0-126 negative, 127 zero, 128-255 positive direction
 
 \subsection{Black-Box Toplogy Optimizer}
 \begin{frame}{Topology Optimization}
-
+Steps:
+\begin{enumerate}
+\item Geometry as voxel grid
+\item Calculate stress on geometry
+\item If stress in voxel below threshold $\rightarrow$ remove voxel from active geometry
+\end{enumerate}
+\only<1>{
+\begin{figure}
+\centering
+\includegraphics[width=.25\textwidth]{Pictures/TopOp/Cantilever_Topy_0.pdf}
+\end{figure}}
+\only<2>{
+\begin{figure}
+\centering
+\includegraphics[width=.25\textwidth]{Pictures/TopOp/Cantilever_Topy_1.pdf}
+\end{figure}}
+\only<3>{
+\begin{figure}
+\centering
+\includegraphics[width=.25\textwidth]{Pictures/TopOp/Cantilever_Topy_2.pdf}
+\end{figure}}
+\only<4>{
+\begin{figure}
+\centering
+\includegraphics[width=.25\textwidth]{Pictures/TopOp/Cantilever_Topy_3.pdf}
+\end{figure}}
+\only<5>{
+\begin{figure}
+\centering
+\includegraphics[width=.25\textwidth]{Pictures/TopOp/Cantilever_Topy_4.pdf}
+\end{figure}}
 \end{frame}
