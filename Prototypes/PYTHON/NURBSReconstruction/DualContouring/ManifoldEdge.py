@@ -299,8 +299,8 @@ class ManifoldEdge:
                     break
 
             try:
-                assert quad_plane in locals()
-            except:
+                assert 'quad_plane' in locals()
+            except AssertionError:
                 new_quads_list = []
                 new_nodes_list = []
                 delete_quads_list = []
