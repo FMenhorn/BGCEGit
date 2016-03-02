@@ -5,6 +5,7 @@
 #include <QString>
 #include <QLineEdit>
 #include <QLabel>
+#include <QSpinBox>
 class InputVerificator
 {
 private:
@@ -12,9 +13,12 @@ private:
 
 public:
     InputVerificator();
-    bool isEmpty(QLineEdit*& qlineEdit, QLabel*& qlabel, QString errorMessage);
+    bool isEmpty(QLineEdit*& qlineEdit, QLabel*& errorField, QString errorString);
+    bool isEmpty(QDoubleSpinBox *&qlineEdit, QLabel*& qlabel, QString errorMessage);
     bool checkFileName(QString file, QString name, QString type, QLabel*& errorField);
     bool areSame(QString stpName, QString igsName, QLabel*& STEPFileInput, QLabel*& IGSFileInput);
+    bool checkRange(const QString& input, QLabel*& errorField, double min, double max);
+    bool isEmpty(QSpinBox*& qlineEdit, QLabel*& errorField, QString errorString);
 
 };
 
