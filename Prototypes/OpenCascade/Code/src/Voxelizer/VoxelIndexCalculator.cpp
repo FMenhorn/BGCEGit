@@ -130,18 +130,19 @@ void VoxelIndexCalculator::calculateIndexForVoxelShape(VoxelShape& voxelShape, b
 
 	std::cout << "voxelShape.GetOrigin: " << voxelShape.getOriginX() << "," << voxelShape.getOriginY() << "," << voxelShape.getOriginZ() << std::endl;
 	std::cout << "origin: " << origin[0] << "," << origin[1] << "," << origin[2] << std::endl;
-	originX =origin[0]+voxelShape.getOriginX()-origin[0];
-	originY =origin[1]+voxelShape.getOriginY()-origin[1];
-	originZ =origin[2]+voxelShape.getOriginZ()-origin[2];
+
+	originX =voxelShape.getOriginX();
+	originY =voxelShape.getOriginY();
+	originZ =voxelShape.getOriginZ();
 	voxelSizeX = voxelShape.getXLen()/voxelShape.getNbX();
 	voxelSizeY = voxelShape.getYLen()/voxelShape.getNbY();
 	voxelSizeZ = voxelShape.getZLen()/voxelShape.getNbZ();
 	nbX = isElem ? dimensions[0] : dimensions[0] + 1;
 	nbY = isElem ? dimensions[1] : dimensions[1] + 1;
 	nbZ = isElem ? dimensions[2] : dimensions[2] + 1;
-	originVoxelX = originX * 1./voxelSizeX + 1;
-	originVoxelY = originY * 1./voxelSizeY + 1;
-	originVoxelZ = originZ * 1./voxelSizeZ + 1;
+	originVoxelX = originX * 1./voxelSizeX + 1 - (int)origin[0];
+	originVoxelY = originY * 1./voxelSizeY + 1 - (int)origin[1];
+	originVoxelZ = originZ * 1./voxelSizeZ + 1 - (int)origin[2];
 	localNbX = voxelShape.getNbX();
 	localNbY = voxelShape.getNbY();
 	localNbZ = voxelShape.getNbZ();
@@ -155,13 +156,9 @@ void VoxelIndexCalculator::calculateIndexForVoxelShape(VoxelShape& voxelShape, b
 	for (int k = 0; k < voxelShape.getNbZ(); k++){
 		for (int i = 0; i < voxelShape.getNbX(); i++){
 			for (int j = 0; j < voxelShape.getNbY(); j++){
-				//std::cout << "Current Step: " << name << ":" << h << "," << k << "," << i << "," << j << std::endl;
 			if (voxelShape.isVoxel(i,j,k)==Standard_True){
-//change to list.append
-				//std::cout<<"X: "<< i*hx<<" Y:  "<<j*hy<<" Z: "<<k*hz << " Index: "<<(j+(voxelShape[h].getVoxelShape().GetNbY())*(i+k*(voxelShape[h].getVoxelShape().GetNbZ()))) << std::endl;
 				curIndex = (nbY-1-originVoxelY) + originVoxelX*nbY + originVoxelZ*nbX*nbY - j + i * nbY + k * nbY*nbX;
 				voxelIndexTmp.push_back( curIndex );
-				//std::cout << " " << curIndex;
 				}
 			}
 		}
@@ -186,33 +183,26 @@ void VoxelIndexCalculator::calculatePassiveIndexFromBody(VoxelShape& bodyVoxelSh
 	double voxelSizeZ = 0;
 	std::vector<int> voxelIndexTmp;
 
-	originX =bodyVoxelShape.getOriginX()-origin[0];
-	originY =bodyVoxelShape.getOriginY()-origin[1];
-	originZ =bodyVoxelShape.getOriginZ()-origin[2];
+	originX =bodyVoxelShape.getOriginX();
+	originY =bodyVoxelShape.getOriginY();
+	originZ =bodyVoxelShape.getOriginZ();
 	nbX = dimensions[0];
 	nbY = dimensions[1];
 	nbZ = dimensions[2];
 	voxelSizeX = bodyVoxelShape.getXLen()/nbX;
 	voxelSizeY = bodyVoxelShape.getYLen()/nbY;
 	voxelSizeZ = bodyVoxelShape.getZLen()/nbZ;
-	originVoxelX = originX * voxelSizeX;
-	originVoxelY = originY * voxelSizeY;
-	originVoxelZ = originZ * voxelSizeZ;
-//	std::cout << "Origin: "<< "[" << originX << "," << originY << "," << originZ << "] " <<
-//				 "VoxelOrigin: " << "[" << originVoxelX << "," << originVoxelY <<"," << originVoxelZ<< "] "
-//				 "VoxelSizes: "<<"[" << voxelSizeX << "," << voxelSizeY <<"," << voxelSizeZ<< "]" << std::endl;
+	originVoxelX = originX * 1./voxelSizeX + 1 - (int)origin[0];
+	originVoxelY = originY * 1./voxelSizeY + 1 - (int)origin[1];
+	originVoxelZ = originZ * 1./voxelSizeZ + 1 - (int)origin[2];
 
 	int curIndex;
 	for (int k = 0; k < bodyVoxelShape.getNbZ(); k++){
 		for (int i = 0; i < bodyVoxelShape.getNbX(); i++){
 			for (int j = 0; j < bodyVoxelShape.getNbY(); j++){
-				//std::cout << "Current Step: " << name << ":" << h << "," << k << "," << i << "," << j << std::endl;
-			if (bodyVoxelShape.isVoxel(i,j,k)==Standard_False){
-//change to list.append
-				//std::cout<<"X: "<< i*hx<<" Y:  "<<j*hy<<" Z: "<<k*hz << " Index: "<<(j+(voxelShape[h].getVoxelShape().GetNbY())*(i+k*(voxelShape[h].getVoxelShape().GetNbZ()))) << std::endl;
-				curIndex = (nbY-1-originVoxelY) + originVoxelX*nbY + originVoxelZ*nbX*nbY - j + i * nbY + k * nbY*nbX;
-				voxelIndexTmp.push_back( curIndex );
-				//voxelIndexTmp.push_back(originVoxelY + j+(bodyVoxelShape.getVoxelShape().GetNbY())*(originVoxelX + i+(originVoxelZ + k)*(bodyVoxelShape.getVoxelShape().GetNbZ())));
+				if (bodyVoxelShape.isVoxel(i,j,k)==Standard_False){
+					curIndex = (nbY-1-originVoxelY) + originVoxelX*nbY + originVoxelZ*nbX*nbY - j + i * nbY + k * nbY*nbX;
+					voxelIndexTmp.push_back( curIndex );
 				}
 			}
 		}

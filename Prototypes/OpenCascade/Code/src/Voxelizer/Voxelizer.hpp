@@ -28,12 +28,11 @@ public:
     /**
      * Calls voxelize() for each shape in ListOfShape and stores it in voxelShapeVector
      * @param refinementLevel
-     * @param isElem
      * @param listOfShapes
      * @param voxelShapeVector
      * @param counter
      */
-    void voxelizeWholeVector(const int refinementLevel, const bool isElem, const ListOfShape& listOfShapes, std::vector<VoxelShape>& voxelShapeVector, int counter = 0);
+    void voxelizeWholeVector(const int refinementLevel, const ListOfShape& listOfShapes, std::vector<VoxelShape>& voxelShapeVector);
 
     /**
      * Voxelizes topoDSShape with given refinementLevel and saves VoxelBoolDS in voxelShape

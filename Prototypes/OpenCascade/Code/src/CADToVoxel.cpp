@@ -137,7 +137,7 @@ int main(int argc, char** argv){
     std::cout << "###Fixture Body###" << std::endl;
 	std::vector<VoxelShape> fixtureVector;
 	fixtureVector.resize(fixtureFacesList.getSize());
-	voxelizer.voxelizeWholeVector(refinementLevel, false, fixtureFacesList, fixtureVector);
+	voxelizer.voxelizeWholeVector(refinementLevel, fixtureFacesList, fixtureVector);
 	voxelIndexCalculator.calculateIndicesForWholeVector(fixtureVector, false);
     outputVoxelVector.push_back(fixtureVector);
 
@@ -145,32 +145,31 @@ int main(int argc, char** argv){
     std::cout << "###Load Body###" << std::endl;
 	std::vector<VoxelShape> loadVector;
 
-	std::vector<VoxelShape> activeVector; /**Treat Loadelements as active cells aswell**/
-	activeVector.resize(loadFacesList.getSize()+activeFacesList.getSize());
-
+	std::vector<VoxelShape> activeVector_load; /**Treat Loadelements as active cells aswell**/
+	activeVector_load.resize(loadFacesList.getSize());
 	loadVector.resize(loadFacesList.getSize());
-	voxelizer.voxelizeWholeVector(refinementLevel, false, loadFacesList, loadVector);
+	voxelizer.voxelizeWholeVector(refinementLevel, loadFacesList, loadVector);
 	voxelIndexCalculator.calculateIndicesForWholeVector(loadVector, false);
-
-	voxelizer.voxelizeWholeVector(refinementLevel, true, loadFacesList, activeVector);
+	voxelizer.voxelizeWholeVector(refinementLevel, loadFacesList, activeVector_load);
+	voxelIndexCalculator.calculateIndicesForWholeVector(activeVector_load, true);
 
 	outputVoxelVector.push_back(loadVector);
-
     /**Active Treatment**/
     std::cout << "###Active Body###" << std::endl;
 	VoxelShape voxelShapeActive;
-	//std::vector<VoxelShape> activeVector;
+	std::vector<VoxelShape> activeVector;
 	if(activeFileSpecified){
 		voxelizer.voxelize(activeShape, refinementLevel, voxelShapeActive);
 		voxelizer.fillVolume(voxelShapeActive);
 		voxelIndexCalculator.calculateIndexForVoxelShape(voxelShapeActive, true);
 		activeVector.push_back(voxelShapeActive);
 	}
-	outputVoxelVector.push_back(activeVector);
-
-	activeVector.clear();
-    voxelizer.voxelizeWholeVector(refinementLevel, true, activeFacesList, activeVector, loadFacesList.getSize());
+    voxelizer.voxelizeWholeVector(refinementLevel, activeFacesList, activeVector);
     voxelIndexCalculator.calculateIndicesForWholeVector(activeVector, true);
+
+	for(int i = 0; i < activeVector_load.size(); i++){
+		activeVector.push_back(activeVector_load[i]);
+	}
     outputVoxelVector.push_back(activeVector);
 
 	/**Passive Treatment**/
