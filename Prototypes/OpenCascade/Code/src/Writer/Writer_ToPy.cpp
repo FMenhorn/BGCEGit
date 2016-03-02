@@ -93,7 +93,7 @@ std::vector<int> Writer_ToPy::writeNodes(std::string name, std::ofstream &outfil
 	double voxelSizeZ = 0;
 	outfile<< name << ": ";
 	const VoxelShape tmpVoxelShape;
-	for(size_t h = 0; h < voxelShape.size(); ++h){
+	for(size_t h = 0; h < voxelShape.size(); h++){
 		originX =voxelShape[h].getOriginX();
 		originY =voxelShape[h].getOriginY();
 		originZ =voxelShape[h].getOriginZ();
@@ -121,10 +121,11 @@ std::vector<int> Writer_ToPy::writeNodes(std::string name, std::ofstream &outfil
 		//		}
 		//	}
 		//	if(k < voxelIndices.size()-1)
-			if(h == voxelShape.size()-1 && k == voxelIndices.size()-1)
+			if(h == voxelShape.size()-1 && k == voxelIndices.size()-1){
 				outfile << voxelIndices[k]+1;
-			else
+			}else{
 				outfile << voxelIndices[k]+1 << "; ";
+			}
 		}
 		size.push_back(voxelIndices.size());
 	}

@@ -16,8 +16,9 @@
 #include <TopTools_ListIteratorOfListOfShape.hxx>
 #include "../Helper/Helper.hpp"
 
-void Voxelizer::voxelizeWholeVector(const int refinementLevel, const bool isElem, const ListOfShape& listOfShapes, std::vector<VoxelShape>& voxelShapeVector, int counter) {
+void Voxelizer::voxelizeWholeVector(const int refinementLevel, const ListOfShape& listOfShapes, std::vector<VoxelShape>& voxelShapeVector) {
 	TopTools_ListIteratorOfListOfShape shapeIterator;
+	int counter = 0;
 	if(listOfShapes.getSize() > 0){
 		for(shapeIterator.Initialize(listOfShapes.getListOfShape()); shapeIterator.More(); shapeIterator.Next() ){
 			this->voxelize(shapeIterator.Value(), refinementLevel, voxelShapeVector[counter]);
