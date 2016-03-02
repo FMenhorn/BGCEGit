@@ -1,20 +1,26 @@
-\subsection{CAD input files}
-\begin{frame}{CAD files: Color code}
+\subsubsection{CAD input files}
+\begin{frame}{CAD input files}
 
+\begin{enumerate}
+\item Optimization domain
 \begin{itemize}
-\item Red faces (RGB=[255,0,0]): Fixture
-\item Green faces (RGB=[0,255,0]): Non-changing region  
-\item Colored (RGB=[0-255,0-255,0-255]): 3D loading vector 
-\item Linear force scaling (according to user-specified parameter)\\
-One Byte: 0-126 negative, 127 zero, 128-255 positive direction
+\item Fixture faces 
+\item Forces
 \end{itemize}
+\end{enumerate}
+
+%Red faces (RGB=[255,0,0]): Fixture
+%\item Green faces (RGB=[0,255,0]): Non-changing region  
+%\item Colored (RGB=[0-255,0-255,0-255]): 3D loading vector 
+%Linear force scaling: $F=f*({\bf x}-127)$\\
+%One Byte: 0-126 negative, 127 zero, 128-255 positive direction
 \begin{figure}
 \centering
 \includegraphics[width=.5\textwidth]{Pictures/CantileverColored.png}
 \end{figure}
 \end{frame}
 
-\subsection{Voxelization}
+\subsubsection{Voxelization}
 \begin{frame}{Voxelized geometry}
 \begin{itemize}
 \item OpenCascade STEP/IGES CAF reader 
@@ -33,7 +39,7 @@ One Byte: 0-126 negative, 127 zero, 128-255 positive direction
 \includegraphics[width=.25\textwidth]{Pictures/Load.pdf}
 \end{frame}
 
-\subsection{Black-Box Toplogy Optimizer}
+\subsubsection{Black-Box Toplogy Optimizer}
 \begin{frame}{Topology Optimization}
 Steps:
 \begin{enumerate}
