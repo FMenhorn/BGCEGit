@@ -18,7 +18,7 @@ def reorient_object(input_file_name, output_file_name):
 	bB = FreeCAD.getDocument("tmp").Objects[-1].Shape.BoundBox
 
 	# create rotation parameters
-	displacement = FreeCAD.Vector(1.0, 0.0, 0.0)
+	displacement = FreeCAD.Vector(2.0, 0.0, 0.0)
 	centerRot = FreeCAD.Vector(bB.XMin, 0.5*(bB.YMin+bB.YMax), bB.ZMin)
 	axisRot1 = FreeCAD.Vector(0.0, 0.0, 1.0)
 	axisRot2 = FreeCAD.Vector(0.0, 1.0, 0.0)
