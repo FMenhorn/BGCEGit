@@ -109,41 +109,48 @@ S. Reiz, B. Rüth, E. Wannerberg, A. Yurova} %[displayed in footer]{displayed on
 \setbeamertemplate{caption}{\raggedright\insertcaption\par} % removes "figure" label at figures
 \frame{\maketitle}
 
-\section*{Introduction}
 \input{Sections/Team}
 \begin{frame}{Contents}
+\setcounter{tocdepth}{1}
 \tableofcontents
 \end{frame}
 
 %-------------------------------------------------------
 \section{Product Presentation}
   \begin{frame}
+  \setcounter{tocdepth}{1}
   \frametitle{Contents}
-  \tableofcontents[currentsection]
+  \tableofcontents[currentsection]  
   \end{frame}
 \input{Sections/Pitch}
 %-------------------------------------------------------
 \section{Topology Optimization Pipeline}
 
   \begin{frame}
+    \setcounter{tocdepth}{2}
   \frametitle{Contents}
   \tableofcontents[currentsection]
   \end{frame}
 
 \subsection{Overview: Workflow}
+  \begin{frame}
+  \frametitle{Contents}
+  \tableofcontents[currentsubsection]
+  \end{frame}
 \input{Sections/Workflow}
 
 %-------------------------------------------------------
 %\subsection{Organization}
 %\input{Sections/Organization}
-  \begin{frame}
-  \frametitle{Contents}
-  \tableofcontents[currentsubsection]
-  \end{frame}
+
 
 
 %-------------------------------------------------------
 \subsection{Topology optimization}
+  \begin{frame}
+  \frametitle{Contents}
+  \tableofcontents[currentsubsection]
+  \end{frame}
 \input{Sections/TopologyOptimization}
 %-------------------------------------------------------
 
@@ -175,6 +182,7 @@ S. Reiz, B. Rüth, E. Wannerberg, A. Yurova} %[displayed in footer]{displayed on
 
 \section{Summary \& Outlook}
   \begin{frame}
+  \setcounter{tocdepth}{1}
   \frametitle{Contents}
   \tableofcontents[hideallsubsections,currentsection]
   \end{frame}
