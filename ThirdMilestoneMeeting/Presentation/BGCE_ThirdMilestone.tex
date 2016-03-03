@@ -64,7 +64,7 @@ cross/.default={2pt}}
 %\usepackage{hyperref} 
 %\usepackage{comment}
 \usepackage{caption}
-\captionsetup[figure]{skip=2pt, labelformat=empty}%to no have figure
+\captionsetup[figure]{labelformat=empty}%to no have figure
 %\renewcommand*{\figureautorefname}{fig.}
 %\renewcommand*{\equationautorefname}{eq.}
 \usepackage{bm}
@@ -112,12 +112,15 @@ S. Reiz, B. Rüth, E. Wannerberg, A. Yurova} %[displayed in footer]{displayed on
 \section*{Introduction}
 \input{Sections/Team}
 \begin{frame}{Contents}
-\tableofcontents[hideallsubsections]
+\tableofcontents
 \end{frame}
 
 %-------------------------------------------------------
 \section{Product Presentation}
-
+  \begin{frame}
+  \frametitle{Contents}
+  \tableofcontents[currentsection]
+  \end{frame}
 \input{Sections/Pitch}
 %-------------------------------------------------------
 \section{Fitting pipeline}
@@ -159,8 +162,8 @@ S. Reiz, B. Rüth, E. Wannerberg, A. Yurova} %[displayed in footer]{displayed on
   \tableofcontents[currentsection]
   \end{frame}
 \input{Sections/SummaryOutlook}
-\section*{Thank You}
-\input{Sections/ThankYou}
+%\section*{Thank You}
+%\input{Sections/ThankYou}
 \section*{Literature}
 \input{Sections/Literature}
 \section*{Theory}
