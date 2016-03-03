@@ -68,13 +68,13 @@
                 {\includegraphics[width=2cm]{Pictures/7MC.pdf}};
         \draw[thick,->] (N3) -- (N4);
         }
-        \uncover<5->{\draw[thick,->] (N4) -- (N5); 
-        }
+        %\uncover<5->{\draw[thick,->] (N4) -- (N5); 
+        %}
         \draw[red,thick,dotted] ($(N1.north west)+(-0.3,0.5)$)  rectangle ($(N5.south east)+(0.3,-0.4)$);
 		\visible<1->{\node [above of=N1, yshift=0.2cm](Text1){CAD design};}
-		\visible<2,6>{\node [above of=N2, yshift=0.2cm](Text2){Voxelized geometry};}
-		\visible<3,6>{\node [above of=N3, yshift=0.2cm](Text3){Optimized topology};}
-		\visible<4,6>{\node [below of=N4, yshift=-0.2cm](Text4){Extracted isosurface};}
+		\visible<2,5>{\node [above of=N2, yshift=0.2cm](Text2){Voxelized geometry};}
+		\visible<3,5>{\node [above of=N3, yshift=0.2cm](Text3){Optimized topology};}
+		\visible<4,5>{\node [below of=N4, yshift=-0.2cm](Text4){Extracted isosurface};}
 		\visible<1->{\node [below of=N5, yshift=-0.2cm](Text5){B-Spline surface};}
         \end{tikzpicture}
 	\end{center}

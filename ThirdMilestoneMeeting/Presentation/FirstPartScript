@@ -68,6 +68,9 @@ Slide 14a: (Features: Effective and Easy)
 	- The output it provides is in standard engineering and design geometry format, which can directly be sent for production, or can be further worked on by designers on their favourite CAD editors.
 	- Furthermore, in terms of technical details of FEM and geometry representations, it works like a black box.
 
-Slide 14b: (Features: Customizable)
+Slide 14b: (Features: Flexible)
 
-	- 
+	- However, as a designer, you have full control on the solution
+	- CADO provides functionality to specify detailed geometry features
+	- You can supply a host of design constraints, such as fixtures, loads, non-changing regions
+	- In terms of optimization, you can choose how accurate you want the topology optimization to be
