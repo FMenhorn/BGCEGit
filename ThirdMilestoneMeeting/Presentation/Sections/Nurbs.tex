@@ -223,111 +223,47 @@ $P$ - B-Spline Control Points \\
 
 \end{frame}
 
+\begin{frame}{Back to CAD Geometry}
+	\begin{minipage}[t]{0.5\linewidth}
+		\begin{block}{Geometry reconstruction}
+			\begin{itemize}
+				\item Surface patches constructed using from Peters' scheme \\
+				\item Patches sewed together to form a geometry \\
+			\end{itemize}
+		\end{block}
+		\begin{block}{Post-processing}
+			\begin{itemize}
+				\item Non-changing regions restored \\
+				\item Solution restricted to desired limits \\
+				\item Final export done as a STEP file
+			\end{itemize}
+		\end{block}
+	\end{minipage}
+	\hfill
+	\begin{minipage}[t]{0.45\linewidth}
+		\vspace{-0.25cm}
+		\begin{figure}
+			\includegraphics[width=.88\textwidth]{Pictures/SecondHalf/Back2CAD1}
+		\end{figure}
+		\vspace{-0.75cm}
+		\begin{center}
+			$\downarrow$
+		\end{center}
+		\vspace{-0.6cm}
+		\begin{figure}
+			\includegraphics[width=.88\textwidth]{Pictures/SecondHalf/Back2CAD2}
+		\end{figure}
+		\vspace{-0.75cm}
+		\begin{center}
+			$\downarrow$
+		\end{center}
+		\vspace{-0.6cm}
+		\begin{figure}
+			\includegraphics[width=.88\textwidth]{Pictures/SecondHalf/Back2CAD3}
+		\end{figure}
+	\end{minipage}
+\end{frame}
+
 \begin{frame}
 Current end
-\end{frame}
-
-\begin{frame}{B--Spline}
-\begin{equation*}
-\vec{S}\left(u,v\right)=\sum\limits_{i,j=1}^{n,m} \vec{C}_{i,j} N_i^p\left(u\right) N_j^p\left(v\right),
-\end{equation*}
-where $p$ -- degree of the B--Spline surface and $n,m$ -- number of control points in each direction.
-\begin{columns}
-\begin{column}{.45\textwidth}
-B--Splines
-\begin{itemize}
-\item offer great flexibility for handling arbitrary shapes
-\item are CAD--standard
-\end{itemize}
-\textbf{Engineers are working with CAD}
-\end{column}
-\begin{column}{.45\textwidth}
-\includegraphics[width=\textwidth]{Pictures/BSplineEx/example.pdf}
-\end{column}
-\end{columns}
-\end{frame}
-\begin{frame}{B--Spline Fitting Pipeline [2]}
-\begin{figure}
-\includegraphics[scale=0.25]{Pictures/NURBS/TheArc.png}
-\end{figure}
-        
-\end{frame}
-
-\begin{frame}{Status}
-\begin{block}{Last milestone}
-\begin{itemize}
-	\item[\textcolor{red}{\XSolidBrush}] Automatic patch selection
-	\item[\textcolor{red}{\XSolidBrush}] Parametrization of obtained patches
-	\item[\textcolor{green}{\Checkmark}] B--spline fitting using least squares
-	\item[\textcolor{black}{\VarClock}] Smooth connection of patches
-	\item[\textcolor{red}{\XSolidBrush}] Conversion back to CAD
-\end{itemize}
-\end{block}
-\begin{block}{Today}
-\begin{itemize}
-	\item[\textcolor{green}{\Checkmark}] Automatic patch selection -- {\color{gray}moved to the surface extraction part}
-	\item[\textcolor{green}{\Checkmark}] Parametrization of obtained patches -- {\color{gray}moved to the surface extraction part}
-	\item[\textcolor{green}{\Checkmark}] B--spline fitting using least squares --  {\color{gray}modified}
-	\item[\textcolor{green}{\Checkmark}] Smooth connection of patches
-	\item[\textcolor{red}{\XSolidBrush}] Conversion back to CAD
-\end{itemize}
-\end{block}
-\end{frame}
-
-\begin{frame}{Improved pipeline[3]}
-\hspace*{-2cm}%
-\begin{tikzpicture} 
-        \node at (0,0)[inner sep=0pt, scale = 0.43](N1)
-                %{\input{Pictures/NURBS/tikz/control_mesh.tex}};
-                {\includegraphics{Pictures/NURBS/fitting_pipeline/half_torus.eps}};
-        \node at (2,4) [inner sep=0pt, scale = 0.4](N2)
-        			%{\includegraphics[width=5cm]{Pictures/NURBS/tikz/patch_points.eps}};
-                 %{\input{Pictures/NURBS/tikz/patch_points.tex}};
-                 {\includegraphics{Pictures/NURBS/fitting_pipeline/half_torus_dc.eps}};                   
-        \node at (7,4)[inner sep=0pt, scale = 0.4](N3)
-                 %{\input{Pictures/NURBS/tikz/bezier_points.tex}};
-                  %{\includegraphics[width=5cm]{Pictures/NURBS/tikz/bezier_points.eps}};
-                  {\includegraphics{Pictures/NURBS/fitting_pipeline/half_torus_hair.eps}};        
-        \node at (9, 0)[inner sep=0pt, scale = 0.43](N4)
-                 %{\input{Pictures/NURBS/tikz/peters_surface.tex}};
-                {\includegraphics{Pictures/NURBS/fitting_pipeline/half_torus.eps}};
-        \draw[thick,->] (N2) -- (N1);
-        \draw[thick,->] (N3) -- (N2);
-        \draw[thick,->] (N4) -- (N3);
-       
-\end{tikzpicture}
-\end{frame}
-%\begin{frame}{Before and after Peters}
-%\vspace{-6mm}
-%\begin{minipage}[t]{0.48\linewidth}
-%\begin{block}{Before}
-%\begin{figure}
-%\includegraphics[width=0.8\linewidth]{uniform_hermite.eps}
-%\end{figure}
-%\end{block}
-%\end{minipage}%
-%\hfill%
-%\begin{minipage}[t]{0.48\linewidth}
-%\begin{block}{Legendre Chaos}
-%\begin{itemize}
-%\item[{\color{green}\smiley}] First order Legendre Chaos expansion represents the random variable \textit{exactly}.
-%\vspace{5mm}
-%
-%\end{itemize}
-%\begin{figure}
-%\includegraphics[width=0.85\linewidth]{legendre_exact.eps}
-%\end{figure}
-%\end{block}
-%\end{minipage}
-
-%\end{frame}
-\begin{frame}{Possible optimizations}
-\begin{itemize}
-\item Introduction of the \textit{fairness functional} in order to deal with more complex shapes
-\item Implementation of the \textit{adaptive refinement} in order to control a maximum error tolerance
-\item Implementation of the \textit{parameter correction} for the improved pipeline
-\end{itemize}
-\begin{figure}
-\includegraphics[width=\textwidth]{Pictures/NURBS/torus_from_DC.png}
-\end{figure}
 \end{frame}
