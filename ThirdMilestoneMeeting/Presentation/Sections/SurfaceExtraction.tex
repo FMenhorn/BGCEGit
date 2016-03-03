@@ -3,7 +3,7 @@
 
 \begin{frame}
 \frametitle{From Voxel to Mesh Geometry}
-\vspace{-0.8cm}
+\vspace{-0.3cm}
 \begin{center}
 	\textbf{Goal:} Extract isosurface from voxel information	
 \end{center}
@@ -19,22 +19,22 @@
 	\only<1>{
 		\begin{figure}	
 			\centering
-			\includegraphics[width=.6\textwidth]{Pictures/DC/MC1.png} %\caption{Marching Cubes}
+			\includegraphics[width=.6\textwidth]{Pictures/DC/MC1.png}
 		\end{figure}}
 	\only<2>{
 		\begin{figure}	
 			\centering
-			\includegraphics[width=.6\textwidth]{Pictures/DC/MC2.png} %\caption{Marching Cubes}
+			\includegraphics[width=.6\textwidth]{Pictures/DC/MC2.png} 
 		\end{figure}}
 	\only<3>{
 		\begin{figure}	
 			\centering
-			\includegraphics[width=.6\textwidth]{Pictures/DC/MC3.png} %\caption{Marching Cubes}
+			\includegraphics[width=.6\textwidth]{Pictures/DC/MC3.png} 
 		\end{figure}}
 	\only<4->{
 		\begin{figure}	
 			\centering
-			\includegraphics[width=.6\textwidth]{Pictures/DC/MC4.png} %\caption{Marching Cubes}
+			\includegraphics[width=.6\textwidth]{Pictures/DC/MC4.png} 
 			\end{figure}}
 \end{minipage}%
 \hfill%
@@ -49,39 +49,48 @@
 \only<5>{
 		\begin{figure}	
 		\centering
-		\includegraphics[width=.6\textwidth]{Pictures/DC/MC1.png} %\caption{Dual Contouring}
+		\includegraphics[width=.6\textwidth]{Pictures/DC/MC1.png} 
 		\end{figure} }
 \only<6>{
 		\begin{figure}	
 		\centering
-		\includegraphics[width=.6\textwidth]{Pictures/DC/MC2.png} %\caption{Dual Contouring}
+		\includegraphics[width=.6\textwidth]{Pictures/DC/MC2.png} 
 		\end{figure}}
 \only<7>{
 		\begin{figure}	
 		\centering
-		\includegraphics[width=.6\textwidth]{Pictures/DC/DC3.png} %\caption{Dual Contouring}
+		\includegraphics[width=.6\textwidth]{Pictures/DC/DC3.png} 
 		\end{figure}}
 \only<8->{
 		\begin{figure}	
 		\centering
-		\includegraphics[width=.6\textwidth]{Pictures/DC/DC4.png} %\caption{Dual Contouring}
+		\includegraphics[width=.6\textwidth]{Pictures/DC/DC4.png} 
 		\end{figure}}
 \end{minipage}
+\vspace{0.4cm}
 
-\only<9>{
-		\begin{minipage}[t]{0.4\linewidth}
-			{$\rightarrow Triangles$}
-		\end{minipage}
-		\hfill
-		\begin{minipage}[t]{0.4\linewidth}
-			{$\rightarrow Quads$}
-		\end{minipage}}
+\pause
+\pause
+\pause
+\pause
+\pause
+\pause
+\pause
+\pause
+
+\begin{minipage}[t]{0.4\linewidth}
+	{$\rightarrow Triangles$}
+\end{minipage}%
+\hfill%
+\begin{minipage}[t]{0.4\linewidth}
+	{$\rightarrow Quads$}
+\end{minipage}
 \end{frame}
 
 
 \begin{frame}
 \frametitle{Two-grid Dual Contouring}
-	\begin{overlayarea}{\textwidth}{0.9 \textheight}
+\begin{overlayarea}{\textwidth}{0.9\textheight}
 	\begin{minipage}{0.45\textwidth}
 	\begin{block}{\centering Coarse grid}
 	\vspace{-0.5cm}
