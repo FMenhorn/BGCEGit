@@ -3,69 +3,88 @@
 
 \begin{frame}
 	\frametitle{From Voxel to Mesh Geometry}
-	Task:
-	\begin{itemize}
-	\item Extract isosurface from voxel information
-	\item Algorithms: Marching Cubes, Dual Contouring, Extended Models
-	\end{itemize}
-	Steps: 
+	\vspace{-0.8cm}
+	\begin{center}
+	\textbf{Goal:} Extract isosurface from voxel information	
+	\end{center}
+\vspace{-0.5cm}	
+\begin{minipage}[t]{0.4\linewidth}
+		\begin{block}{Marching Cubes}
 	\begin{enumerate}
-		\item Locate the position of the vertex inside each cube which has at least one sign changing
-		edge
-		\item Join the vertices associated with four cubes sharing a common edge to form a quadrilateral face (quad)
+		\item<2-> Identify boundary voxels
+		\item<3-> Locate sign changes on cube edges
+		\item<4-> Reconstruct surface
 	\end{enumerate}
-	\begin{minipage}{0.49\textwidth}
+	
+	\end{block}
 	\only<1>{
-	\begin{figure}	
-	\centering
-	\includegraphics[width=.35\textwidth]{Pictures/DC/MC1.png}\caption{Marching cube}
-	\end{figure}}
+\begin{figure}	
+		\centering
+	\includegraphics[width=.6\textwidth]{Pictures/DC/MC1.png} %\caption{Marching Cubes}
+\end{figure} }
 	\only<2>{
 		\begin{figure}	
-		\centering
-		\includegraphics[width=.35\textwidth]{Pictures/DC/MC2.png}\caption{Marching cube}
-		\end{figure}}
-	\only<3>{
-		\begin{figure}	
-		\centering
-		\includegraphics[width=.35\textwidth]{Pictures/DC/MC3.png}\caption{Marching cube}
-		\end{figure}}
-			\only<4>{
-				\begin{figure}	
-				\centering
-				\includegraphics[width=.35\textwidth]{Pictures/DC/MC4.png}\caption{Marching cube}
-	\end{figure}}
-	\end{minipage}
-	\begin{minipage}{0.49\textwidth}
-	\only<1>{
-	\begin{figure}	
+			\centering
+			\includegraphics[width=.6\textwidth]{Pictures/DC/MC2.png} %\caption{Marching Cubes}
+			\end{figure}}
+		\only<3>{
+			\begin{figure}	
+			\centering
+			\includegraphics[width=.6\textwidth]{Pictures/DC/MC3.png} %\caption{Marching Cubes}
+			\end{figure}}
+				\only<4->{
+					\begin{figure}	
+					\centering
+					\includegraphics[width=.6\textwidth]{Pictures/DC/MC4.png} %\caption{Marching Cubes}
+					\end{figure}}
+				
+
+\end{minipage}%
+\hfill%
+\begin{minipage}[t]{0.4\linewidth}
+\begin{block}<5->{Dual Contouring}
+	\begin{enumerate}
+		\item<6-> Identify boundary voxels
+		\item<7-> Locate position inside boundary voxel
+		\item<8-> Reconstruct surface
+	\end{enumerate}
+	
+\end{block}
+	\only<5>{
+\begin{figure}	
 	\centering
-	\includegraphics[width=.35\textwidth]{Pictures/DC/MC1.png}\caption{Dual Contouring}
-	\end{figure}}
-	\only<2>{
+	\includegraphics[width=.6\textwidth]{Pictures/DC/MC1.png} %\caption{Dual Contouring}
+\end{figure} }
+	\only<6>{
 		\begin{figure}	
 		\centering
-		\includegraphics[width=.35\textwidth]{Pictures/DC/MC2.png}\caption{Dual Contouring}
+		\includegraphics[width=.6\textwidth]{Pictures/DC/MC2.png} %\caption{Dual Contouring}
 		\end{figure}}
-	\only<3>{
+	\only<7>{
 		\begin{figure}	
 		\centering
-		\includegraphics[width=.35\textwidth]{Pictures/DC/DC3.png}\caption{Dual Contouring}
+		\includegraphics[width=.6\textwidth]{Pictures/DC/DC3.png} %\caption{Dual Contouring}
 		\end{figure}}
-			\only<4>{
+			\only<8->{
 				\begin{figure}	
 				\centering
-				\includegraphics[width=.35\textwidth]{Pictures/DC/DC4.png}\caption{Dual Contouring}
+				\includegraphics[width=.6\textwidth]{Pictures/DC/DC4.png} %\caption{Dual Contouring}
 	\end{figure}}
 	
-	\end{minipage}
-%	\caption{Comparision of MC and DC for identical datasets. The vertices are created on the edges of the cubes for MC  and inside the cubes for DC. Please note that the sharp feature in the top right cube can only be reconstructed by DC. Figure from %\cite{FromVoxelsToPolygons}.
+\end{minipage}
+\only<9>{
+\begin{minipage}[t]{0.4\linewidth}
+{$\rightarrow Triangles$}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.4\linewidth}
+{$\rightarrow Quads$}
+\end{minipage}}
 \end{frame}
 
 
 \begin{frame}
 	\frametitle{Dual Contouring}
-	T
 	\begin{overlayarea}{\textwidth}{.25 \textheight}
 	Dual contouring on two different scales:
 	\begin{itemize}
