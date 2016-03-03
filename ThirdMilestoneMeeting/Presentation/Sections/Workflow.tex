@@ -76,6 +76,7 @@
 		\visible<3,5>{\node [above of=N3, yshift=0.2cm](Text3){Optimized topology};}
 		\visible<4,5>{\node [below of=N4, yshift=-0.2cm](Text4){Extracted isosurface};}
 		\visible<1->{\node [below of=N5, yshift=-0.2cm](Text5){B-Spline surface};}
+		\uncover<5->{\draw[thick,->] (N4) -- (N5);} 
         \end{tikzpicture}
 	\end{center}
 	\end{overlayarea}
