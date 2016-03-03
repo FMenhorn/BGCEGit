@@ -1,6 +1,13 @@
-\setbeamertemplate{caption}{\raggedright\insertcaption\par}
 \subsubsection{CAD input files}
 \begin{frame}{CAD input files}
+
+\begin{enumerate}
+\item Optimization domain
+\begin{itemize}
+\item Fixture faces 
+\item Forces
+\end{itemize}
+\end{enumerate}
 
 %Red faces (RGB=[255,0,0]): Fixture
 %\item Green faces (RGB=[0,255,0]): Non-changing region  
@@ -9,46 +16,27 @@
 %One Byte: 0-126 negative, 127 zero, 128-255 positive direction
 \begin{figure}
 \centering
-\includegraphics[width=.72\textwidth]{Pictures/SecondHalf/four_files.png}
+\includegraphics[width=.5\textwidth]{Pictures/CantileverColored.png}
 \end{figure}
 \end{frame}
 
 \subsubsection{Voxelization}
 \begin{frame}{Voxelized geometry}
 \begin{itemize}
-\item Done using OpenCascade  
-\item Each region voxelized separately 
+\item OpenCascade STEP/IGES CAF reader 
+\item Voxelize faces/geometry seperately: Boolean (0/1) grid for 
+\begin{enumerate}
+\item Active voxels (geometry)
+\item Fixture voxels
+\item Non-changing voxels
+\item Load voxels
+\end{enumerate}
 \end{itemize}
-\vspace{0.4cm}
-%\begin{enumerate}
-%\item Active voxels (geometry)
-%\item Fixture voxels
-%\item Non-changing voxels
-%\item Load voxels
-%\end{enumerate}
-\begin{minipage}{0.49\textwidth}
-\begin{figure}
-\includegraphics[width=.8\textwidth]{Pictures/Voxels/Active.pdf}
-\caption{Participating voxels}
-\end{figure}
-\vspace{-0.6cm}
- \begin{figure}
-\includegraphics[width=.8\textwidth]{Pictures/Voxels/NonChanging.pdf}
-\caption{Non-Changing Voxels}
-\end{figure}
-\end{minipage}
-\hfill
-\begin{minipage}{0.49\textwidth}
-\begin{figure}
-\includegraphics[width=.8\textwidth]{Pictures/Voxels/Fixture.pdf}
-\caption{Fixture voxels}
-\end{figure}
-\vspace{-0.6cm}
-\begin{figure}
-\includegraphics[width=.8\textwidth]{Pictures/Voxels/Load.pdf}
-\caption{Load voxels}
-\end{figure}
-\end{minipage}
+\includegraphics[width=.25\textwidth]{Pictures/Active.pdf}
+\hspace{1cm}
+\includegraphics[width=.25\textwidth]{Pictures/NonChanging.pdf}
+\hspace{1cm}
+\includegraphics[width=.25\textwidth]{Pictures/Load.pdf}
 \end{frame}
 
 \subsubsection{Black-Box Toplogy Optimizer}
