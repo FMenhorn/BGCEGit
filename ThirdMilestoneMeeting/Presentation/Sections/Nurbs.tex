@@ -157,33 +157,69 @@
 \end{frame}
 
 \begin{frame}{Fitting Problem: Peters’ Scheme}
+\vspace{-0.5cm}
+\only<1>{
+\begin{minipage}[t]{0.4\linewidth}
+\begin{figure}
+	\includegraphics[width=.88\textwidth]{Pictures/NURBS/Torus_wiggly}
+\end{figure}
+\end{minipage}%
+\hfill%
+\begin{minipage}[t]{0.55\linewidth}
+%\begin{block}{}
+\vspace{0.27cm}
+\begin{equation*}
+||D - C(u, v) \ P||^2  \rightarrow min %\sum_{i=1}^{N}\norm{P_{i} - y_{i}V_{x}}^{2} \rightarrow min$$
+\end{equation*}
+%\end{block}
+\end{minipage}}
 
-\only<1>{\begin{equation*}
- ||D - C(u, v) \ P||^2  \rightarrow min %\sum_{i=1}^{N}\norm{P_{i} - y_{i}V_{x}}^{2} \rightarrow min,
-\end{equation*}}
-\only<2>{\begin{equation*}
- ||D - C(u, v) \ P||^2 + \textcolor{red}{\lambda ||0-C^{fair}P||}  \rightarrow min %\sum_{i=1}^{N}\norm{P_{i} - y_{i}V_{x}}^{2} \rightarrow min,
-\end{equation*}}
+\only<2>{
+\begin{minipage}[t]{0.4\linewidth}
+\begin{figure}
+	\includegraphics[width=.88\textwidth]{Pictures/NURBS/Torus_wiggly}
+\end{figure}
+\end{minipage}%
+\hfill%
+\begin{minipage}[t]{0.55\linewidth}
+%\begin{block}{}
+\begin{equation*}
+||D - C(u, v) \ P||^2 + \textcolor{red}{\lambda ||0-C^{fair}P||}  \rightarrow min %\sum_{i=1}^{N}\norm{P_{i} - y_{i}V_{x}}^{2} \rightarrow min
+\end{equation*}
+%\end{block}
+\end{minipage}}
+\vspace{0.2cm}
+\only<1>{
+\begin{minipage}[t]{0.4\linewidth}
+\begin{figure}
+	\includegraphics[width=.88\textwidth]{Pictures/NURBS/ToCover}
+\end{figure}
+\end{minipage}%
+\hfill%
+\begin{minipage}[t]{0.55\linewidth}
 \begin{block}{Notation}
 $D$ - Data  points object to surface fitting\\
 $C(u,v)$ - Control Point Matrix \\
-$P$ - B-Spline Control Points  \\
-\only<2>{\color{red}{$C^{fair}$ - Fairness coefficients}}
+$P$ - B-Spline Control Points \\
 \end{block}
-%\begin{block}{Main ideas}
-%\begin{itemize}
-%\item Use the mesh  as a \textit{control mesh}
-%\item Modify the fitting step to take advantage of the \textbf{Peters' scheme}
-%\end{itemize}
-%\end{block}
+\end{minipage}}
 
-%\pause
-%\begin{block}{What is achieved?}
-%\begin{itemize}
-%\item Smoothness of the fitted surface is now %guaranteed by construction
-%\item Fitting of more complex shapes achieved
-%\end{itemize}
-%\end{block}
+\only<2>{
+\begin{minipage}[t]{0.4\linewidth}
+\begin{figure}
+	\includegraphics[width=.88\textwidth]{Pictures/NURBS/Torus_smooth}
+\end{figure}
+\end{minipage}%
+\hfill%
+\begin{minipage}[t]{0.55\linewidth}
+\begin{block}{Notation}
+$D$ - Data  points object to surface fitting\\
+$C(u,v)$ - Control Point Matrix \\
+$P$ - B-Spline Control Points \\
+\color{red}{$C^{fair}$ - Fairness coefficients}
+\end{block}
+\end{minipage}}
+
 \end{frame}
 
 \begin{frame}
