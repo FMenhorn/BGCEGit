@@ -28,26 +28,33 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    QLocale dotSeperator(QLocale::C);
+
     ui->ForceDoubleSpinBox->setMinimum(0);
     ui->ForceDoubleSpinBox->setMaximum(1000000);
     ui->ForceDoubleSpinBox->setSingleStep(0.5);
     ui->ForceDoubleSpinBox->setValue(1.5);
+    ui->ForceDoubleSpinBox->setLocale(dotSeperator);
 
     ui->SmoothnessDoubleSpinBox->setMinimum(0);
     ui->SmoothnessDoubleSpinBox->setMaximum(10000);
     ui->SmoothnessDoubleSpinBox->setSingleStep(0.1);
     ui->SmoothnessDoubleSpinBox->setValue(0.5);
+    ui->SmoothnessDoubleSpinBox->setLocale(dotSeperator);
 
     ui->ResolutionSpinBox->setMinimum(1);
     ui->ResolutionSpinBox->setMaximum(10);
+    ui->ResolutionSpinBox->setLocale(dotSeperator);
 
     ui->CoarseningSpinBox->setMinimum(1);
     ui->CoarseningSpinBox->setMaximum(50);
+    ui->CoarseningSpinBox->setLocale(dotSeperator);
 
     ui->VolumeFractionDoubleSpinBox->setMinimum(0);
     ui->VolumeFractionDoubleSpinBox->setMaximum(1);
     ui->VolumeFractionDoubleSpinBox->setSingleStep(0.05);
     ui->VolumeFractionDoubleSpinBox->setValue(0.2);
+    ui->VolumeFractionDoubleSpinBox->setLocale(dotSeperator);
 
     this->hide_ErrorFields();
     this->ui->startFreeCadButton->hide();
@@ -58,9 +65,6 @@ MainWindow::MainWindow(QWidget *parent) :
     this->ui->ToPyDial->setDisabled(true);
     this->ui->NurbsDial->setValue(0);
     this->ui->NurbsDial->setDisabled(true);
-
-
-
 
     //logoScene->setSceneRect(ui->logoView->Rect());
     this->ui->logoView->setScene(&logoScene);
@@ -151,7 +155,8 @@ void MainWindow::on_runButton_clicked()
     //this->checkInput(igsName, stpName)
     if (this->checkInput(igsName, stpName)){
         QString forceScaling = ui->ForceDoubleSpinBox->text();
-        QString refinementLevel = ui->ResolutionSpinBox->text();
+        int refinementLevelValue = ui->ResolutionSpinBox->text().toInt() - 1;
+        std::string refinementLevelString = std::to_string(refinementLevelValue);
         QString volFraction = ui->VolumeFractionDoubleSpinBox->text();
 
         QFont boldFont("Cantarell", 11, QFont::Bold);
@@ -165,7 +170,7 @@ void MainWindow::on_runButton_clicked()
         std::string parameterString = stpPath.toStdString() + " " +
                                       stpName.toStdString() + " " +
                                       forceScaling.toStdString() + " " +
-                                      refinementLevel.toStdString() + " " +
+                                      refinementLevelString + " " +
                                       volFraction.toStdString() + " " +
                                       (isFixtureFileSupplied ? "1" : "0");
         std::string scriptCADToVoxel = "./../../CADTopOp.sh " + parameterString;
@@ -324,8 +329,8 @@ void MainWindow::on_startFreeCadButton_clicked()
     QString outputFile;
     QString outputPath;
     StringHelper::getPathAndName(stepOutputFile, outputFile, outputPath);
-    std::string freeCADCommand = "freecad " + stepOutputFile.toStdString() +
-            (isFixtureFileSupplied ? outputPath.toStdString() + outputFile.toStdString() + "_BOOLEANED.step " : ""); //+
+    std::string freeCADCommand = "freecad " + stepOutputFile.toStdString() + " " +
+            (isFixtureFileSupplied ? outputPath.toStdString() + outputFile.toStdString() + "_BOOLEANED.step " : " ") + "&"; //+
           //  (isOptimizationDomainSupplied ? outputFile.toStdString() + "_ALLOWED.step" : "");
     system(freeCADCommand.c_str());
 }

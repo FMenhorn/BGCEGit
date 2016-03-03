@@ -2,6 +2,7 @@ from dualcontouring import tworesolution_dual_contour
 from projection import create_parameters
 from quad import Quad
 import cPickle
+import export_results
 
 
 def transform_dict(cellsDict):
@@ -49,6 +50,8 @@ def extraction_algorithm(fine_data, resolutions, dimensions):
     print "### Projecting Datapoints onto coarse quads ###"
     # do projection of fine verts on coarse quads
     param = create_parameters(verts, quads)
+
+    export_results.export_as_csv(param,'param')
 
     print "### Projecting Datapoints onto coarse quads DONE ###"
 
