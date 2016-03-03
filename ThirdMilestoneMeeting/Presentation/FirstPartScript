@@ -3,7 +3,7 @@ Script for Dave:
 
 Slide 1: (Only Dave)
 	
-	Meet Dave. Dave the Designer. Dave just finished a major project at work, and plans to throw a party tonight. He has a brilliant idea to jazz up his party ..
+	Meet Dave. Dave is a designer. Dave just finished a major project at work, and plans to throw a party tonight. He has a brilliant idea to jazz up his party ..
 
 Slide 2: (Dave with only the pinyata)
 
@@ -27,7 +27,7 @@ Slide 6: (Dave, design, Ed)
 
 Slide 7: (Dave, design Ed-disappering)
 
-	Ed is, as always, skeptical. He warns that getting the optimal CANTILEVER would take a lot of effort - Dave would constantly need to alter his design to Ed's suggestions.
+	Ed, being an engineer, is skeptical. He warns that getting the optimal CANTILEVER would take a lot of effort - Dave would constantly need to alter his design to Ed's suggestions.
 
 Slide 8: (Dave)
 
@@ -35,11 +35,11 @@ Slide 8: (Dave)
 
 Slide 9: (Dave, top-opt)
 
-	.. Topology Optimization - An algorithm that at the press of a button gives an optimized structure.
+	.. Topology Optimization - An algorithm that at the press of a button gives an optimized structure for your design constraints.
 
 Slide 10: (Dave, computer--loading)
 
-	Dave is excited! He installs the best Open-source Top-Opt software, and waits for the result. It turns out to be great and all, but there's one problem ..
+	Dave is excited! He installs the best Open-source Top-Opt software out there, and waits for the result. It turns out to be great and all, but there's one problem ..
 
 Slide 11: (Dave, computer-obscure)
 
@@ -48,24 +48,24 @@ Slide 11: (Dave, computer-obscure)
 
 Slide 12a: (Design issues)
 
-	- And Dave is not the only one. These issues plague the design community the world over especially those in Small-to-medium design firms.
+	- And Dave is not the only one. These issues plague the design community the world over, especially those in Small-to-medium design firms.
 	- The repetitive design-engineering process consumes both time and money.
-	- What little open-source topology optimization options exist, are a dead-end in terms or portability of results.
+	- What little open-source topology optimization options do exist are a dead-end in terms or portability of results.
 
 Slide 12b: (Design issues)
 
 	- What could solve this issue?
-	- A topology optimization software that would bring the obscure top-opt output to a usable format for designers.
+	- A one-click topology optimization software that would bring the obscure top-opt output to a usable format for designers.
 
 Slide 13: (Introducing CADO)
 
-	- This is exactly what our software CADO does. 
+	- This is exactly what CADO does. 
 	- CADO, short for Computer-Aided Design Optimization, provides a fully integrated pipeline for recovering usable geometry.
 
 Slide 14a: (Features: Effective and Easy)
 
 	- CADO reconstructs a full 3D geometry from the results of topology optimization
-	- The output it provides is in standard engineering geometry format, which can directly be sent for production, or can be further worked on by designers on their favourite CAD editors.
+	- The output it provides is in standard engineering and design geometry format, which can directly be sent for production, or can be further worked on by designers on their favourite CAD editors.
 	- Furthermore, in terms of technical details of FEM and geometry representations, it works like a black box.
 
 Slide 14b: (Features: Customizable)
