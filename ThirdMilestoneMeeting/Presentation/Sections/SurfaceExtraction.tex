@@ -79,12 +79,12 @@
 \pause
 \vspace{-.1cm}
 \begin{minipage}[c]{0.5\linewidth}
-\hspace{1cm}$\rightarrow Triangles$
+\begin{center}$\rightarrow$ Triangular Faces\end{center}
 \end{minipage}%
 \hfill%
 \begin{minipage}[c]{0.5\linewidth}
 \begin{center}
-	{$\rightarrow Quads$}
+	{$\rightarrow$ Quadrilateral Faces}
 \end{center}
 \end{minipage}
 \end{frame}
@@ -106,13 +106,14 @@
 	\end{minipage}
 	\hfill%
 	\begin{minipage}{0.45\textwidth}
+	\vspace{-0.37cm}
 	\begin{block}{\centering Fine grid}
 	\vspace{-0.5cm}
 	\begin{figure}
 	\includegraphics[scale=0.35]{Pictures/DC/DC_1_Fine.pdf}
 	\end{figure}
 	\begin{itemize}
-	\item Fine vertices used for \textcolor{red}{projection}
+	\item Fine vertices used for \textcolor{red}{fitting}
 	\end{itemize}
 	\end{block}
 	\end{minipage}
@@ -128,9 +129,8 @@
 %\begin{minipage}{0.45\textwidth}
 \begin{enumerate}
 \visible<1->{\item Use coarse quad from Dual Contouring}
-\visible<2->{\item Project grid points from fine grid onto closest plane}
-\visible<4->{\item Find corresponding parameters for B-Spline surface $\left[u,v\right] \in \left[0,1\right]^2$}
-\visible<4->{\alert<4->{\item[$\Rightarrow$] Peter's scheme}}
+\visible<1->{\item Project grid points from fine grid onto closest plane}
+\visible<1->{\item Find corresponding parameters for B-Spline surface $\left[u,v\right] \in \left[0,1\right]^2$}
 \end{enumerate}
 %\end{overlayarea}
 %\begin{overlayarea}{\textwidth}{.85 \textheight}
@@ -148,7 +148,7 @@
 \coordinate[dot] (B) at (1,0,0);
 \coordinate[dot] (C) at (1.2,1.5,0);
 \coordinate[dot] (D) at (0,1,0);
-\visible<3->{
+\visible<1->{
 \coordinate[dot] (E) at (1.4,2.0,-0.5);
 \coordinate[dot] (F) at (0,1.7,-0.8);
 \draw[thick] (D) -- (F) -- (E) -- (C);}
@@ -174,7 +174,7 @@
 \draw (P1) node[thick,cross,red,label = {$P_1$}] {};
 \draw (P2) node[thick,cross,red,label = {$P_2$}] {};
 \draw (P3) node[thick,cross,red,label = {$P_3$}] {};
-\visible<2->{
+\visible<1->{
 \draw (Q1) node[thick,cross,red] {};
 \draw (Q2) node[thick,cross,red] {};
 \draw (Q3) node[thick,cross,red] {};
@@ -183,7 +183,7 @@
 \draw[red,dashed] (P3) -- (Q3);
 }
 
-\visible<3->{
+\visible<1->{
 \draw (P4) node[thick,cross,red,label = {$P_4$}] {};
 \draw[red,dashed] (P4) -- (Q4);
 \draw (Q4) node[thick,cross,red] {};
@@ -194,7 +194,7 @@
 \draw (D) node[]{};
 \draw (E) node[]{};
 \draw (F) node[]{};
-\visible<4->{
+\visible<1->{
 \draw[blue,thick,->] (B) -- ($.5*(A)+.5*(B)$) node[anchor=east]{\textcolor{blue}{$u$}};
 \draw[blue,thick,->] (B) -- ($.75*(B)+.25*(C)$) node[anchor=north]{\textcolor{blue}{$v$}};
 }
