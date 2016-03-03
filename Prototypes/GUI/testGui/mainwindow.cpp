@@ -101,30 +101,34 @@ void MainWindow::on_STEPFileSelector_clicked()
     QStringList fileNames;
 
     fileNames = QFileDialog::getOpenFileNames(this, tr("Open File"),"/path/to/file/",tr("STEP File (*.step)"));
+
     if(fileNames.size()==1){
         stpFile = fileNames.first();
         ui->STEPFileInput->setText(StringHelper::cropText(ui->STEPFileInput, stpFile));
         ui->STEPFileInput->setStyleSheet("QLabel { Color : black }");
+        QString stpPath, stpName;
+        StringHelper::getPathAndName(stpFile, stpName, stpPath);
+        igsFile = stpPath+stpName+".iges";
     }else{
         ui->STEPFileInput->setText("Select ONE step input file!");
         ui->STEPFileInput->setStyleSheet("QLabel { Color : red }");
     }
 }
 
-void MainWindow::on_IGSFileSelector_clicked()
-{
-    QStringList fileNames;
+//void MainWindow::on_IGSFileSelector_clicked()
+//{
+//    QStringList fileNames;
 
-    fileNames = QFileDialog::getOpenFileNames(this, tr("Open File"),"/path/to/file/",tr("IGES File (*.iges)"));
-    if(fileNames.size()==1){
-        igsFile = fileNames.first();
-        ui->IGSFileInput->setText(StringHelper::cropText(ui->IGSFileInput, igsFile));
-        ui->IGSFileInput->setStyleSheet("QLabel { Color : black }");
-    }else{
-        ui->IGSFileInput->setText("Select ONE iges input file!");
-        ui->IGSFileInput->setStyleSheet("QLabel { Color : red }");
-    }
-}
+//    fileNames = QFileDialog::getOpenFileNames(this, tr("Open File"),"/path/to/file/",tr("IGES File (*.iges)"));
+//    if(fileNames.size()==1){
+//        igsFile = fileNames.first();
+//        ui->IGSFileInput->setText(StringHelper::cropText(ui->IGSFileInput, igsFile));
+//        ui->IGSFileInput->setStyleSheet("QLabel { Color : black }");
+//    }else{
+//        ui->IGSFileInput->setText("Select ONE iges input file!");
+//        ui->IGSFileInput->setStyleSheet("QLabel { Color : red }");
+//    }
+//}
 
 void MainWindow::showEvent(QShowEvent *) {
     ui->logoView->fitInView(logoScene.sceneRect(),Qt::KeepAspectRatio);
@@ -132,7 +136,7 @@ void MainWindow::showEvent(QShowEvent *) {
 void MainWindow::on_runButton_clicked()
 {
     this->disableAllElements();
-    ui->IGSFileInput->setStyleSheet("QLabel { Color : black }");
+    //ui->IGSFileInput->setStyleSheet("QLabel { Color : black }");
     ui->STEPFileInput->setStyleSheet("QLabel { Color : black }");
     this->hide_ErrorFields();
     this->resetDials();
@@ -291,10 +295,10 @@ bool MainWindow::checkInput(QString igsName, QString stpName){
     flag = verificator.isEmpty(ui->ResolutionSpinBox, ui->ErrorField_refinement, "Please enter the refinement") && flag;
     flag = verificator.isEmpty(ui->VolumeFractionDoubleSpinBox, ui->ErrorField_volumefraction, "Please enter the volume fraction") && flag;
 
-    flag = verificator.areSame(stpName, igsName, ui->STEPFileInput, ui->IGSFileInput) && flag;
+    //flag = verificator.areSame(stpName, igsName, ui->STEPFileInput, ui->IGSFileInput) && flag;
 
     flag = verificator.checkFileName(this->stpFile, stpName, ".step", ui->STEPFileInput) && flag;
-    flag = verificator.checkFileName(this->igsFile, igsName, ".iges", ui->IGSFileInput) && flag;
+    //flag = verificator.checkFileName(this->igsFile, igsName, ".iges", ui->IGSFileInput) && flag;
     flag = verificator.checkFileName(this->stepOutputFile, outputName, ".step", ui->STEPOutput) && flag;
     return flag;
 }
@@ -311,7 +315,7 @@ void MainWindow::on_Output_selector_clicked()
         ui->STEPOutput->setText(StringHelper::cropText(ui->STEPOutput, stepOutputFile));
         ui->STEPOutput->setStyleSheet("QLabel { Color : black }");
     } else {
-        ui->STEPOutput->setText("Select ONE stp input file!");
+        ui->STEPOutput->setText("Select ONE step output file!");
         ui->STEPOutput->setStyleSheet("QLabel { Color : red }");
     }
 }
@@ -361,7 +365,7 @@ void MainWindow::on_checkBox_2_stateChanged(int newState)
 
 void MainWindow::disableAllElements(){
     this->ui->STEPFileSelector->setDisabled(true);
-    this->ui->IGSFileSelector->setDisabled(true);
+    //this->ui->IGSFileSelector->setDisabled(true);
     this->ui->checkBox->setDisabled(true);
     this->ui->checkBox_2->setDisabled(true);
     this->ui->ForceDoubleSpinBox->setDisabled(true);
@@ -375,7 +379,7 @@ void MainWindow::disableAllElements(){
 
 void MainWindow::enableAllElements(){
     this->ui->STEPFileSelector->setEnabled(true);
-    this->ui->IGSFileSelector->setEnabled(true);
+    //this->ui->IGSFileSelector->setEnabled(true);
     this->ui->checkBox->setEnabled(true);
     this->ui->checkBox_2->setEnabled(true);
     this->ui->ForceDoubleSpinBox->setEnabled(true);
