@@ -64,7 +64,7 @@ cross/.default={2pt}}
 %\usepackage{hyperref} 
 %\usepackage{comment}
 \usepackage{caption}
-\captionsetup[figure]{skip=2pt, labelformat=empty}%to no have figure
+\captionsetup[figure]{labelformat=empty}%to no have figure
 %\renewcommand*{\figureautorefname}{fig.}
 %\renewcommand*{\equationautorefname}{eq.}
 \usepackage{bm}
@@ -109,25 +109,34 @@ S. Reiz, B. Rüth, E. Wannerberg, A. Yurova} %[displayed in footer]{displayed on
 \setbeamertemplate{caption}{\raggedright\insertcaption\par} % removes "figure" label at figures
 \frame{\maketitle}
 
-\section*{Introduction}
 \input{Sections/Team}
 \begin{frame}{Contents}
-\tableofcontents[hideallsubsections]
+\setcounter{tocdepth}{1}
+\tableofcontents
 \end{frame}
 
 %-------------------------------------------------------
 \section{Product Presentation}
-
+  \begin{frame}
+  \setcounter{tocdepth}{1}
+  \frametitle{Contents}
+  \tableofcontents[currentsection]  
+  \end{frame}
 \input{Sections/Pitch}
 %-------------------------------------------------------
-\section{Fitting pipeline}
+\section{Topology Optimization Pipeline}
 
   \begin{frame}
+    \setcounter{tocdepth}{2}
   \frametitle{Contents}
   \tableofcontents[currentsection]
   \end{frame}
 
 \subsection{Overview: Workflow}
+  \begin{frame}
+  \frametitle{Contents}
+  \tableofcontents[currentsubsection]
+  \end{frame}
 \input{Sections/Workflow}
 
 %-------------------------------------------------------
@@ -138,29 +147,48 @@ S. Reiz, B. Rüth, E. Wannerberg, A. Yurova} %[displayed in footer]{displayed on
 
 %-------------------------------------------------------
 \subsection{Topology optimization}
+  \begin{frame}
+  \frametitle{Contents}
+  \tableofcontents[currentsubsection]
+  \end{frame}
 \input{Sections/TopologyOptimization}
 %-------------------------------------------------------
 
 %-------------------------------------------------------
 %
+
+
 \subsection{Surface Extraction}
+  \begin{frame}
+  \frametitle{Contents}
+  \tableofcontents[currentsubsection]
+  \end{frame}
 \input{Sections/SurfaceExtraction}
 
 
 \subsection{B--Spline Fitting}
+  \begin{frame}
+  \frametitle{Contents}
+  \tableofcontents[currentsubsection]
+  \end{frame}
 \input{Sections/Nurbs}
 
 \subsection{Back to CAD}
+  \begin{frame}
+  \frametitle{Contents}
+  \tableofcontents[currentsubsection]
+  \end{frame}
 \input{Sections/BackToCAD}
 
 \section{Summary \& Outlook}
   \begin{frame}
+  \setcounter{tocdepth}{1}
   \frametitle{Contents}
-  \tableofcontents[currentsection]
+  \tableofcontents[hideallsubsections,currentsection]
   \end{frame}
 \input{Sections/SummaryOutlook}
-\section*{Thank You}
-\input{Sections/ThankYou}
+%\section*{Thank You}
+%\input{Sections/ThankYou}
 \section*{Literature}
 \input{Sections/Literature}
 \section*{Theory}

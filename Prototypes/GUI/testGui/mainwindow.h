@@ -30,7 +30,7 @@ public:
 private slots:
     void on_STEPFileSelector_clicked();
 
-    void on_IGSFileSelector_clicked();
+    //void on_IGSFileSelector_clicked();
 
     void on_runButton_clicked();
 
