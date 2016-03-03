@@ -14,6 +14,8 @@
 \usepackage{tikz,tikzscale,pgfplots,grffile}
 \usepackage{3dplot}
 \usetikzlibrary{arrows,shapes,backgrounds}
+\usetikzlibrary{positioning,decorations.text}
+\usetikzlibrary{calc}
 \usetikzlibrary{plotmarks}
 \usetikzlibrary{spy}
 \tikzset{
@@ -115,6 +117,10 @@ S. Reiz, B. Rüth, E. Wannerberg, A. Yurova} %[displayed in footer]{displayed on
 
 %-------------------------------------------------------
 \section{Product Presentation}
+  \begin{frame}
+  \frametitle{Contents}
+  \tableofcontents[currentsection]
+  \end{frame}
 \input{Sections/Pitch}
 %-------------------------------------------------------
 \section{Fitting pipeline}
@@ -146,7 +152,17 @@ S. Reiz, B. Rüth, E. Wannerberg, A. Yurova} %[displayed in footer]{displayed on
 
 \subsection{B--Spline Fitting}
 \input{Sections/Nurbs}
+\subsection{Back to CAD}
+\begin{frame}
+MISSING!!!
+Only some blabla about freecad. Not too technical. Just use obtained control points from Peters scheme for plotting NURBS using an existing geometry kernel (in our case freecad, but also working with arbitrary other kernels)
+\end{frame}
+
 \section{Summary \& Outlook}
+  \begin{frame}
+  \frametitle{Contents}
+  \tableofcontents[currentsection]
+  \end{frame}
 \input{Sections/SummaryOutlook}
 \section*{Thank You}
 \input{Sections/ThankYou}
