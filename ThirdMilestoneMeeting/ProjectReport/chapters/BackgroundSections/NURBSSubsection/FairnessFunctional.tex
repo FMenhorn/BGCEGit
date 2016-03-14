@@ -1,0 +1,49 @@
+\subsection{Fairness Functional}%maybe change title
+
+%%plotline: 
+%as well as smoothness, curvature is important
+%for quadratic parametric patch, can express curvature by thin-plate energy functional as was done in [eck-hoppe]
+%we notice here that for Bezier curves, we express the \vec{S} surface as polynomials*surface points, which we can integrate analytically
+%AND: this gives us a quadratic polynomial in the control points of the patch, with a lot of coefficients
+%we express this as the norm in a matrix-vector thingy:
+% <from here in LSQ section> and this we can then find the eigenvectors for
+% which let us express this as a sum of squares of coefficients*bezier points, (just like we wanted.)
+
+
+\begin{align}
+\vec{d}_k = & \sum\limits_{i,j=1}^{N,M} \c(u_k,v_k)_{i,j} \lsControlPointi{i,j}
+\\=& C_k (u_k,v_k)P
+\end{align}
+\begin{align}
+\vec{p}_{p} &= \sum\limits_{l} c^{PS}_{p,l} \vec{v} 
+\\
+&=C_k^{PS}V
+\end{align}
+
+\begin{align}
+\label{eq:fairness}
+E_{fair,quad} =& 
+\int\limits_0^1 \int\limits_0^1
+\left(
+(\frac{\partial^2}{\partial u^2 }\vec{S}(u,v))^2
++ 2 
+(\frac{\partial^2}{\partial u\partial v} \vec{S}(u,v))^2
++
+(\frac{\partial^2}{\partial v^2}\vec{S}(u,v))^2
+\right)
+\text{d}u\text{d}v
+\\
+=& \sum\limits_{i,j=1}^{N,M} c_{i,j}^{fair}\vec{p}_{i,j}
+\\
+&=
+C_{fair} P
+\end{align}
+
+\begin{equation}
+\label{eq:fairness-sum}
+E_{fair} = \sum\limits_{\text{all quads}}E_{fair,quad}
+\end{equation}
+\begin{equation}
+\norm{D - \left[ C(\vec{u},\vec{v}) C^{PS} \right] V }^2 + \lambda \norm{0 - C^{fair} V }^2
+\end{equation}
+
