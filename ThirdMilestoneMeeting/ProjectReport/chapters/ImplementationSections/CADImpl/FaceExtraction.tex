@@ -15,7 +15,7 @@ Here is an explanation of how the faces are extracted from the CAD input and how
 
 \begin{enumerate}
 	\item An instance of \lstinline|Reader| is created with the CAD source directory and file name as input. \lstinline|Reader| wraps the OpenCascade classes for reading STEP and IGES files into a single class, reads the two files, and holds them in two handles.
-	\item The \lstinline|ColorHandler| class takes over the handles from \lstinline|Reader|. \lstinline|ColorHandler| provides methods, each of which returns a list of faces (see Figure \ref{umlCADToVoxel}). Depending on which method is called the returned list contains groups of fixtures, loads, passive faces, or all faces of the body.
+	\item The \lstinline|ColorHandler| class takes over the handles from \lstinline|Reader|. \lstinline|ColorHandler| provides methods, each of which returns a list of faces (see \autoref{fig:umlCADToVoxel}). Depending on which method is called the returned list contains groups of fixtures, loads, passive faces, or all faces of the body.
 	\item Each of the methods mentioned above internally calls the hidden function \lstinline|findColoredFaces()|. This method takes as input a color, and returns all faces that match it. It also takes as input a boolean variable \lstinline|isLoadSeeked| - if true, then the function returns all faces with load on them, and also a vector of the corresponding loads.
 	\item The load vector is then scaled with respect to the scaling factor provided as input by the user.
 \end{enumerate}
