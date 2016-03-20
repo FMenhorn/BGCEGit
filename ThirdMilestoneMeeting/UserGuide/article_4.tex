@@ -1,0 +1,200 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Arsclassica Article
+% LaTeX Template
+% Version 1.1 (10/6/14)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Lorenzo Pantieri (http://www.lorenzopantieri.net) with extensive modifications by:
+% Vel (vel@latextemplates.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[
+12pt, % Main document font size
+a4paper, % Paper type, use 'letterpaper' for US Letter paper
+oneside, % One page layout (no page indentation)
+%twoside, % Two page layout (page indentation for binding and different headers)
+headinclude,footinclude, % Extra spacing for the header and footer
+BCOR5mm, % Binding correction
+]{scrartcl}
+\input{structure.tex} % Include the structure.tex file which specified the document structure and layout
+\usepackage{fancybox}
+\usepackage{listings}
+\usepackage{tikz}
+%\usepackage{authblk}
+%\usepackage{titlepic}
+\usepackage{titling}
+
+
+\hyphenation{Fortran hyphenation} % Specify custom hyphenation points in words with dashes where you would like hyphenation to occur, or alternatively, don't put any dashes in a word to stop hyphenation altogether
+
+
+%----------------------------------------------------------------------------------------
+%	TITLE AND AUTHOR(S)
+%----------------------------------------------------------------------------------------
+%\centering
+%\pretitle{%
+% % \begin{center}
+%  \LARGE
+%  \includegraphics[width=14cm,height=7cm]{Pictures/cado_logo_text.jpg}%\\[\bigskipamount]
+%}
+\title{\includegraphics[width=14cm,height=7cm]{Pictures/cado_logo_text_wide.png} \\ \normalfont\spacedallcaps{User Guide} \\
+\vspace*{\fill}}% The article title
+
+%\author[1]{Joshi, Saumitra}
+%\author[1]{Medina, Juan Carlos}
+%\author[1]{Menhorn, Friedrich}
+%\author[1]{Reiz, Severin}
+%\author[2]{R{\"u}th, Benjamin}
+%\author[2]{Wannerberg, Erik}
+%\author[2]{Yurova, Anna}
+%\vfill{2cm}
+
+\author{Joshi, Saumitra; Medina, Juan Carlos; \\ Menhorn, Friedrich; Reiz, Severin;\\ R{\"u}th, Benjamin;  Wannerberg, Erik; Yurova, Anna}% The article author(s) - author affiliations need to be specified in the AUTHOR AFFILIATIONS block
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+%----------------------------------------------------------------------------------------
+%	HEADERS
+%----------------------------------------------------------------------------------------
+\newcommand{\titlebox}[2]{
+\begin{tikzpicture}
+\node[draw,thick,inner sep=6mm] (titlebox) {#2};
+\node[fill=white] (Title) at (titlebox.north) {\bfseries \large #1};
+\end{tikzpicture}
+}
+\renewcommand{\sectionmark}[1]{\markright{\spacedlowsmallcaps{#1}}} % The header for all pages (oneside) or for even pages (twoside)
+
+%\lehead{\mbox{\llap{\small\thepage\kern1em\{halfgray} \vline}\color{halfgray}\hspace{0.5em}\rightmark\hfil} % The header style
+\newcommand{\titledframe}[2]{%
+       \boxput*(0,1){\psframebox*{#1}}%
+         {\psframebox[framesep=12pt]{#2}}}
+         
+\pagestyle{scrheadings} % Enable the headers specified in this block
+
+
+%----------------------------------------------------------------------------------------
+%	TABLE OF  CONTENTS & LISTS OF FIGURES AND TABLES
+%----------------------------------------------------------------------------------------
+
+\maketitle % Print the title/author/date block
+
+\setcounter{tocdepth}{2} % Set the depth of the table of contents to show sections and subsections only
+\newpage
+\tableofcontents % Print the table of contents
+
+
+
+%----------------------------------------------------------------------------------------
+%	ABSTRACT
+%----------------------------------------------------------------------------------------
+
+\section*{Abstract} % This section will not appear in the table of contents due to the star (\section*)
+This document provides general information about using CADO software. CADO is an fully CAD-integrated topology optimization tool.
+
+
+
+
+%----------------------------------------------------------------------------------------
+
+\newpage % Start the article content on the second page, remove this if you have a longer abstract that goes onto the second page
+
+%----------------------------------------------------------------------------------------
+%	INTRODUCTION
+%----------------------------------------------------------------------------------------
+
+\section{Preparing your computer}
+\subsection{Technical requirements \& Installation}
+Please, make sure that the following software is installed on your computer:
+\begin{itemize}
+\item ToPy
+\item OpenCascade
+\item CPPUnit
+\item FreeCAD
+\item Qt (version > 5.4.2)
+\item QtCreator (version > 3.4) 
+\end{itemize}
+
+For the detailed installation instructions, please, refer to \textit{CADO_InstallationGuide.pdf}.
+
+Once all necessary software is installed CADO can be ran using QtCreator.
+\end{itemize}
+
+%----------------------------------------------------------------------------------------
+%	GETTING STARTED
+%----------------------------------------------------------------------------------------
+
+\section{Getting started with CADO}
+
+To run a sample optimization open \textit{QtCreator} project file \textit{CADO.pro} in your QtCreator and run it using the \textbf{"Run"} button. In the appeared window (see fig. \ref{img:mainwindow}) you can see the default parameters for for the \textbf{"Cantilever"} test case, provided together with the source code distribution. 
+
+To run the optimization press the \textbf{"Run"} button in the bottom of the window.
+
+The progress of the Topology Optimization pipeline can be observed on the progress bars near the \textbf{"Run"} button (see fig. \ref{fig:progressBars}). Each round-shaped progress-bar corresponds to one of the three main steps of the pipeline. While one of the steps is running, corresponding progress bar is indicated yellow and moving (see fig. \ref{fig:progressBars}). Once the step is finished, the progress bar is colored green.
+
+Once all progress bars are marked green (see \ref{fig:progressBarsFinished}) the optimization process has finished. To see the optimized result in FreeCAD click on the \textbf{Start FreeCAD} button (see fig. \ref{fig:resultsFreeCAD}).
+\section{Structure}
+Now let us take a closer look at the parameters, required by CADO.
+
+\subsection{Input files}
+To select your input \textit{.step} file:
+\begin{itemize}
+\item Press the \textbf{"Select STEP File"} button in the top left corner of CADO;
+\item Choose the appropriate file by navigating through the file system in the opened dialog (see fig. \ref{fig:fileDialog});
+\item Press the \textbf{"Open"} button.
+\end{itemize}
+
+Note, that the same directory must also contain an \textit{.iges} file with the ... information with an identical name (\textit{<StepFileName>.iges})! 
+
+\subsubsection{Nonchanging domain}
+In case some domains should stay unchanged during the optimization (for example, fixture to the wall), select the \textbf{"Nonchanging domain"} checkbox in the \textit{"Additional Specifications"} section. Make sure that your \textit{.step} file with the nonchanging domain is located in the same directory as the original \textit{.step} file and named as:
+\begin{lstlisting}[ numbers = left,language = {Promela}]
+<StepFileName>_Fixed.step
+\end{lstlisting}
+
+\subsubsection{Optimization domain}
+In order to specify an optimization domain, select the \textbf{Optimization Domain} checkbox in the \textit{"Additional Specifications"} section. Make sure that your \textit{.step} file with the optimization domain is located in the same directory as the original \textit{.step} file and named as:
+\begin{lstlisting}[ numbers = left,language = {Promela}]
+<StepFileName>_ToOptimize.step
+\end{lstlisting}
+\subsection{Topology Optimization Parameters}
+In order to tune the topology optimization for your specific problem, please enter the following parameters:
+\begin{itemize}
+\item \textbf{Force Scaling} - ???
+\item \textbf{Resolution} - ???
+\item \textbf{Volume Fraction Limit} - the fraction of the volume to be kept
+\end{itemize}
+
+To change the corresponding parameters slightly, use the raise/lower arrows. You can also enter the numbers directly into the fields.
+\subsection{Surface Fitting Parameters}
+In order to specify the desired quality of the output surface, please enter the following parameters in the \textit{Surface Fitting Parameters} section:
+\begin{itemize}
+\item \textbf{"Smoothness"} - increase the number to increase the smoothness. Note, that some features might be lost if your desired smoothness varies from the physical result.
+\item \textbf{"Coarsening"} - ...
+\end{itemize}
+\subsection{Output}
+To specify the output file:
+\begin{itemize}
+\item Press the \textbf{"Output"} button;
+\item Choose the output destination by navigating through the appeared file dialog;
+\item Enter the name of the output file;
+\item Press \textbf{"Open"}.
+\end{itemize}
+
+Once the optimization process has been completed (all progress bars are colored green and don't move), view your results in FreeCAD by clicking now available \textbf{"Start FreeCAD"} button.
+
+Enjoy your topology optimized result in FreeCAD! :-)
+\end{document}
+\end{figure}

@@ -1,2 +1,24 @@
 \section{Graphical User Interface}
-\todourgent[author=Benni, inline]{Add info on GUI. Library used? User input?...}
+\label{sec:gui}
+In order to make user interaction with CADO as simple as possible, Graphical User Interface was implemented using the Qt5.4 \cite{Qt} framework. 
+
+The interface allows to enter all necessary files and parameters without using the command line. In particular, user chooses only the main \textit{.step} file and then, if all other files were named according to the naming convention (\ref{sec: CADToVoxels}), user just has to check the checkbox for specifying fixtures or the optimization domain (see fig. \ref{fig:interface}).
+
+All necessary input parameters for the topology optimization (sec. \ref{sec:ToPy}) can be entered through the input fields:
+\begin{itemize}
+\item Force Scaling
+\item Resolution
+\item Volume Fraction Limit
+\end{itemize}
+
+All necessary input parameters for the surface fitting (sec. REFERENCE) can be entered through the input fields:
+\begin{itemize}
+\item Smoothing - parameter for the fairness functional (see. \ref{sec:NURBS})
+\item Coarsening - ...
+\end{itemize}
+
+\todointern{Add descriptions of the parameters and references! And a nice picture of the GUI from Friedis computer!}
+
+After all parameters are specified, the pipeline can  be executed without any interaction with the user. After the process has finished, there is an option to lunch FreeCAD and view the results directly from the GUI.
+
+
