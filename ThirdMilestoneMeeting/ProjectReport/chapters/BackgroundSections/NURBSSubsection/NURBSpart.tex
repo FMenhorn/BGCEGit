@@ -1,4 +1,5 @@
 \subsection{Parametric Curves}
+\label{subsec:paracurves}
 \todointern{add thing about control points in description and possibly names, because they're kinda important}
 %As mentioned in the Introduction, the main challenge of our project is to convert the mesh based geometry, obtained on a previous step, back to CAD representation. 
 
@@ -8,9 +9,9 @@ A \Bez curve is a \textit{parametric} curve, which is often used for producing a
  
 An analytical expression for the \Bez curve parametrized by the variable $u$ is given by:
 \begin{equation*}
-\vec{B}(u)=\sum\limits_{i=0}^n b_i^n(u) \vec{P}_i
+\vec{B}(u)=\sum\limits_{i=0}^n b_i^n(u) \vec{p}_i
 \end{equation*}
-where $\vec{P}_i$ is the $i^{\text{th}}$ control point, $i\in0,1, \dots ,n$ ($n+1$ control points in total), and
+where $\vec{p}_i$ is the $i^{\text{th}}$ control point, $i\in0,1, \dots ,n$ ($n+1$ control points in total), and
 \begin{equation*}
 b_i^n(u)=\binom{n}{i}(1-u)^{(n-i)}u^i
 \end{equation*}
@@ -18,10 +19,11 @@ with $\binom{n}{i}$ being a binomial coefficient, is the $i^{\text{th}}$ \emph{B
 
 In addition to the expression with the Bernstein polynomials, one can use a recursion formula (so-called \emph{de Casteljau Algorithm}) for the construction of the \Bez curve, which we will not cover here. 
 
-Analogous to \Bez curves, one can also define a \textit{\Bez surface}. One of the ways of doing this, is by extending the set of control points indexed in one dimension, to a $2$-dimensional mesh of $n\times m$ control points $\vec{P}_{i,j}$, likewise extending the Bernstein polynomial basis to $2$D by taking the tensor product of it with itself. The resulting \textit{tensor product \Bez} (curve) \textit{surface} is then given by the analytical expression
-\begin{equation*}
-\vec{S}(u,v)=\sum\limits_{i=0}^n \sum\limits_{j=0}^m b_i^n(u) b_j^m(v) \vec{P}_{i,j}
-\end{equation*}
+Analogous to \Bez curves, one can also define a \textit{\Bez surface}. One of the ways of doing this, is by extending the set of control points indexed in one dimension, to a $2$-dimensional mesh of $n\times m$ control points $\vec{p}_{i,j}$, likewise extending the Bernstein polynomial basis to $2$D by taking the tensor product of it with itself. The resulting \textit{tensor product \Bez} (curve) \textit{surface} is then given by the analytical expression
+\begin{equation}
+\label{eq:bezsurface}
+\vec{S}(u,v)=\sum\limits_{i=0}^n \sum\limits_{j=0}^m b_i^n(u) b_j^m(v) \vec{p}_{i,j}
+\end{equation}
 
 \subsubsection{B-Splines and NURBS}
 Extending the idea described in previous section, one could use \emph{B-spline basis functions} (see below) instead of the Bernstein polynomial basis.
@@ -60,7 +62,7 @@ For $p=0$ we get just step functions, and $p=1$ familiar hat functions, whereas 
 
 By giving each of these basis functions a weight $\omega_i$ and normalizing them at each point by dividing by the total sum, we get the rational basis functions. Writing them out explicitly, in terms of B-spline basis functions $N_{i,p}$, the $n^{\text{th}}$-degree NURBS curve with $k$ control points $P_i$ is finally given by:
 \begin{equation}
-C(u) = \frac{\sum_{i=1}^{k}N_{i,n}\omega_{i}P_{i}}{\sum_{i=1}^{k}N_{i,n}\omega_{i}}.
+C(u) = \frac{\sum_{i=1}^{k}N_{i,n}\omega_{i}p_{i}}{\sum_{i=1}^{k}N_{i,n}\omega_{i}}.
 \end{equation}
 
 B-splines have the following properties, which are useful for our problem:
