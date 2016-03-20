@@ -1,5 +1,56 @@
 \subsection{Fairness Functional}%maybe change title
+Aside from recognising discontinuities in the first derivative (kinks), the human eye is usually able to recognise large values in curvature, that is, properties depending on the second derivatives of a surface. For example, we can have a surface that is entirely continous in the first derivative of the surface, that also has large wiggles and sharp turns, that on a small scale are smooth, but do not seem so on the large scale. %maybe example of a gaussian with very small variance? 
+\todointernal[author=Erik]{mention that it's called fairness because they're nice to look at}
+To give a measure for this, one can for example use the bending energy of a thin plate, which depends on the squared magnitude of the second derivatives. In the special case of a rectangular patch, parametrized by $u,v\in \left[0,1\right]$, we can easily integrate this over the whole area. The energy can then be expressed as a functional of $\vec{S}$,
 
+\begin{equation}
+\label{eq:fairness}
+E_{patch}\left[\vec{S}\right] = 
+\int\limits_0^1 \int\limits_0^1
+\left(
+(\frac{\partial^2}{\partial u^2 }\vec{S}(u,v))^2
++ 2 
+(\frac{\partial^2}{\partial u\partial v} \vec{S}(u,v))^2
++
+(\frac{\partial^2}{\ v^2}\vec{S}(u,v))^2
+\right)
+\text{d}u\text{d}v
+\end{equation}
+One case in which this equation can be simplified is when we have explicit definitions of the surface. For example, for the rectangular \Bez tensor product surface curves in \autoref{subsec:paracurves}, we express the surface as a weighted sum of polynomials in $u$ and $v$ (see \autoref{eq:bezsurface} for a reminder). For a \Bez surface of order $N$, with $N+1$ points $\vec{p}_{i,j}$ in each direction, we can thus reexpress \autoref{eq:fairness} as coefficients times a dot product 
+\begin{equation}
+\label{eq:faireqsum}
+E_{fair} =  \sum\limits_{i_1,j_1=1}^{N+1} \sum\limits_{i_2,j_2=1}^{N+1} \left( c_{(i_1,j_1),(i_2,j_2)}^{uu} + 2c_{(i_1,j_1),(i_2,j_2)}^{uv} + c_{(i_1,j_1),(i_2,j_2)}^{vv} \right) \vec{p}_{i_1,j_1} \cdot\vec{p}_{i_2 ,j_2} 
+\end{equation} 
+where the coeficcients $c_{(i_1,j_1),(i_2,j_2)}^{st}$ are obtained by of multiplying out the squares in the energy functional, inserting the definitions of the Bernstein polynimials $b_{i}^N(u)$:
+\begin{equation}
+c_{(i_1,j_1),(i_2,j_2)}^{st} = 
+\int\limits_0^1 \int\limits_0^1 \frac{\partial^2}{\partial s \partial t} \left[b_{i_1}^N(s) b_{j_1}^N(t)\right]\frac{\partial^2}{\partial s \partial t} \left[ b_{i_2}^N(s) b_{j_2}^N(t)\right]
+\text{d}s\text{d}t
+\end{equation}
+\todointern[author=Erik]{maybe move this following part to LeastSquares?}
+Although this is already very much simpler to evaluate, given one already has the coefficients $c_{(i_1,j_1),(i_2,j_2)}$, we can do a further reformulation by reindexing $(i,j)$ to $k$ where $k$ goes from $1$ to $(N+1)\times(N+1)$. By forming a vector $P_{patch}$ containg all the points as 3-dimensional entries, we can then reexpress \autoref{eq:faireqsum} as a vector-matrix-vector product:
+\begin{align*}
+\phantom{=}& \sum\limits_{i_1,j_1=1}^{N+1} \sum\limits_{i_2,j_2=1}^{N+1} c_{(i_1,j_1),(i_2,j_2)} \vec{p}_{i_1,j_1} \cdot\vec{p}_{i_2 ,j_2} =
+\\
+=& \sum\limits_{k_1=1}^{(N+1)^2} \sum\limits_{k_2=1}^{(N+1)^2} c_{k_1,k_2} \vec{p}_{k_1} \cdot\vec{p}_{k_2} =
+\\
+=& P_{patch}^T C_{patch}^{fair} P_{patch}
+\end{align*}
+Now, since we know the original expression of $E_{fair}$ and the contribution stemming from each point $\vec{p}_{i,j}$, we know the matrix $C_{patch}^{fair}$ to be positive semi-definite and symmetric. Hence, it should be diagonalizable by an orthogonal matrix, and have only nonnegative eigenvalues. Thus, expressing $C_{patch}^{fair} = S^T \Lambda S$, we end up with:
+\begin{align*}
+E_{fair} =& P_{patch}^T C_{patch}^{fair} P_{patch} =
+\\
+=&  P_{patch}^T S^T \Lambda S P_{patch} = 
+\\
+=& P_{patch}^T S^T \Lambda^{\frac{T}{2}}\Lambda^{\frac{1}{2}} S P_{patch} =
+\\
+=& \left[\Lambda^{\frac{1}{2}} S P_{patch}\right]^T\left[\Lambda^{\frac{1}{2}} S P_{patch}\right] =
+\\
+=& \norm{\Lambda^{\frac{1}{2}} S P_{patch}}^2
+\end{align*}
+which allows us to express and calculate the thin plate energy using a matrix-vector product and a squared norm.
+
+Since surfaces with low curvatures and therefore softer curves are typically considered more pleasing to the eye, the functional in \autoref{eq:fairness} is typically named \emph{fairness functional}.\todointern[author=Erik]{move this further up}
 %%plotline: 
 %as well as smoothness, curvature is important
 %for quadratic parametric patch, can express curvature by thin-plate energy functional as was done in [eck-hoppe]
@@ -20,24 +71,7 @@
 &=C_k^{PS}V
 \end{align}
 
-\begin{align}
-\label{eq:fairness}
-E_{fair,quad} =& 
-\int\limits_0^1 \int\limits_0^1
-\left(
-(\frac{\partial^2}{\partial u^2 }\vec{S}(u,v))^2
-+ 2 
-(\frac{\partial^2}{\partial u\partial v} \vec{S}(u,v))^2
-+
-(\frac{\partial^2}{\partial v^2}\vec{S}(u,v))^2
-\right)
-\text{d}u\text{d}v
-\\
-=& \sum\limits_{i,j=1}^{N,M} c_{i,j}^{fair}\vec{p}_{i,j}
-\\
-&=
-C_{fair} P
-\end{align}
+
 
 \begin{equation}
 \label{eq:fairness-sum}
