@@ -102,7 +102,7 @@ BCOR5mm, % Binding correction
 %----------------------------------------------------------------------------------------
 
 \section*{Abstract} % This section will not appear in the table of contents due to the star (\section*)
-This document provides general information about using CADO software. CADO is an fully CAD-integrated topology optimization tool.
+This document provides general information about using the CADO software. CADO is a fully CAD-integrated topology optimization tool.
 
 
 
@@ -124,7 +124,7 @@ This document provides general information about using CADO software. CADO is an
 \caption{CADO main window}
 \label{fig:mainWindow}
 \end{figure}
-Please, make sure that the following software is installed on your computer:
+Please make sure that the following software is installed on your computer in order to fulfil CADO's dependencies:
 \begin{itemize}
 \item ToPy
 \item OpenCascade
@@ -136,7 +136,10 @@ Please, make sure that the following software is installed on your computer:
 
 
 
-For the detailed installation instructions, please, refer to \\ \textit{CADO\_InstallationGuide.pdf}.
+For the detailed installation instructions, please refer to:
+\begin{lstlisting}[language = {Promela}]
+CADO_InstallationGuide.pdf
+\end{lstlisting}
 
 Once all necessary software is installed CADO can be ran from the command line as follows:
 \begin{lstlisting}[ numbers = left,language = {Promela}]
@@ -152,14 +155,14 @@ Once CADO is running, the main window appears on the screen (see fig. \ref{fig:m
 
 \section{Structure}
 \label{sec:structure}
-Now let us take a closer look at the parameters, required by CADO.
+Now let us take a closer look at the parameters required by CADO.
 
 \subsection{Input files}
 To select your input \textit{.step} file:
 \begin{itemize}
-\item Press the \textbf{"Select STEP File"} button in the top left corner of CADO;
+\item Press the \textbf{Select STEP File} button in the top left corner of CADO;
 \item Choose the appropriate file by navigating through the file system in the opened dialog (see fig. \ref{fig:fileDialog});
-\item Press the \textbf{"Open"} button.
+\item Press the \textbf{Open} button.
 \end{itemize}
 
 After that, the path to the chosen file should appear near the \textbf{Select STEP file} button (see fig. \ref{fig:mainWindowParameters}).
@@ -171,17 +174,20 @@ After that, the path to the chosen file should appear near the \textbf{Select ST
 \label{fig:fileDialog}
 \end{figure} 
 
-Note, that the same directory must also contain an \textit{.iges} file with the information about colors with an identical name (\textit{<StepFileName>.iges})! 
+Note that the same directory must also contain an \textit{.iges} file with the information about colors with an identical name:
+\begin{lstlisting}[language = {Promela}]
+<StepFileName>.iges
+\end{lstlisting}
 
 \subsubsection{Nonchanging domain}
-In case some domains should stay unchanged during the optimization (for example, fixture to the wall), select the \textbf{"Nonchanging domain"} checkbox in the \textit{"Additional Specifications"} section. Make sure that your \textit{.step} file with the nonchanging domain is located in the same directory as the original \textit{.step} file and named as:
+In case some domains need to be kept unchanged during the optimization (for example, screw threads), select the \textbf{Nonchanging domain} checkbox in the \textit{Additional Specifications} section. Make sure that your \textit{.step} file that specifies the nonchanging domains is located in the same directory as the original \textit{.step} file and named as:
 \begin{lstlisting}[language = {Promela}]
 <StepFileName>_Fixed.step
 \end{lstlisting}
 
 \subsubsection{Optimization domain}
-In order to specify an optimization domain, select the \textbf{Optimization Domain} checkbox in the \textit{"Additional Specifications"} section. Make sure that your \textit{.step} file with the optimization domain is located in the same directory as the original \textit{.step} file and named as:
-\begin{lstlisting}[ numbers = left,language = {Promela}]
+You can constrain the solution to be limited to a certain domain of optimization. In order to specify this, select the \textbf{Optimization Domain} checkbox in the \textit{Additional Specifications} section. Make sure that your \textit{.step} file with the optimization domain is located in the same directory as the original \textit{.step} file and named as:
+\begin{lstlisting}[language = {Promela}]
 <StepFileName>_ToOptimize.step
 \end{lstlisting}
 
@@ -190,11 +196,11 @@ In order to specify an optimization domain, select the \textbf{Optimization Doma
 In order to tune the topology optimization for your specific problem, please enter the following parameters:
 \begin{itemize}
 \item \textbf{Force Scaling} - scaling factor for the force from the input file. Scaling is performed from the range $0 - 1$ (corresponding to the color in the original input file) to the desired one.
-\item \textbf{Resolution} - the resolution of the optimized geometry. Increase the number to increase the resolution.
+\item \textbf{Resolution} - the resolution of the optimized geometry. Increase the number to increase the resolution and get a more accurate solution.
 \item \textbf{Volume Fraction Limit} - the fraction of the volume to be kept in the voxel after the topology optimization
 \end{itemize}
 
-To change the corresponding parameters slightly, use the raise/lower arrows. You can also enter the numbers directly into the fields.
+To fine-tune the parameters, use the raise/lower arrows. You can also enter the numbers directly into the fields.
 
 \begin{figure}
 \centering
@@ -205,19 +211,19 @@ To change the corresponding parameters slightly, use the raise/lower arrows. You
 \subsection{Surface Fitting Parameters}
 In order to specify the desired quality of the output surface, please enter the following parameters in the \textit{Surface Fitting Parameters} section:
 \begin{itemize}
-\item \textbf{"Smoothness"} - increase the number to increase the smoothness. Note, that some features might be lost if your desired smoothness varies from the physical result.
-\item \textbf{"Coarsening"} - the resolution of the output surface.  Increase the coarsening to reduce the number of patches in the output surface. Please, note that increasing the coarsening factor can lead to loss of the features of the surface (such as holes, etc.).
+\item \textbf{Smoothness} - increase the number to increase the smoothness. Note that some features might be lost if your desired smoothness varies from the physical result.
+\item \textbf{Coarsening} - the resolution of the output surface.  Increase the coarsening to reduce the number of patches in the output surface. Note that increasing the coarsening factor can lead to loss of the features of the surface (such as holes, etc.).
 \end{itemize}
 \subsection{Output}
 To specify the output file:
 \begin{itemize}
-\item Press the \textbf{"Output"} button;
+\item Press the \textbf{Output} button;
 \item Choose the output destination by navigating through the appeared file dialog (see fig. \ref{fig:fileDialog});
 \item Enter the name of the output file;
-\item Press \textbf{"Open"}.
+\item Press \textbf{Open}.
 \end{itemize}
 
-Once the optimization process has been completed (all progress bars are colored green and don't move), view your results in FreeCAD by clicking now available \textbf{"Start FreeCAD"} button.
+Once the optimization process is completed (all progress bars are colored green and don't move), view your results in FreeCAD by clicking now available \textbf{Start FreeCAD} button.
 
 \section{Example}
 
@@ -227,19 +233,19 @@ Once the optimization process has been completed (all progress bars are colored 
 \caption{CADO in progress}
 \label{fig:inProgress}
 \end{figure}
-To run a sample optimization, run CADO from the command line as described in \ref{sec:prep}. In the appeared window (see fig. \ref{img:mainwindow}) you can see the default parameters for for the \textbf{"Cantilever"} test case, provided together with the source code distribution. To complete the necessary input for running the program, enter the following information:
+To run a sample optimization, run CADO from the command line as described in \ref{sec:prep}. In the appeared window (see fig. \ref{img:mainwindow}) you can see the default parameters for for the \textbf{Cantilever} test case, provided together with the source code distribution. To complete the necessary input for running the program, enter the following information:
 \begin{itemize}
-\item Choose the input \textit{Cantilever.step} file as described in sec. \ref{sec:structure} from the following folder:
+\item Choose the input file as described in sec. \ref{sec:structure} from the following folder:
 \begin{lstlisting}[language = {Promela}]
 Examples/Cantilever/
 \end{lstlisting}
-\item Check the checkboxes \textbf{"Nonchanging Domain"} and \textbf{"Optimization Domain"}. The files with appropriate names are already placed in the folder.
+\item Check the checkboxes \textbf{Nonchanging Domain} and \textbf{Optimization Domain}. The files with appropriate names are already placed in the folder.
 \item Specify the output file following the instructions from the sec. \ref{sec:structure}.
 \end{itemize}
 
-To run the optimization press the \textbf{"Run"} button in the bottom of the window.
+To run the optimization press the \textbf{Run} button in the bottom of the window.
 
-The progress of the Topology Optimization pipeline can be observed on the progress bars near the \textbf{"Run"} button (see fig. \ref{fig:inProgress}). Each round-shaped progress bar corresponds to one of the three main steps of the pipeline. While one of the steps is running, corresponding progress bar is indicated yellow and moving. Once the step is finished, the progress bar is colored green (see fig. \ref{fig:progressBarsFinished}).
+The progress of the Topology Optimization pipeline can be observed on the progress bars near the \textbf{Run} button (see fig. \ref{fig:inProgress}). Each round-shaped progress bar corresponds to one of the three main steps of the pipeline. While one of the steps is running, corresponding progress bar is indicated yellow and moving. Once the step is finished, the progress bar is colored green (see fig. \ref{fig:progressBarsFinished}).
 
 
 Once all progress bars are marked green the optimization process has finished. To see the optimized result in FreeCAD click on the \textbf{Start FreeCAD} button (see fig. \ref{fig:resultsFreeCAD}).
@@ -250,5 +256,5 @@ Once all progress bars are marked green the optimization process has finished. T
 \label{fig:progressBarsFinished}
 \end{figure}
 
-Enjoy your topology optimized result in FreeCAD! :-)
+Enjoy your topology optimized result in FreeCAD!
 \end{document}
