@@ -1,0 +1,52 @@
+% Included by MAIN.TEX
+% Put your content in here or include it by using \input (\include won't work)
+
+\addtolength{\evensidemargin}{-12mm}
+
+% ---------------------------------------------------------------------------
+%
+%Introduction and Background Theory
+%
+% ---------------------------------------------------------------------------
+\part[Introduction and Background Theory]{Introduction and Background Theory}
+\label{part:introAndBackgroundTheory}
+\input{chapters/Introduction}
+\input{chapters/BackgroundTheory} 
+
+%
+%% ---------------------------------------------------------------------------
+%%
+%% Fully Automated Calibration for Ultrasound
+%%
+%%% ---------------------------------------------------------------------------
+\part[Fully Automated Calibration for Ultrasound]{Fully Automated Calibration for Ultrasound}
+\label{part:fullyAutomatedCalibration}
+\input{chapters/FullyAutomatedCalibrationOverview} 
+\input{chapters/MethodsAndImplementation}
+\input{chapters/SpheresPhantom} 
+\input{chapters/ModulatedCirclesPhantom} 
+
+%% ---------------------------------------------------------------------------
+%%
+%% Results and Conclusion
+%%
+%% ---------------------------------------------------------------------------
+\part[Results and Conclusion]{Results and Conclusion}
+\label{part:resultsAndConclusion}
+\input{chapters/Experiments} 
+\input{chapters/Simulations} 
+\input{chapters/Conclusion} 
+
+
+% ---------------------------------------------------------------------------
+%
+% Appendix
+%
+% ---------------------------------------------------------------------------
+
+\part*{Appendix}
+\addcontentsline{toc}{part}{Appendix}
+
+\appendix %---------------------------------------
+
+\input{chapters/validationDetailed}
