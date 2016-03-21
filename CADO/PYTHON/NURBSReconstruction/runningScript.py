@@ -17,6 +17,7 @@ parser.add_argument('input_file_name', type=str, help='path to the input files--
 parser.add_argument('output_file_name', type=str, help='path to the output file--given by the user')
 parser.add_argument('fairnessWeight', type=float, help='fairnessWeight')
 parser.add_argument('coarsening_factor', type=int, help='coarsening_factor')
+parser.add_argument('refinement_level', type=int, help='refinement_level')
 parser.add_argument('nonchanging_file_name', type=str, help='path to nonchanging file --given by the user')
 parser.add_argument('allowed_domains_file_name', type=str, help='path to allowed domains file --given by the user')
 args, leftovers = parser.parse_known_args()
@@ -65,7 +66,7 @@ print "### Peters' Scheme DONE### "
 # TODO: nonchanging_file_name should be a zero string if not provided by the user
 
 print "### Generating Step File ###"
-export_step( NURBSIndices, NURBSMatrix, args.input_file_name, args.output_file_name, nonchanging_file_name, allowed_domains_file_name)
+export_step( NURBSIndices, NURBSMatrix, args.refinement_level, args.input_file_name, args.output_file_name, nonchanging_file_name, allowed_domains_file_name)
 #export_step( NURBSIndices, NURBSMatrix, input_file_name, output_file_name, nonchanging_file_name, allowed_domains_file_name)
 print "### Step File DONE### "
 

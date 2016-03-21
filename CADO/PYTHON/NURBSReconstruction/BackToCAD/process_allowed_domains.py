@@ -4,7 +4,7 @@ import FreeCAD
 
 from create_mega_bounding_box_object import create_mega_bounding_box_object
 
-def process_allowed_domains(allowed_domains_file_name, output_file_name):
+def process_allowed_domains(allowed_domains_file_name, output_file_name, refinement_level):
 	if len(allowed_domains_file_name) != 0:
 		print "Checking allowed domains..."
 		# take the intersection of allowed domains
@@ -14,6 +14,10 @@ def process_allowed_domains(allowed_domains_file_name, output_file_name):
 
 		# get bounding box of the allowed domains
 		# NOTE: ASSUMING ALLOWED DOMAINS ARE ALL FUSED IN ONE OBJECT.
+		#import Draft
+		#scaleFactor = 2**refinement_level
+		#scaleVector = FreeCAD.Vector(scaleFactor, scaleFactor, scaleFactor)
+		#Draft.scale(FreeCAD.getDocument("tmp").Objects[0], scaleVector)#, center=FreeCAD.Vector(1,1,1),copy=False) # perfom scaling
 
 		# create mega BB object
 		create_mega_bounding_box_object()

@@ -221,7 +221,8 @@ void MainWindow::on_runButton_clicked()
         std::string outputFile = stpOutputPath.toStdString()+stpOutputName.toStdString();
         std::string fixedFileFullPathNameString = this->isFixtureFileSupplied ? stpPath.toStdString() + stpName.toStdString() + "_Fixed.step" : "\"\"";
         std::string booleanFileString = this->isOptimizationDomainSupplied ? stpPath.toStdString() + stpName.toStdString() + "_ToOptimize.step" : "\"\"";
-        parameterString = cellsAndDimensionsPath + " " + stpFile.toStdString() + " " + outputFile + " " + fairnessWeight + " " + coarseningFactorString + " "+ fixedFileFullPathNameString + " " + booleanFileString;
+        parameterString = cellsAndDimensionsPath + " " + stpFile.toStdString() + " " + outputFile + " " + fairnessWeight + " " + coarseningFactorString + " "
+                + refinementLevelString + " " + fixedFileFullPathNameString + " " + booleanFileString;
         std::string scriptPython = "python ./PYTHON/NURBSReconstruction/runningScript.py " + parameterString;
 
         std::cout << scriptPython << std::endl;
