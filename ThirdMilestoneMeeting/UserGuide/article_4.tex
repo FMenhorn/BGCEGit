@@ -116,6 +116,7 @@ This document provides general information about using CADO software. CADO is an
 %----------------------------------------------------------------------------------------
 
 \section{Preparing your computer}
+\label{sec:prep}
 \subsection{Technical requirements \& Installation}
 Please, make sure that the following software is installed on your computer:
 \begin{itemize}
@@ -129,22 +130,17 @@ Please, make sure that the following software is installed on your computer:
 
 For the detailed installation instructions, please, refer to \\ \textit{CADO\_InstallationGuide.pdf}.
 
-Once all necessary software is installed CADO can be ran using QtCreator.
+Once all necessary software is installed CADO can be ran from the command line as follows:
+\begin{lstlisting}[ numbers = left,language = {Promela}]
+./CADO
+\end{lstlisting}
 
 %----------------------------------------------------------------------------------------
 %	GETTING STARTED
 %----------------------------------------------------------------------------------------
 
-\section{Getting started with CADO}
-
-To run a sample optimization open \textit{QtCreator} project file \\ \textit{CADO.pro} in your QtCreator and run it using the \textbf{"Run"} button. In the appeared window (see fig. \ref{img:mainwindow}) you can see the default parameters for for the \textbf{"Cantilever"} test case, provided together with the source code distribution. 
-
-To run the optimization press the \textbf{"Run"} button in the bottom of the window.
-
-The progress of the Topology Optimization pipeline can be observed on the progress bars near the \textbf{"Run"} button (see fig. \ref{fig:progressBars}). Each round-shaped progress-bar corresponds to one of the three main steps of the pipeline. While one of the steps is running, corresponding progress bar is indicated yellow and moving (see fig. \ref{fig:progressBars}). Once the step is finished, the progress bar is colored green.
-
-Once all progress bars are marked green (see \ref{fig:progressBarsFinished}) the optimization process has finished. To see the optimized result in FreeCAD click on the \textbf{Start FreeCAD} button (see fig. \ref{fig:resultsFreeCAD}).
 \section{Structure}
+\label{sec:structure}
 Now let us take a closer look at the parameters, required by CADO.
 
 \subsection{Input files}
@@ -159,7 +155,7 @@ Note, that the same directory must also contain an \textit{.iges} file with the 
 
 \subsubsection{Nonchanging domain}
 In case some domains should stay unchanged during the optimization (for example, fixture to the wall), select the \textbf{"Nonchanging domain"} checkbox in the \textit{"Additional Specifications"} section. Make sure that your \textit{.step} file with the nonchanging domain is located in the same directory as the original \textit{.step} file and named as:
-\begin{lstlisting}[ numbers = left,language = {Promela}]
+\begin{lstlisting}[language = {Promela}]
 <StepFileName>_Fixed.step
 \end{lstlisting}
 
@@ -171,9 +167,9 @@ In order to specify an optimization domain, select the \textbf{Optimization Doma
 \subsection{Topology Optimization Parameters}
 In order to tune the topology optimization for your specific problem, please enter the following parameters:
 \begin{itemize}
-\item \textbf{Force Scaling} - ???
-\item \textbf{Resolution} - ???
-\item \textbf{Volume Fraction Limit} - the fraction of the volume to be kept
+\item \textbf{Force Scaling} - scaling factor for the force from the input file. Scaling is performed from the range $0 - 1$ (corresponding to the color in the original input file) to the desired one.
+\item \textbf{Resolution} - the resolution of the optimized geometry. Increase the number to increase the resolution.
+\item \textbf{Volume Fraction Limit} - the fraction of the volume to be kept in the voxel after the topology optimization
 \end{itemize}
 
 To change the corresponding parameters slightly, use the raise/lower arrows. You can also enter the numbers directly into the fields.
@@ -181,7 +177,7 @@ To change the corresponding parameters slightly, use the raise/lower arrows. You
 In order to specify the desired quality of the output surface, please enter the following parameters in the \textit{Surface Fitting Parameters} section:
 \begin{itemize}
 \item \textbf{"Smoothness"} - increase the number to increase the smoothness. Note, that some features might be lost if your desired smoothness varies from the physical result.
-\item \textbf{"Coarsening"} - ...
+\item \textbf{"Coarsening"} - the resolution of the output surface.  Increase the coarsening to reduce the number of patches in the output surface. Please, note that increasing the coarsening factor can lead to loss of the features of the surface (such as holes, etc.).
 \end{itemize}
 \subsection{Output}
 To specify the output file:
@@ -197,3 +193,21 @@ Once the optimization process has been completed (all progress bars are colored 
 Enjoy your topology optimized result in FreeCAD! :-)
 \end{document}
 \end{figure}
+
+\section{Example}
+
+To run a sample optimization, run CADO from the command line as described in \ref{sec:prep}. In the appeared window (see fig. \ref{img:mainwindow}) you can see the default parameters for for the \textbf{"Cantilever"} test case, provided together with the source code distribution. To complete the necessary input for running the program, enter the following information:
+\begin{itemize}
+\item Choose the input \textit{Cantilever.step} file as described in sec. \ref{sec:structure} from the following folder:
+\begin{lstlisting}[language = {Promela}]
+Examples/Cantilever/
+\end{lstlisting}
+\item Check the checkboxes \textbf{"Nonchanging Domain"} and \textbf{"Optimization Domain"}. The files with appropriate names are already placed in the folder.
+\item Specify the output file following the instructions from the sec. \ref{sec:structure}.
+\end{itemize}
+
+To run the optimization press the \textbf{"Run"} button in the bottom of the window.
+
+The progress of the Topology Optimization pipeline can be observed on the progress bars near the \textbf{"Run"} button (see fig. \ref{fig:progressBars}). Each round-shaped progress bar corresponds to one of the three main steps of the pipeline. While one of the steps is running, corresponding progress bar is indicated yellow and moving (see fig. \ref{fig:progressBars}). Once the step is finished, the progress bar is colored green.
+
+Once all progress bars are marked green (see \ref{fig:progressBarsFinished}) the optimization process has finished. To see the optimized result in FreeCAD click on the \textbf{Start FreeCAD} button (see fig. \ref{fig:resultsFreeCAD}).
