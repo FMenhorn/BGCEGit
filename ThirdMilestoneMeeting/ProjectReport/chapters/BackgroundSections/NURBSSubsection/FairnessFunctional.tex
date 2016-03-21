@@ -1,4 +1,6 @@
 \subsection{Fairness Functional}%maybe change title
+\label{subsec:fairnessthry}
+\todointernal[inline, author=Erik]{on reread: come up with nicer-looking variable names}
 Aside from recognising discontinuities in the first derivative (kinks), the human eye is usually able to recognise large values in curvature, that is, properties depending on the second derivatives of a surface. For example, we can have a surface that is entirely continous in the first derivative of the surface, that also has large wiggles and sharp turns, that on a small scale are smooth, but do not seem so on the large scale. %maybe example of a gaussian with very small variance? 
 \todointernal[author=Erik]{mention that it's called fairness because they're nice to look at}
 To give a measure for this, one can for example use the bending energy of a thin plate, which depends on the squared magnitude of the second derivatives. In the special case of a rectangular patch, parametrized by $u,v\in \left[0,1\right]$, we can easily integrate this over the whole area. The energy can then be expressed as a functional of $\vec{S}$,
@@ -37,17 +39,18 @@ Although this is already very much simpler to evaluate, given one already has th
 =& P_{patch}^T C_{patch}^{fair} P_{patch}
 \end{align*}
 Now, since we know the original expression of $E_{fair}$ and the contribution stemming from each point $\vec{p}_{i,j}$, we know the matrix $C_{patch}^{fair}$ to be positive semi-definite and symmetric. Hence, it should be diagonalizable by an orthogonal matrix, and have only nonnegative eigenvalues. Thus, expressing $C_{patch}^{fair} = S^T \Lambda S$, we end up with:
-\begin{align*}
-E_{fair} =& P_{patch}^T C_{patch}^{fair} P_{patch} =
+\begin{align}
+E_{fair} =& P_{patch}^T C_{patch}^{fair} P_{patch} =\nonumber
 \\
-=&  P_{patch}^T S^T \Lambda S P_{patch} = 
+=&  P_{patch}^T S^T \Lambda S P_{patch} = \nonumber
 \\
-=& P_{patch}^T S^T \Lambda^{\frac{T}{2}}\Lambda^{\frac{1}{2}} S P_{patch} =
+=& P_{patch}^T S^T \Lambda^{\frac{T}{2}}\Lambda^{\frac{1}{2}} S P_{patch} = \nonumber
 \\
-=& \left[\Lambda^{\frac{1}{2}} S P_{patch}\right]^T\left[\Lambda^{\frac{1}{2}} S P_{patch}\right] =
+=& \left[\Lambda^{\frac{1}{2}} S P_{patch}\right]^T\left[\Lambda^{\frac{1}{2}} S P_{patch}\right] =\nonumber
 \\
 =& \norm{\Lambda^{\frac{1}{2}} S P_{patch}}^2
-\end{align*}
+\label{eq:fairnessnorm}
+\end{align}
 which allows us to express and calculate the thin plate energy using a matrix-vector product and a squared norm.
 
 Since surfaces with low curvatures and therefore softer curves are typically considered more pleasing to the eye, the functional in \autoref{eq:fairness} is typically named \emph{fairness functional}.\todointern[author=Erik]{move this further up}
@@ -77,7 +80,5 @@ Since surfaces with low curvatures and therefore softer curves are typically con
 \label{eq:fairness-sum}
 E_{fair} = \sum\limits_{\text{all quads}}E_{fair,quad}
 \end{equation}
-\begin{equation}
-\norm{D - \left[ C(\vec{u},\vec{v}) C^{PS} \right] V }^2 + \lambda \norm{0 - C^{fair} V }^2
-\end{equation}
+
 

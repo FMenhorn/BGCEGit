@@ -20,7 +20,7 @@ where $\lsControlPointCoefi{i,j}(u,v)$ are the coefficients calculated on contro
 \lsDataPointi{k} = \sum\limits_{p=1}^{S} \lsControlPointCoefi{p}(u_k,v_k) \lsControlPointi{p} \equiv \vec{\lsControlPointCoef}(u_k,v_k)\lsControlPointMatrix
 \label{eqn:lsmatrix1}
 \end{equation} 
-where in the last equality, we've expressed the control points as a vector-matrix product, where the $S\times 3$ matrix $P$ has the $p^\text{th}$ row as the position of the $p^\text{th}$ control points as a 3D row-vector, and $\vec{\lsControlPointCoef}(u_k,v_k)$ is the row vector whose entries are the coefficients $\lsControlPointCoefi{p}(u_k,v_k)$ on the control points. Now, again realizing that for $Q$ datapoints $\lsDataPointi{k}$ we can view them as the columns in a $3\times Q$ matrix $\lsDataPointMatrix$, and create an analogous matrix $\lsControlPointCoefMatrix(\vec{u},\vec{v})$ with the $k^\text{th}$ containing the coefficients calculated from the parameters $(u_k,v_k)$ of datapoint $\lsDataPointi{k}$, resulting in the matrix equation:
+where in the last equality, we've expressed the control points as a vector-matrix product, where the $S\times 3$ matrix $P$ has the $p^\text{th}$ row as the position of the $p^\text{th}$ control points as a 3D row-vector, and $\vec{\lsControlPointCoef}(u_k,v_k)$ is the row vector whose entries are the coefficients $\lsControlPointCoefi{p}(u_k,v_k)$ on the control points. Now, again realizing that for $Q$ datapoints $\lsDataPointi{k}$ we can view them as the columns in a $Q\times 3$ matrix $\lsDataPointMatrix$, and create an analogous matrix $\lsControlPointCoefMatrix(\vec{u},\vec{v})$ with the $k^\text{th}$ containing the coefficients calculated from the parameters $(u_k,v_k)$ of datapoint $\lsDataPointi{k}$, resulting in the matrix equation:
 
 \begin{equation}
 \lsDataPointMatrix = \lsControlPointCoefMatrix(\vec{u},\vec{v})\lsControlPointMatrix
@@ -38,6 +38,37 @@ However, this requires that there be a solution, which typically relies on the s
 \end{equation}
 This again is a central problem in computing, and can be solved by many standard libraries with excellent performance.
 
+\subsubsection{Fitting Problem: Fairness}
+As discussed in \autoref{subsec:fairnessthry}, it can also be important to have surface patches that are not only continous and smooth, but also have a low curvature. Fortunately, this is relatively simple to incorporate in the above Least-Squares formulation. Starting from the end result of \autoref{eq:fairnessnorm}, we see that the minimisation of the fairness functional can already be expressed as the minimisation of a squared norm of a matrix-vector product. In order to combine this with the fitting to a surface, we begin by writing it in the form of \autoref{eqn:lsminim}. To do that we simply replace $\lsDataPointMatrix$ with a 3-dimensional $0$-vector (thus a 3-column $0$-matrix), as we want to get the matrix-vector product as close to $0$ as possible, and minimize
+\begin{align*}
+\phantom{=}& \norm{0 - \Lambda^{\frac{1}{2}} S \lsControlPointMatrix} =
+\\
+=& \norm{0 - \lsControlPointCoefMatrix^{fair}\lsControlPointMatrix}^2
+\end{align*}
+where $\lsControlPointCoefMatrix^{fair} = \Lambda^{\frac{1}{2}} S$ has the same number of columns as $\lsControlPointCoefMatrix(\vec{u},\vec{v})$ in \autoref{eqn:lsminim}. %The last fact allows us to minimize
+To minimize both equations simultaneously, we notice that both terms are positive, and we can add them together, giving a weight $\lambda \geq 0$ to the fairness term:
+\begin{equation}
+\norm{\lsDataPointMatrix - \lsControlPointCoefMatrix(\vec{u},\vec{v}) \lsControlPointMatrix }^2 + \lambda \norm{0 - \lsControlPointCoefMatrix^{fair}\lsControlPointMatrix }^2
+\end{equation}
+Noticing that the terms in the sums each depend on one row of $D$ or $0$ and $\lsControlPointCoefMatrix(\vec{u},\vec{v})$ or $\lsControlPointCoefMatrix^{fair}\lsControlPointMatrix$ respectively, we see that we could also join the equations into one norm, by concatenating $D$ and $0$, and $\lsControlPointCoefMatrix(\vec{u},\vec{v})$ and $\lsControlPointCoefMatrix^{fair}\lsControlPointMatrix$ vertically, giving a minimization of
+\begin{equation*}
+\norm{
+\begin{pmatrix}
+\lsDataPointMatrix \\ 0
+\end{pmatrix} -
+\begin{pmatrix*}[l]
+%for aligning the \lsControlPointCoefMatrix to the left. pmatrix* is from mathtools package
+\phantom{\lambda}\lsControlPointCoefMatrix(\vec{u},\vec{v}) \\ \lambda \lsControlPointCoefMatrix^{fair}
+\end{pmatrix*}
+\lsControlPointMatrix 
+}^2 =
+\end{equation*}
+\begin{equation}
+\label{eq:lsconcatmat}
+= \norm{\lsDataPointConcMatrix - \lsControlCoefConcMatrix(\vec{u},\vec{v}) \lsControlPointMatrix }
+\end{equation}
+where we have denoted the final concatenated matrices with $\lsDataPointConcMatrix$ and $ \lsControlCoefConcMatrix(\vec{u},\vec{v})$ respectively.
+
 \subsubsection{Fitting Problem: Peters' Scheme}
 \label{subsub:petersleastsq}
 One of the major drawbacks with the approach above is that it is typically very complicated to impose smoothness constraints on structures of multiple patches, something that is essential for representing more complicated geometries. One of the ways of avoiding this is to use an existing scheme for creating a smooth surface, such as the scheme of Peters \cite{peters1992constructing,eck1996automatic}, which we introduced in \autoref{subsec:peters}. Here, we create smoothly connected square \Bez patches by letting their control points be linear combinations of vertices in a refined control mesh $\petersPatchPoints$, and ensure smoothness by the way that we calculate these coefficients on the vertices in $\petersPatchPoints$, using the imformation we have on their local positions in the mesh to make sure which neighbouring vertices they should be infulenced by. Once more, we can express this mathematically with relative simplicity, again letting $\lsControlPointi{p}$ denote the $p^\text{th}$ control point, and $\petersPatchPointVec_l$ being the $l^\text{th}$ refined control mesh vertex:
@@ -54,13 +85,16 @@ where $\lsControlPointMatrix$ as before is the \Bez control point position matri
 Finally, we can now substitute this into our equations \ref{eqn:lsmatrix2} and \ref{eqn:lsminim} above, to solve the system:
 
 \begin{equation}
-\lsDataPointMatrix = \lsControlPointCoefMatrix(\vec{u},\vec{v})\lsControlPointMatrix = \lsControlPointCoefMatrix(\vec{u},\vec{v})\petersControlPointCoefMatrix\petersPatchPointMatrix
+\lsDataPointConcMatrix = \lsControlCoefConcMatrix(\vec{u},\vec{v})\lsControlPointMatrix = \lsControlCoefConcMatrix(\vec{u},\vec{v})\petersControlPointCoefMatrix\petersPatchPointMatrix
 \end{equation}
 or minimize the least squares error for the only unknowns in this case, the positions of the refined control mesh vertices $\petersPatchPointMatrix$:
 \begin{equation}
-\norm{\lsDataPointMatrix - \left [\lsControlPointCoefMatrix(\vec{u},\vec{v})\petersControlPointCoefMatrix\right ]\petersPatchPointMatrix}^2
+\norm{\lsDataPointConcMatrix - \left [\lsControlCoefConcMatrix(\vec{u},\vec{v})\petersControlPointCoefMatrix\right ]\petersPatchPointMatrix}^2
 \label{eqn:petersminimisation}
 \end{equation}
 
-To summarize, using the standard methods of minimisation of least-squares errors, we compute a set of points, which when used in Peters' scheme produces a surface with the smallest error to a set of datapoints. For this, we require the parametrisations of these datapoints on the surface to compute $\lsControlPointCoefMatrix(\vec{u},\vec{v})$, and in order to obtain $\petersControlPointCoefMatrix$, we also need to know how the patches connect with each other. 
-Worth noting is that both $\lsControlPointCoefMatrix(\vec{u},\vec{v})$ and $\petersControlPointCoefMatrix$ are, although likely very large for large amounts of datapoints, also very sparse, as the $\lsControlPointCoefMatrix(\vec{u},\vec{v})$ will only contain coefficients on one patch, and the algorithms for computing $\petersControlPointCoefMatrix$ only use information of a few vertices around the patch, resulting in the combined coefficient matrix $\lsControlPointCoefMatrix(\vec{u},\vec{v})\petersControlPointCoefMatrix$ also having high sparsity. Thus, the minimisation problem in \autoref{eqn:petersminimisation} will be able to use specialised, fast solvers for sparse systems.
+To summarize, using the standard methods of minimisation of least-squares errors, we compute a set of points, which when used in Peters' scheme produces a surface with the smallest error to a set of datapoints. By including a Fairness term, we also reduce the curvature of the surface.
+
+For the computation of  $\lsControlPointCoefMatrix(\vec{u},\vec{v})$ (and therefore of $\lsControlCoefConcMatrix(\vec{u},\vec{v})$), we require the parametrisations of these datapoints on the surface, and in order to obtain $\petersControlPointCoefMatrix$, we also need to know how the patches connect with each other. 
+
+Worth noting is that all matrices $\lsControlPointCoefMatrix(\vec{u},\vec{v})$, $\lsControlPointCoefMatrix^{fair}$ and $\petersControlPointCoefMatrix$ are, although likely very large for large amounts of datapoints and patches, also very sparse. This fact comes from that both $\lsControlPointCoefMatrix(\vec{u},\vec{v})$ and $\lsControlPointCoefMatrix^{fair}$ will only contain coefficients on one patch, and that the algorithms for computing $\petersControlPointCoefMatrix$ only use information of a few vertices around the patch. Thus, the final combined coefficient matrix $\lsControlCoefConcMatrix(\vec{u},\vec{v})\petersControlPointCoefMatrix$ will also have high sparsity. For solving the minimisation problem of \autoref{eqn:petersminimisation}, we will therefore be able to use specialised, fast solvers for sparse systems, with lower complexity, and therefore much lower runtime.
