@@ -15,7 +15,7 @@ As pointed out in the \ref{sec:CADbackg}, STEP and IGES files can store color in
 	\item \textbf{Fixture faces}: These faces of the geometry are meant to be fixed in space, and undergo zero displacement. These faces are colored absolute red, i.e. if the color space of red ranges in {$[0, 255]$}, then the face is assigned the extremum $255$. The blue and green color components are set to $0$. Thus, the color array is set to $(255, 0, 0)$. These are also stored in the file holding the optimized domain.
 	\item \textbf{Load faces and load value}: These faces bear the forces acting on the body. Loads are three-dimensional, and can take both positive and negative values depending on their direction. To accommodate all possibilities, each color component (i.e. red, blue and green) is assigned a direction ($x$, $y$, and $z$). The range $(0, 255)$ is split in two: $(0, 127]$ representing the negative force range and $[128, 255)$ representing the positive force range. The color is then offset by $-127$. 
 
-Of course, force values may also lie outside the offset color range, i.e $(-\infty, -127] \cup [128, \infty)$. The user then needs to scale the required force to fit in the color range, and provide a scaling factor as an input.
+Internally, OpenCascade transforms the colors from range $(0, 255)$ to $(0,1)$ which we then shift to $(-0.5, 0.5)$. Of course, force values may also lie outside this range. The user then needs to scale the required force to fit in the color range, and provide a scaling factor as an input.
 
 For example, to assign a force value of $(-200.5, 172.0, -10.75)$:
 
@@ -25,11 +25,11 @@ For example, to assign a force value of $(-200.5, 172.0, -10.75)$:
 		\label{LoadFaceExample}
 		\begin{tabular}{cccc}
 			\toprule
-			{\small Original vector} & {\small Scaling factor} & {\small Modified vector} & {\small Final color}\\
+			{\small Original vector} & {\small Scaling factor} & {\small OpenCascade values} & {\small Final color}\\
 			\midrule
-			$-200.5$ & $0.628428928$ & $-126$ & $1$\\
-			$172.0$  & $0.628428928$ & $108$  & $235$\\
-			$-10.75$ & $0.628428928$ & $-7$   & $120$\\
+			$-200.5$ & $401$ & $-0.5$ & $1$\\
+			$172.0$  & $401$ & $0.427860697$  & $235$\\
+			$-10.75$ & $401$ & $-0.02680798$   & $120$\\
 			\bottomrule
 		\end{tabular}
 	\end{center}
