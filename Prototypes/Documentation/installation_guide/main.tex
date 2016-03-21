@@ -18,7 +18,7 @@
 %% Final document mode (no todos, with pictures)
 %\documentclass[final,11pt,a4paper,bibtotoc,idxtotoc,headsepline,footsepline,footexclude,DIV13,oneside]{scrbook}
 %% Intermediate document mode (todos and pictures)
-\documentclass[11pt,a4paper,bibtotoc,idxtotoc,headsepline,footsepline,footexclude,DIV13,oneside]{scrbook}
+\documentclass[11pt,a4paper,article,bibtotoc,idxtotoc,headsepline,footsepline,footexclude,DIV13,oneside]{scrbook}
 \usepackage{listings}
 \lstset{basicstyle=\ttfamily,
   showstringspaces=false,
@@ -62,16 +62,16 @@
 	
 	%\input{components/acknowledgements}
 	
-	%\input{components/abstract}
-	\listoftodos
+	\input{components/abstract}
+	%\listoftodos
 	\tableofcontents
   	%outline and overview
 
 	\mainmatter
 	
-	\chapter{Introduction}
-	\label{intro}
-	In this document we provide a complete guide on how to install and use CADO tool on Linux.
+%	\chapter{Introduction}
+%	\label{intro}
+%	In this document we provide a complete guide on how to install CADO tool on Linux.
 
 	\chapter{ToPy}
 	\label{Topy}
@@ -119,7 +119,7 @@ git clone git:://pysparse.git.sourceforge.net/gitroot/pysparse/pysparse/
 	
 
 	\section{Install ToPy}
-	If all the tools specified in the section \ref{ToPy:sec1} are installed, we can now proceed to the installation of ToPy itself. For that download ToPy from \href{https://github.com/williamhunter/topy}{https://github.com/williamhunter/topy} \todo{Did we clone it from git or downloaded it?} and run the following command from the root directory of ToPy:
+	If all the tools specified in the section \ref{ToPy:sec1} are installed, we can now proceed to the installation of ToPy itself. For that download ToPy from \href{https://github.com/williamhunter/topy}{https://github.com/williamhunter/topy} and run the following command from the root directory of ToPy:
 \begin{lstlisting}[language=bash]
 sudo python setup.py install
 \end{lstlisting}	
@@ -146,7 +146,7 @@ The output should look as showed on a picture \ref{fig:ToPy_test}.
 
 \chapter{OpenCascade}
 \label{OpenCascade}
-OpenCascade (\href{http://www.opencascade.com/}{http://www.opencascade.com/}) is a... \todo{maybe add a short description}
+OpenCascade (\href{http://www.opencascade.com/}{http://www.opencascade.com/}) is a open source CAD kernel widely used in the engineering and design for geometry modeling.
 \section{Install OpenCascade}
 For technical reasons, we do not use OpenCascade from the official webpage, but from the \textit{.git} repository. 
 \begin{figure}
@@ -216,16 +216,22 @@ make test
 \end{lstlisting}
 All performed tests should be successful (See Pic. \ref{fig:OC_test})
 
-\chapter{Qt \& QtCreator}
+\chapter{Miscellaneous}
+\section{Qt \& QtCreator}
 \label{Qt}
-To install the the newest version of \textbf{Qt}, visit the page \href{http://ftp.fau.de/qtproject/archive/qt/5.4/5.4.2/}{http://ftp.fau.de/qtproject/archive/qt/5.4/5.4.2/} and download the \textit{.run} file suitable for your computer. 
+To install the the newest version of \textbf{Qt}, visit the page \\ \href{http://ftp.fau.de/qtproject/archive/qt/5.4/5.4.2/}{http://ftp.fau.de/qtproject/archive/qt/5.4/5.4.2/} and download the \textit{.run} file suitable for your computer. 
 After that, change the rights for the installer file and install \textbf{Qt} by following instructions of the installation manager:
 \begin{lstlisting}[language=bash]
 chmod +x qt-opensource-linux-x64-5.5.0-2.run
 sudo ./qt-opensource-linux-x64-5.5.0-2.run
 \end{lstlisting}
-\chapter{FreeCAD}
-Download and install FreeCAD following the instructions from the official FreeCAD webcite: \href{http://www.freecadweb.org/wiki/?title=Download}{http://www.freecadweb.org/wiki/?title=Download}
+\section{FreeCAD}
+Download and install FreeCAD following the instructions from the official FreeCAD webcite: \href{http://www.freecadweb.org/wiki/?title=Download}{http://www.freecadweb.org/wiki/?title=Download}.
+
+It can also be installed directly from the command line as follows:
+\begin{lstlisting}[language=bash]
+sudo apt-get install freecad
+\end{lstlisting}
 \chapter{CADO}
 \section{Prerequisites}
 In order to install CADO the following tools should be installed on your computer:
@@ -244,7 +250,15 @@ CADO doesn't require special installation. Download the source code by running:
 \begin{lstlisting}[language=bash]
 git clone https://github.com/FMenhorn/BGCEGit.git
 \end{lstlisting}	
-After that open \textbf{QtCreator} and load the \textit{GUI.pro} file from the \textit{"CADO/GUI"} folder into the framework and run the program using the \textbf{"Run"} button.
+After that perform the following commands from the repository main folder:
+\begin{lstlisting}[language=bash]
+cd CADO
+make
+\end{lstlisting}	
+After the installation process has completed run the program from the command line:
+\begin{lstlisting}[language=bash]
+./CADO
+\end{lstlisting}	
 
 
   	\clearemptydoublepage
