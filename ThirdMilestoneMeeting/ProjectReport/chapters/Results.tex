@@ -22,29 +22,35 @@ Using the algorithm described above one is able to produce a NURBS representatio
 \subsection{GE Jet Engine Bracket}
 \begin{figure}[H]
 \begin{center}
-\includegraphics[width=\textwidth]{Pictures/GEbracket.png}
+\includegraphics[scale = 0.6]{Pictures/GEbracket.png}
 \end{center}
 \caption{Boundary conditions and different load cases for test case "GE Bracket". Figure from \cite{GEBracket}}
 \end{figure}
 Used already optimized design \cite{GEBracketTripon}.
 
-
 \begin{figure}
 \begin{center}
-\includegraphics[width = \textwidth]{Pictures/TestCases.png}
+\includegraphics[scale = 0.4]{Pictures/TestCases.png}
 \end{center}
 \caption{Initial CAD geometry and resulting optimized NURBS geometry for three test cases}
 \end{figure}
 
 \section{User Experience}
 \label{sec:uex}
-From the user point of view CADO  is very simple. One doesn't have to know anything about the algorithms behind nor about the implementation details. Graphical User Interface (see fig. \ref{}) allows the user to enter all the necessary information right a way, without opening the command line and keeping in mind the order of the parameters or the name of the executable file. Closed structure of the pipeline allows us to hide all the technical details from the user. However, user can still see on which stage the process is right now by looking at the progress bars, corresponding to the three major steps:
+From the user point of view CADO  is very simple. One doesn't have to know anything about the algorithms behind nor about the implementation details. Graphical User Interface (see fig. \ref{fig:mainWindow}) allows the user to enter all the necessary information right a way, without keeping in mind the order of the parameters. Closed structure of the pipeline allows us to hide all the technical details from the user. However, user can still see on which stage the process is right now by looking at the progress bars, corresponding to the three major steps:
 \begin{itemize}
 \item Voxelization
 \item Topology Optimimzation
 \item Surface Fitting
 \end{itemize}
 
-Further information and the detailed description of the user interface can be found in \textit{CADO\_UserGude.pdf}
 
-\todointern{And a nice picture of the GUI from Friedis computer!}
+Further information and the detailed description of the user interface can be found in \\
+\textit{CADO\_UserGude.pdf}
+
+\begin{figure}
+\centering
+\includegraphics[scale=0.4]{Pictures/CADO_mainWindow.png}
+\caption{CADO user interface}
+\label{fig:mainWindow}
+\end{figure}
