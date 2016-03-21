@@ -180,7 +180,6 @@ def tworesolution_dual_contour(data, resolutions, dims):
         if used_by_quads.__len__() != 2:
             nonmanifold.append(np.array(edge_identifier))
 
-    nonmanifold = [1,2]
     try:
         assert nonmanifold.__len__() == 0 and not_resolved_edges_coarse.__len__() == 0
     except AssertionError as e:

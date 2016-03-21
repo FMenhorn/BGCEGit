@@ -8,7 +8,7 @@ import Import
 import Draft
 import Part
 
-def reorient_object(input_file_name, output_file_name):
+def reorient_object(input_file_name, output_file_name, refinement_level):
 	__objToExport__ = FreeCAD.getDocument("tmp").findObjects()
 
 	# get the original file

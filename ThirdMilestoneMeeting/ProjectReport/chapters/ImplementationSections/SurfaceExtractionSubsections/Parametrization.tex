@@ -25,7 +25,7 @@ Now that we have constructed a \ac{NURBS}-patch distribution we can estimate the
 \todointern[inline]{making quads plane using least squares (Reference?), otherwise each projection is a non-linear optimization! show picture with both}
 \todointern[inline]{coarse criterion: Distance to centroid (better: spacetree!)}
 \todointern[inline]{fine criterion: Projection with QR decomposition}
-Finally the projection of some datapoints might lead to parameters $u,v\not\in\left[0,1\right]^2$ in our algorithm we just omitted \todourgent[author=Benni]{{@} Erik: really?}all those datapoints. If we do not get enough datapoints on each patch for the least squares fitting step after Peters' Scheme we artificially increase the number of datapoints by applying a subdivision scheme to the fine scale surface reconstruction.
+Finally the projection of some datapoints might lead to parameters $u,v\not\in\left[0,1\right]^2$ in our algorithm we just omitted \todourgent[author=Benni]{{@} Erik: really?}\todourgent[author=Erik]{{@} Benni: no.} all those datapoints. If we do not get enough datapoints on each patch for the least squares fitting step after Peters' Scheme we artificially increase the number of datapoints by applying a subdivision scheme to the fine scale surface reconstruction.
 
 After having completed all these steps we obtain the following data for the subsequent steps of our algorithm:
 \begin{itemize}
