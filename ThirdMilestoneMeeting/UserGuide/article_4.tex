@@ -233,7 +233,7 @@ Once the optimization process is completed (all progress bars are colored green 
 \caption{CADO in progress}
 \label{fig:inProgress}
 \end{figure}
-To run a sample optimization, run CADO from the command line as described in \ref{sec:prep}. In the appeared window (see fig. \ref{img:mainwindow}) you can see the default parameters for for the \textbf{Cantilever} test case, provided together with the source code distribution. To complete the necessary input for running the program, enter the following information:
+To run a sample optimization, run CADO from the command line as described in \ref{sec:prep}. In the appeared window (see fig. \ref{fig:mainWindow}) you can see the default parameters for for the \textbf{Cantilever} test case, provided together with the source code distribution. To complete the necessary input for running the program, enter the following information:
 \begin{itemize}
 \item Choose the input file as described in sec. \ref{sec:structure} from the following folder:
 \begin{lstlisting}[language = {Promela}]
@@ -247,14 +247,14 @@ To run the optimization press the \textbf{Run} button in the bottom of the windo
 
 The progress of the Topology Optimization pipeline can be observed on the progress bars near the \textbf{Run} button (see fig. \ref{fig:inProgress}). Each round-shaped progress bar corresponds to one of the three main steps of the pipeline. While one of the steps is running, corresponding progress bar is indicated yellow and moving. Once the step is finished, the progress bar is colored green (see fig. \ref{fig:progressBarsFinished}).
 
-
-Once all progress bars are marked green the optimization process has finished. To see the optimized result in FreeCAD click on the \textbf{Start FreeCAD} button (see fig. \ref{fig:resultsFreeCAD}).
 \begin{figure}
 \centering
 \includegraphics[scale=0.4]{Pictures/progressBar_ready.png}
 \caption{CADO. Optimization is finished}
 \label{fig:progressBarsFinished}
 \end{figure}
+
+Once all progress bars are marked green the optimization process has finished. To see the optimized result in FreeCAD click on the \textbf{Start FreeCAD} button (see fig. \ref{fig:progressBarsFinished}).
 
 Enjoy your topology optimized result in FreeCAD!
 \end{document}
