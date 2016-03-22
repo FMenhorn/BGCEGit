@@ -35,9 +35,6 @@ Therefore, in our algorithm we are reconstructing the surface on two different s
 \end{figure}
 One iteration of this coarsening scheme is referred to as one \emph{coarsening step}, applying this scheme recursively allows higher coarsening and results in multiple coarsening steps.
 
-
-
-
 In the following we apply \ac{DC} to both datasets and obtain two different reconstructed surfaces.
 The coarse scale surface is used as a patch distribution; from the fine scale we obtain our datapoints to which the \ac{NURBS} will be fitted to. We call this approach \emph{Two-scale \acl{DC}} (see \autoref{fig:TwoScale}).
 Of course this simple approach comes with drawbacks:
@@ -53,9 +50,6 @@ Now that we have constructed a \ac{NURBS}-patch distribution we can estimate the
 
 \item For the latter we want the whole \ac{quad} to be parametrized on $u,v\in\left[0,1\right]^2$. We could either use bilinear interpolation for representing the quad and solve a non-linear minimization problem for each projection, or first approximate the quad with its least squares fit plane and then do a projection onto this plane by applying a simple basis transformation\footnote{This basis transformation can be computed in a very cheap way, by computing the QR-decomposition for the basis of each patch only once and applying it for each datapoint projected onto this patch.}. In our algorithm we used the second approach since the approximation of the original \acp{quad} via their least-squares fit planes introduces only a small error and significantly simplifies the projection onto the \ac{quad}.
 \end{itemize}
-\todointern[inline]{making quads plane using least squares (Reference?), otherwise each projection is a non-linear optimization! show picture with both}
-\todointern[inline]{coarse criterion: Distance to centroid (better: spacetree!)}
-\todointern[inline]{fine criterion: Projection with QR decomposition}
 Finally the projection of some datapoints might lead to parameters $u,v\not\in\left[0,1\right]^2$ in our algorithm we just omitted \todourgent[author=Benni]{{@} Erik: really?}\todourgent[author=Erik]{{@} Benni: no.} all those datapoints. If we do not get enough datapoints on each patch for the least squares fitting step after Peters' Scheme we artificially increase the number of datapoints by applying a subdivision scheme to the fine scale surface reconstruction.
 
 After having completed all these steps we obtain the following data for the subsequent steps of our algorithm:
