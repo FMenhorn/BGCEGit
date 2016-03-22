@@ -8,7 +8,33 @@ In addition to the reconstructed surface we need the following information for t
 \subsubsection{Two-scale Dual Contouring}
 Before we can distribute datapoints to \ac{NURBS}-patches, we first have to find out how these patches look like. Since we want to have as few patches as possible we do not simply turn every \ac{quad} from the surface reconstruction into a patch. Instead  we try to find a surface with as few \acp{quad} as possible, while keeping the same topology as our initially reconstructed surface. This coarse surface will be assumed to be the patch distribution for the later steps.
 
-Therefore, in our algorithm we are reconstructing the surface on two different scales, a coarse and a fine scale\todourgent[author=Benni]{explain our coarsening strategy}. The coarse scale surface reconstruction will be used as a patch distribution - from the fine scale we obtain our datapoints to which the \ac{NURBS} will be fitted to. We call this approach \emph{Two-scale \acl{DC}} (see \autoref{fig:TwoScale}).
+
+Therefore, in our algorithm we are reconstructing the surface on two different scales: a coarse and a fine scale. The coarse scale data is deduced from the fine scale data by recursively applying the following algorithm:
+\begin{enumerate}
+\item Combine sets of eight connected voxels with egdelength $a$ into a coarse voxel with edgelength $2a$ (see \autoref{sfig:coarsenA}).
+\item Decide whether the new voxel resembles an inside ($=1$) or outside ($=0$) voxel, by taking the mean value of the contributing eight voxels. If mean value is above a certain threshold $t$, the new voxel is considered as an inside voxel. We picked $t=\frac{1}{8}$, i.e. if at least two voxels out of eight are inside voxels, the resulting voxel is considered being an inside voxel.
+\item For the resolution of non-manifold edges additional coarse voxel grids are generated, that are shifted by edgelength $a$ (see \autoref{sfig:coarsenB}).
+\end{enumerate}
+\begin{figure}
+\begin{subfigure}{.45\textwidth}
+\begin{center}
+\includegraphics[scale=1]{Pictures/tikzCoarsen/coarsen.pdf}
+\end{center}
+\subcaption{Recursively sets of 8 (4 in 2D) fine voxels (blue) are combined to form one coarse voxel (red).}
+\label{sfig:coarsenA}
+\end{subfigure}\hfill
+\begin{subfigure}{.45\textwidth}
+\begin{center}
+\includegraphics[scale=1]{Pictures/tikzCoarsen/coarsenMani.pdf}
+\end{center}
+\subcaption{In a non-aligned grid addition voxels (yellow) are introduced, that are used for non-manifold resolution on the coarse scale.}
+\label{sfig:coarsenB}
+\end{subfigure}
+\caption{Coarsening scheme applied for \emph{Two-scale \acl{DC}}.}
+\label{fig:coarsen}
+\end{figure}
+In the following we apply \ac{DC} to both datasets and obtain two different reconstructed surfaces.
+The coarse scale surface is used as a patch distribution; from the fine scale we obtain our datapoints to which the \ac{NURBS} will be fitted to. We call this approach \emph{Two-scale \acl{DC}} (see \autoref{fig:TwoScale}).
 Of course this simple approach comes with drawbacks:
 \begin{itemize}
 \item We cannot guarantee that the coarse and the fine scale have exactly the same topology. Topological details of the fine scale, which do not exist on the coarse scale, are lost.
