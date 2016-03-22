@@ -1,0 +1,46 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usetikzlibrary{calc,patterns,decorations.pathmorphing,decorations.markings}
+
+\begin{document}
+
+\begin{tikzpicture}
+
+\draw[step=1cm,blue, thin] (0,0) grid (4,4);
+\draw[step=2cm,red, thick] (0,0) grid (4,4);
+
+\foreach \i in {0, ..., 3}
+{
+	\foreach \j in {0, ..., 3}
+	{
+		\node[circle,fill=blue,draw=black,radius=2pt](fine\i \j) at ($+\i*(1,0)+\j*(0,1)+(.5,.5)$){};
+	}
+}
+
+\foreach \i in {0, ..., 2}
+{
+	\foreach \j in {0, ..., 2}
+	{
+		\node[circle,fill=yellow,draw=black,radius=4pt](mani\i \j) at ($\i*(1,0)+\j*(0,1)+(1,1)$){};								
+	}
+}
+
+\foreach \i in {0,2, ..., 2}
+{
+	\foreach \j in {0,2, ..., 2}
+	{
+		\node[circle,fill=red,draw=black,radius=4pt](coarse\i \j) at ($\i*(1,0)+\j*(0,1)+(1,1)$){};								
+	}
+}
+
+%draw non-manifold value
+\draw[->,thick](fine10)--(mani10);
+\draw[->,thick](fine11)--(mani10);
+\draw[->,thick](fine20)--(mani10);
+\draw[->,thick](fine21)--(mani10);
+
+%add annotations
+\draw[draw=none](-.9,-.65) rectangle (4.9,4.65);
+\end{tikzpicture}
+
+\end{document}
