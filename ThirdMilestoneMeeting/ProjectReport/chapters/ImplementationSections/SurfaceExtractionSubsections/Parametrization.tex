@@ -33,6 +33,11 @@ Therefore, in our algorithm we are reconstructing the surface on two different s
 \caption{Coarsening scheme applied for \emph{Two-scale \acl{DC}}.}
 \label{fig:coarsen}
 \end{figure}
+One iteration of this coarsening scheme is referred to as one \emph{coarsening step}, applying this scheme recursively allows higher coarsening and results in multiple coarsening steps.
+
+
+
+
 In the following we apply \ac{DC} to both datasets and obtain two different reconstructed surfaces.
 The coarse scale surface is used as a patch distribution; from the fine scale we obtain our datapoints to which the \ac{NURBS} will be fitted to. We call this approach \emph{Two-scale \acl{DC}} (see \autoref{fig:TwoScale}).
 Of course this simple approach comes with drawbacks:

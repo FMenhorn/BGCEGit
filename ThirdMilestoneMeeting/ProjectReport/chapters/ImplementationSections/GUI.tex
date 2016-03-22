@@ -8,12 +8,13 @@ All necessary input parameters for the topology optimization can be entered thro
 \item Force Scaling - parameter for the force scaling (see \autoref{sec: CADToVoxels}).
 \item Resolution - parameter for calculating the voxel size for the voxelization. Voxel size is then equal to $2^{-(Resolution - 1)}$. Hence, by increasing the resolution user reduces the length of the edge of a voxel by half.
 \item Volume Fraction Limit - the fraction of the volume to be kept after the topology optimization process by ToPy (see sec. \ref{sec:ToPy}).
+
 \end{itemize}
 \todo{Do we subtract one from it now or not???}
 All necessary input parameters for the surface fitting (see \autoref{sec:LSQfitting}) can be entered through the input fields:
 \begin{itemize}
 \item Smoothing - parameter for the fairness functional (see \autoref{sec:NURBS})
-\item Coarsening - the number of coarsening steps in Dual Contouring (see \todourgent{add ref to corresponding section!}).
+\item Coarsening - the number of coarsening steps in Dual Contouring(see \autoref{ssec:parametrization}).
 \end{itemize}
 
 After all parameters are specified, the pipeline can  be executed without any interaction with the user. After the process has finished, there is an option to lunch FreeCAD directly from the GUI  and view the results.
