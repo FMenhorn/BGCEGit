@@ -10,11 +10,17 @@ To give a measure for this, one can for example use the bending energy of a thin
 E_{patch}\left[\vec{S}\right] = 
 \int\limits_0^1 \int\limits_0^1
 \left(
-(\frac{\partial^2}{\partial u^2 }\vec{S}(u,v))^2
+\left(
+\frac{\partial^2}{\partial u^2 }\vec{S}(u,v)
+\right)^2
 + 2 
-(\frac{\partial^2}{\partial u\partial v} \vec{S}(u,v))^2
+\left(
+\frac{\partial^2}{\partial u\partial v} \vec{S}(u,v)
+\right)^2
 +
-(\frac{\partial^2}{\ v^2}\vec{S}(u,v))^2
+\left(
+\frac{\partial^2}{\partial v^2}\vec{S}(u,v)
+\right)^2
 \right)
 \text{d}u\text{d}v
 \end{equation}
@@ -80,5 +86,7 @@ Since surfaces with low curvatures and therefore softer curves are typically con
 \label{eq:fairness-sum}
 E_{fair} = \sum\limits_{\text{all quads}}E_{fair,quad}
 \end{equation}
+
+\todointernal[author=Benni,inline]{looks strange, if paragraph ends with formulas. Probably some text is still missing here?}
 
 

@@ -1,26 +1,25 @@
 \section{Least-Squares Fitting of Parametrized Surfaces}
 \label{sec:LSQfitting}
-\todourgent[author=Benni]{{@}Erik fairness functional here?}
-In order to make a surface adhere as closely as possible to our desired form, some fitting is usually required. This typically involves varying some parameters in order to minimize some error. As minimizing the error squared of a function -- for example distance between a calculated point and its desired location -- is an important building block in many practical applications, extensive literature can be found regarding this, especially when the function depends linearly on its input (ex. (\cite{becker2011advanced})). The field that treats this topic is called \emph{linear least-squares fitting}, and in this section, some selected subtopics relevant to the fitting of \acs{NURBS} is treated.
+In order to make a surface adhere as closely as possible to our desired form, some fitting is usually required. This typically involves varying some parameters in order to minimize some error. As minimizing the error squared of a function -- for example distance between a calculated point and its desired location -- is an important building block in many practical applications, extensive literature can be found regarding this, especially when the function depends linearly on its input (ex. \cite{becker2011advanced}). The field that treats this topic is called \emph{linear least-squares fitting}, and in this section, some selected subtopics relevant to the fitting of \acs{NURBS} are treated.
 
 %\begin{itemize}
 %\item Possibly that this can used to fit the location of these "patch points" to a set of datapoints by minimusing a least-squares error 
 %\end{itemize}
 
 \subsection{Fitting Problem}
-In order to represent a given line or surface by Bezier curves or surfaces respectively, just as with NURBS, one has to solve a fitting problem (\cite{becker2011advanced}). The goal of it is to fit in a parametric curve to the set of given data points. In the case of interest, the given set of points is a mesh, obtained from surface contouring.
+In order to represent a given line or surface by Bezier curves or surfaces respectively, just as with NURBS, one has to solve a fitting problem (see \cite{becker2011advanced}). The goal of this is to fit in a parametric curve to the set of given data points. In the case of interest, the given set of points is a mesh, obtained from surface contouring.
 
 \subsubsection{Fitting Problem: Parametric Surfaces}
-In order to fit a \Bez surface to a set of datapoints with fixed locations and parameters on this surface, we can use an approach similar to the approach above. The base of the approach is making use of the way a point with specific parameters is mapped by either the Bernstein polynomials (\Bez curves) or the B--spline basis functions (NURBS) to a linear combination on the control points. That is, from the parameters $(u,v)$ of each data point on the surface, we get a set of coefficients on the control points that define the surface. Expressing this as a sum, we have for the point $\lsDataPointi{k}$ with the parameters $(u_k,v_k)$ on the surface defined by the $N \times M$ control points $\lsControlPointi{i,j}$:
+In order to fit a \Bez surface to a set of datapoints with fixed locations and parameters on this surface, we can use an approach similar to the approach above\todointernal{which approach?}. The base of the approach is making use of the way a point with specific parameters is mapped by either the Bernstein polynomials (\Bez curves) or the B--spline basis functions (NURBS) to a linear combination on the control points. That is, from the parameters $(u,v)$ of each data point on the surface, we get a set of coefficients on the control points that define the surface. Expressing this as a sum, we have for the point $\lsDataPointi{k}$ with the parameters $(u_k,v_k)$ on the surface defined by the $N \times M$ control points $\lsControlPointi{i,j}$:
 \begin{equation}
 \lsDataPointi{k} = \sum\limits_{i,j=1}^{N,M} \lsControlPointCoefi{i,j}(u_k,v_k) \lsControlPointi{i,j}
 \end{equation} 
-where $\lsControlPointCoefi{i,j}(u,v)$ are the coefficients calculated on control point $\lsControlPointi{i,j}$ from the parameters $(u,v)$. Reindexing, realizing that the matrix indexing $i,j$ can be flattened to a vector index $p = 1,2,...,S=N\times M$ mapping to $i$ and $j$, we can express this as:
+where $\lsControlPointCoefi{i,j}(u,v)$ are the coefficients calculated on control point $\lsControlPointi{i,j}$ from the parameters $(u,v)$. Reindexing, realizing that the matrix indexing $i,j$ can be flattened to a vector index $p = 1,2,...,S$, where $S=N\times M$, mapping to $i$ and $j$, we can express this as:
 \begin{equation}
 \lsDataPointi{k} = \sum\limits_{p=1}^{S} \lsControlPointCoefi{p}(u_k,v_k) \lsControlPointi{p} \equiv \vec{\lsControlPointCoef}(u_k,v_k)\lsControlPointMatrix
 \label{eqn:lsmatrix1}
 \end{equation} 
-where in the last equality, we've expressed the control points as a vector-matrix product, where the $S\times 3$ matrix $P$ has the $p^\text{th}$ row as the position of the $p^\text{th}$ control points as a 3D row-vector, and $\vec{\lsControlPointCoef}(u_k,v_k)$ is the row vector whose entries are the coefficients $\lsControlPointCoefi{p}(u_k,v_k)$ on the control points. Now, again realizing that for $Q$ datapoints $\lsDataPointi{k}$ we can view them as the columns in a $Q\times 3$ matrix $\lsDataPointMatrix$, and create an analogous matrix $\lsControlPointCoefMatrix(\vec{u},\vec{v})$ with the $k^\text{th}$ containing the coefficients calculated from the parameters $(u_k,v_k)$ of datapoint $\lsDataPointi{k}$, resulting in the matrix equation:
+where in the last equality, we have expressed the control points as a vector-matrix product, where the $S\times 3$ matrix $P$ has the $p^\text{th}$ row as the position of the $p^\text{th}$ control points as a 3D row-vector, and $\vec{\lsControlPointCoef}(u_k,v_k)$ is the row vector whose entries are the coefficients $\lsControlPointCoefi{p}(u_k,v_k)$ on the control points. Now, again realizing that for $Q$ datapoints $\lsDataPointi{k}$ we can view them as the columns in a $Q\times 3$ matrix $\lsDataPointMatrix$, and create an analogous matrix $\lsControlPointCoefMatrix(\vec{u},\vec{v})$ with the $k^\text{th}$ containing the coefficients calculated from the parameters $(u_k,v_k)$ of datapoint $\lsDataPointi{k}$, resulting in the matrix equation:
 
 \begin{equation}
 \lsDataPointMatrix = \lsControlPointCoefMatrix(\vec{u},\vec{v})\lsControlPointMatrix
@@ -40,10 +39,11 @@ This again is a central problem in computing, and can be solved by many standard
 
 \subsubsection{Fitting Problem: Fairness}
 As discussed in \autoref{subsec:fairnessthry}, it can also be important to have surface patches that are not only continous and smooth, but also have a low curvature. Fortunately, this is relatively simple to incorporate in the above Least-Squares formulation. Starting from the end result of \autoref{eq:fairnessnorm}, we see that the minimisation of the fairness functional can already be expressed as the minimisation of a squared norm of a matrix-vector product. In order to combine this with the fitting to a surface, we begin by writing it in the form of \autoref{eqn:lsminim}. To do that we simply replace $\lsDataPointMatrix$ with a 3-dimensional $0$-vector (thus a 3-column $0$-matrix), as we want to get the matrix-vector product as close to $0$ as possible, and minimize
+\todointernal[inline]{are the following two formulas really equal or is the minimization of both equivalent? The square for the second expression looks strange...}
 \begin{align*}
 \phantom{=}& \norm{0 - \Lambda^{\frac{1}{2}} S \lsControlPointMatrix} =
 \\
-=& \norm{0 - \lsControlPointCoefMatrix^{fair}\lsControlPointMatrix}^2
+=& \norm{0 - \lsControlPointCoefMatrix^{fair}\lsControlPointMatrix}^2,
 \end{align*}
 where $\lsControlPointCoefMatrix^{fair} = \Lambda^{\frac{1}{2}} S$ has the same number of columns as $\lsControlPointCoefMatrix(\vec{u},\vec{v})$ in \autoref{eqn:lsminim}. %The last fact allows us to minimize
 To minimize both equations simultaneously, we notice that both terms are positive, and we can add them together, giving a weight $\lambda \geq 0$ to the fairness term:
