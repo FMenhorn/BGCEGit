@@ -32,8 +32,8 @@ Since we want to deduce a first estimate for the topology of the \ac{NURBS} surf
 Our procedure has the following steps:
 \begin{enumerate}
 \item Find all non-manifold edges which are connected to more than two \acp{quad}.
-\item All non-manifold edges are split into two manifold edges with only two \acp{quad} connected to them.
-\item The members of each pair of manifold edges are moved into opposite directions. 
+\item All non-manifold edges are split into two manifold edges with only two \acp{quad} connected to each one of them.
+\item The member vertices of each pair of manifold edges are moved into opposite directions. 
 \end{enumerate}
 We illustrate the procedure of remeshing for a 2D example in \autoref{fig:manifoldResolution2D}. 
 In 3D we do not have non-manifold vertices, but edges, which have to be split and moved. Please note that for the 3D case additional patterns occur. In 3D not only the \acp{quad} which are connected to the whole non-manifold edge have to be considered, but also the \acp{quad} connected to only one vertex of the edge. This also implies the introduction of new \acp{quad} at other locations. For an overview over some of the possible patterns in 3D see \autoref{fig:manifoldPatterns3D}.
