@@ -6,4 +6,6 @@ all:
 	rm Makefile_GUI
 	cd CPP/Code/ && make --file Makefile release && make --file Makefile clean
 
-	
+clean:
+	rm -f CADO
+	cd CPP/Code/ && make --file Makefile clean
