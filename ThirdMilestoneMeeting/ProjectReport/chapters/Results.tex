@@ -37,7 +37,7 @@ First this scenario is modelled in CAD (see \autoref{fig:cantiCAD}). After the o
 
 \subsection{Bridge}
 \label{ssec:bridge}
-The second test scenario resembles a bridge, that is modelled through a volume resting on two supports and a plane - the intended driving plane - in the middle of the volume subjected to an area force (see \autoref{fig:bridgeBC}).
+The second test scenario resembles a bridge, that is modelled through a volume resting on two supports and a plane - the intended driving plane - in the middle of the volume subjected to an area force. The two fixtures are intentionally placed at non-symmetric positions ($a\neq b$, see \autoref{fig:bridgeBC}).
 \begin{figure}[H]
 \begin{center}
 \includegraphics[scale=1]{Pictures/tikzBridge/bridge.pdf}
@@ -45,7 +45,7 @@ The second test scenario resembles a bridge, that is modelled through a volume r
 \caption{Boundary conditions for the test case "Bridge".}
 \label{fig:bridgeBC}
 \end{figure}
-After modelling the bridge in CAD (see \autoref{fig:bridgeCAD}) and running the optimization algorithm, a structure is obtained, that resembles a bridge (see \autoref{fig:bridgeOPTIM}). The optimized structure is represented by $868$ NURBS patches and has a volume fraction of approximately $15\%$ of the initial volume.
+After modelling the bridge in CAD (see \autoref{fig:bridgeCAD}) and running the optimization algorithm, a structure is obtained, that resembles a bridge (see \autoref{fig:bridgeOPTIM}). The optimized structure is represented by $868$ NURBS patches and has a volume fraction of approximately $15\%$ of the initial volume.\enlargethispage{1cm}
 \begin{figure}[H]
 \begin{subfigure}[t]{.45\textwidth}
 \begin{center}
@@ -74,7 +74,7 @@ On the contrary to the previous two tests, the final test case resembles a real 
 \caption{Boundary conditions and different load cases for test case "GE Bracket". Figure from \cite{GEBracket}.}
 \label{fig:GEbracketBC}
 \end{figure}
-In the following an already optimized design from \cite{GEBracketTripon} was chosen, since the scale of the scenario was to big to be handled by ToPy. Therefore, the task for the last test case was only the reconstruction of the given geometry, in order to investigate the performance of the algorithm for real world applications. While the original design is described by $226$ faces, the reconstructed version took $3202$ NURBS patches. Additionally some topological features are lost in the region close to "Interface 1".
+In the following an already optimized design from \cite{GEBracketTripon} was chosen, since the scale of the scenario was to big to be handled by ToPy. Therefore, the task for the last test case was only the reconstruction of the given geometry, in order to investigate the performance of the algorithm for real world applications. While the original design is described by $226$ faces, the reconstructed version took $3202$ NURBS patches. Additionally some topological features are lost in the region close to "Interface 1"(see \autoref{fig:GEbracketBC}).
 \enlargethispage{2cm}
 \begin{figure}[H]
 \begin{subfigure}[t]{.45\textwidth}
