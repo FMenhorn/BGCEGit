@@ -80,12 +80,12 @@
 	\label{ToPy:sec1}
 	In order to install ToPy, make sure that the following software is installed on your computer:
 	\begin{itemize}
-	\item Python (version $>$ 2.7)
+	\item Python (version 2.7)
 	\item NumPy (Usually provided by Python distribution)
 	\item PyVTK tool (\href{https://pypi.python.org/pypi/PyVTK}{https://pypi.python.org/pypi/PyVTK}) 
-	\item Pysparse library(\href{http://pysparse.sourceforge.net/}{http://pysparse.sourceforge.net/})
+	\item Pysparse library (\href{http://pysparse.sourceforge.net/}{http://pysparse.sourceforge.net/})
 	\end{itemize}
-	Here are some recommendation for the installation of the above mentioned tools/libraries.
+	Here are some recommendations for the installation of the tools/libraries mentioned above.
 	
 	To install PyVTK tool, please run the following commands in your terminal:
 \begin{lstlisting}[language=bash]
@@ -95,20 +95,23 @@ sudo pip install pyvtk
 	%\end{flushleft}
 	
 	
-	The installation of the Pysparse library is a little bit more cumbersome, since the pip-installation (like in the previous case) fails most of the times. So, here we provide an alternative way of installing Pysparse from the \textit{.git} repository.
+	The installation of the Pysparse library is a bit more cumbersome, since the pip-installation (like in the previous case) fails most of the times. So, here we provide an alternative way of installing Pysparse from the \textit{.git} repository.
 	
-	To install Pysparse, make sure that \textit{git} (\href{https://git-scm.com/}{url}) is installed on your computer and then run the following commands in your terminal:
+	To install Pysparse (assuming the pip installation fails), make sure that \textit{git} (\href{https://git-scm.com/}) is installed on your computer and then run the following commands in your terminal:
 \begin{lstlisting}[language=bash]
-git clone git:://pysparse.git.sourceforge.net/gitroot/pysparse/pysparse/
+git clone git://pysparse.git.sourceforge.net/gitroot/pysparse/pysparse/
 \item cd pysparse
 \item sudo python setup.py install	
 \end{lstlisting}	
 	
-	Furthermore, for CADO it is necessary to have an output in the \textit{ascii} format. By default the output \textit{.vtk} files from ToPy are binary, so we need to change them to \textit{ascii}. In order to do that, please perform the following actions:
+	\section{Install ToPy}
+	If all the tools specified in the section \ref{ToPy:sec1} are installed, we can now proceed to the installation of ToPy itself. For that download ToPy from \href{https://github.com/williamhunter/topy}{https://github.com/williamhunter/topy}. 
+
+For CADO it is necessary to have an output in the \textit{ascii} format. By default the output \textit{.vtk} files from ToPy are binary, so we need to change them to \textit{ascii}. In order to do that, please perform the following actions:
 	\begin{itemize}
  		\item Open the ToPy source file \texttt{core/visualization.py}
- 		\item Go to the method \texttt{{\_}write{\_}legace{\_}vtu(x, fname)} (line 160)
- 		\item Change in line 194 \texttt{binary} to \texttt{ascii} (see pic. \ref{fig:ToPy_CodeChange})
+ 		\item Go to the method \texttt{{\_}write{\_}legacy{\_}vtu(x, fname)} (line 160)
+ 		\item Change \texttt{binary} to \texttt{ascii} in line 194 (see pic. \ref{fig:ToPy_CodeChange})
 	\end{itemize} 
 	\begin{figure}
 	\centering
@@ -116,10 +119,9 @@ git clone git:://pysparse.git.sourceforge.net/gitroot/pysparse/pysparse/
 	\caption{Changing of the output type of ToPy to ascii}
 	\label{fig:ToPy_CodeChange}
 	\end{figure}
-	
 
-	\section{Install ToPy}
-	If all the tools specified in the section \ref{ToPy:sec1} are installed, we can now proceed to the installation of ToPy itself. For that download ToPy from \href{https://github.com/williamhunter/topy}{https://github.com/williamhunter/topy} and run the following command from the root directory of ToPy:
+After making the following edit, run the following command from the root directory of ToPy:
+
 \begin{lstlisting}[language=bash]
 sudo python setup.py install
 \end{lstlisting}	
@@ -146,7 +148,7 @@ The output should look as showed on a picture \ref{fig:ToPy_test}.
 
 \chapter{OpenCascade}
 \label{OpenCascade}
-OpenCascade (\href{http://www.opencascade.com/}{http://www.opencascade.com/}) is a open source CAD kernel widely used in the engineering and design for geometry modeling.
+OpenCascade (\href{http://www.opencascade.com/}{http://www.opencascade.com/}) is an open-source CAD kernel. It is widely used in engineering and design for geometry construction and editing.
 \section{Install OpenCascade}
 For technical reasons, we do not use OpenCascade from the official webpage, but from the \textit{.git} repository. 
 \begin{figure}
@@ -161,7 +163,7 @@ For technical reasons, we do not use OpenCascade from the official webpage, but 
 \caption{OpenCascade installation: cmake}
 \label{fig:OC_cmake}
 \end{figure}
-To install OpenCascade this way, make sure that textit{git} (\href{https://git-scm.com/}{url}) is installed on your computer and then run the following commands in your terminal:
+To install OpenCascade this way, make sure that \textit{git} (\href{https://git-scm.com/}) is installed on your computer and then run the following commands in your terminal:
 \begin{itemize}
 \item \begin{lstlisting}[language=bash]
 git clone git://github.com/tpaviot/oce.git
@@ -193,7 +195,7 @@ Sample output: see Pic. \ref{fig:OC_install}
 \caption{OpenCascade installation}
 \label{fig:OC_install}
 \end{figure}
-	In the make step, one can use the \texttt{-jx} parameter, where $x$ is the number of processors, to build in parallel. That allows to speed up the installation process These steps are in accord with the installation guide on the git page itself. One can also use the CMake-GUI (see Pic. \ref{fig:CMake_GUI}) to change some of the build configuration if need be (e.g. include OpenMP support).
+	In the \texttt{make} step, one can use the \texttt{-jx} parameter, where \texttt{x} is the number of processors, to build in parallel. This allows to speed up the installation process These steps are in accord with the installation guide on the git page itself. One can also use the CMake-GUI (see Pic. \ref{fig:CMake_GUI}) to change some of the build configuration if need be (e.g. include OpenMP support).
 	
 \begin{figure}
 \centering

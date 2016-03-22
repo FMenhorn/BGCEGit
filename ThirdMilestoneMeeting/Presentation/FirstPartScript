@@ -64,7 +64,7 @@ Slide 13: (Introducing CADO)
 
 Slide 14a: (Features: Effective and Easy)
 
-	- CADO reconstructs a full 3D geometry from the results of topology optimization
+	- CADO reconstructs a full 3D parametric representation from the results of topology optimization
 	- The output it provides is in standard engineering and design geometry format, which can directly be sent for production, or can be further worked on by designers on their favourite CAD editors.
 	- Furthermore, in terms of technical details of FEM and geometry representations, it works like a black box.
 
