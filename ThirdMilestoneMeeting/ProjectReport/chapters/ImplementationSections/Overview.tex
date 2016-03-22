@@ -1,6 +1,7 @@
 \section{CADO: Computer Aided Design Optimization Tool}
-\todourgent[inline,author=Benni]{How did we put together the different parts? Here mainly first part of presentation: workflow, overview, user experience}
-The absolute pipeline is illustrated in \autoref{fig:pipeline}
+CADO is the tool of choice to realize a one click CAD-to-Topology-Optimization-back-to-CAD experience. With CADO, the user only has to select the input file on which to apply the topology optimization and set the parameters which for example define the resolution or refinement level. By executing the \texttt{Run} command the tool starts the pipeline illustrated in \autoref{fig:pipeline}: 
+
+From the given geometry (a) we start off by voxelizing (b). Next, topology optimization is applied (c) and the control points are computed (d). After computing the surface (e), finally, the boolean operation is executed and the final geometry is received (f). All of this happens in the background. To get a better insight into the implementation, in the next sections we explain the different steps in more detail.
 \begin{figure}[ht]
 \begin{center}
 		\begin{tikzpicture}[remember picture,auto,
@@ -49,13 +50,17 @@ The absolute pipeline is illustrated in \autoref{fig:pipeline}
         \path[thick, ->] (N2) edge [bend left] (N3) node[yshift=1cm, xshift = 0.1cm]{(b)};
         \node [below =of N3,inner sep=0pt] [xshift=0cm,yshift=-0cm, inner sep=0pt](N4)
                 {\includegraphics[scale=0.1]{Pictures/CADO_Overview/Back2CAD4.png}};
-        \path[thick, ->] (N3) edge [bend left] (N4) node[yshift=0cm, xshift = 2.7cm]{(c)};
+        \coordinate (N31) at (-0.7,-1);
+        \coordinate (N32) at ($(N3)+(N31)$);
+        \coordinate (N41) at (-0.7,1);
+        \coordinate (N42) at ($(N4)+(N41)$);
+        \draw[thick, ->] (N32) -- (N42) node[yshift=2.8cm, xshift = 3.4cm]{(c)};
         \node [right =of N5,inner sep=0pt] [xshift=-0.7cm,yshift=-3cm, inner sep=0pt](N6)
                 {\includegraphics[scale=0.1]{Pictures/CADO_Overview/Back2CAD5.png}};
         \path[thick, ->] (N4) edge [bend left] (N6) node[yshift=0cm, xshift = 2.7cm]{(d)};
         \path[thick, ->] (N6) edge [bend left] (N5) node[yshift=-1cm, xshift = 0.1cm]{(e)} node[yshift=3cm, xshift = -8.7cm]{(f)};
         \end{tikzpicture}
-        \caption{The workflow of CADO. From the given geometry (a) we start off by voxelizing (b). Next, topology optimization is applied (c) and the control points are computed (d). After computing the surface (e), finally, the boolean operation is executed and the final geometry is received (f).}
+        \caption{The workflow of CADO}
         \label{fig:pipeline}
 	\end{center}
 \end{figure}
