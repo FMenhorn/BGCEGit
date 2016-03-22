@@ -51,7 +51,7 @@ def extraction_algorithm(fine_data, resolutions, dimensions):
     # do projection of fine verts on coarse quads
     param = create_parameters(verts, quads)
 
-    export_results.export_as_csv(param,'param')
+    #export_results.export_as_csv(param,'./PYTHON/NURBSReconstruction/DualContouring/plotting/param')
 
     print "### Projecting Datapoints onto coarse quads DONE ###"
 

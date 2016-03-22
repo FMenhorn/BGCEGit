@@ -42,11 +42,11 @@ def fit_NURBS(As, B1s, B2s, Cs, regularPoints, vertices, quads, fine_vertices, p
     print "Solving least-squares problem..."
     vertices = solve_least_squares_problem(joined_coefs, joined_verts)
     print "Done."
-    print "Writing files..."
-    write_matrix_to_csv(vertices,'vertices.csv')
-    write_matrix_to_asc(vertices,'vertices.asc')
-    write_matrix_to_asc(fine_vertices,'vertices_fine.asc')
-    print "Done."
+    #print "Writing files..."
+    #write_matrix_to_csv(vertices,'vertices.csv')
+    #write_matrix_to_asc(vertices,'vertices.asc')
+    #write_matrix_to_asc(fine_vertices,'vertices_fine.asc')
+    #print "Done."
     print "Calculating NURBS control points..."
 
     NURBSMatrix, NURBSIndices = createNURBSMatricesAllraised(quads,As,B1s,B2s,Cs,regularPoints,vertices)
