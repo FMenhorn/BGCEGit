@@ -143,8 +143,7 @@ python optimize.py <example.tpd-file>
 \end{lstlisting}	
 	\end{itemize}
 	
-The output should look as showed on a picture \ref{fig:ToPy_test}.
-
+The output should look as showed in picture \ref{fig:ToPy_test}.
 
 \chapter{OpenCascade}
 \label{OpenCascade}
@@ -163,7 +162,7 @@ For technical reasons, we do not use OpenCascade from the official webpage, but 
 \caption{OpenCascade installation: cmake}
 \label{fig:OC_cmake}
 \end{figure}
-To install OpenCascade this way, make sure that \textit{git} (\href{https://git-scm.com/}) is installed on your computer and then run the following commands in your terminal:
+To install OpenCascade this way, make sure that git (\href{https://git-scm.com/}{https://git-scm.com/}) is installed on your computer and then run the following commands in your terminal:
 \begin{itemize}
 \item \begin{lstlisting}[language=bash]
 git clone git://github.com/tpaviot/oce.git
@@ -195,7 +194,7 @@ Sample output: see Pic. \ref{fig:OC_install}
 \caption{OpenCascade installation}
 \label{fig:OC_install}
 \end{figure}
-	In the \texttt{make} step, one can use the \texttt{-jx} parameter, where \texttt{x} is the number of processors, to build in parallel. This allows to speed up the installation process These steps are in accord with the installation guide on the git page itself. One can also use the CMake-GUI (see Pic. \ref{fig:CMake_GUI}) to change some of the build configuration if need be (e.g. include OpenMP support).
+	In the \texttt{make} step, one can use the \texttt{-jx} parameter, where \texttt{x} is the number of processors, to build in parallel. This allows to speed up the installation process. These steps are in accord with the installation guide on the Github page of OpenCascade itself. One can also use the CMake-GUI (see Pic. \ref{fig:CMake_GUI}) to change some of the build configuration if need be (e.g. include OpenMP support).
 	
 \begin{figure}
 \centering
@@ -242,19 +241,18 @@ In order to install CADO the following tools should be installed on your compute
 	\item OpenCascade (see Sec. \ref{OpenCascade})
 	\item QtCreator (see Sec. \ref{Qt})
 	\item FreeCAD
-	\item CPPUNIT (\href{http://cppunit.sourceforge.net/doc/cvs/cppunit_cookbook.html}{http://cppunit.sourceforge.net/doc/cvs/cppunit\_cookbook.html})
+	%\item CPPUNIT (\href{http://cppunit.sourceforge.net/doc/cvs/cppunit_cookbook.html}{http://cppunit.sourceforge.net/doc/cvs/cppunit\_cookbook.html})
 	\end{itemize}
-In order to install CPPUnit run the following command from you terminal:
+%In order to install CPPUnit run the following command from you terminal:
+%\begin{lstlisting}[language=bash]
+%sudo apt-get install lib-cppunitdev
+%\end{lstlisting}
+%CADO doesn't require special installation. Download the source code by running:
+%\begin{lstlisting}[language=bash]
+%git clone https://github.com/FMenhorn/BGCEGit.git
+%\end{lstlisting}	
+After having installed all the prerequisites, CADO is ready to install. To do that, perform the following command from the repository main folder:
 \begin{lstlisting}[language=bash]
-sudo apt-get install lib-cppunitdev
-\end{lstlisting}
-CADO doesn't require special installation. Download the source code by running:
-\begin{lstlisting}[language=bash]
-git clone https://github.com/FMenhorn/BGCEGit.git
-\end{lstlisting}	
-After that perform the following commands from the repository main folder:
-\begin{lstlisting}[language=bash]
-cd CADO
 make
 \end{lstlisting}	
 After the installation process has completed run the program from the command line:
