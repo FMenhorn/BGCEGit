@@ -60,8 +60,19 @@ BCOR5mm, % Binding correction
 %\author[2]{Yurova, Anna}
 %\vfill{2cm}
 
-\author{Joshi, Saumitra; Medina, Juan Carlos; \\ Menhorn, Friedrich; Reiz, Severin;\\ R{\"u}th, Benjamin;  Wannerberg, Erik; Yurova, Anna}% The article author(s) - author affiliations need to be specified in the AUTHOR AFFILIATIONS block
-
+%\author{Joshi, Saumitra; Medina, Juan Carlos; \\ Menhorn, Friedrich; Reiz, Severin;\\ R{\"u}th, Benjamin;  Wannerberg, Erik; Yurova, Anna}% The article author(s) - author affiliations need to be specified in the AUTHOR AFFILIATIONS block
+%\author{
+%\spacedlowsmallcaps{Saumitra Joshi, Juan Carlos Medina,} \\
+%\spacedlowsmallcaps{Friedrich Menhorn, Severin Reiz,} \\
+%\spacedlowsmallcaps{Benjamin R{\"u}th, Erik Wannerberg,} \\
+%\spacedlowsmallcaps{Anna Yurova}
+%}
+%\author{
+%{Saumitra Joshi, Juan Carlos Medina,} \\
+%{Friedrich Menhorn, Severin Reiz,} \\
+%{Benjamin R{\"u}th, Erik Wannerberg,} \\
+%{Anna Yurova}
+%}
 %----------------------------------------------------------------------------------------
 
 \begin{document}
@@ -88,11 +99,13 @@ BCOR5mm, % Binding correction
 %----------------------------------------------------------------------------------------
 %	TABLE OF  CONTENTS & LISTS OF FIGURES AND TABLES
 %----------------------------------------------------------------------------------------
-
+\date{}
 \maketitle % Print the title/author/date block
+\thispagestyle{empty}
 
 \setcounter{tocdepth}{2} % Set the depth of the table of contents to show sections and subsections only
 \newpage
+\setcounter{page}{1}
 \tableofcontents % Print the table of contents
 
 
@@ -101,11 +114,17 @@ BCOR5mm, % Binding correction
 %	ABSTRACT
 %----------------------------------------------------------------------------------------
 
-\section*{Abstract} % This section will not appear in the table of contents due to the star (\section*)
-This document provides general information about using the CADO software. CADO is a fully CAD-integrated topology optimization tool.
-
-
-
+\section*{About} % This section will not appear in the table of contents due to the star (\section*)
+This document provides general information about using the CADO software. CADO is a fully CAD-integrated topology optimization tool under the open source BSD license. It resulted from a project as part of the Bavarian Graduate School of Engineering at TU München and was developed by Saumitra Joshi, Juan Carlos Medina, Friedrich Menhorn, Severin Reiz, Benjamin R{\"u}th, Erik Wannerberg and Anna Yurova in 2015-2016.
+%\begin{itemize}
+%\item Saumitra Joshi
+%\item Juan Carlos Medina
+%\item Friedrich Menhorn
+%\item Severin Reiz
+%\item Benjamin R{\"u}th
+%\item Erik Wannerberg
+%\item Anna Yurova
+%\end{itemize}
 
 %----------------------------------------------------------------------------------------
 
@@ -128,7 +147,7 @@ Please make sure that the following software is installed on your computer in or
 \begin{itemize}
 \item ToPy
 \item OpenCascade
-\item CPPUnit
+%\item CPPUnit
 \item FreeCAD
 \item Qt (version > 5.4.2)
 \item QtCreator (version > 3.4) 
@@ -137,14 +156,22 @@ Please make sure that the following software is installed on your computer in or
 
 
 For the detailed installation instructions, please refer to:
-\begin{lstlisting}[language = {Promela}]
-CADO_InstallationGuide.pdf
-\end{lstlisting}
+\begin{itemize}
+\item[] \textit{CADO{\_}InstallationGuide.pdf}
+\end{itemize}
+%\begin{lstlisting}[language = {Promela}]
+%CADO_InstallationGuide.pdf
+%\end{lstlisting}
 
-Once all necessary software is installed CADO can be ran from the command line as follows:
-\begin{lstlisting}[ numbers = left,language = {Promela}]
-./CADO
-\end{lstlisting}
+Once all necessary software is installed CADO can be run from the terminal by issuing:
+\begin{itemize}
+%\begin{large}
+\item[] \textsf{\textbf{$>$ ./}CADO}
+%\end{large}
+\end{itemize}
+%\begin{lstlisting}[language = {bash}]
+%	./CADO
+%\end{lstlisting}
 
 Once CADO is running, the main window appears on the screen (see fig. \ref{fig:mainWindow}).
 
@@ -175,27 +202,36 @@ After that, the path to the chosen file should appear near the \textbf{Select ST
 \end{figure} 
 
 Note that the same directory must also contain an \textit{.iges} file with the information about colors with an identical name:
-\begin{lstlisting}[language = {Promela}]
-<StepFileName>.iges
-\end{lstlisting}
+\begin{itemize}
+\item[] \textit{$<$StepFileName$>$.step}
+\end{itemize}
+%\begin{lstlisting}[language = {Promela}]
+%<StepFileName>.iges
+%\end{lstlisting}
 
 \subsubsection{Nonchanging domain}
 In case some domains need to be kept unchanged during the optimization (for example, screw threads), select the \textbf{Nonchanging domain} checkbox in the \textit{Additional Specifications} section. Make sure that your \textit{.step} file that specifies the nonchanging domains is located in the same directory as the original \textit{.step} file and named as:
-\begin{lstlisting}[language = {Promela}]
-<StepFileName>_Fixed.step
-\end{lstlisting}
+\begin{itemize}
+\item[] \textit{$<$StepFileName$>${\_}Fixed.step}
+\end{itemize}
+%\begin{lstlisting}[language = {Promela}]
+%<StepFileName>_Fixed.step
+%\end{lstlisting}
 
 \subsubsection{Optimization domain}
 You can constrain the solution to be limited to a certain domain of optimization. In order to specify this, select the \textbf{Optimization Domain} checkbox in the \textit{Additional Specifications} section. Make sure that your \textit{.step} file with the optimization domain is located in the same directory as the original \textit{.step} file and named as:
-\begin{lstlisting}[language = {Promela}]
-<StepFileName>_ToOptimize.step
-\end{lstlisting}
+\begin{itemize}
+\item[] \textit{$<$StepFileName$>${\_}ToOptimize.step}
+\end{itemize}
+%\begin{lstlisting}[language = {Promela}]
+%<StepFileName>_ToOptimize.step
+%\end{lstlisting}
 
 
 \subsection{Topology Optimization Parameters}
 In order to tune the topology optimization for your specific problem, please enter the following parameters:
 \begin{itemize}
-\item \textbf{Force Scaling} - scaling factor for the force from the input file. Scaling is performed from the range $0 - 1$ (corresponding to the color in the original input file) to the desired one.
+\item \textbf{Force Scaling} - scaling factor for the force from the input file. Scaling is performed from the range $-0.5 - 0.5$ (corresponding to the color in the original input file) to the desired one.
 \item \textbf{Resolution} - the resolution of the optimized geometry. Increase the number to increase the resolution and get a more accurate solution.
 \item \textbf{Volume Fraction Limit} - the fraction of the volume to be kept in the voxel after the topology optimization
 \end{itemize}
@@ -223,7 +259,7 @@ To specify the output file:
 \item Press \textbf{Open}.
 \end{itemize}
 
-Once the optimization process is completed (all progress bars are colored green and don't move), view your results in FreeCAD by clicking now available \textbf{Start FreeCAD} button.
+Once the optimization process is completed (all progress bars are colored green), view your results in FreeCAD by clicking \textbf{Start FreeCAD} button.
 
 \section{Example}
 
@@ -233,19 +269,22 @@ Once the optimization process is completed (all progress bars are colored green 
 \caption{CADO in progress}
 \label{fig:inProgress}
 \end{figure}
-To run a sample optimization, run CADO from the command line as described in \ref{sec:prep}. In the appeared window (see fig. \ref{fig:mainWindow}) you can see the default parameters for for the \textbf{Cantilever} test case, provided together with the source code distribution. To complete the necessary input for running the program, enter the following information:
+To run a sample optimization, run CADO from the command line as described in \ref{sec:prep}. In the appeared window (see fig. \ref{fig:mainWindow}) you can see the default parameters for the \textbf{Cantilever} test case, provided together with the source code distribution. To complete the necessary input for running the program, enter the following information:
 \begin{itemize}
 \item Choose the input file as described in sec. \ref{sec:structure} from the following folder:
-\begin{lstlisting}[language = {Promela}]
-Examples/Cantilever/
-\end{lstlisting}
+\begin{itemize}
+\item[] \textit{Examples/Cantilever/}
+\end{itemize}
+%\begin{lstlisting}[language = {Promela}]
+%Examples/Cantilever/
+%\end{lstlisting}
 \item Check the checkboxes \textbf{Nonchanging Domain} and \textbf{Optimization Domain}. The files with appropriate names are already placed in the folder.
 \item Specify the output file following the instructions from the sec. \ref{sec:structure}.
 \end{itemize}
 
 To run the optimization press the \textbf{Run} button in the bottom of the window.
 
-The progress of the Topology Optimization pipeline can be observed on the progress bars near the \textbf{Run} button (see fig. \ref{fig:inProgress}). Each round-shaped progress bar corresponds to one of the three main steps of the pipeline. While one of the steps is running, corresponding progress bar is indicated yellow and moving. Once the step is finished, the progress bar is colored green (see fig. \ref{fig:progressBarsFinished}).
+The progress of the Topology Optimization pipeline can be observed on the progress bars near the \textbf{Run} button (see fig. \ref{fig:inProgress}). Each round-shaped progress bar corresponds to one of the three main steps of the pipeline. While one of the steps is running, the corresponding progress bar is indicated yellow and moving. Once the step is finished, the progress bar is colored green (see fig. \ref{fig:progressBarsFinished}).
 
 \begin{figure}
 \centering
