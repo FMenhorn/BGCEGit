@@ -20,7 +20,7 @@ In the first step, the mesh is refined through two iterations of \emph{Doo-Sabin
 \end{align}
 where $\alpha$ is a smoothening parameter, controlling the sharpness of the corners and edges, which we for simplicity set to $1/2$, to get a simple midpoint.
 
-Thus, in every refinement step on an $n$--gon, $n$ vertices are created, giving 4 vertices for a quad in the original control mesh. These are then joined up with the neighbours on the quad to form a smaller quad, and with the neighbouring points from the same vertex on the neighbouring quads, forming a quad along each edge. Around a quad corner, where $n$ quads meet (or $n$ edges in the general case), we instead get an $n$--gon around the corner vertex. After two refinements, we thus get a mesh of vertices $\petersPatchPoints$ that mainly consists of quads, with possibilities of getting polygons with other number of edges around the vertices of the original mesh $\petersControlMesh$. The mesh and the resulting structure after two subdivisions can be seen in \autoref{fig:petersSubDivide}b.\todourgent[inline,author=Benni]{illustrate this with a figure with the notation that is introduced here: what is $V_x$?}\todointernal{maybe fancy peter's scheme picture, alt the one in EckHoppe for what the thingymajong looks like after 2x ref.}
+Thus, in every refinement step on an $n$--gon, $n$ vertices are created, giving 4 vertices for a quad in the original control mesh. These are then joined up with the neighbours on the quad to form a smaller quad, and with the neighbouring points from the same vertex on the neighbouring quads, forming a quad along each edge. Around a quad corner, where $n$ quads meet (or $n$ edges in the general case), we instead get an $n$--gon around the corner vertex. After two refinements, we thus get a mesh of vertices $\petersControlMeshDobRef := \petersPatchPoints$ that mainly consists of quads, with possibilities of getting polygons with other number of edges around the vertices of the original mesh $\petersControlMesh$. The mesh and the resulting structure after two subdivisions can be seen in \autoref{fig:petersSubDivide}b.\todourgent[inline,author=Benni]{illustrate this with a figure with the notation that is introduced here: what is $V_x$?}\todointernal{maybe fancy peter's scheme picture, alt the one in EckHoppe for what the thingymajong looks like after 2x ref.}
 
 \begin{figure}
 	\centering
@@ -30,7 +30,7 @@ Thus, in every refinement step on an $n$--gon, $n$ vertices are created, giving 
 \end{figure}
 
 \subsubsection{Step 2: \Bez Patch Creation}
-In this step, we create one \Bez patch for every vertex in the double refined mesh $\petersControlMeshDobRef$. 
+In this step, we create one \Bez patch for every vertex in the double refined mesh $\petersPatchPoints$. 
 
 To begin with, we can recognize that each original quad now has a $4 \times 4$ grid of vertices, where the $4$ vertices along each original quad edge match the $4$ vertices on the neighbouring quad (see \autoref{fig:petersSubDivide}b). From this, we see that most of the cells will be locally in a regular grid, in the sense that it can be seen as the center grid point in a $3\times3$ \todointernal[author=Benni]{which $3\times3$ grid? I thought its $4\times4$...Is it the red grid in Fig. 2.4.3 a)?}two-dimensional structured grid.% have $8$ local neighbours ($4$ along the edges of the double refined quads, and $4$ along the diagonals of the doubly refined quads). 
 
@@ -102,7 +102,7 @@ Here, any number of quads may be meeting.
 
 However, we can still create a \Bez patch which connects smoothly to the locally regular points. To do this, we create a bicubic \Bez patch (of polynomial order 3 one higher than around the regular points, meaning it has $4\times4$ control points) for every vertex in the corner polygon.
 We then evaluate how the surface position and normal direction depends on the \Bez control points along all edges of the patches. In order to have a smooth connection, we want these to match, and thus, we can produce constraints for the positions of the \Bez control points.
-Since the surfaces are defined at each point as linear combinations of the \Bez control points (which in turn are linear combinations of the vertices in the doubly refined mesh $\petersControlMeshDobRef$), the constraints result in an underdetermined system of linear equations for all the \Bez control points on the bicubic \Bez patches on the vertices in the doubly refined mesh $\petersControlMeshDobRef$.
+Since the surfaces are defined at each point as linear combinations of the \Bez control points (which in turn are linear combinations of the vertices in the doubly refined mesh $\petersPatchPoints$), the constraints result in an underdetermined system of linear equations for all the \Bez control points on the bicubic \Bez patches on the vertices in the doubly refined mesh $\petersPatchPoints$.
 
 As the resulting formulae for the locations of the \Bez control points are rather lengthy and complex, we refer to the original paper (ref. \cite{peters1992constructing}) for a solution which produces nice-looking, smoothly connected surfaces. Here, it is also proven that the surfaces have an overall $G^1$ connectivity. A cut-out sample can be seen in \autoref{subfig:smoothsurf}.
 \todourgent[inline]{insert points in appendix}
