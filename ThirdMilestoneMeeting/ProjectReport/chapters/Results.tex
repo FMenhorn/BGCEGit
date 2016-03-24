@@ -1,22 +1,42 @@
 \chapter{Results}
-\todointernal[author=Benni,inline]{@ Saumi: please proofread this chapter}
-Using the algorithm described above one is able to produce a NURBS representation of a structure, that has been optimized with respect to predefined boundary conditions. Examples of initial boundary conditions as well as the resulting optimized structures are presented in \autoref{sec:tests}. Additionally the described topology optimization tool enables a less complicated design workflow from the user's point of view. That workflow is described in \autoref{sec:uex}.
+\todointernal[author=Benni,inline]{@ Saumi: please proofread this chapter: DONE}
+The six stages of the workflow (see \autoref{chapter:Implementation}) are assembled into CADO, complete with GUI encapsulation. This software enables a less complicated design workflow for the user, which is described in \autoref{sec:uex}. 
+
+In order to assess CADO's performace, several test cases are carried out. These tests, with their initial and boundary conditions, as well as the resulting optimized structures are presented in \autoref{sec:tests}.
+
+\section{Product Overview}
+\todointern{Saumi: Change title and move it to the top: DONE}
+\label{sec:uex}
+CADO, the computer-aided design optimization tool, provides users with a turnkey solution for their design problem. CADO takes as input the geometry and boundary conditions on one hand, and simulation and surface fitting parameters on the other. The former input is given through CAD files, and the latter as numeric entries in the GUI. Using these parameters, CADO computes the optimal material distrubution and reconstructs a fully CAD-compliant geometry from it.
+
+In terms of user experience, CADO offers simplicity and intuitiveness. It requires no knowledge of its algorithms and implementation from the user. Provision of all parameters and files necessary for the simulation is seamlessly integrated into the GUI (see \autoref{fig:mainWindowParameters}). Once under progress, the status of the simulation can be assessed throught the progress bars, corresponding to the three major steps:
+\begin{itemize}
+\item Voxelization
+\item Topology Optimimzation
+\item Surface Fitting
+\end{itemize}
+Further information and the detailed description of the user interface can be found in the userguide (\textit{CADO\_UserGuide.pdf}).
+
 
 \section{Test Cases}
 \label{sec:tests}
-For the verification of the algorithm three tests have been conducted. In the following the underlying boundary conditions as well as the outcome of the tests are described.
+The performance of CADO is evaluated through three tests. The first case is a standard Cantilever design problem in three dimensions. The second deals with optimization of a bridge design. Finally, the third case leans more towards real-world applications, and concerns a design challenge on a jet engine bracket. Here we describe the underlying boundary conditions and the outcome of the tests.
 
 \subsection{Cantilever}
 \label{ssec:canti}
-The first test case describes a cuboidal block of material\todo{better description?}, that is fixed at one end to a wall. A force is pressing on a part of the upper section of the block at the end, that lies on the opposite side of the wall (see \autoref{fig:cantiBC}).
+
 \begin{figure}[H]
 \begin{center}
-\includegraphics[scale=1]{Pictures/tikzCantilever/canti.pdf}
+\includegraphics[scale=0.8]{Pictures/tikzCantilever/canti.pdf}
 \end{center}
 \caption{Boundary conditions for the test case "Cantilever".}
 \label{fig:cantiBC}
 \end{figure}
-First this scenario is modelled in CAD (see \autoref{fig:cantiCAD}). After the optimization a lightweight structure is obtained (see \autoref{fig:cantiOPTIM}). One observes that in comparison to the original design topological changes have been introduces. The resulting NURBS surface is represented by $2202$ single NURBS patches and has a volume fraction of approximately $28\%$ compared to the initial volume.
+
+The first test case simulates a cantilever. A cuboidal block of material\todo{better description?} is provided as the initial condition. This block is fixed at one end to a wall. The load on the cantilever is modeled as a downward force on its other end. (see \autoref{fig:cantiBC}).
+
+The cantilever is first modeled on a CAD designer (\autoref{fig:cantiCAD}). With all necessary input files and parameters, CADO produces a topology-optimized structure (\autoref{fig:cantiOPTIM}). There is a $78\%$ reduction of volume as compared to the initial configuration. The NURBS surface enclosing this volume consists of $2202$ single NURBS patches.
+
 \begin{figure}[H]
 \begin{subfigure}[t]{.45\textwidth}
 \begin{center}
@@ -37,15 +57,16 @@ First this scenario is modelled in CAD (see \autoref{fig:cantiCAD}). After the o
 
 \subsection{Bridge}
 \label{ssec:bridge}
-The second test scenario resembles a bridge, that is modelled through a volume resting on two supports and a plane - the intended driving plane - in the middle of the volume subjected to an area force. The two fixtures are intentionally placed at non-symmetric positions ($a\neq b$, see \autoref{fig:bridgeBC}).
 \begin{figure}[H]
 \begin{center}
-\includegraphics[scale=1]{Pictures/tikzBridge/bridge.pdf}
+\includegraphics[scale=0.8]{Pictures/tikzBridge/bridge.pdf}
 \end{center}
 \caption{Boundary conditions for the test case "Bridge".}
 \label{fig:bridgeBC}
 \end{figure}
-After modelling the bridge in CAD (see \autoref{fig:bridgeCAD}) and running the optimization algorithm, a structure is obtained, that resembles a bridge (see \autoref{fig:bridgeOPTIM}). The optimized structure is represented by $868$ NURBS patches and has a volume fraction of approximately $15\%$ of the initial volume.\enlargethispage{1cm}
+The second test scenario simulates a bridge as a volume resting on two supports and a plane -- the intended driving plane -- in the middle of the volume. This plane is subjected to an area force that models the load of traffic as well as the bridge's self weight. The two fixtures are intentionally placed at non-symmetric positions ($a\neq b$, see \autoref{fig:bridgeBC}).
+
+The bridge in modeled CAD (see \autoref{fig:bridgeCAD}) and processed through CADO. The CAD output shows a wholesome balance between intuition and efficiency -- it complies with the intuitive idea of a bridge, and also ensures use of minimal material. (see \autoref{fig:bridgeOPTIM}). The optimized structure is represented by $868$ NURBS patches, with approximately $85\%$ reduction of volume.\enlargethispage{1cm}
 \begin{figure}[H]
 \begin{subfigure}[t]{.45\textwidth}
 \begin{center}
@@ -66,7 +87,7 @@ After modelling the bridge in CAD (see \autoref{fig:bridgeCAD}) and running the 
 
 \subsection{GE Jet Engine Bracket}
 \label{ssec:bracket}
-On the contrary to the previous two tests, the final test case resembles a real application scenario. The load conditions and the initial volume originate from a topology optimization challenge proposed by General Electric in 2013 \cite{GEBracket}. The original goal of the challenge was the optimization of a jet engine bracket, that is subjected to four different load conditions and five different non-changing regions (see \autoref{fig:GEbracketBC}).
+
 \begin{figure}[H]
 \begin{center}
 \includegraphics[scale = 0.4]{Pictures/GEbracket.png}
@@ -74,7 +95,10 @@ On the contrary to the previous two tests, the final test case resembles a real 
 \caption{Boundary conditions and different load cases for test case "GE Bracket". Figure from \cite{GEBracket}.}
 \label{fig:GEbracketBC}
 \end{figure}
-In the following an already optimized design from \cite{GEBracketTripon} was chosen, since the scale of the scenario was to big to be handled by ToPy. Therefore, the task for the last test case was only the reconstruction of the given geometry, in order to investigate the performance of the algorithm for real world applications. While the original design is described by $226$ faces, the reconstructed version took $3202$ NURBS patches. Additionally some topological features are lost in the region close to "Interface 1"(see \autoref{fig:GEbracketBC}).
+
+On the contrary to the previous two tests, the final test case resembles a real application scenario. The load conditions and the initial volume originate from a topology optimization challenge proposed by General Electric in 2013 \cite{GEBracket}. The original goal of the challenge was the optimization of a jet engine bracket, that is subjected to four different load conditions and five different non-changing regions (see \autoref{fig:GEbracketBC}).
+
+In the following an already optimized design from \cite{GEBracketTripon} was chosen, since the scale of the scenario was too big to be handled by the topology optimizer ToPy. Therefore, the task for the last test case was only the reconstruction of the given geometry, in order to investigate the performance of the surface fitting algorithm for real-world applications. While the original design is described by $226$ faces, the reconstructed version took $3202$ NURBS patches. Additionally some topological features are lost in the region close to "Interface 1"(see \autoref{fig:GEbracketBC}).
 \enlargethispage{2cm}
 \begin{figure}[H]
 \begin{subfigure}[t]{.45\textwidth}
@@ -94,13 +118,3 @@ In the following an already optimized design from \cite{GEBracketTripon} was cho
 \caption{Test case "GE Bracket"}
 \end{figure}
 
-\section{User Experience}
-\todointern{Saumi: Change title and move it to the top}
-\label{sec:uex}
-From the user point of view CADO  is very simple. One doesn't have to know anything about the algorithms behind nor about the implementation details. Graphical User Interface (see \autoref{fig:mainWindowParameters}) allows the user to enter all the necessary information right a way, without keeping in mind the order of the parameters. Closed structure of the pipeline allows us to hide all the technical details from the user. However, user can still see on which stage the process is right now by looking at the progress bars, corresponding to the three major steps:
-\begin{itemize}
-\item Voxelization
-\item Topology Optimimzation
-\item Surface Fitting
-\end{itemize}
-Further information and the detailed description of the user interface can be found in the userguide (\textit{CADO\_UserGuide.pdf}).
