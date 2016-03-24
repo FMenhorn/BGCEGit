@@ -7,7 +7,7 @@ The approach sometimes referred to as \emph{surface splines} or \emph{G-splines}
 One such scheme is the scheme of Peters, described in \cite{peters1992constructing}, which starts from an unstructured mesh of polygonal faces, and creates a $G^1$--continous surface from the location and connectivity of its vertices. This means that the normal vector to the plane is countinous, resulting in a smooth surface without sharp corners. The process consists of two steps, described below for a mesh of quadrilateral faces (quads) \cite{eck1996automatic}. However, the scheme could also be applied for a mesh with any mixture of polygons.
 
 \subsubsection{Step 1: Mesh Refinement}
-In the first step, the mesh is refined through two iterations of \emph{Doo-Sabin refinement}, as first described in \cite{DooSabin1978subdiv}. In one step of this refinement, a new point $\vec{m}_{ref}$  is created for each vertex $\petersControlMeshVec$ in the control mesh $\petersControlMesh$, for every face $f_{\vec{m}}$ that $\petersControlMeshVec$ corners,  between $\petersControlMeshVec$ and the centroid $\centroidof{f_{\petersControlMeshVec}}$ (the average position of its vertices) of the bordering face $f_{\petersControlMeshVec}$. The refined mesh $\petersControlMeshRef$ then consists of all these created points. Mathematically, for the faces $\petersFaces$, with face ${\hat{f}}$ having vertices $V_{\hat{f}}$:
+In the first step, the mesh is refined through two iterations of \emph{Doo-Sabin refinement}, as first described in \cite{DooSabin1978subdiv}. This refinement is done by creating new points $\vec{m}_{ref}$ around the vertices $\petersControlMeshVec$ in the control mesh $\petersControlMesh$. One such point is created for every face $f_{\vec{m}}$ that $\petersControlMeshVec$ corners, the new point $\vec{m}_{ref}$ being placed between $\petersControlMeshVec$ and the centroid $\centroidof{f_{\petersControlMeshVec}}$ of the bordering face $f_{\petersControlMeshVec}$ (the centroid of a face being the position of the face's vertices). After having done this for all the points in the control mesh $\petersControlMesh$, we group all the points $\vec{m}_{ref}$ into a new refined mesh $\petersControlMeshRef$. Describing this mathematically for the faces $\petersFaces$, with face ${\hat{f}}\in \petersFaces$ having vertices $V_{\hat{f}}$:
 
 \begin{align}
 \petersControlMeshRef =& \left\lbrace \petersControlMeshVec_{ref} \suchthat\petersControlMeshVec_{ref} = \alpha\petersControlMeshVec + (1-\alpha)\centroidof{f} \suchthat f \in \facesof{\petersControlMeshVec} \suchthat \right.
@@ -16,7 +16,7 @@ In the first step, the mesh is refined through two iterations of \emph{Doo-Sabin
 \\
 \where \qquad\qquad \centroidof{\hat{f}} =& \; \text{average}\left(\petersControlMeshVec_{\hat{f}}\right)_{\petersControlMeshVec_{\hat{f}} \in \verticesof{\hat{f}}}
 \\
-\text{and} \qquad\qquad F_{\vec{\hat{m}}} =& \left\lbrace \hat{f} \suchthat \vec{\hat{m}} \in \verticesof{\hat{f}}	\right\rbrace
+\text{and} \qquad\qquad F_{\vec{\hat{m}}} =& \left\lbrace \hat{f} \in \petersFaces \suchthat \vec{\hat{m}} \in \verticesof{\hat{f}}	\right\rbrace
 \end{align}
 where $\alpha$ is a smoothening parameter, controlling the sharpness of the corners and edges, which we for simplicity set to $1/2$, to get a simple midpoint.
 
@@ -25,12 +25,12 @@ Thus, in every refinement step on an $n$--gon, $n$ vertices are created, giving 
 \begin{figure}
 	\centering
 	\includegraphics[width = \textwidth]{Pictures/NURBS/petersQuad_to_patches.png}
-	\caption{The subdivision step in Peter's scheme. a): A quad in the original mesh, with edges and vertices marked out. Note that there are 5 edges connecting the top-left corner, making this a non-regular mesh corner. b): The mesh resulting from two Doo-Sabin subdivisions. The mesh is regular, except for around the original mesh corners with other than 4 edges. In the case of the top-left corner, the 5 edges result in a pentagon. c): The resulting \Bez patch structure. The surface is at least $G^1$ continous everywhere. Figure from \cite{eck1996automatic}.}
+	\caption{The subdivision step in Peter's scheme. a): A quad in the original mesh, with edges and vertices marked out. Note that there are 5 edges connecting the top-left corner, making this a non-regular mesh corner. b): The mesh resulting from two Doo-Sabin subdivisions, denoted $\petersPatchPoints$ in the text. The mesh is regular, except for around the original mesh corners with other than 4 edges. In the case of the top-left corner, the 5 edges result in a pentagon. c): The resulting \Bez patch structure. The surface is at least $G^1$ continous everywhere. Figure from \cite{eck1996automatic}.}
 	\label{fig:petersSubDivide}
 \end{figure}
 
-\subsubsection{Step 2: Bezier Patch Creation}
-In this step, we create one B{\'e}zier patch for every vertex in the double refined mesh $\petersControlMeshDobRef$. 
+\subsubsection{Step 2: \Bez Patch Creation}
+In this step, we create one \Bez patch for every vertex in the double refined mesh $\petersControlMeshDobRef$. 
 
 To begin with, we can recognize that each original quad now has a $4 \times 4$ grid of vertices, where the $4$ vertices along each original quad edge match the $4$ vertices on the neighbouring quad (see \autoref{fig:petersSubDivide}b). From this, we see that most of the cells will be locally in a regular grid, in the sense that it can be seen as the center grid point in a $3\times3$ \todointernal[author=Benni]{which $3\times3$ grid? I thought its $4\times4$...Is it the red grid in Fig. 2.4.3 a)?}two-dimensional structured grid.% have $8$ local neighbours ($4$ along the edges of the double refined quads, and $4$ along the diagonals of the doubly refined quads). 
 
