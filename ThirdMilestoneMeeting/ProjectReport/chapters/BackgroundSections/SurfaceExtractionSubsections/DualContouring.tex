@@ -38,7 +38,7 @@ The approach can be seen in \autoref{fig:CompMCDC}, with a similar \ac{MC} illus
 \end{comment}
 
 \subsubsection{Minimizing the Quadratic Error Function}
-Now we want to find out where in the cube the ideal place for the vertex is located, and here different dual algorithms are distinguished. \Ac{DC} in particular generates a vertex positioned at the minimizer of a certain quadratic function. This function depends on the (interpolated) isosurface intersection points, as well as the gradient -- or just the normal of the isosurface -- at these points, both quantities represent the \acs{FirstOrderHermiteData} of the set.
+We now wish to determine where in the cube the ideal place for the vertex is located -- this is where different dual algorithms are distinguished. \Ac{DC} in particular generates a vertex positioned at the minimizer of a certain quadratic function. This function depends on the (interpolated) isosurface intersection points as well as the gradient at these points. Both quantities represent the \acs{FirstOrderHermiteData} of the set.
 The \acl{QEF} defined in \cite{Hermite2002} is as follows:
 \begin{equation}
 \label{eq:QEF}
@@ -51,7 +51,7 @@ Computing the position of the new node by just taking the mean value of all the 
 \subsubsection{Non-Manifold Surfaces}
 The risk to also obtain non-manifold surfaces represents one of the big drawbacks of \ac{DC}. A manifold surface is defined by the following topological property:
 \begin{quote}
-\emph{A $d$-dimensional contour is locally a \emph{manifold} if it is topologically equivalent to a $d$-dimensional disc.}\cite{Hermite2002}
+\emph{A $d$-dimensional contour is locally a \emph{manifold} if it is topologically equivalent to a $d$-dimensional disc.} \cite{Hermite2002}
 \end{quote}
 This means that for 2D data we only get a manifold isocontour, if each vertex is connected to exactly 2 edges. For 3D we only get a manifold isosurface, if each edge is at maximum shared by two \acp{quad}. Since the original method does not deal with this issue, extensions have been developed to solve this problem. \autoref{fig:manifold} shows one configuration creating a non-manifold surface for the basic method from \cite{Hermite2002} and its correct resolution by \cite{Schaefer2007}.
 
@@ -105,6 +105,6 @@ This means that for 2D data we only get a manifold isocontour, if each vertex is
 \end{comment}
 
 \subsubsection{Topology-Safe Adaptivity}
-Usually having as few faces as possible is desirable for reasons like filesize and complexity of the mesh. But in its basic form \ac{DC} is working with uniformly distributed data and introduces vertices on a uniform grid. The reconstructed surface mesh has uniform resolution on the whole area and this results in huge files and a uniformly high resolution, if one wants to resolve fine features of the geometry. As a post processing step one could try to simplify the mesh, but especially for \ac{quad} meshes this is a very demanding -- sometimes even impossible -- task \cite{Puppo2010}.
+For keeping a check on the size of files and the complexity of the mesh, it is usually desirable to have as few faces as possible. However, in its basic form \ac{DC} works with uniformly distributed data. The reconstructed surface mesh has uniform resolution on the whole area -- this results in huge files and a uniformly high resolution if one wants to resolve fine features of the geometry. As a post processing step one could try to simplify the mesh, but especially for \ac{quad} meshes this is a very demanding task. There are cases where it could also be impossible. \cite{Puppo2010}.
 
 The solution to this problem is adaptivity. Referring to \cite{Hermite2002} it is possible to implement \ac{DC} in an adaptive and topology-safe way. This means we can simplify the obtained \ac{quad} mesh and therefore reduce the number of \acp{quad} needed to represent the surface, while still conserving the topological structure of our surface.

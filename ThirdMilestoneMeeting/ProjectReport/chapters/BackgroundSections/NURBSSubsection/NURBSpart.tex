@@ -17,9 +17,9 @@ b_i^n(u)=\binom{n}{i}(1-u)^{(n-i)}u^i
 \end{equation*}
 with $\binom{n}{i}$ being a binomial coefficient, is the $i^{\text{th}}$ \emph{Bernstein polynomial} (see \cite{lorentz2012bernstein}) of degree $n$.
 
-In addition to the expression with the Bernstein polynomials, one can use a recursion formula (so-called \emph{de Casteljau Algorithm}) for the construction of the \Bez curve, which we will not cover here. 
+In addition to the expression with Bernstein polynomials, one can use a recursion formula (so-called \emph{de Casteljau Algorithm}) for the construction of the \Bez curve, which we will not cover here. 
 
-Analogous to \Bez curves, one can also define a \textit{\Bez surface}. One of the ways of doing this, is by extending the set of control points indexed in one dimension, to a $2$-dimensional mesh of $n\times m$ control points $\vec{p}_{i,j}$, likewise extending the Bernstein polynomial basis to $2$D by taking the tensor product of it with itself. The resulting \textit{tensor product \Bez} (curve) \textit{surface} is then given by the analytical expression
+Analogous to \Bez curves, one can also define a \textit{\Bez surface}. One way of doing this is by extending the set of control points indexed in one dimension, to a two-dimensional mesh of $n\times m$ control points $\vec{p}_{i,j}$. Likewise, we extend the Bernstein polynomial basis to $2$D by taking its tensor product with itself. The resulting \textit{tensor product \Bez surface} is then given by the analytical expression
 \begin{equation}
 \label{eq:bezsurface}
 \vec{S}(u,v)=\sum\limits_{i=0}^n \sum\limits_{j=0}^m b_i^n(u) b_j^m(v) \vec{p}_{i,j}
@@ -28,7 +28,7 @@ Analogous to \Bez curves, one can also define a \textit{\Bez surface}. One of th
 \subsubsection{B-Splines and NURBS}
 Extending the idea described in previous section, one could use \emph{B-spline basis functions} (see below) instead of the Bernstein polynomial basis.
 
-Unlike with \Bez curves, for the B-splines a parameter domain is subdivided by so-called \textit{knots}. For the one-dimensional parameter domain $[u_{0}, u_{m}]$, the \textit{knot vector} will be given by $u_{0} \leq u_{1} \leq ... \leq u_{m}$. In most cases $u_{0} = 0, u_{m} = 1$ is chosen, so that we get the unit interval for our parameter values. For the case of NURBS, the knots $u_{0},..., u_{m}$ need not be equidistant -- hence the Non-Uniform in the beginning NU of NURBS.
+Unlike \Bez curves, the parameter domain for B-splines is subdivided by so-called \textit{knots}. For the one-dimensional parameter domain $[u_{0}, u_{m}]$, the \textit{knot vector} will be given by $u_{0} \leq u_{1} \leq ... \leq u_{m}$. In most cases $u_{0} = 0, u_{m} = 1$ is chosen, so that we get a unit interval for our parameter values. For the case of NURBS, the knots $u_{0},..., u_{m}$ need not be equidistant -- hence the "NU" (for Non-Uniform) in the name "NURBS".
 
 Given a knot vector $[u_{0}, u_{m}]$ and a degree of B-spline $p$, the $i$-th B-spline basis function is then defined recursively as follows:
 \begin{equation}
@@ -37,7 +37,7 @@ N_{i,0}(u) =  \begin{cases} 1, & \mbox{if } u_{i} \leq u < u_{i+1} \\ 0, & \mbox
 \begin{equation}
 N_{i,p}(u) = \frac{u - u_{i}}{u_{i+p} - u_{i}}N_{i, p-1}(u)  + \frac{u_{i+p+1}-u}{u_{i+p+1} - u_{i+1}}N_{i+1, p-1}(u)
 \end{equation}
-For $p=0$ we get just step functions, and $p=1$ familiar hat functions, whereas the quadratic basis functions look more complicated (\autoref{fig:bsplineBases}).
+For $p=0$ the basis fucntions are simply step functions, and for $p=1$ we end up with so-called "hat" functions. Quadratic basis functions ($p=2$) look more complicated (\autoref{fig:bsplineBases}).
 \begin{figure}
 \centering
 \begin{subfigure}[b]{.3\linewidth}
@@ -60,7 +60,7 @@ For $p=0$ we get just step functions, and $p=1$ familiar hat functions, whereas 
 \end{figure}
 
 
-By giving each of these basis functions a weight $\omega_i$ and normalizing them at each point by dividing by the total sum, we get the rational basis functions. Writing them out explicitly, in terms of B-spline basis functions $N_{i,p}$, the $n^{\text{th}}$-degree NURBS curve with $k$ control points $P_i$ is finally given by:
+By giving each of these basis functions a weight $\omega_i$ and normalizing them at each point by dividing by the total sum, we get the rational basis functions. Writing them out explicitly, in terms of B-spline basis functions $N_{i,p}$, the $n^{\text{th}}$-degree NURBS surface with $k$ control points $P_i$ is finally given by:
 \begin{equation}
 C(u) = \frac{\sum_{i=1}^{k}N_{i,n}\omega_{i}p_{i}}{\sum_{i=1}^{k}N_{i,n}\omega_{i}}.
 \end{equation}
@@ -71,4 +71,4 @@ B-splines have the following properties, which are useful for our problem:
 \item B-Splines only change locally (depending on the degree $n$) when a control point is changed.
 \end{itemize}
 
-Analogous to the tensor product \Bez curve surfaces, one can define tensor product B-spline or -NURBS surfaces. With varying degrees and number of control points, these can be made to fit a variety of shapes. However, as the parameters $u$ and $v$ define a square in their two-dimensional parameter domain, there is a limit to what topologies may be realized with just one such NURBS surface. For example, an open cylinder could be constructed by one such surface where one of the sides meets its own beginning, whereas something with multiple holes - like a double torus, or a non-flat 8-shaped surface, would be impossible. Therefore, when using NURBS, surfaces are most often modelled using a network of connected patches. \todointern{maybe should include an example picture here} For more information about NURBS see \cite{farin1999nurbs}.
+Analogous to the tensor product \Bez curve surfaces, one can define tensor product B-spline or NURBS surfaces. With varying degrees and number of control points, these can be made to fit a variety of shapes. However, as the parameters $u$ and $v$ define a square in their two-dimensional parameter domain, there is a limit to what topologies may be realized with just one such NURBS surface. For example, an open cylinder could be constructed by one such surface where one of the sides meets its own beginning, whereas something with multiple holes - like a double torus, or a non-flat 8-shaped surface, would be impossible. Therefore, when using NURBS, surfaces are most often modelled using a network of connected patches. \todointern{maybe should include an example picture here} For more information about NURBS, see \cite{farin1999nurbs}.
