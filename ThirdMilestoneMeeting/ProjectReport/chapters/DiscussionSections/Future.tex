@@ -8,15 +8,16 @@ We consider three main areas of improvement in which a future project could dive
 \item Find a general approach to  avoid special manifold treatment
 \item Implement an adaptive Peters' scheme
 \end{itemize}
-The second area of improvement relies on \textit{correctness}
+The second area of improvement relies on \textit{correctness}. Until now the output results have not been checked for accuracy. In order to find the optimal approach with the best parameters we would need a concrete measure of the error. Therefore we would suggest to:
 \begin{itemize}
-\item Improved Parameter estimation (w.r.t. accuracy (better scheme?) and speed(spacetree?))
+\item Find an error measure to analyze the deviations in the DC algorithm
+\item Implement an improved parameter estimation % (w.r.t. accuracy (better scheme?) and speed(spacetree?))
 \end{itemize}
-Finally, the toolkit could profit from using \textit{alternative approaches} in the various subsystems. Replacing one section of the workflow, for example the surface extractor, with a better method would provide new . Some ideas for the interested reader:
+Finally, the toolkit could profit from using \textit{alternative approaches} in the various subsystems. Replacing one section of the workflow, for example the surface extractor, with a faster and more robust method would provide a more rigorous mechanism . Some ideas for the interested reader would be to:
 \begin{itemize}
-\item Use the advantages of an Isogeometric analysis
+\item Explore the advantages of an Isogeometric analysis
 
-\item Apply a faster Topology Optimization, which could deal with big size voxelized data.
+\item Apply a faster Topology Optimization, which could deal with big size voxelized data
 
-\item Postprocess shape optimization?
+\item Carry out a shape optimization as a postprocessing step
 \end{itemize}
