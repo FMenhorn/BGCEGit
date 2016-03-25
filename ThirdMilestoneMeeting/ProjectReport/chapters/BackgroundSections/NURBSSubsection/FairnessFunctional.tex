@@ -69,24 +69,24 @@ Since surfaces with low curvatures and therefore softer curves are typically con
 % <from here in LSQ section> and this we can then find the eigenvectors for
 % which let us express this as a sum of squares of coefficients*bezier points, (just like we wanted.)
 
+%
+%\begin{align}
+%\vec{d}_k = & \sum\limits_{i,j=1}^{N,M} \c(u_k,v_k)_{i,j} \lsControlPointi{i,j}
+%\\=& C_k (u_k,v_k)P
+%\end{align}
+%\begin{align}
+%\vec{p}_{p} &= \sum\limits_{l} c^{PS}_{p,l} \vec{v} 
+%\\
+%&=C_k^{PS}V
+%\end{align}
+%
+%
+%
+%\begin{equation}
+%\label{eq:fairness-sum}
+%E_{fair} = \sum\limits_{\text{all quads}}E_{fair,quad}
+%\end{equation}
 
-\begin{align}
-\vec{d}_k = & \sum\limits_{i,j=1}^{N,M} \c(u_k,v_k)_{i,j} \lsControlPointi{i,j}
-\\=& C_k (u_k,v_k)P
-\end{align}
-\begin{align}
-\vec{p}_{p} &= \sum\limits_{l} c^{PS}_{p,l} \vec{v} 
-\\
-&=C_k^{PS}V
-\end{align}
-
-
-
-\begin{equation}
-\label{eq:fairness-sum}
-E_{fair} = \sum\limits_{\text{all quads}}E_{fair,quad}
-\end{equation}
-
-\todointernal[author=Benni,inline]{looks strange, if paragraph ends with formulas. Probably some text is still missing here?}
+\tododone[author=Benni,inline]{looks strange, if paragraph ends with formulas. Probably some text is still missing here? Erik: Sorry, forgot to remove. Done now.}
 
 
