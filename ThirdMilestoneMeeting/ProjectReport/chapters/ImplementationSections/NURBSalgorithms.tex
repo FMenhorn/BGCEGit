@@ -5,9 +5,12 @@ Following the example of using Peters' scheme to fit NURBS smoothly to datapoint
 
 Incorporated in these algorithms were also the least-squares fitting with a Fairness Functional term (see \autoref{subsec:fairnessthry} and \autoref{subsec:lsqfairness}) to ensure surfaces without unnecessary sharp wiggles.
 
-Among our prototypes for this process we have:
+In the following part of this section, the implemented algorithm will be shortly described, based on the theory and notations in \autoref{sec:NURBS} and \autoref{sec:LSQfitting}.
+
+\subsection{Algorithm}
+The algorithm is given information about a quadrilateral mesh of vertices ($\petersControlMeshVec \in \petersControlMesh$), how they are connected into quads ($\verticesof{\hat{f}}, \forall \hat{f} \in \petersFaces$) as an ordered list of four vertex indices, and how they are parameterized (parameters $(u_\lsDataPoint, v_\lsDataPoint)$ and on which quad $\hat{f}\in\petersFaces$).   roughly proceeds as follows:
 \begin{itemize}
-\item A Doo-Sabin subdivision scheme implemented in Python, which we use to organize the twice refined mesh in structures, from which you can extract the locality and neighbour information necessary to calculate the \Bez point coefficients on them in Peters' scheme
+\item The information obtained from the Dual Contouring scheme is 
 \item Implementations of the algorithm to calculate these \Bez point coefficients, as well as plotting them for debugging and visualisation
 \item \Bez curve and surface evaluation via calculating the coefficients on each \Bez control point from a set of parameters
 \item Algorithms to extract the necessary datapoints and parameters from the result data of the \acf{DC} algorithm in \autoref{ssec:DC}, using geometric conversions where necessary, and ignoring unusual datapoints
