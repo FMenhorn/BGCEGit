@@ -1,16 +1,13 @@
 \section{Least-Squares Fitting of Parametrized Surfaces}
 \label{sec:LSQfitting}
-In order to make a surface adhere as closely as possible to our desired form, some fitting is usually required. This typically involves varying some parameters in order to minimize some error. As minimizing the error squared of a function -- for example distance between a calculated point and its desired location -- is an important building block in many practical applications, extensive literature can be found regarding this, especially when the function depends linearly on its input (ex. \cite{becker2011advanced}). The field that treats this topic is called \emph{linear least-squares fitting}, and in this section, some selected subtopics relevant to the fitting of \acs{NURBS} are treated.
+In order to make a surface adhere as closely as possible to our desired form, some fitting is usually required. This typically involves varying some parameters in order to minimize some error. As minimizing the error squared of a function -- for example distance between a calculated point and its desired location -- is an important building block in many practical applications, extensive literature can be found regarding this. The treatment is especially well described for when the function depends linearly on its input (see for example \cite{becker2011advanced}), in the field that treats is called \emph{linear least-squares fitting}. In this section, some selected subtopics relevant to the fitting of parametric surfaces are discussed.
 
 %\begin{itemize}
 %\item Possibly that this can used to fit the location of these "patch points" to a set of datapoints by minimusing a least-squares error 
 %\end{itemize}
 
-\subsection{Fitting Problem}
-In order to represent a given line or surface by Bezier curves or surfaces respectively, just as with NURBS, one has to solve a fitting problem (see \cite{becker2011advanced}). The goal of this is to fit in a parametric curve to the set of given data points. In the case of interest, the given set of points is a mesh, obtained from surface contouring.
-
-\subsubsection{Fitting Problem: Parametric Surfaces}
-In order to fit a \Bez surface to a set of datapoints with fixed locations and parameters on this surface, we can use an approach similar to the approach above\todointernal{which approach?}. The base of the approach is making use of the way a point with specific parameters is mapped by either the Bernstein polynomials (\Bez curves) or the B--spline basis functions (NURBS) to a linear combination on the control points. That is, from the parameters $(u,v)$ of each data point on the surface, we get a set of coefficients on the control points that define the surface. Expressing this as a sum, we have for the point $\lsDataPointi{k}$ with the parameters $(u_k,v_k)$ on the surface defined by the $N \times M$ control points $\lsControlPointi{i,j}$:
+\subsection{Fitting Problem: Parametric Surfaces}
+In order to fit a \Bez surface or NURBS surface to a set of datapoints with fixed locations and parameters on this surface, linear least-squares fitting can be applied, using an approach of mapping the parameters of the datapoints to control points on the surface\tododone{which approach? Erik:-The approach that was deleted after I wrote the section}. The base of the approach is using either the Bernstein polynomials (\Bez curves) or the B--spline basis functions (NURBS) to evaluate how control points should be combined for those surface parameters, and obtain this as a linear combination on the control points. That means, that from the parameters $(u,v)$ of each data point on the surface, we get a set of coefficients on the control points that define the surface. Expressing this as a sum, we have for the point $\lsDataPointi{k}$ with the parameters $(u_k,v_k)$ on the surface defined by the $N \times M$ control points $\lsControlPointi{i,j}$:
 \begin{equation}
 \lsDataPointi{k} = \sum\limits_{i,j=1}^{N,M} \lsControlPointCoefi{i,j}(u_k,v_k) \lsControlPointi{i,j}
 \end{equation} 
@@ -37,11 +34,11 @@ However, this requires that there be a solution, which typically relies on the s
 \end{equation}
 This again is a central problem in computing, and can be solved by many standard libraries with excellent performance.
 
-\subsubsection{Fitting Problem: Fairness}
+\subsection{Fitting Problem: Fairness}
 As discussed in \autoref{subsec:fairnessthry}, it can also be important to have surface patches that are not only continous and smooth, but also have a low curvature. Fortunately, this is relatively simple to incorporate in the above Least-Squares formulation. Starting from the end result of \autoref{eq:fairnessnorm}, we see that the minimisation of the fairness functional can already be expressed as the minimisation of a squared norm of a matrix-vector product. In order to combine this with the fitting to a surface, we begin by writing it in the form of \autoref{eqn:lsminim}. To do that we simply replace $\lsDataPointMatrix$ with a 3-dimensional $0$-vector (thus a 3-column $0$-matrix), as we want to get the matrix-vector product as close to $0$ as possible, and minimize
-\todointernal[inline]{are the following two formulas really equal or is the minimization of both equivalent? The square for the second expression looks strange...}
+\tododone[inline]{are the following two formulas really equal or is the minimization of both equivalent? The square for the second expression looks strange... Erik: Yes, strange indeed. woop, look, suddenly a magic power of two appeared!!! :)}
 \begin{align*}
-\phantom{=}& \norm{0 - \Lambda^{\frac{1}{2}} S \lsControlPointMatrix} =
+\phantom{=}& \norm{0 - \Lambda^{\frac{1}{2}} S \lsControlPointMatrix}^2 =
 \\
 =& \norm{0 - \lsControlPointCoefMatrix^{fair}\lsControlPointMatrix}^2,
 \end{align*}
@@ -69,7 +66,7 @@ Noticing that the terms in the sums each depend on one row of $D$ or $0$ and $\l
 \end{equation}
 where we have denoted the final concatenated matrices with $\lsDataPointConcMatrix$ and $ \lsControlCoefConcMatrix(\vec{u},\vec{v})$ respectively.
 
-\subsubsection{Fitting Problem: Peters' Scheme}
+\subsection{Fitting Problem: Peters' Scheme}
 \label{subsub:petersleastsq}
 One of the major drawbacks with the approach above is that it is typically very complicated to impose smoothness constraints on structures of multiple patches, something that is essential for representing more complicated geometries. One of the ways of avoiding this is to use an existing scheme for creating a smooth surface, such as the scheme of Peters \cite{peters1992constructing,eck1996automatic}, which we introduced in \autoref{subsec:peters}. Here, we create smoothly connected square \Bez patches by letting their control points be linear combinations of vertices in a refined control mesh $\petersPatchPoints$, and ensure smoothness by the way that we calculate these coefficients on the vertices in $\petersPatchPoints$, using the imformation we have on their local positions in the mesh to make sure which neighbouring vertices they should be infulenced by. Once more, we can express this mathematically with relative simplicity, again letting $\lsControlPointi{p}$ denote the $p^\text{th}$ control point, and $\petersPatchPointVec_l$ being the $l^\text{th}$ refined control mesh vertex:
 \begin{equation}
