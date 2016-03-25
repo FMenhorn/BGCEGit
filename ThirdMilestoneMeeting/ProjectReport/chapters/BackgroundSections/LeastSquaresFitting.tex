@@ -35,6 +35,7 @@ However, this requires that there be a solution, which typically relies on the s
 This again is a central problem in computing, and can be solved by many standard libraries with excellent performance.
 
 \subsection{Fitting Problem: Fairness}
+\label{subsec:lsqfairness}
 As discussed in \autoref{subsec:fairnessthry}, it can also be important to have surface patches that are not only continous and smooth, but also have a low curvature. Fortunately, this is relatively simple to incorporate in the above Least-Squares formulation. Starting from the end result of \autoref{eq:fairnessnorm}, we see that the minimisation of the fairness functional can already be expressed as the minimisation of a squared norm of a matrix-vector product. In order to combine this with the fitting to a surface, we begin by writing it in the form of \autoref{eqn:lsminim}. To do that we simply replace $\lsDataPointMatrix$ with a 3-dimensional $0$-vector (thus a 3-column $0$-matrix), as we want to get the matrix-vector product as close to $0$ as possible, and minimize
 \tododone[inline]{are the following two formulas really equal or is the minimization of both equivalent? The square for the second expression looks strange... Erik: Yes, strange indeed. woop, look, suddenly a magic power of two appeared!!! :)}
 \begin{align*}
