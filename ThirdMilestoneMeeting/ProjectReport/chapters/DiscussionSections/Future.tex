@@ -2,13 +2,21 @@
 \label{sec:Future}
 \todourgent[inline, author=Benni]{avoid subsections! Just show up problems and outlook to literature: no pictures, no explanations!}
 \todointern{Erik: Adaptive peters scheme, JC, Benni: others}
-\begin{enumerate}
-\item Avoid special manifold treatment, find a general approach (refer to manifold DC paper)
-\item Alternative approach: Isogeometric analysis?
-\item Adaptive DC
-\item Adaptive Peters' scheme
-\item faster Topology Optimization
+We consider three main areas of improvement in which a future project could dive into. The first one deals with the \textit{robustness} of the methods.  In order to get better results, there are specific ways in which the algorithms we used, could provide more reliable results. Adaptivity is one of the best approaches to tackle robustness, therefore we propose to:  
+\begin{itemize}
+\item Implement an adaptive DC algorithm
+\item Find a general approach to  avoid special manifold treatment
+\item Implement an adaptive Peters' scheme
+\end{itemize}
+The second area of improvement relies on \textit{correctness}
+\begin{itemize}
 \item Improved Parameter estimation (w.r.t. accuracy (better scheme?) and speed(spacetree?))
-\item error estimates (DC, Peters' scheme, Topology Optimization)
+\end{itemize}
+Finally, the toolkit could profit from using \textit{alternative approaches} in the various subsystems. Replacing one section of the workflow, for example the surface extractor, with a better method would provide new . Some ideas for the interested reader:
+\begin{itemize}
+\item Use the advantages of an Isogeometric analysis
+
+\item Apply a faster Topology Optimization, which could deal with big size voxelized data.
+
 \item Postprocess shape optimization?
-\end{enumerate}
+\end{itemize}
