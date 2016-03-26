@@ -11,7 +11,7 @@ Before we can distribute datapoints to \ac{NURBS}-patches, we first have to find
 
 Therefore, in our algorithm we are reconstructing the surface on two different scales: a coarse and a fine scale. The coarse scale data is deduced from the fine scale data by recursively applying the following algorithm:
 \begin{enumerate}
-\item Combine sets of eight connected voxels with egdelength $a$ into a coarse voxel with edgelength $2a$ (see \autoref{sfig:coarsenA}).
+\item Combine sets of eight connected voxels with egde-length $a$ into a coarse voxel with edgelength $2a$ (see \autoref{sfig:coarsenA}).
 \item Decide whether the new voxel resembles an inside ($=1$) or outside ($=0$) voxel, by taking the mean value of the contributing eight voxels. If mean value is above a certain threshold $t$, the new voxel is considered as an inside voxel. We picked $t=\frac{1}{8}$, i.e. if at least two voxels out of eight are inside voxels, the resulting voxel is considered being an inside voxel.
 \item For the resolution of non-manifold edges additional coarse voxel grids are generated, that are shifted by edgelength $a$ (see \autoref{sfig:coarsenB}).
 \end{enumerate}
