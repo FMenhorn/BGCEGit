@@ -107,8 +107,12 @@
  		%---------------------------------------------------------------------------
 	%	\addcontentsline{toc}{part}{Appendix}
 		\appendix 
-		\todointern{Severin: Include the installation and user-guide as-is as appendices under sections}
+		\tododone{Severin: Include the installation and user-guide as-is as appendices under sections; Doesn't look awesome with pagenumbers...}
 		\input{chapters/AppendixSurf}
+		\chapter{Installation Guide}
+		\includepdf[pages=-]{InstallationGuide.pdf}
+		\chapter{User Guide}
+		\includepdf[pages=-]{UserGuide.pdf}
 		
 		%---------------------------------------
 %		\chapter{Source Code}
