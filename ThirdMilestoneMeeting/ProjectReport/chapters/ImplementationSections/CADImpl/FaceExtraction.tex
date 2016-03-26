@@ -2,15 +2,7 @@
 \label{sec: FaceExtraction}
 
 %\tododone[inline]{}
-Apart from using CADO directly, one can also call the face extraction step manually. For that, once the user has created their input geometry and saved it as STEP and IGES files, they can begin the execution by invoking the bash script \lstinline|CADTopOp.sh| located in \lstinline|/CADORoot/CADO/CPP|. For example, for a case located in directory \lstinline|/newuser/CADRoot/TestCase/| with file name \lstinline|geom|, force scaling factor of 240.19 and a refinement level of 2, the appropriate command to invoke the script from its folder would be: \\
-
-\lstinline|$ ./CADTopOp.sh /CADRoot/TestCase/ geom 240.19 2| \\
-
-The bash script basically invokes \lstinline|CADToVoxel| that parses the geometry, sorts out the faces based on their type, voxelizes the assembly, and writes the input for the topology optimizer. The script then calls the topology optimizer with this file as input. Once optimised, the script requests an extracted surface from the density voxel grid from the dual contouring algorithm. 
-
-%It is worth noting, that as of the second milestone an integrated pipeling is available from the geometry input to the surface extraction through dual contouring. Connection with the next part of the pipeline is the objective for the third phase.
-
-Here is an explanation of how the faces are extracted from the CAD input and how they are categorised based on the color:
+With the input geometry, the workflow is transferred to the face-extraction pipeling that parses the geometry and sorts out the faces based on their type. Here is an explanation of how the faces are extracted from the CAD input and how they are categorised based on the color:
 
 \begin{enumerate}
 	\item An instance of \lstinline|Reader| is created with the CAD source directory and file name as input. \lstinline|Reader| wraps the OpenCascade classes for reading STEP and IGES files into a single class, reads the two files, and holds them in two handles. Also \lstinline|Reader| instances are created for the non-changing domain and load file input.
@@ -19,4 +11,4 @@ Here is an explanation of how the faces are extracted from the CAD input and how
 	\item The load vector is then scaled with respect to the scaling factor provided as input by the user.
 \end{enumerate}
 
-Once these face lists are available, they can be voxelized.
+These face lists are then transferred to the voxelization pipeline.

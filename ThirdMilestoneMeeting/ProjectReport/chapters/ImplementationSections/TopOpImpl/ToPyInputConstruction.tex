@@ -15,19 +15,13 @@ LOAD_VALU_Y: -1@100
 \caption{Sample ToPy input file: Active, fixture or force elements are passed as lists of voxel numbers; load strengths are specified with corresponding value.}
 \label{fig:TPDfile}
 \end{figure}
-The topology optimization library ToPy works with ToPy Problem Definition files ({\it.tpd}, see \autoref{fig:TPDfile}). As usual, the file starts with a header and internal parameters; they are used to define the domain size and to steer the topology optimization using grey-scale filters. Geometry shape and boundary conditions are passed specifying the type (load, active, passive, force) followed by lists of element indexes. The numbering is defined as follows:
+The topology optimization library ToPy works with ToPy Problem Definition files ({\it.tpd}, see \autoref{fig:TPDfile}). The file starts with a header and internal parameters; they are used to define the domain size and to steer the topology optimization using grey-scale filters. Geometry shape and boundary conditions are passed specifying the type (load, active, passive, force) followed by lists of element indexes. The numbering is defined as follows:
 \begin{itemize}
 \item Voxel Zero lies at the bounding box corner with the minimal coordinate values
 \item Neighboring elements in y-direction are then numbered 1,2,3, ...
 \item After reaching the domain bounds the numbering continues with the next neighboring row in x-direction.
 \item after finishing the first "plate" the numbering continues with the next neighboring layer in z-direction.
 \end{itemize}
-As a side note a twist regarding the coordinate systems is introduced internally by the program: The coordinate system flips the Y-coordinate and interchanges the X and Z coordinate. 
+It must be stated that ToPy modifies the coordinate system: flips the Y-coordinate and interchanges the X and Z coordinate. 
 
-Here, also the motivation of the integrated CAD topology optimization tool becomes clear: performing a topology optimization using ToPy is quite cumbersome for the user. An integrated work flow automatizing the steps will remove many hurdles for using topology optimization techniques in a design process.  
-
-Topy Problem Definition files are created invoking the bash script \lstinline|CADTopOpt.sh| (see section \ref{sec: FaceExtraction}). The main file \lstinline|CADToVoxel| invokes a function \lstinline|write|, that creates a {\it.tpd} file (see \autoref{fig:umlCADToVoxel}). The functionality is implemented in a class \lstinline|Writer_ToPy|.
-
-In a first step, \lstinline|Writer_ToPy| opens an output file, writes the {\it.tpd} header and grey-scale filters. In a next step it deals with the voxelized shapes: active (filled voxels subject to optimization), passive (filled voxels not subject to optimization), fixture and load elements are written in the file by repetitively writing lists of element node numbers.   
-
-This file is then ready to be used; the bash script \lstinline|CADTopOpt.sh| invokes ToPy to perform the topology optimization. 
+Topy Problem Definition files are created invoking the bash script \lstinline|CADTopOpt.sh| (see section \ref{sec: FaceExtraction}). The main file \lstinline|CADToVoxel| invokes a function \lstinline|write|, that creates a {\it.tpd} file (see \autoref{fig:umlCADToVoxel}). The functionality is implemented in a class \lstinline|Writer_ToPy|. \lstinline|Writer_ToPy| opens an output file, writes the {\it.tpd} header and grey-scale filters. In the next step it deals with the voxelized shapes: active (filled voxels subject to optimization), passive (filled voxels not subject to optimization), fixture and load elements are written in the file by writing lists of element node numbers. This file is then ready to be used; the bash script \lstinline|CADTopOpt.sh| invokes ToPy to perform the topology optimization.
