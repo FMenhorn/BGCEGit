@@ -1,16 +1,13 @@
 \section{From NURBS to Standardized CAD File Format}
-In order to create standardized CAD files from previously computed B-Spline control points, the scripting functionality offered by FreeCAD is employed. Almost all functions of FreeCAD can be called using a python script, which allows to utilize FreeCAD functions within the automatized tool-chain. \cite{FreeCAD}
+In order to create standardized CAD files from previously computed B-Spline control points, the scripting functionality offered by FreeCAD is employed. Almost all functions of FreeCAD can be called using a python script, which allows utilization FreeCAD functions within our automated workflow. \cite{FreeCAD}
 
 %installation path
-Thus, the implemented python script is structured as follows: 
+The implemented python script is structured as follows: 
 \begin{enumerate}
-\item The installation path is specified and FreeCAD modules are imported separately
-\item A new document is opened and B-Spline patches are consecutively created according to control points from Peters' scheme
-\item  The object is reoriented to revert coordinate changes imposed by Topy (see section \ref{sec: ToPyInputConstruction})
-\item Geometric constraints are enforced with boolean operations in FreeCAD  
-\item The active object is exported as step file.
+\item The installation path for FreeCAD is specified and its modules are imported separately
+\item A new document is opened and B-Spline patches are created consecutively using the control points obtained from Peters' scheme
+\item The object is reoriented to revert coordinate changes imposed by ToPy (see section \ref{sec: ToPyInputConstruction}) and exported as a basic output (without appplying geometry and domain constraints)
+\item Geometry and domain constraints are enforced with boolean operations
+\item The active object is exported as step file, which is the final output of the program
 \end{enumerate} 
-
-
-
 
