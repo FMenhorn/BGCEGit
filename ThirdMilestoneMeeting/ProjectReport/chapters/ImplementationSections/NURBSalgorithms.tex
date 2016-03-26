@@ -22,7 +22,9 @@ The algorithm is given information about a quadrilateral mesh of vertices ($\pet
 \item The \Bez points of the patches are reconstructed from $\petersPatchPoints$, quad-wise, using a matrix-free formulation of the second part of Peters' scheme, and the lookup of point locations calculated in the beginning of the algorithm.
 \end{enumerate}
 At this point, we have reached the minimum we need for a reconstructed surface, now formulated as a network of tensor produduct \Bez curve surface patches of second and third order (quadratic and cubic). For conveniece, and usability, we convert them into one cubic tensor product NURBS curve surface patch per quad. That means the $4\times4$ \Bez patches per quad are turned into one cubic NURBS patch, with $13\times13$ control points. 
+
 A sample result, showing the fitting of a surface to a toroidal shape defined implicitly for the \acs{DC} algorithm, is shown in \autoref{fig:fittingStructures}. 
+
 \begin{enumerate}[resume]
 \item First, the quadratic \Bez patches are degree-raised to cubic in both directions. \todointernal[author=erik]{add formula or reference to for example web page with a degree raising formula}. Then, since the cubic polynomial curves are shared between the patches along the edges, their four degrees of freedom, thus their control points, are shared along the edge.
 \begin{enumerate} [label=(\alph*)]
@@ -37,12 +39,10 @@ A sample result, showing the fitting of a surface to a toroidal shape defined im
 %\item An application of MATLAB's built-in least squares minimisation tool to fit the resulting network of \Bez patches to the extracted surface.
 %\end{itemize}
 
-
 \begin{figure}
 \includegraphics[width = \textwidth]{Pictures/NURBS/torus_from_DC.png}
 \caption{A sample result from the Peters' scheme least-squares minimisation surface fitting, using the data provided by the \acs{DC} algorithm for an implicit function describing a torus. The grid lines on the figure are following the constant lines of each parameter value. As they follow the patch edges, corners where other than 4 coarse quads are meeting can be recognized, as for example on the middle of the far side of the torus, on the side that's facing the viewer.}
 \label{fig:fittingStructures}
 \end{figure}
 \todourgent[inline,author=Benni]{From Bezier patches to NURBS using degree elevation. Add this to theory and implementation or only here?}
-
 
