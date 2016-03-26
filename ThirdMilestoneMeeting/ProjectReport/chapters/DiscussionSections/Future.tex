@@ -6,11 +6,12 @@ We consider three main areas of improvement in which a future project could dive
 \begin{itemize}
 \item Implement an adaptive DC algorithm
 \item Find a general approach to  avoid special manifold treatment
-\item Implement an adaptive Peters' scheme
+\item Implement an adaptive surface reconstruction. This could for example work by first fitting a surface on very coarse quads, then using an error measure (see below) to see where the error should be improved upon, then subdividing these quads, and rerun the fitting algorithm either locally or globally.
 \end{itemize}
 The second area of improvement relies on \textit{correctness}. Until now the output results have not been checked for accuracy. In order to find the optimal approach with the best parameters we would need a concrete measure of the error. Therefore we would suggest to:
 \begin{itemize}
 \item Find an error measure to analyze the deviations in the DC algorithm
+\item Implement an errir measure for the surface reconstruction, for example the (squared) difference between the datapoint locations and the respective parameterized surface point
 \item Implement an improved parameter estimation % (w.r.t. accuracy (better scheme?) and speed(spacetree?))
 \end{itemize}
 Finally, the toolkit could profit from using \textit{alternative approaches} in the various subsystems. Replacing one section of the workflow, for example the surface extractor, with a faster and more robust method would provide a more rigorous mechanism . Some ideas for the interested reader would be to:
