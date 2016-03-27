@@ -2,9 +2,9 @@
 \label{sec:nutshell}
 \todointern[author=erik]{maybe talk a bit more about summary of the report?}
 \todourgent[inline,author=Severin]{@ALL: Please revise!!}
-In this report, we present CADO, Computer Aided Design Optimizer, which is the result of this project. In summary, a full tool-chain from CAD input file to an optimized CAD file is provided. First, a voxelization is performed using OpenCASCADE in order to bring the initial geometry to an appropriate case description. Second, the topology is optimized by employing the open-source tool ToPy \cite{ToPy}.  
-Next, a two-stage Dual Contouring surface reconstruction scheme for coarse parametrization patches and fine vertices is computed.
-A B-Spline surface is fitted by a least-square approach using control points described by the Peters' scheme \cite{peters1992constructing} in order to ensure geometrically continuous surfaces. Lastly, a FreeCAD macro script performs boolean operations to enforce geometric constraints and exports the geometry to a standardized CAD file \cite{FreeCAD}.
+In this report, we present CADO, Computer Aided Design Optimizer, which is the result of this project. In summary, CADO works as a fully integrated tool-chain from the CAD input file to an optimized CAD file. First, the input geometry undergoes voxelization using OpenCASCADE to ensure compatibility with the topology optimizer. Second, the topology is optimized by employing the open-source tool ToPy \cite{ToPy}.  
+Next, a two-stage Dual Contouring surface reconstruction scheme is executed on the output of topology optimization. This gives us coarse parametrization patches and fine vertices as output.
+A B-Spline surface is then fitted through this data by a least-square approach using control points described by the Peters' scheme \cite{peters1992constructing} in order to ensure continuous and smooth surfaces. Lastly, a FreeCAD macro script performs boolean operations to enforce geometric constraints and exports the geometry to a standardized CAD file \cite{FreeCAD}.
 Note that intermediate steps can be replaced in the future with more suitable solutions. 
 
 In conclusion, the implementation provides a user-friendly CAD-integrated topology optimization tool. The functionality of the tool is tested by three test cases explained in chapter \ref{sec:tests}.
