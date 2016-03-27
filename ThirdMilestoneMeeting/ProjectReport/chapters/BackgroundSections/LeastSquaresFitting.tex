@@ -63,8 +63,9 @@ Noticing that the terms in the sums each depend on one row of $D$ or $0$ and $\l
 \end{equation*}
 \begin{equation}
 \label{eq:lsconcatmat}
-= \norm{\lsDataPointConcMatrix - \lsControlCoefConcMatrix(\vec{u},\vec{v}) \lsControlPointMatrix }
+= \norm{\lsDataPointConcMatrix - \lsControlCoefConcMatrix(\vec{u},\vec{v}) \lsControlPointMatrix }^2
 \end{equation}
+\todointernal[author=Benni]{added a $^2$ in the second formula. That's right?}
 where we have denoted the final concatenated matrices with $\lsDataPointConcMatrix$ and $ \lsControlCoefConcMatrix(\vec{u},\vec{v})$ respectively.
 
 \subsection{Fitting Problem: Peters' Scheme}
