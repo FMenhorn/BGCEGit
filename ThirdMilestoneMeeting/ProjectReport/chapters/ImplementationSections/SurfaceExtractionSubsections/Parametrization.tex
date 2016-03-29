@@ -3,7 +3,7 @@
 In addition to the reconstructed surface we need the following information for the least squares fit: 
 \begin{itemize}
 \item Which \ac{NURBS}-patch does each datapoint of the reconstructed surface belong to?
-\item Which parameters $u,v$ does the datapoint have on this patch?
+\item What are the values of $u,v$ parameters of the datapoint on the patch?
 \end{itemize}
 \subsubsection{Two-scale Dual Contouring}
 Before we can distribute datapoints to \ac{NURBS}-patches, we first have to find out how these patches look like. Since we want to have as few patches as possible we do not simply turn every \ac{quad} from the surface reconstruction into a patch. Instead  we try to find a surface with as few \acp{quad} as possible, while keeping the same topology as our initially reconstructed surface. This coarse surface will be assumed to be the patch distribution for the later steps.
@@ -12,31 +12,31 @@ Before we can distribute datapoints to \ac{NURBS}-patches, we first have to find
 Therefore, in our algorithm we are reconstructing the surface on two different scales: a coarse and a fine scale. The coarse scale data is deduced from the fine scale data by recursively applying the following algorithm:
 \begin{enumerate}
 \item Combine sets of eight connected voxels with egde-length $a$ into a coarse voxel with edgelength $2a$ (see \autoref{sfig:coarsenA}).
-\item Decide whether the new voxel resembles an inside ($=1$) or outside ($=0$) voxel, by taking the mean value of the contributing eight voxels. If mean value is above a certain threshold $t$, the new voxel is considered as an inside voxel. We picked $t=\frac{1}{8}$, i.e. if at least two voxels out of eight are inside voxels, the resulting voxel is considered being an inside voxel.
-\item For the resolution of non-manifold edges additional coarse voxel grids are generated, that are shifted by edgelength $a$ (see \autoref{sfig:coarsenB}).
+\item Decide whether the new voxel resembles an inner ($=1$) or outer ($=0$) voxel. This is done by taking the mean value of the contributing eight voxels. If the mean value is above a certain threshold $t$, the new voxel is considered as an inner voxel. We picked $t=\frac{1}{8}$, i.e. if at least two voxels out of eight are inner voxels, the resulting voxel is considered being an inner voxel.
+\item For the resolution of non-manifold edges, additional coarse voxel grids are generated. These grids are shifted by edge-length $a$ (see \autoref{sfig:coarsenB}).
 \end{enumerate}
 \begin{figure}
 \begin{subfigure}{.45\textwidth}
 \begin{center}
 \includegraphics[scale=1]{Pictures/tikzCoarsen/coarsen.pdf}
 \end{center}
-\subcaption{Recursively sets of 8 (4 in 2D) fine voxels (blue) are combined to form one coarse voxel (red).}
+\subcaption{Sets of 8 (4 in 2D) fine voxels (blue) are recursively combined to form one coarse voxel (red).}
 \label{sfig:coarsenA}
 \end{subfigure}\hfill
 \begin{subfigure}{.45\textwidth}
 \begin{center}
 \includegraphics[scale=1]{Pictures/tikzCoarsen/coarsenMani.pdf}
 \end{center}
-\subcaption{In a non-aligned grid addition voxels (yellow) are introduced, that are used for non-manifold resolution on the coarse scale.}
+\subcaption{Addition voxels (yellow) are introduced in a non-aligned grid for non-manifold resolution on the coarse scale.}
 \label{sfig:coarsenB}
 \end{subfigure}
-\caption{Coarsening scheme applied for \emph{Two-scale \acl{DC}}.}
+\caption{Coarsening scheme applied in \emph{Two-scale \acl{DC}}.}
 \label{fig:coarsen}
 \end{figure}
-One iteration of this coarsening scheme is referred to as one \emph{coarsening step}, applying this scheme recursively allows higher coarsening and results in multiple coarsening steps.
+One iteration of this coarsening scheme is referred to as one \emph{coarsening step}. Applying this scheme recursively allows higher coarsening and results in multiple coarsening steps.
 
-In the following we apply \ac{DC} to both datasets and obtain two different reconstructed surfaces.
-The coarse scale surface is used as a patch distribution; from the fine scale we obtain our datapoints to which the \ac{NURBS} will be fitted to. We call this approach \emph{Two-scale \acl{DC}} (see \autoref{fig:TwoScale}).
+Here, we apply \ac{DC} to both datasets and obtain two different reconstructed surfaces.
+The coarse scale surface is used as a patch distribution and from the fine scale we obtain our datapoints. The \ac{NURBS} will be fitted to these datapoints. We call this approach \emph{Two-scale \acl{DC}} (see \autoref{fig:TwoScale}).
 Of course this simple approach comes with drawbacks:
 \begin{itemize}
 \item We cannot guarantee that the coarse and the fine scale have exactly the same topology. Topological details of the fine scale, which do not exist on the coarse scale, are lost.
@@ -44,20 +44,23 @@ Of course this simple approach comes with drawbacks:
 \end{itemize}
 These drawbacks are especially bad for complex surfaces -- like the output of topology optimization -- where the topological details mentioned above are not an exception, but the default case. There are more elaborate surface extraction schemes that handle these problems. For the interested reader, alternative schemes such as \emph{Dual Marching Cubes} \cite{ScottSchaefer2004} or \emph{Manifold Dual Contouring} \cite{Schaefer2007}, are included in \autoref{appx:AltSurfRecon}.
 \subsubsection{Projection of Datapoints onto Quads}
-Now that we have constructed a \ac{NURBS}-patch distribution we can estimate the parametrization of the datapoints on the fine scale by projecting the datapoints onto the patches: For this procedure we first have to find out onto which one of the patches one particular datapoint will be projected. Then we have to do the actual projection of the datapoint onto the quad: 
-\begin{itemize}
-\item The first part can be done by simply measuring the distance from the datapoint to the centroid of each patch and deciding to project onto the patch with the smallest distance. 
+Now that we have constructed a \ac{NURBS}-patch distribution, we can estimate the parametrization of the datapoints on the fine scale by projecting them onto the patches: 
 
-\item For the latter we want the whole \ac{quad} to be parametrized on $u,v\in\left[0,1\right]^2$. We could either use bilinear interpolation for representing the quad and solve a non-linear minimization problem for each projection, or first approximate the quad with its least squares fit plane and then do a projection onto this plane by applying a simple basis transformation\footnote{This basis transformation can be computed in a very cheap way, by computing the QR-decomposition for the basis of each patch only once and applying it for each datapoint projected onto this patch.}. In our algorithm we used the second approach since the approximation of the original \acp{quad} via their least-squares fit planes introduces only a small error and significantly simplifies the projection onto the \ac{quad}.
-\end{itemize}
-Finally the projection might lead to parameters $u,v\not\in\left[0,1\right]^2$ for some of the datapoints. As these are not directly above a \ac{quad}, they might lead to inconsistencies in where the datapoints of a quad belong to, especially along interfaces of quads, where points on different quads might lie overlapping. To simplify the treatment and only use consistent points, these outside points are therefore omitted.
+For this procedure we do the following steps:
 
-After having completed all these steps we obtain the following data for the subsequent steps of our algorithm:
+\begin{enumerate}
+\item Find out onto which of these patches a datapoint should be projected. This can be done by simply measuring the distance from the datapoint to the centroid of each patch and deciding to project onto the patch with the smallest distance.
+\item Project the point onto the target patch. For this, we want the whole \ac{quad} to be parametrized on $u,v\in\left[0,1\right]^2$. This is done by first approximating the quad (which may not necessarily be planar) with its least squares fit plane. Then a projection onto this plane is done by applying a simple basis transformation\footnote{This basis transformation is computed in a very efficient way by computing the QR-decomposition for the basis of each patch only once and applying it to each datapoint projected onto this patch.}.
+\end{enumerate}
+
+The projection might lead to parameters $u,v\not\in\left[0,1\right]^2$ for some of the datapoints. As these are not directly above a \ac{quad}, they might lead to inconsistencies in where the datapoints of a quad belong to, especially along interfaces of quads, where points on different quads might lie overlapping\todourgent[author=Benni]{@Erik: Whaaaaaat?}. To simplify the treatment, these inconsistent points are omitted.
+
+After completing all these steps we obtain the following data for the subsequent steps of our algorithm:
 \begin{itemize}
 \item a coarse surface delivering the topology for our \ac{NURBS}-patches in Peters' Scheme
-\item a set of datapoints from the fine scale with coordinates $\left(x,y,z\right)^T$ and parameters $\left(u,v\right)\in\left[0,1\right]^2$, where each datapoint is associated with a \ac{NURBS}-patch. 
+\item a set of datapoints from the fine scale with coordinates $\left(x,y,z\right)^T\in\mathbb{R}^3$ and parameters $\left(u,v\right)\in\left[0,1\right]^2$, where each datapoint is associated with a \ac{NURBS}-patch. 
 \end{itemize}
-For a visualization of our algorithm in 2D see \autoref{fig:TwoScale}.
+For a sample output of our algorithm for a 2D case, see \autoref{fig:TwoScale}.
 
 \begin{figure}
 \begin{center}

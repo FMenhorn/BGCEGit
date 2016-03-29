@@ -4,39 +4,37 @@ In \autoref{sec:surfaceBackg} different surface reconstruction schemes were intr
 
 \subsubsection{Discussion on Surface Reconstruction Schemes}
 Since the surface reconstruction is just an intermediate step before our final \ac{NURBS} fitting procedure, it is not sufficient to only produce a good surface approximation of our optimized topology, but additional constraints have to be kept in mind:
-\begin{enumerate}
+\begin{itemize}
 \item \ac{NURBS} have a rectangular topology, therefore our surface reconstruction should also be able to provide a surface consisting of rectangular patches.
 \item Peters' Scheme only covers manifold surfaces. This means that each edge must be shared by exactly two patches.
-\end{enumerate}
-The first requirement is met by \ac{DC}, while the second one is met only by \ac{MC}. Nevertheless, we decided to use the \ac{DC} method, because its basic version already creates \acp{quad}, while \ac{MC} creates a mesh of triangles, which can only be changed into a mesh of \acp{quad} by considerably increasing the number of faces.
+\end{itemize}
+The first requirement is met by \ac{DC}, while the second one is met only by \ac{MC}. Nevertheless, we decided to use the \ac{DC} method because its basic version already creates \acp{quad}, while \ac{MC} creates a mesh of triangles. This mesh can only be changed into a mesh of \acp{quad} by considerably increasing the number of faces.
 
 \subsubsection{Our Implementation of Dual Contouring}
-We use the open-source language PYTHON \cite{Python} for the implementation of \ac{DC}. Compared to the version described in \cite{Hermite2002} we have applied some simplifications:
+We use the open-source language PYTHON \cite{Python} for the implementation of \ac{DC}. Compared to the version described in \cite{Hermite2002} the following simplifications were applied:
 \begin{itemize}
-\item We do not care about sharp features and cannot easily access gradient information in our algorithm. Therefore, we did not use \autoref{eq:QEF} for the generation of new vertices, but the simple averaging scheme described in \autoref{ssec:DC}.
-\item For the reason that our dataset only consists of boolean values instead of real valued quantities, we locate our surface at the interface of material and no-material and not at a certain isovalue.
-\item We did not implement the adaptive and topology safe scheme but a scheme for uniform grids which does not support adaptive mesh simplification nor topology checks.
+\item We use the simple averaging scheme described in \autoref{ssec:DC} instead of \autoref{eq:QEF}, since we do not consider sharp features and cannot easily access gradient information in our algorithm. 
+\item Since our dataset only consists of boolean values instead of real valued quantities, we locate our surface at the material/non-material interface instead of a certain isovalue.
+\item Our implementation does not support adaptivity or topology safety.
 \end{itemize}
 This leads to the following modified \ac{DC} scheme:
 \begin{enumerate}
-\item On each cube edge find the root (i.e. the interface of material and no-material voxels) using bisection. We assume our surface to exactly lie in the middle between material and no-material voxels.
-\item Take the mean value of all root positions for determining the position of the newly introduced vertex.
-\item Join the vertices associated with four cubes sharing a common edge to form a \ac{quad}.
+\item Find all sign-changing edges that connect material and non-material voxels.
+\item On each sign-changing edge, find the root (i.e. the interface of material and non-material voxels) using bisection. We assume our surface to lie exactly in the middle of material and non-material voxels.
+\item Take the mean value of these root positions for determining the position of the newly introduced vertex.
+\item Join the vertices associated with four cubes sharing a common sign-changing edge to form a \ac{quad}.
 \end{enumerate}
-Thus our procedure generates \ac{quad} surfaces for boolean datasets on uniform Cartesian grids. But like for the original \ac{DC} algorithm we cannot guarantee that those surfaces are manifold.
+Thus our procedure generates \ac{quad} surfaces for boolean datasets on uniform Cartesian grids. But unlike the original \ac{DC} algorithm we cannot guarantee that these are manifold surfaces (see \autoref{sssec:nonmfsurf}).
 
 \subsubsection{Obtaining Manifold Surfaces}
-%\todointernal[inline]{proofreading!}
-Since we want to deduce a first estimate for the topology of the \ac{NURBS} surface output, non-manifold surfaces cannot be accepted\footnote{Surfaces consisting of smoothly connected \ac{NURBS} \acp{patch} are always manifold surfaces. Therefore we cannot start with a non-manifold surface and assume we will end up with a manifold surface.}. We implemented a remeshing procedure for generating manifold surfaces out of non-manifold surfaces.
-
-Our procedure has the following steps:
+Since we want to deduce a first estimate for the topology of the \ac{NURBS} surface output, non-manifold surfaces cannot be accepted\footnote{Surfaces consisting of smoothly connected \ac{NURBS} \acp{patch} are always manifold surfaces. Therefore we cannot start with a non-manifold surface and assume we will end up with a manifold surface.}. We therefore use a remeshing procedure for generating manifold surfaces out of non-manifold surfaces. Our procedure has the following steps:
 \begin{enumerate}
-\item Find all non-manifold edges which are connected to more than two \acp{quad}.
-\item All non-manifold edges are split into two manifold edges with only two \acp{quad} connected to each one of them.
-\item The member vertices of each pair of manifold edges are moved into opposite directions. 
+\item Find all non-manifold edges by searching for edges that are connected to more than two \acp{quad}.
+\item For every non-manifold edge found, make a copy. Link the quads to the two resulting edges to create a manifold surface. Now, exactly two \acp{quad} are connected to each edge.
+\item The member vertices of the original edge and those of its copy are moved in opposite directions. This is done to separate the overlapping edges. 
 \end{enumerate}
 We illustrate the procedure of remeshing for a 2D example in \autoref{fig:manifoldResolution2D}. 
-In 3D we do not have non-manifold vertices, but edges, which have to be split and moved. Please note that for the 3D case additional patterns occur. In 3D not only the \acp{quad} which are connected to the whole non-manifold edge have to be considered, but also the \acp{quad} connected to only one vertex of the edge. This also implies the introduction of new \acp{quad} at other locations. For an overview over some of the possible patterns in 3D see \autoref{fig:manifoldPatterns3D}.
+In 3D we do not have non-manifold vertices, but edges, which have to treated. Please note that for the 3D case additional patterns come up. In 3D not only the \acp{quad} which are connected to the whole non-manifold edge have to be considered, but also the \acp{quad} connected to only one vertex of the edge. This also implies the introduction of new \acp{quad} at other locations. For an overview over some of the possible patterns in 3D see \autoref{fig:manifoldPatterns3D}.
 
 \begin{figure}
 \begin{center}
@@ -51,7 +49,7 @@ In 3D we do not have non-manifold vertices, but edges, which have to be split an
 \subcaption{contour after remeshing}
 \end{subfigure}
 \end{center}
-\caption{Illustration of the remeshing process. Blue dots denote outside voxels, red dots inside voxels and crosses voxels considered for resolving ambiguities. We first split the non-manifold vertex into two vertices and then move them into opposite directions. The direction is determined from the gradient at the datapoint with the cross, which goes in the direction of the blue dots (from inside to outside). Please note that we can only estimate the gradient if additional information in the middle of the cube, which is containing the non-manifold vertex, is available. Otherwise it is not possible to resolve the ambiguity in a proper way and therefore we cannot eliminate the non-manifold vertex.}
+\caption{Illustration of the remeshing process. Blue dots denote outer voxels, red dots inner voxels. Crosses denote voxels considered for resolving ambiguities. We first copy the non-manifold vertex and then move the resulting pair of vertices in opposite directions. The direction is determined from the gradient at the datapoint with the cross, which goes in the direction of the blue dots (from inside to outside). Please note that we can only estimate the gradient if additional information is available in the middle of the cube which contains the non-manifold vertex. Otherwise it is not possible to resolve the ambiguity in a proper way and therefore we cannot eliminate the non-manifold vertex.}
 \label{fig:manifoldResolution2D}
 \end{figure}
 
@@ -98,7 +96,7 @@ In 3D we do not have non-manifold vertices, but edges, which have to be split an
 \includegraphics[height = .17\textheight, width = .5\textwidth,keepaspectratio]{Pictures/SurfaceReconstruction/3DManifoldOIRes}
 \end{subfigure}
 \end{center}
-\caption{Different patterns before (left) and after (right) remeshing. Depending on the neighbourhood of the non-manifold edge (red) different patterns are applied. The edge is always divided into to edges which are then moved into different directions. A non-manifold edge is connected to outside-outside (1.row), inside-inside (2.row), two other manifold edges (3.row), inside and another manifold edge (4.row), inside-outside (5.row). In the first and last row just splitting the edge is not sufficient, but additionaly new \acp{quad} have to be introduced. Please note that this figure does not cover all possible patterns.}
+\caption{Different patterns before (left) and after (right) remeshing. Depending on the neighbourhood of the non-manifold edge (red) different patterns are applied. The edge is always copied. The resulting two edges are moved in opposite directions. A non-manifold edge is connected to outside-outside (1.row), inside-inside (2.row), two other manifold edges (3.row), inside and another manifold edge (4.row), inside-outside (5.row). In the first and last row copying the edge is not sufficient; new \acp{quad} have to be introduced. Please note that this figure does not cover all possible patterns.}
 \label{fig:manifoldPatterns3D}
 \end{figure}
 
