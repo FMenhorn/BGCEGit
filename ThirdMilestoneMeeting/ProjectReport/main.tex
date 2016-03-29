@@ -107,11 +107,12 @@
  		%---------------------------------------------------------------------------
 	%	\addcontentsline{toc}{part}{Appendix}
 		\appendix 
-		\tododone{Severin: Include the installation and user-guide as-is as appendices under sections; Doesn't look awesome with pagenumbers...}
 		\input{chapters/AppendixSurf}
 		\chapter{Installation Guide}
+		\todourgent[inline, author=Benni]{@Anna: some blabla here, refer to this in main document!}
 		\includepdf[pages=-]{InstallationGuide.pdf}
 		\chapter{User Guide}
+		\todourgent[inline, author=Benni]{@Anna: some blabla here, refer to this in main document!}
 		\includepdf[pages=-]{UserGuide.pdf}
 		
 		%---------------------------------------
@@ -125,8 +126,9 @@
 
   	\clearemptydoublepage
   
+\todourgent[inline, author=Benni]{@Severin: Do the bibliography}
 	\bibliography{bibliography/literature}
-	\todo[inline]{insert all the acronym stuff for final delivery of report}
+	\todourgent[author = Benni,inline]{@Benni: think about this comment: insert all the acronym stuff for final delivery of report}
 	%\cleardoublepage
 	%\printacronyms[	include-classes=abbrev,
 	%				name=Abbreviations,

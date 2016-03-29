@@ -7,7 +7,7 @@
 \caption{The FreeCAD workbench. FreeCAD is an open-source CAD modeling software, and is the primary CAD tool used in this project. Figure from \cite{FreeCAD}}
 \label{fig: freeCAD}
 \end{figure}
-
+\todourgent[author=Benni, inline]{@Saumi: remove Fig. FreeCAD}
 As pointed out in the \ref{sec:CADbackg}, STEP and IGES files can store color information for each face. This is the attribute that is used to specify the identity of the face, and can be modified using standard CAD design software such as FreeCAD (see \cite{FreeCAD}). When analysing a structural problem, a designer typically needs to provide information on up to five parameters:
 
 \begin{itemize}
@@ -18,6 +18,8 @@ As pointed out in the \ref{sec:CADbackg}, STEP and IGES files can store color in
 Internally, OpenCascade transforms the colors from range $(0, 255)$ to $(0,1)$ which we then shift to $(-0.5, 0.5)$. Of course, force values may also lie outside this range. The user then needs to scale the required force to fit in the color range, and provide a scaling factor as an input.
 
 For example, to assign a force value of $(-200.5, 172.0, -10.75)$:
+
+\todourgent[author=Benni,inline]{@Saumi: make table nice according to arash}
 
 \begin{table}[h!]
 	\begin{center}
