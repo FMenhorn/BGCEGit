@@ -27,7 +27,8 @@ oneside, % One page layout (no page indentation)
 headinclude,footinclude, % Extra spacing for the header and footer
 BCOR5mm, % Binding correction
 ]{scrartcl}
-\input{structure.tex} % Include the structure.tex file which specified the document structure and layout
+\input{structure.tex} 
+\clearscrheadfoot
 \usepackage{fancybox}
 %\usepackage{listings}
 \usepackage{tikz}
@@ -35,6 +36,7 @@ BCOR5mm, % Binding correction
 %\usepackage{authblk}
 %\usepackage{titlepic}
 \usepackage{titling}
+%\usepackage{fancyhdr}
 
 
 \hyphenation{Fortran hyphenation} % Specify custom hyphenation points in words with dashes where you would like hyphenation to occur, or alternatively, don't put any dashes in a word to stop hyphenation altogether
@@ -46,7 +48,7 @@ BCOR5mm, % Binding correction
 
 \title{\includegraphics[width=14cm,height=7cm]{Pictures/cado_logo_text_wide.png} \\ \normalfont\spacedallcaps{Installation Guide} \\
 \vspace*{\fill}}% The article title
-
+%\lhead{CADO Installation Guide}
 %\author[1]{Joshi, Saumitra}
 %\author[1]{Medina, Juan Carlos}
 %\author[1]{Menhorn, Friedrich}
@@ -55,7 +57,8 @@ BCOR5mm, % Binding correction
 %\author[2]{Wannerberg, Erik}
 %\author[2]{Yurova, Anna}
 %\vfill{2cm}
-
+\ihead{\textcolor{gray}{CADO Installation Guide}}
+\ohead{\textcolor{gray}{\thepage}}
 %\author{Joshi, Saumitra; Medina, Juan Carlos; \\ Menhorn, Friedrich; Reiz, Severin;\\ R{\"u}th, Benjamin;  Wannerberg, Erik; Yurova, Anna}% The article author(s) - author affiliations need to be specified in the AUTHOR AFFILIATIONS block
 %\author{
 %\spacedlowsmallcaps{Saumitra Joshi, Juan Carlos Medina,} \\
@@ -111,7 +114,7 @@ BCOR5mm, % Binding correction
 %----------------------------------------------------------------------------------------
 
 \section*{About} % This section will not appear in the table of contents due to the star (\section*)
-This document provides general information about using the CADO software. CADO is a fully CAD-integrated topology optimization tool under the open source BSD license. It resulted from a project as part of the Bavarian Graduate School of Engineering at TU München and was developed by Saumitra Joshi, Juan Carlos Medina, Friedrich Menhorn, Severin Reiz, Benjamin R{\"u}th, Erik Wannerberg and Anna Yurova in 2015-2016.
+This document provides general information about using the CADO software. CADO is a fully CAD-integrated topology optimization tool under the open source BSD license. This project is a part of the Bavarian Graduate School of Engineering at TU München and was developed by Saumitra Joshi, Juan Carlos Medina, Friedrich Menhorn, Severin Reiz, Benjamin R{\"u}th, Erik Wannerberg and Anna Yurova in 2015-2016. The figures in this document are provided as reference output for the user. 
 %\begin{itemize}
 %\item Saumitra Joshi
 %\item Juan Carlos Medina
@@ -167,13 +170,13 @@ For CADO it is necessary to have an output in the \textit{ascii} format. By defa
  		\item Open the ToPy source file \textit{core/visualization.py}
  		\item Go to the method \texttt{{\_}write{\_}legacy{\_}vtu(x, fname)} in line 160
 
- 		\item Change \textcolor{orange}{\texttt{'binary'}} to \textcolor{orange}{\texttt{'ascii'}} in line 194 (see pic. \ref{fig:ToPy_CodeChange})
+ 		\item Change \textcolor{orange}{\texttt{'binary'}} to \textcolor{orange}{\texttt{'ascii'}} in line 194 (see fig. \ref{fig:ToPy_CodeChange})
 \end{itemize} 
 	
 \begin{figure}
 \centering
 \includegraphics[scale=0.5]{img/ToPy_CodeChange.png}
-\caption{Changing of the output type of ToPy to ascii}
+\caption{Changing of the output type of ToPy to \texttt{'ascii'}}
 \label{fig:ToPy_CodeChange}
 \end{figure}
 
@@ -185,7 +188,7 @@ After making the following edit, run the following command from the root directo
 \begin{figure}
 \centering
 \includegraphics[scale=0.3]{img/ToPy_ExampleRun_cut.png}
-\caption{ToPy test}
+\caption{Output of the ToPy test}
 \label{fig:ToPy_test}
 \end{figure}
 
@@ -209,16 +212,18 @@ OpenCascade (\href{http://www.opencascade.com/}{http://www.opencascade.com/}) is
 For technical reasons, we do not use OpenCascade from the official webpage, but from the \textit{.git} repository. 
 \begin{figure}
 \centering
-\includegraphics[scale=0.3]{img/OC_Build5_cut.png}
-\caption{Building OpenCascade}
-\label{fig:OC_build}
-\end{figure}
-\begin{figure}
-\centering
-\includegraphics[scale=0.3]{img/OC_CMake2.png}
+\includegraphics[scale=0.3]{img/OC_CMake2_cropped.png}
 \caption{OpenCascade installation: cmake}
 \label{fig:OC_cmake}
 \end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[scale=0.3]{img/OC_Build5_cut.png}
+\caption{Sample output of the OpenCascade building process}
+\label{fig:OC_build}
+\end{figure}
+
 To install OpenCascade this way, make sure that git (\href{https://git-scm.com/}{https://git-scm.com/}) is installed on your computer and then run the following commands in your terminal:
 \begin{itemize}
 \item Clone the repository:
@@ -232,7 +237,7 @@ To install OpenCascade this way, make sure that git (\href{https://git-scm.com/}
 \begin{itemize}
 \item[] \texttt{\textbf{$>$ }cmake ..}
 \end{itemize}
-Sample output: see Pic. \ref{fig:OC_cmake}
+Sample output: see fig. \ref{fig:OC_cmake}
 \item Build OpenCascade:
 \begin{itemize}
 \item[] \texttt{\textbf{$>$ }make ..}
@@ -241,33 +246,21 @@ To speed up the process, build can be done in parrallel:
 \begin{itemize}
 \item[] \texttt{\textbf{$>$ }make -j<number\_of\_processors>}
 \end{itemize}
-Sample output: see Pic. \ref{fig:OC_build}
+Sample output: see fig. \ref{fig:OC_build}
 \item Install OpenCascade:
 \begin{itemize}
 \item[] \texttt{\textbf{$>$ }sudo make install ..}
 \end{itemize}
-Sample output: see Pic. \ref{fig:OC_install}
 \end{itemize}
 
-\begin{figure}
-\centering
-\includegraphics[scale=0.3]{img/OC_Install2.png}
-\caption{OpenCascade installation}
-\label{fig:OC_install}
-\end{figure}
-	 These steps are in accord with the installation guide on the Github page of OpenCascade itself. One can also use the CMake-GUI (see Pic. \ref{fig:CMake_GUI}) to change some of the build configuration if need be (e.g. include OpenMP support).
+	 These steps are in accord with the installation guide on the Github page of OpenCascade itself. One can also use the CMake-GUI to change some of the build configuration if need be (e.g. include OpenMP support).
 	
-\begin{figure}
-\centering
-\includegraphics[scale=0.5]{img/CMake_GUI.png}
-\caption{CMake graphical interface}
-\label{fig:CMake_GUI}
-\end{figure}
+
 \subsection{Test OpenCascade}
 \begin{figure}
 \centering
-\includegraphics[scale=0.2]{img/OC_Test2.png}
-\caption{OpenCascade test}
+\includegraphics[scale=0.3]{img/OC_Test2_cropped.png}
+\caption{Sample output of the OpenCascade test}
 \label{fig:OC_test}
 \end{figure}
 In order to test whether the installation of OpenCascade was completed successfully it is possible to run a test provided by OpenCascade. 
@@ -276,7 +269,7 @@ For that, run the following command from your terminal:
 \begin{itemize}
 \item[] \texttt{\textbf{$>$ }make test}
 \end{itemize}
-All performed tests should be successful (See Pic. \ref{fig:OC_test})
+All performed tests should be successful (See fig. \ref{fig:OC_test})
 
 \section{Miscellaneous}
 \subsection{Qt \& QtCreator}
