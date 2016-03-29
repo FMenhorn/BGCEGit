@@ -1,6 +1,6 @@
 \section{Overview}
-The implementation workflow starts from the input geometry (a). The first step is voxelization, in which we convert the CAD geometry into a three-dimensional voxel grid (b). This grid then undergoes topology optimization (c) from which the points for surface fitting are computed (d). This is followed by construction of NURBS surfaces through these points (e). Finally, post-processing with fixtures and optimization domain limits results in the final geometry (f).\todourgent[author=Benni,inline]{@ Friedrich: fix this labelling stuff. Only refer to fig. Put workflow into caption.}
-\begin{figure}
+Using the different concepts introduced in the previous chapters we built a pipeline from CAD design via topology optimization back to CAD. An overview over the implementation workflow is shown in \autoref{fig:pipeline}. It describes the different steps and the transformations applied on the geometry at whose implementation details we will now look more closely.
+\begin{figure}[ht]
 \begin{center}
 		\begin{tikzpicture}[remember picture, auto,
     block/.style={
@@ -58,7 +58,7 @@ The implementation workflow starts from the input geometry (a). The first step i
         \path[thick, ->] (N4) edge [bend left] (N6) node[yshift=0.1cm, xshift = 2.6cm]{(d)};
         \path[thick, ->] (N6) edge [bend left] (N5) node[yshift=-1cm, xshift = -0.1cm]{(e)} node[yshift=2cm, xshift = -7.22cm]{(f)};
         \end{tikzpicture}
-        \caption{The implementation workflow}
+        \caption{Starting off with an input geometry (a), the first step is voxelization, in which we convert the CAD geometry into a three-dimensional voxel grid (b). This grid then undergoes topology optimization (c) from which the points for surface fitting are computed (d). This is followed by construction of NURBS surfaces through these points (e). Finally, post-processing with fixtures and optimization domain limits results in the final geometry (f).}
         \label{fig:pipeline}
 	\end{center}
 \end{figure}
