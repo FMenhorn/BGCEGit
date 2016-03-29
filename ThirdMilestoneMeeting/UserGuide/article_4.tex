@@ -27,7 +27,8 @@ oneside, % One page layout (no page indentation)
 headinclude,footinclude, % Extra spacing for the header and footer
 BCOR5mm, % Binding correction
 ]{scrartcl}
-\input{structure.tex} % Include the structure.tex file which specified the document structure and layout
+\input{structure.tex}
+\clearscrheadfoot % Include the structure.tex file which specified the document structure and layout
 \usepackage{fancybox}
 \usepackage{listings}
 \usepackage{tikz}
@@ -59,6 +60,8 @@ BCOR5mm, % Binding correction
 %\author[2]{Wannerberg, Erik}
 %\author[2]{Yurova, Anna}
 %\vfill{2cm}
+\ihead{\textcolor{gray}{CADO User Guide}}
+\ohead{\textcolor{gray}{\thepage}}
 
 %\author{Joshi, Saumitra; Medina, Juan Carlos; \\ Menhorn, Friedrich; Reiz, Severin;\\ R{\"u}th, Benjamin;  Wannerberg, Erik; Yurova, Anna}% The article author(s) - author affiliations need to be specified in the AUTHOR AFFILIATIONS block
 %\author{
