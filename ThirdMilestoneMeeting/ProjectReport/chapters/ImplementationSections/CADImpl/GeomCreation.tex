@@ -1,13 +1,7 @@
 \subsection{Specification of Boundary Conditions for the Input Geometry}
 \label{sec: GeomCreation}
 
-\begin{figure}
-\centering
-  \includegraphics[scale=0.75]{Pictures/CADToVoxel/FreeCAD.png}
-\caption{The FreeCAD workbench. FreeCAD is an open-source CAD modeling software, and is the primary CAD tool used in this project. Figure from \cite{FreeCAD}}
-\label{fig: freeCAD}
-\end{figure}
-\todourgent[author=Benni, inline]{@Saumi: remove Fig. FreeCAD}
+\tododone[author=Benni, inline]{@Saumi: remove Fig. FreeCAD}
 As pointed out in the \ref{sec:CADbackg}, STEP and IGES files can store color information for each face. This is the attribute that is used to specify the identity of the face, and can be modified using standard CAD design software such as FreeCAD (see \cite{FreeCAD}). When analysing a structural problem, a designer typically needs to provide information on up to five parameters:
 
 \begin{itemize}
@@ -19,7 +13,7 @@ Internally, OpenCascade transforms the colors from range $(0, 255)$ to $(0,1)$ w
 
 For example, to assign a force value of $(-200.5, 172.0, -10.75)$:
 
-\todourgent[author=Benni,inline]{@Saumi: make table nice according to arash}
+\tododone[author=Benni,inline]{@Saumi: make table nice according to arash}
 
 \begin{table}[h!]
 	\begin{center}
@@ -29,9 +23,9 @@ For example, to assign a force value of $(-200.5, 172.0, -10.75)$:
 			\toprule
 			{\small Original vector} & {\small Scaling factor} & {\small OpenCascade values} & {\small Final color}\\
 			\midrule
-			$-200.5$ & $401$ & $-0.4999999$ & $1$\\
-			$172.0$  & $401$ & $0.427860697$  & $235$\\
-			$-10.75$ & $401$ & $-0.02680798$   & $120$\\
+			$-200.5$ & $401$ & $-0.49$ & $001$\\
+			$+172.0$ & $401$ & $+0.43$ & $235$\\
+			$-10.75$ & $401$ & $-0.03$ & $120$\\
 			\bottomrule
 		\end{tabular}
 	\end{center}
