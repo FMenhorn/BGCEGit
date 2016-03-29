@@ -197,20 +197,20 @@ After that, the path to the chosen file should appear near the \textbf{Select ST
 \begin{figure}
 \centering
 \includegraphics[scale=0.4]{Pictures/chooseFileDialog.png}
-\caption{File dialog}
+\caption{CADO input files. Please make sure that files follow the naming convention stated in the document.}
 \label{fig:fileDialog}
 \end{figure} 
 
-Note that the same directory must also contain an \textit{.iges} file with the information about colors with an identical name:
+Note that the same directory must also contain an \textit{.iges} file with the information about colors (see fig. \ref{fig:fileDialog}) with an identical name:
 \begin{itemize}
-\item[] \textit{$<$StepFileName$>$.step}
+\item[] \textit{$<$StepFileName$>$.iges}
 \end{itemize}
 %\begin{lstlisting}[language = {Promela}]
 %<StepFileName>.iges
 %\end{lstlisting}
 
 \subsubsection{Nonchanging domain}
-In case some domains need to be kept unchanged during the optimization (for example, screw threads), select the \textbf{Nonchanging domain} checkbox in the \textit{Additional Specifications} section. Make sure that your \textit{.step} file that specifies the nonchanging domains is located in the same directory as the original \textit{.step} file and named as:
+In case some domains need to be kept unchanged during the optimization (for example, screw threads), select the \textbf{Nonchanging domain} checkbox in the \textit{Additional Specifications} section. Make sure that your \textit{.step} file that specifies the nonchanging domains is located in the same directory as the original \textit{.step} file (see fig. \ref{fig:fileDialog}) and named as:
 \begin{itemize}
 \item[] \textit{$<$StepFileName$>${\_}Fixed.step}
 \end{itemize}
@@ -219,7 +219,7 @@ In case some domains need to be kept unchanged during the optimization (for exam
 %\end{lstlisting}
 
 \subsubsection{Optimization domain}
-You can constrain the solution to be limited to a certain domain of optimization. In order to specify this, select the \textbf{Optimization Domain} checkbox in the \textit{Additional Specifications} section. Make sure that your \textit{.step} file with the optimization domain is located in the same directory as the original \textit{.step} file and named as:
+You can constrain the solution to be limited to a certain domain of optimization. In order to specify this, select the \textbf{Optimization Domain} checkbox in the \textit{Additional Specifications} section. Make sure that your \textit{.step} file with the optimization domain is located in the same directory as the original \textit{.step} file (see fig. \ref{fig:fileDialog}) and named as:
 \begin{itemize}
 \item[] \textit{$<$StepFileName$>${\_}ToOptimize.step}
 \end{itemize}
