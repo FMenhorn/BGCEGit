@@ -12,8 +12,14 @@ For the input:
 \item a set of a datapoints ($\lsDataPoint_k \in \mathbb{R}^d$),
 \item how they are parameterized (parameters $(u_{\lsDataPoint_k}, v_{\lsDataPoint_k})$ and on which quad $\hat{f}\in\petersFaces$),
 \end{itemize}
-the algorithm proceeds as follows:
-
+the algorithm proceeds as follows (see \autoref{fig:petersAlgorithm} for a graphical overview):
+\begin{figure}
+\begin{center}
+\includegraphics[width=1.1\textwidth]{Pictures/tikzPeters/Peterscombined.pdf}
+\end{center}
+\caption{AWESOME PIXX}
+\label{fig:petersAlgorithm}
+\end{figure}
 %The algorithm is given information about a quadrilateral mesh of vertices ($\petersControlMeshVec \in \petersControlMesh$), how they are connected into quads ($\verticesof{\hat{f}}, \forall \hat{f} \in \petersFaces$) as an ordered list of four vertex indices, and how they are parameterized (parameters $(u_\lsDataPoint, v_\lsDataPoint)$ and on which quad $\hat{f}\in\petersFaces$). The algorithm then roughly proceeds as follows:
 \begin{enumerate}
 \item For every quad in the mesh, a $4 \times 4$ grid of points ($\petersPatchPoints$) is created. In addition, several lists are created for labelling these points. These labels define the position of the points with respect to each other and to corners on the quads. They are used later in the algorithm, where information about neighbouring points is needed\footnote{These labels are correlating with points $A, B \text{ and } C$ in \cite{peters1992constructing} and \cite{eck1996automatic}, for reference.}.
