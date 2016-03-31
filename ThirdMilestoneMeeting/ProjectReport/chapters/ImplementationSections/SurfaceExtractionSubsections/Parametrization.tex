@@ -55,7 +55,7 @@ For this procedure we do the following steps:
 
 The projection might lead to parameters $\left(u,v\right)\not\in\left[0,1\right]^2$ for some of the datapoints. As we only produce surfaces for $\left(u,v\right)\in\left[0,1\right]^2$, these are then not on the surface. If we still include them in the fitting, these will then influence parts of the surface that are not there, leading to unwanted fitting behaviour such as wiggles and turns. 
 
-We have tried several methods to solve this problem. For example, one might consider scaling the parameter space of each quad to $\left[0,1\right]^2$, which however leads to inconsistencies in parameter assignemt between neighbouring quads with different scaling. Another solution, cropping the parameter domain by shifting all parameters outside $\left[0,1\right]^2$ to the closest border (i.e. for $u \text{ or } v < 0$ is assigned to $0$, $u \text{ or } v >1$ is assigned to $1$), also leads to problems, as points in different regions of space then can end up having the same parameter values. To simplify the treatment, we therefore currently only consider the points parametrized inside $\left[0,1\right]^2$, and omit all points outside from this step onwards. \tododone[author=Erik]{Benni{@}Erik: Whaaaaaat?,{@}Benni: Works? }.
+We have tried several methods to solve this problem. For example, one might consider scaling the parameter space of each quad to $\left[0,1\right]^2$, which however leads to inconsistencies in parameter assignemt between neighbouring quads with different scaling. Another solution, cropping the parameter domain by shifting all parameters outside $\left[0,1\right]^2$ to the closest border (i.e. for $u \text{ or } v < 0$ is assigned to $0$, $u \text{ or } v >1$ is assigned to $1$), also leads to problems, as points in different regions of space then can end up having the same parameter values. To simplify the treatment, we therefore currently only consider the points parametrized inside $\left[0,1\right]^2$, and omit all points outside from this step onwards.
 
 After completing all these steps we obtain the following data for the subsequent steps of our algorithm:
 \begin{itemize}
@@ -63,7 +63,7 @@ After completing all these steps we obtain the following data for the subsequent
 \item a set of datapoints from the fine scale with coordinates $\left(x,y,z\right)^T\in\mathbb{R}^3$ and parameters $\left(u,v\right)\in\left[0,1\right]^2$, where each datapoint is associated with a \ac{NURBS}-patch. 
 \end{itemize}
 For a sample output of our algorithm for a 2D case, see \autoref{fig:TwoScale}.
-\todointern[inline, author=erik]{do we want to refer to future work of improving this rather crude parametrisation?}
+\tododone[inline, author=benni]{do we want to refer to future work of improving this rather crude parametrisation? Benni: No, since there is no good idea how to do it.}
 
 \begin{figure}
 \begin{center}

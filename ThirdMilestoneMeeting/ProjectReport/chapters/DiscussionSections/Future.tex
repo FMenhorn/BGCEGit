@@ -4,7 +4,7 @@ We consider three main areas of improvement in which a future project could dive
 \begin{itemize}
 \item Implement an adaptive DC algorithm
 \item Find a general approach to  avoid special manifold treatment
-\item Implement an adaptive surface reconstruction. This could work by first fitting a surface on very coarse quads, relying on using an error measure (see below) to detect if the error could be improved. Afterwards  subdividing these quads and finally rerun the fitting algorithm either locally or globally. For further ideas on surface reconstruction, refer to Appendix A.
+\item Implement an adaptive surface reconstruction. This could work by first fitting a surface on very coarse quads, relying on using an error measure (see below) to detect if the error could be improved. Afterwards  subdividing these quads and finally rerun the fitting algorithm either locally or globally. For further ideas on surface reconstruction, refer to \autoref{appx:AltSurfRecon}.
 
 \end{itemize}
 The second area of improvement relies on \textit{correctness}. Until now the output results have not been checked for accuracy. In order to find the optimal approach with the best parameters we would need a concrete measure of the error. Therefore we would suggest to:
