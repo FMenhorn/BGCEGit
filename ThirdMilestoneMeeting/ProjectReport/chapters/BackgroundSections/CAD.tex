@@ -31,7 +31,7 @@ A very straightforward approach is to store a geometry shape as a regular grid o
 \ac{CAD} software programs usually use their own data formats; in order to exchange models standardized interface formats have been developed. Geometric models are compressed to certain geometry descriptions; transferring additional information, such as material properties or manufacturing information, is in general a difficult task and in some exchange file formats even prohibited. A few common exchange file types are described below, as also compared in \cite{STL}.
 \subsubsection{\acs{STL} File Format} \label{subsub:STL}
 The \acf{STL} file format describes the model only by its boundary and is thus a \ac{BREP} format. The idea behind its files is simple: the geometric model is discretized into a cloud of points, where sets of three vertices form a triangle; hence, a connected surface of triangles emerges which describes the geometry. The procedure is shown in \autoref{fig:STL} for a two dimensional circle.  
-\begin{figure}
+\begin{figure}[b]
 \centering
    \scalebox{0.4}{\includegraphics{Pictures/STL.pdf}}\\
    \caption{\ac{STL} discretization for a circle, self-made in MATLAB \cite{MATLAB}. Note that the circle cannot be exactly represented by the vertices and edges.}

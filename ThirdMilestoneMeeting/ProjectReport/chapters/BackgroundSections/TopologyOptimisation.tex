@@ -13,13 +13,14 @@ For the rest of this section, and the rest of the document, we will concentrate 
 
 \subsection{Minimum Compliance: Problem Formulation}
 \label{subsec:TopOpTheory}
+In order to constrain the resulting structure as little as possible, the formulation of the topology optimization problem is generally given as follows: for a given set of external fixture points, external loads and/or body forces, the distribution of material within the reference domain should be found such that the structure has maximum stiffness. This is obtained when the structure has the minimum energy stored by external work for the applied forces. The problem is also usually formed to allow for regions in the domain to be specified as filled or empty of material (see \autoref{fig:topOpRefDomain}). 
+
 \begin{figure}
 \centering
 \includegraphics[width=0.6\textwidth]{Pictures/TopOp/design_domain.png}
 \caption{The reference domain $\Omega$ for the minimum compliance problem. The problem is formulated such that for a set of external loads $t$ on boundaries $\lambda_t$, body forces $f$ and a set of fixed support points $\lambda_u$, the material distribution within $\Omega$ is such that the stiffness with regards to these loads and forces is maximal and the energy stored by the application of those forces is minimal. The problem also allows defining areas which either cannot or must be filled with material. Figure from \cite{bendsoe2003topology}.}
 \label{fig:topOpRefDomain}
 \end{figure}
-In order to constrain the resulting structure as little as possible, the formulation of the topology optimization problem is generally given as follows: for a given set of external fixture points, external loads and/or body forces, the distribution of material within the reference domain should be found such that the structure has maximum stiffness. This is obtained when the structure has the minimum energy stored by external work for the applied forces. The problem is also usually formed to allow for regions in the domain to be specified as filled or empty of material (see \autoref{fig:topOpRefDomain}). 
 
 The formulation allows the problem to be cast as finding a displacement field $u$ and a stiffness tensor field $E$ that is in equilibrium with the applied loads, and that minimizes the external work done by these external loads do to reach that equilibrium. 
 
@@ -34,13 +35,14 @@ As described in the previous section, we aim to minimise the external work done 
 In order to still obtain topologies where material is predominant in certain areas --- of densities one, with the rest being empty at densities close to zero --- a "penalty" is applied to the intermediate values. This is effected by raising the density to a power $> 1$ in the elastic energy calculation, but not in the volume calculation. That way, an intermediate density value provides less elastic support, but still "costs" as much volume, and will thus be suboptimal. 
 
 \subsection{Solution and Implementation}
-\begin{figure}
+In typical implementations, a heuristic iterative scheme is then used for finding a solution. The optimal solution is assumed to be stresses over all included parts (as they would otherwise be unnecessary, not providing any support). Thus, at places where the elastic energy is high, material is added if possible, and where it is low, material is likewise removed, with the values "high" and "low" being determined dynamically to keep the total volume constraint. 
+
+This whole scheme is one of the simpler topology optimisation schemes to implement, and has been done so in several pieces of open-source software, including a known 99-line Matlab code by Sigmund \cite{sigmund200199} and ToPy described in \autoref{sec:ToPy}. An example optimised topology is shown in \autoref{fig:sigmundcantilever}. For an extended explanation and discussion, as well as further alternative methods for topology optimisation, the interested reader is referred to \cite{bendsoe2003topology}.
+
+\begin{figure}[b]
 \centering
 \includegraphics[width=0.6\textwidth]{Pictures/TopOp/Sigmund_cantilever2d.png}
 \caption{Topology optimisation of end-loaded cantilever with fixed hole. The optimisation of a loaded cantilever is one of the model problems in topology optimisation, due to its simplicity and its multitude of used solutions throughout the history of engineering. The picture is taken from a known paper by Sigmund \cite{sigmund200199} where a 99-line Matlab code for topology optimisation is introduced.} 
 \label{fig:sigmundcantilever}
 \end{figure}
-In typical implementations, a heuristic iterative scheme is then used for finding a solution. The optimal solution is assumed to be stresses over all included parts (as they would otherwise be unnecessary, not providing any support). Thus, at places where the elastic energy is high, material is added if possible, and where it is low, material is likewise removed, with the values "high" and "low" being determined dynamically to keep the total volume constraint. 
-
-This whole scheme is one of the simpler topology optimisation schemes to implement, and has been done so in several pieces of open-source software, including a known 99-line Matlab code by Sigmund \cite{sigmund200199} and ToPy described in \autoref{sec:ToPy}. An example optimised topology is shown in \autoref{fig:sigmundcantilever}. For an extended explanation and discussion, as well as further alternative methods for topology optimisation, the interested reader is referred to \cite{bendsoe2003topology}.
 

@@ -33,7 +33,6 @@ The load faces are given in a specified input file such that for example inner l
 	\item \textbf{Non-changing geometry}: Sometimes, certain parts of the geometry cannot accommodate changes. This could be for several reasons, for example, due to compatibility issues with other components. To define the geometry accurately and independently of the main geometry, it is provided in a distinguished file.% These faces are marked with absolute green, i.e. $(0, 255, 0)$.
 	\item \textbf{Solution limits:} The designer may be interested in restricting the solution to a certain region in space. This can be done by creating CAD geometry enclosing this region. Since this region could be different from the main geometry, it is specified through an additional file.
 \end{itemize}
-
 \autoref{fig: CADTopInputFiles} illustrates in more detail how the inputs needs to be defined to describe the constraint geometry. 
 
 %The user must save the CAD file in both STEP and IGES formats. This is necessary due to some issues with the face extraction process in OpenCascade - the IGES format allows for proper face extraction, but color detection works only for the STEP format. Also, the files should be saved in the same directory, and have the same name.

@@ -2,9 +2,10 @@
 Using the different concepts introduced in the previous chapters, we built a software pipeline starting from a CAD design via topology optimization back to CAD. We start from a CAD geometry input, obtain a voxelized input for the topology optimizer, extract the surface from an optimized voxel grid, and then fit a network of smooth NURBS surface patches to it.
 
 A graphical overview over the pipeline implementation is shown in \autoref{fig:pipeline}. Here, the different steps and transformations applied on the geometry are described. In the following sections, we will look at these implementation details more closely.
-\begin{figure}[ht]
+\enlargethispage{5cm}
+\begin{figure}[H]
 \begin{center}
-		\begin{tikzpicture}[remember picture, auto,
+		\begin{tikzpicture}[x=.8cm,y=.8cm,remember picture, auto,
     block/.style={
       rectangle,
       draw=blue,
@@ -64,3 +65,4 @@ A graphical overview over the pipeline implementation is shown in \autoref{fig:p
         \label{fig:pipeline}
 	\end{center}
 \end{figure}
+\newpage
