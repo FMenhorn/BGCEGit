@@ -35,8 +35,15 @@ However, for conveniece and usability, we convert them into one cubic tensor pro
 \begin{enumerate}[resume]
 \item The network of \Bez patches are combined to a network of NURBS patches.
 \begin{enumerate} [label=(\alph*)]
-\item First, for each quad, the quadratic \Bez patches on this quad are degree-raised\footnote{See for example \cite{bezDegRaise}.} to cubic in both directions. \tododone[author=erik]{add formula or reference to for example web page with a degree raising formula}. 
-\item Then, we can combine the $4\times4$ \Bez patches of the quad into one cubic NURBS patch\todourgent[author=erik]{i'm editing here still}. Since the control points along the shared edges are the same\footnote{}, this can be done by putting them in once,simply done by putting them once, giving the knots of triple multiplicitycurves through the \Bez patch edges will have knots of triple multiplicity, with quadruple multiplicity along the edges of a quad to clamp the curve. \todointernal{Add any NURBS reference}
+\item First, for each quad, the quadratic \Bez patches on this quad are degree-raised\footnote{See for example \cite{bezDegRaise} for how to compute the control points of an equivalent \Bez curve with a higher degree.} to cubic in both directions.\tododone[author=erik]{add formula or reference to for example web page with a degree raising formula}
+%
+\item Then, we can combine the $4\times4$ \Bez patches of the quad into one cubic NURBS patch. This is done by inserting the \Bez control points in a $13\times13$ array, where the shared control points along the \Bez patch edges are only inserted in once (instead of once for each \Bez patch), and using the knot vector 
+$(0, 0, 0, 0,$ $0.25, 0.25, 0.25,$ $0.5, 0.5, 0.5,$ $0.75, 0.75, 0.75,$ $1, 1, 1, 1)$, in both directions.%
+%
+\footnote{That the surfaces are the same can be verified using for example the formulae in pp. 115-116 of \cite{shikin1995handbook}. A conceptual explanation would be as follows: we formulate the \Bez surfaces as NURBS surfaces, and then connect them along the edges by changing the knot multiplicities. This can be done since the Bernstein polynomials can be recovered from the NURBS basis functions (by clamping at both ends, thus using knots $0$ and $1$ with multiplicities $N+1$ for an order $N$ curve having $N+1$ control points). Then, just as two clamped NURBS curves sharing one end point are combined easily into one curve (by concatenating the lists of control points, but putting the shared control point in only once, and concatenating the knot vectors, but reducing the multiplicity of the knot at the intersection to the order of the curve), we combine the curves along the surface in both directions to have a combined surface.}
+%
+%Since the control points along the shared edges are the same\footnote{}, this can be done by putting them in once, simply done by putting them once, giving the knots of triple multiplicitycurves through the \Bez patch edges will have knots of triple multiplicity, with quadruple multiplicity along the edges of a quad to clamp the curve. 
+\tododone[inline]{Add any NURBS reference}
 \end{enumerate}
 \item The NURBS patches are returned as a list of control points and an ordered array of indices for what control points belong to which quad.
 \end{enumerate}
