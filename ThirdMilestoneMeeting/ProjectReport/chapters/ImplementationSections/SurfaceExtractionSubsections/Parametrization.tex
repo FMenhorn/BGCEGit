@@ -44,6 +44,7 @@ Of course this simple approach comes with drawbacks:
 \end{itemize}
 These drawbacks are especially bad for complex surfaces -- like the output of topology optimization -- where the topological details mentioned above are not an exception, but the default case. There are more elaborate surface extraction schemes that handle these problems. For the interested reader, alternative schemes such as \emph{Dual Marching Cubes} \cite{ScottSchaefer2004} or \emph{Manifold Dual Contouring} \cite{Schaefer2007}, are included in \autoref{appx:AltSurfRecon}.
 \subsubsection{Projection of Datapoints onto Quads}
+\label{sssec:projection}
 Now that we have constructed a \ac{NURBS}-patch distribution, we can estimate the parametrization of the datapoints on the fine scale by projecting them onto the patches: 
 
 For this procedure we do the following steps:
