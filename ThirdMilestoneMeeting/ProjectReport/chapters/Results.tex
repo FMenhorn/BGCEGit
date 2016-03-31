@@ -34,15 +34,14 @@ The first test case simulates a cantilever. A cuboidal block of material is prov
 The cantilever is first modeled on a CAD designer (\autoref{fig:cantiCAD}). With all necessary input files and parameters, CADO produces a topology-optimized structure (\autoref{fig:cantiOPTIM}). There is a $78\%$ reduction of volume as compared to the initial configuration. The NURBS surface enclosing this volume consists of $2202$ single NURBS patches.
 
 \begin{figure}[H]
-\begin{center}
-\begin{subfigure}[t]{.49\textwidth}
+\begin{subfigure}[t]{.45\textwidth}
 \begin{center}
 \includegraphics[width=.9\textwidth]{Pictures/Results/CantiIn.png}
 \end{center}
 \caption{CAD design}
 \label{fig:cantiCAD}
-\end{subfigure}\hfill
-\begin{subfigure}[t]{.49\textwidth}
+\end{subfigure}
+\begin{subfigure}[t]{.45\textwidth}
 \begin{center}
 \includegraphics[width=.9\textwidth]{Pictures/Results/CantiOut.png}
 \end{center}
@@ -50,7 +49,6 @@ The cantilever is first modeled on a CAD designer (\autoref{fig:cantiCAD}). With
 \label{fig:cantiOPTIM}
 \end{subfigure}
 \caption{Test case "Cantilever"}
-\end{center}
 \end{figure}
 \newpage
 
@@ -67,15 +65,14 @@ The second test scenario simulates a bridge as a volume resting on two supports 
 \end{figure}
 The bridge modeled in CAD (see \autoref{fig:bridgeCAD}) and processed through CADO. The CAD output shows a wholesome balance between intuition and efficiency -- it complies with the intuitive idea of a bridge, and also ensures minimal use of material. (see \autoref{fig:bridgeOPTIM}). The optimized structure is represented by $868$ NURBS patches, with approximately $85\%$ reduction of volume. We also observe "dents" on the surface of the driving plane.
 \begin{figure}[H]
-\begin{center}
-\begin{subfigure}[t]{.49\textwidth}
+\begin{subfigure}[t]{.45\textwidth}
 \begin{center}
 \includegraphics[width=.9\textwidth]{Pictures/Results/BridgeIn.png}
 \end{center}
 \caption{CAD design}
 \label{fig:bridgeCAD}
-\end{subfigure}\hfill
-\begin{subfigure}[t]{.49\textwidth}
+\end{subfigure}
+\begin{subfigure}[t]{.45\textwidth}
 \begin{center}
 \includegraphics[width=.9\textwidth]{Pictures/Results/BridgeOut.png}
 \end{center}
@@ -83,14 +80,12 @@ The bridge modeled in CAD (see \autoref{fig:bridgeCAD}) and processed through CA
 \label{fig:bridgeOPTIM}
 \end{subfigure}
 \caption{Test case "Bridge"}
-\end{center}
 \end{figure}
 \newpage
 
 
 \subsection{GE Jet Engine Bracket}
 \label{ssec:bracket}
-On the contrary to the previous two tests, the final test case resembles a real application scenario. The load conditions and the initial volume originate from a topology optimization challenge proposed by General Electric in 2013 \cite{GEBracket}. The original goal of the challenge was the optimization of a jet engine bracket, that is subjected to four different load conditions and five different non-changing regions (see \autoref{fig:GEbracketBC}).
 \begin{figure}[H]
 \begin{center}
 \includegraphics[scale = 0.4]{Pictures/GEbracket.png}
@@ -98,19 +93,20 @@ On the contrary to the previous two tests, the final test case resembles a real 
 \caption{Boundary conditions and different load cases for test case "GE Bracket". Figure from \cite{GEBracket}.}
 \label{fig:GEbracketBC}
 \end{figure}
-In the following an already optimized design from \cite{GEBracketTripon} was chosen, since the scale of the scenario was too big to be handled by the topology optimizer ToPy. Therefore, the task for the last test case was only the reconstruction of the given geometry, in order to investigate the performance of the surface fitting algorithm for real-world applications. While the original design is described by $226$ faces, the reconstructed version took $3202$ NURBS patches. Additionally some topological features are lost in the region close to "Interface 1"(see \autoref{fig:GEbracketBC}).
+
+On the contrary to the previous two tests, the final test case resembles a real application scenario. The load conditions and the initial volume originate from a topology optimization challenge proposed by General Electric in 2013 \cite{GEBracket}. The original goal of the challenge was the optimization of a jet engine bracket, that is subjected to four different load conditions and five different non-changing regions (see \autoref{fig:GEbracketBC}).
+
+In the following an already optimized design from \cite{GEBracketTripon} was chosen, since the scale of the scenario was too big to be handled by the topology optimizer ToPy, due to runtime and memory constraints. Therefore, the task for the last test case was only the reconstruction of the given geometry, in order to investigate the performance of the surface fitting algorithm for real-world applications. While the original design is described by $226$ faces, the reconstructed version took $3202$ NURBS patches. Additionally some topological features are lost in the region close to "Interface 1"(see \autoref{fig:GEbracketBC}).
 \enlargethispage{2cm}
 \begin{figure}[H]
-\begin{center}
-\begin{subfigure}[t]{.49\textwidth}
+\begin{subfigure}[t]{.45\textwidth}
 \begin{center}
 \includegraphics[width=.9\textwidth]{Pictures/Results/BracketIn.png}
 \end{center}
 \caption{CAD design. Initial geometry is already an optimized design from \cite{GEBracketTripon}.}
 \label{fig:GEbracketCAD}
 \end{subfigure}
-\hfill
-\begin{subfigure}[t]{.49\textwidth}
+\begin{subfigure}[t]{.45\textwidth}
 \begin{center}
 \includegraphics[width=.9\textwidth]{Pictures/Results/BracketOut.png}
 \end{center}
@@ -118,6 +114,5 @@ In the following an already optimized design from \cite{GEBracketTripon} was cho
 \label{fig:GEbracketOPTIM}
 \end{subfigure}
 \caption{Test case "GE Bracket"}
-\end{center}
 \end{figure}
 
