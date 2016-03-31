@@ -5,7 +5,7 @@
 \usepackage{xifthen}
 \usepackage{bm}
 \usepackage[outline]{contour}
-\usetikzlibrary{calc,patterns, decorations.pathmorphing, decorations.markings}
+\usetikzlibrary{3d,calc,patterns, decorations.pathmorphing, decorations.markings}
 \usetikzlibrary{arrows}
 \usetikzlibrary{positioning,calc}
 \renewcommand{\vec}{\bm}
@@ -44,10 +44,14 @@
 {
 	\foreach \j in {0,..., 4}
 	{			
-		\draw[very thin] 
+		\draw[thick,blue] 
 		($(patchABase) + {(\i-0.1)}*(1,0,0)+\j*(0,1,0) - {((\i-0.1)*(\i-0.1-4) + \j*(\j-4))}*(0,0,0.25)$) 
 		-- 
 		($(patchABase) + \i*(1,0,0)+\j*(0,1,0) - {(\i*(\i-4) + \j*(\j-4))}*(0,0,0.25)$);	
+		\draw[very thin] 
+		($(patchABase) + {(\i-0.1)}*(1,0,0)+\j*(0,1,0)$) 
+		-- 
+		($(patchABase) + \i*(1,0,0)+\j*(0,1,0)$);
 	}
 }
 
@@ -55,22 +59,45 @@
 {
 	\foreach \j in {0.1,0.2,..., 4}
 	{		
-		\draw[very thin] 
+		\draw[thick,blue] 
 		($(patchABase) + \i*(1,0,0)+{(\j-0.1)}*(0,1,0) - {(\i*(\i-4) + (\j-0.1)*(\j-0.1-4))}*(0,0,0.25)$) 
 		-- 
-		($(patchABase) + \i*(1,0,0)+\j*(0,1,0) - {(\i*(\i-4) + \j*(\j-4))}*(0,0,0.25)$);	
+		($(patchABase) + \i*(1,0,0)+\j*(0,1,0) - {(\i*(\i-4) + \j*(\j-4))}*(0,0,0.25)$);
+		\draw[very thin] 
+		($(patchABase) + \i*(1,0,0)+{(\j-0.1)}*(0,1,0)$) 
+		-- 
+		($(patchABase) + \i*(1,0,0)+\j*(0,1,0)$);						
 	}
 }
+
+\fill[blue,opacity=.3]
+(patchABase)
+\foreach \i in {0,0.1,..., 4}
+{
+-- ($(patchABase) + \i*(1,0,0) - {\i*(\i-4)}*(0,0,0.25)$)
+}
+\foreach \j in {0,0.1,..., 4}
+{
+-- ($(patchABase) + 4*(1,0,0)+\j*(0,1,0) - {\j*(\j-4)}*(0,0,0.25)$)
+}
+\foreach \i in {4,3.9,..., 0}
+{
+-- ($(patchABase) + \i*(1,0,0)+4*(0,1,0) - {\i*(\i-4)}*(0,0,0.25)$)
+}
+\foreach \j in {4,3.9,..., .1}
+{
+-- ($(patchABase) + \j*(0,1,0) - {\j*(\j-4)}*(0,0,0.25)$)
+};
 
 \contourlength{.15em}
 \coordinate(Atrans 11) at ($(Ao 11) +(0.2,0.2,0)- {(1.2(1.2-4) + 1.2*(1.2-4))}*(0,0,0.25)$);
 \coordinate(Ap) at ($(Atrans 11)+(0,0,2.3)$);
-\draw[dashed] (Atrans 11)--(Ap);
+\draw[dashed,draw=red,thick] (Atrans 11)--(Ap);
 \node[circle,fill=red,draw=black, label={[red,xshift=.1cm]left:$\vec{d}_k$},inner sep=2pt] at (Ap){};
 \node[circle,fill=blue,draw=black, label={[blue,yshift=-.1cm,xshift=-.1cm]above right:\contour{white}{$\vec{S}\left(u_k,v_k\right)$}},inner sep=2pt] at (Atrans 11){};
 
 %%% second patch
-\coordinate[below = 1cm of Ao 40] (patchBBase);
+\coordinate[right = 6cm of patchABase] (patchBBase);
 
 \foreach \i in {0,..., 4}
 {
@@ -115,7 +142,7 @@
 
 
 %%% third patch
-\coordinate[below = 1cm of Bo 40] (patchCBase);
+\coordinate[right = 6cm of patchBBase] (patchCBase);
 
 \foreach \i in {0,..., 4}
 {
@@ -164,29 +191,40 @@
 	}
 }
 \contourlength{.15em}
-\node[label={[Gray,yshift=.1cm]below:\contour{white}{$\vec{m_k}\in M$}}] at (C 40){};
-\node[label={[orange,yshift=.1cm,xshift=-.1cm]below right:\contour{white}{$\vec{B}_{i,j}^{PS}\in V_x$}}] at ($(patchCBase) + 2.5*(1,0,0)+1.5*(0,1,0) - {(2.5*(2.5-4) + 1.5*(1.5-4))}*(0,0,0.25)$){};
+\node[label={[Gray,yshift=.1cm]below:\contour{white}{$\vec{m_k}\in M$}}] at (C 44){};
+\node[label={[orange]right:\contour{white}{$\vec{B}_{i,j}^{PS}\in V_x$}}] at (C 31){};
 
 %%% arrows and stuff
 \draw[->,>=stealth',auto]
-($(A 34)+(30:.5cm)$) to [out=30,in=30] node[align=center]{Bernstein polynomials \\ give coefficients $C\left(u_k,v_k\right)$} ($(B 14)+(30:.5cm)$);
-\draw[->,>=stealth',auto]
-($(B 34)+(30:.5cm)$) to [out=30,in=30] node[align=center]{Peters' scheme \\ gives coefficients $C^{PS}$}($(C 14)+(30:.5cm)$);
+($(A 04)+(0:.5cm)$) 
+to [out=30,in=150] 
+node[align=center]{Bernstein polynomials \\ give coefficients $C\left(u_k,v_k\right)$} 
+($(B 04)+(180:.5cm)$);
 
 \draw[->,>=stealth',auto]
-($(C 10)+(210:.5cm)$) to [out=210,in=210] node[align=center]{$\sum \left[C^{PS}\right]_{i,j}P_{i,j}$ \\ gives control points $\bm{p}_{i,j}$} ($(B 30)+(210:.5cm)$);
+($(B 04)+(0:.5cm)$) 
+to [out=30,in=150] 
+node[align=center]{Peters' scheme \\ gives coefficients $C^{PS}$}
+($(C 04)+(180:.5cm)$);
+
 \draw[->,>=stealth',auto]
-($(B 10)+(210:.5cm)$) to [out=210,in=210] node[align=center]{$\sum\left[C\left(u_k,v_k\right)\right]_{i,j}\bm{p}_{i,j} $ \\ gives surface point $\vec{S}\left(u_k,v_k\right)$} ($(A 30)+(210:.5cm)$);
+($(C 40)+(180:.5cm)$) 
+to [out=210,in=-30] 
+node[align=center]{$\sum \left[C^{PS}\right]_{i,j}P_{i,j}$ \\ gives control points $\bm{p}_{i,j}$} 
+($(B 40)+(0:.5cm)$);
+
+\draw[->,>=stealth',auto]
+($(B 40)+(180:.5cm)$) 
+to [out=210,in=-30] 
+node[align=center]{$\sum\left[C\left(u_k,v_k\right)\right]_{i,j}\bm{p}_{i,j} $ \\ gives surface point $\vec{S}\left(u_k,v_k\right)$} 
+($(A 40)+(0:.5cm)$);
 
 %%% loop arrow 
-\coordinate(interAAA) at ($(C 42)+(-60:2cm)$);
-\node[draw,circle] at (interAAA){};
 \draw [->,>=stealth',auto]
-($(C 34)+(30:.5cm)$)
-to [out=30,in=30] (interAAA)
-to [out=210,in=210]($(C 30)+(210:.5cm)$);
-
-\node[draw,fill=white,align=center] at (interAAA) {Least squares \\ fitting \\ \scriptsize $ \norm{\lsDataPointMatrix - \lsControlPointCoefMatrix(\vec{u},\vec{v})\lsControlPointMatrix}^2$};
+($(C 04)+(0:.5cm)$)
+to [out=30,in=-30,looseness=3]
+node[pos=0.125,align=center]{Least squares fitting \\ $ \norm{\lsDataPointMatrix - \lsControlPointCoefMatrix(\vec{u},\vec{v})\lsControlPointMatrix}^2$}
+($(C 40)+(0:.5cm)$);
 
 \end{tikzpicture}
 
