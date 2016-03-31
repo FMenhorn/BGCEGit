@@ -1,0 +1,192 @@
+\documentclass{standalone}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{tikz}
+\usepackage{tikz-3dplot}
+\usepackage{xifthen}
+\usepackage{bm}
+\usepackage[outline]{contour}
+\usetikzlibrary{calc,patterns, decorations.pathmorphing, decorations.markings}
+\usetikzlibrary{arrows}
+\usetikzlibrary{positioning,calc}
+\renewcommand{\vec}{\bm}
+\newcommand{\lsDataPointLetter}{D}
+\newcommand{\lsDataPoint}{\vec{\MakeLowercase{\lsDataPointLetter}}}
+\newcommand{\lsDataPointMatrix}{\MakeUppercase{\lsDataPointLetter}}
+\newcommand{\lsDataPointConcMatrix}{\tilde{\lsDataPointMatrix}}
+\newcommand{\lsControlPointLetter}{P}
+\newcommand{\lsControlPointMatrix}{\MakeUppercase{\lsControlPointLetter}}
+\newcommand{\lsControlPoint}{\vec{\MakeLowercase{\lsControlPointLetter}}}
+\newcommand{\lsControlPointCoef}{c}
+\newcommand{\lsControlPointCoefVec}{\vec{\lsControlPointCoef}}
+\newcommand{\lsControlPointCoefMatrix}{\MakeUppercase{\lsControlPointCoef}}
+\newcommand{\lsControlCoefConcMatrix}{\tilde{\lsControlPointCoefMatrix}}
+\newcommand{\norm}[1]{\left\| #1 \right\|}
+
+\renewcommand{\vec}{\bm}
+\begin{document}
+\tdplotsetmaincoords{30}{60}
+\begin{tikzpicture}[tdplot_main_coords]
+\tdplotsetrotatedcoords{0}{90}{0}
+
+%%% first patch
+\coordinate (patchABase) at (0,0,0);
+
+\foreach \i in {0,..., 4}
+{
+	\foreach \j in {0,..., 4}
+	{
+		\coordinate(Ao \i \j) at ($(patchABase) + \i*(1,0,0)+\j*(0,1,0)$);
+		\coordinate(A \i \j) at ($(Ao \i \j) - {(\i*(\i-4) + \j*(\j-4))}*(0,0,0.25)$);				
+	}
+}	
+
+\foreach \i in {0.1,0.2,..., 4}
+{
+	\foreach \j in {0,..., 4}
+	{			
+		\draw[very thin] 
+		($(patchABase) + {(\i-0.1)}*(1,0,0)+\j*(0,1,0) - {((\i-0.1)*(\i-0.1-4) + \j*(\j-4))}*(0,0,0.25)$) 
+		-- 
+		($(patchABase) + \i*(1,0,0)+\j*(0,1,0) - {(\i*(\i-4) + \j*(\j-4))}*(0,0,0.25)$);	
+	}
+}
+
+\foreach \i in {0,..., 4}
+{
+	\foreach \j in {0.1,0.2,..., 4}
+	{		
+		\draw[very thin] 
+		($(patchABase) + \i*(1,0,0)+{(\j-0.1)}*(0,1,0) - {(\i*(\i-4) + (\j-0.1)*(\j-0.1-4))}*(0,0,0.25)$) 
+		-- 
+		($(patchABase) + \i*(1,0,0)+\j*(0,1,0) - {(\i*(\i-4) + \j*(\j-4))}*(0,0,0.25)$);	
+	}
+}
+
+\contourlength{.15em}
+\coordinate(Atrans 11) at ($(Ao 11) +(0.2,0.2,0)- {(1.2(1.2-4) + 1.2*(1.2-4))}*(0,0,0.25)$);
+\coordinate(Ap) at ($(Atrans 11)+(0,0,2.3)$);
+\draw[dashed] (Atrans 11)--(Ap);
+\node[circle,fill=red,draw=black, label={[red,xshift=.1cm]left:$\vec{d}_k$},inner sep=2pt] at (Ap){};
+\node[circle,fill=blue,draw=black, label={[blue,yshift=-.1cm,xshift=-.1cm]above right:\contour{white}{$\vec{S}\left(u_k,v_k\right)$}},inner sep=2pt] at (Atrans 11){};
+
+%%% second patch
+\coordinate[below = 1cm of Ao 40] (patchBBase);
+
+\foreach \i in {0,..., 4}
+{
+	\foreach \j in {0,..., 4}
+	{
+		\coordinate(Bo \i \j) at ($(patchBBase) + \i*(1,0,0)+\j*(0,1,0)$);
+		\coordinate(B \i \j) at ($(Bo \i \j) - {(\i*(\i-4) + \j*(\j-4))}*(0,0,0.25)$);					
+	}
+}
+
+\foreach \i in {0.1,0.2,..., 4}
+{
+	\foreach \j in {0,..., 4}
+	{			
+		\draw[very thin] 
+		($(patchBBase) + {(\i-0.1)}*(1,0,0)+\j*(0,1,0) - {((\i-0.1)*(\i-0.1-4) + \j*(\j-4))}*(0,0,0.25)$) 
+		-- 
+		($(patchBBase) + \i*(1,0,0)+\j*(0,1,0) - {(\i*(\i-4) + \j*(\j-4))}*(0,0,0.25)$);	
+	}
+}
+
+\foreach \i in {0,..., 4}
+{
+	\foreach \j in {0.1,0.2,..., 4}
+	{		
+		\draw[very thin] 
+		($(patchBBase) + \i*(1,0,0)+{(\j-0.1)}*(0,1,0) - {(\i*(\i-4) + (\j-0.1)*(\j-0.1-4))}*(0,0,0.25)$) 
+		-- 
+		($(patchBBase) + \i*(1,0,0)+\j*(0,1,0) - {(\i*(\i-4) + \j*(\j-4))}*(0,0,0.25)$);	
+	}
+}
+
+\foreach \i in {1,1.5,2}
+{
+	\foreach \j in {1,1.5,2}
+	{
+	\node[circle, fill=OliveGreen, draw=black,inner sep=2pt] at ($(patchBBase) + \i*(1,0,0)+\j*(0,1,0) - {(\i*(\i-4) + \j*(\j-4))}*(0,0,0.25)$){};
+	}
+}
+\contourlength{.15em}
+\node[label={[OliveGreen,yshift=.1cm,xshift=-.1cm]below right:\contour{white}{$\vec{B}_{i,j}^{Bez}$}}] at ($(patchBBase) + 2*(1,0,0)+1.5*(0,1,0) - {(2*(2-4) + 1.5*(1.5-4))}*(0,0,0.25)$){};
+
+
+%%% third patch
+\coordinate[below = 1cm of Bo 40] (patchCBase);
+
+\foreach \i in {0,..., 4}
+{
+	\foreach \j in {0,..., 4}
+	{
+		\coordinate(Co \i \j) at ($(patchCBase) + \i*(1,0,0)+\j*(0,1,0)$);
+		\coordinate(C \i \j) at ($(Co \i \j) - {(\i*(\i-4) + \j*(\j-4))}*(0,0,0.25)$);						
+	}
+}
+
+\foreach \i in {0.1,0.2,..., 4}
+{
+	\foreach \j in {0,..., 4}
+	{			
+		\draw[very thin] 
+		($(patchCBase) + {(\i-0.1)}*(1,0,0)+\j*(0,1,0) - {((\i-0.1)*(\i-0.1-4) + \j*(\j-4))}*(0,0,0.25)$) 
+		-- 
+		($(patchCBase) + \i*(1,0,0)+\j*(0,1,0) - {(\i*(\i-4) + \j*(\j-4))}*(0,0,0.25)$);	
+	}
+}
+
+\foreach \i in {0,..., 4}
+{
+	\foreach \j in {0.1,0.2,..., 4}
+	{		
+		\draw[very thin] 
+		($(patchCBase) + \i*(1,0,0)+{(\j-0.1)}*(0,1,0) - {(\i*(\i-4) + (\j-0.1)*(\j-0.1-4))}*(0,0,0.25)$) 
+		-- 
+		($(patchCBase) + \i*(1,0,0)+\j*(0,1,0) - {(\i*(\i-4) + \j*(\j-4))}*(0,0,0.25)$);	
+	}
+}
+
+\foreach \i in {0.5,1.5,2.5}
+{
+	\foreach \j in {0.5,1.5,2.5}
+	{
+	\node[circle, fill=orange, draw=black,inner sep=2pt] at ($(patchCBase) + \i*(1,0,0)+\j*(0,1,0) - {(\i*(\i-4) + \j*(\j-4))}*(0,0,0.25)$){};
+	}
+}
+
+\foreach \i in {0,4}
+{
+	\foreach \j in {0,4}
+	{
+\node[circle, fill=Gray, draw=black,inner sep=2pt] at (C \i \j){};
+	}
+}
+\contourlength{.15em}
+\node[label={[Gray,yshift=.1cm]below:\contour{white}{$\vec{m_k}\in M$}}] at (C 40){};
+\node[label={[orange,yshift=.1cm,xshift=-.1cm]below right:\contour{white}{$\vec{B}_{i,j}^{PS}\in V_x$}}] at ($(patchCBase) + 2.5*(1,0,0)+1.5*(0,1,0) - {(2.5*(2.5-4) + 1.5*(1.5-4))}*(0,0,0.25)$){};
+
+%%% circle 
+\node[below = of C 43,circle,draw,align=center] (D) {Least squares \\ fitting \\ \scriptsize $ \norm{\lsDataPointMatrix - \lsControlPointCoefMatrix(\vec{u},\vec{v})\lsControlPointMatrix}^2$};
+
+
+%%% arrows and stuff
+\draw[->,>=stealth',auto]
+($(A 34)+(30:.5cm)$) to [out=30,in=30] node[align=center]{Bernstein polynomials \\ give coefficients $c\left(u_k,v_k\right)$} ($(B 14)+(30:.5cm)$);
+\draw[->,>=stealth',auto]
+($(B 34)+(30:.5cm)$) to [out=30,in=30] node[align=center]{Peters' scheme \\ gives coefficients $C^{PS}$}($(C 14)+(30:.5cm)$);
+\draw[->,>=stealth',auto]
+($(C 34)+(30:.5cm)$) to [out=30,in=30] node[align=center]{\textbf{text1} \\ \scriptsize think about useful text here?} ($(D.30)+(30:.5cm)$);
+
+\draw[->,>=stealth',auto]
+($(D.210)+(210:.5cm)$) to [out=210,in=210] node[align=center]{\textbf{text2} \\ \scriptsize think about useful text here.} ($(C 30)+(210:.5cm)$);
+\draw[->,>=stealth',auto]
+($(C 10)+(210:.5cm)$) to [out=210,in=210] node[align=center]{\textbf{text3} \\ \scriptsize think about useful text here?} ($(B 30)+(210:.5cm)$);
+\draw[->,>=stealth',auto]
+($(B 10)+(210:.5cm)$) to [out=210,in=210] node[align=center]{Control points $\vec{p}_{i,j}$ \\ give $\vec{S}\left(u_k,v_k\right)$} ($(A 30)+(210:.5cm)$);
+
+
+\end{tikzpicture}
+
+\end{document}
