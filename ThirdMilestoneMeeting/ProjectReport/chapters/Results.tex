@@ -19,10 +19,10 @@ Further information and the detailed description of the user interface can be fo
 \section{Test Cases}
 \label{sec:tests}
 The performance of CADO is evaluated through three tests. The first case is a standard Cantilever design problem in three dimensions. The second deals with optimization of a bridge design. Finally, the third case leans more towards real-world applications, and concerns a design challenge on a jet engine bracket. Here we describe the underlying boundary conditions and the outcome of the tests.
-
+\newpage
 \subsection{Cantilever}
 \label{ssec:canti}
-
+The first test case simulates a cantilever. A cuboidal block of material is provided as the initial condition. This block is fixed at one end to a wall. The load on the cantilever is modeled as a downward force on its other end. (see \autoref{fig:cantiBC}).
 \begin{figure}[H]
 \begin{center}
 \includegraphics[scale=0.8]{Pictures/tikzCantilever/canti.pdf}
@@ -30,8 +30,6 @@ The performance of CADO is evaluated through three tests. The first case is a st
 \caption{Boundary conditions for the test case "Cantilever".}
 \label{fig:cantiBC}
 \end{figure}
-
-The first test case simulates a cantilever. A cuboidal block of material is provided as the initial condition. This block is fixed at one end to a wall. The load on the cantilever is modeled as a downward force on its other end. (see \autoref{fig:cantiBC}).
 
 The cantilever is first modeled on a CAD designer (\autoref{fig:cantiCAD}). With all necessary input files and parameters, CADO produces a topology-optimized structure (\autoref{fig:cantiOPTIM}). There is a $78\%$ reduction of volume as compared to the initial configuration. The NURBS surface enclosing this volume consists of $2202$ single NURBS patches.
 
@@ -52,8 +50,11 @@ The cantilever is first modeled on a CAD designer (\autoref{fig:cantiCAD}). With
 \end{subfigure}
 \caption{Test case "Cantilever"}
 \end{figure}
+\newpage
+
 
 \subsection{Bridge}
+The second test scenario simulates a bridge as a volume resting on two supports and a plane -- the intended driving plane -- in the middle of the volume. This plane is subjected to an area force that models the load of traffic as well as the bridge's self weight. The two fixtures are intentionally placed at non-symmetric positions ($a\neq b$, see \autoref{fig:bridgeBC}).
 \label{ssec:bridge}
 \begin{figure}[H]
 \begin{center}
@@ -62,9 +63,7 @@ The cantilever is first modeled on a CAD designer (\autoref{fig:cantiCAD}). With
 \caption{Boundary conditions for the test case "Bridge".}
 \label{fig:bridgeBC}
 \end{figure}
-The second test scenario simulates a bridge as a volume resting on two supports and a plane -- the intended driving plane -- in the middle of the volume. This plane is subjected to an area force that models the load of traffic as well as the bridge's self weight. The two fixtures are intentionally placed at non-symmetric positions ($a\neq b$, see \autoref{fig:bridgeBC}).
-
-The bridge in modeled CAD (see \autoref{fig:bridgeCAD}) and processed through CADO. The CAD output shows a wholesome balance between intuition and efficiency -- it complies with the intuitive idea of a bridge, and also ensures use of minimal material. (see \autoref{fig:bridgeOPTIM}). The optimized structure is represented by $868$ NURBS patches, with approximately $85\%$ reduction of volume.\enlargethispage{1cm}
+The bridge modeled in CAD (see \autoref{fig:bridgeCAD}) and processed through CADO. The CAD output shows a wholesome balance between intuition and efficiency -- it complies with the intuitive idea of a bridge, and also ensures minimal use of material. (see \autoref{fig:bridgeOPTIM}). The optimized structure is represented by $868$ NURBS patches, with approximately $85\%$ reduction of volume. We also observe "dents" on the surface of the driving plane.
 \begin{figure}[H]
 \begin{subfigure}[t]{.45\textwidth}
 \begin{center}
@@ -82,10 +81,11 @@ The bridge in modeled CAD (see \autoref{fig:bridgeCAD}) and processed through CA
 \end{subfigure}
 \caption{Test case "Bridge"}
 \end{figure}
+\newpage
+
 
 \subsection{GE Jet Engine Bracket}
 \label{ssec:bracket}
-
 \begin{figure}[H]
 \begin{center}
 \includegraphics[scale = 0.4]{Pictures/GEbracket.png}
