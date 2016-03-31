@@ -4,6 +4,7 @@
 \usepackage{tikz-3dplot}
 \usepackage{xifthen}
 \usepackage{bm}
+\usepackage{amsmath}
 \usepackage[outline]{contour}
 \usetikzlibrary{3d,calc,patterns, decorations.pathmorphing, decorations.markings}
 \usetikzlibrary{arrows}
@@ -24,21 +25,23 @@
 
 \renewcommand{\vec}{\bm}
 \begin{document}
-\tdplotsetmaincoords{30}{60}
+\tdplotsetmaincoords{40}{60}
 \begin{tikzpicture}[tdplot_main_coords]
 \tdplotsetrotatedcoords{0}{90}{0}
 
 %%% first patch
 \coordinate (patchABase) at (0,0,0);
 \coordinate (upshiftSurface) at (0,0,0.5);
+\coordinate (baseVx) at (1.2,0,0);
+\coordinate (baseVy) at (0,1,0);
 \coordinate (patchABaseUp) at ($(patchABase) + (upshiftSurface)$);
 
 \foreach \i in {0,..., 4}
 {
 	\foreach \j in {0,..., 4}
 	{
-		\coordinate(Ao \i \j) at ($(patchABase) + \i*(1,0,-0.2)+\j*(0,1,-0.4)$);
-		\coordinate(A \i \j) at ($(Ao \i \j) + (upshiftSurface) + \i*(1,0,-0.2)+\j*(0,1,-0.4) - {(\i*(\i-4) + \j*(\j-4))}*(0,0,0.25)$);				
+		\coordinate(Ao \i \j) at ($(patchABase) + \i*(baseVx)+\j*(baseVy)$);
+		\coordinate(A \i \j) at ($(Ao \i \j) + (upshiftSurface) + \i*(baseVx)+\j*(baseVy) - {(\i*(\i-4) + \j*(\j-4))}*(0,0,0.25)$);				
 	}
 }	
 
@@ -47,13 +50,13 @@
 	\foreach \j in {0,..., 4}
 	{			
 		\draw[thick,blue] 
-		($(patchABaseUp) + {(\i-0.1)}*(1,0,-0.2)+\j*(0,1,-0.4) - {((\i-0.1)*(\i-0.1-4) + \j*(\j-4))}*(0,0,0.25)$) 
+		($(patchABaseUp) + {(\i-0.1)}*(baseVx)+\j*(baseVy) - {((\i-0.1)*(\i-0.1-4) + \j*(\j-4))}*(0,0,0.25)$) 
 		-- 
-		($(patchABaseUp) + \i*(1,0,-0.2)+\j*(0,1,-0.4) - {(\i*(\i-4) + \j*(\j-4))}*(0,0,0.25)$);	
+		($(patchABaseUp) + \i*(baseVx)+\j*(0,1,0) - {(\i*(\i-4) + \j*(\j-4))}*(0,0,0.25)$);	
 		\draw[very thin] 
-		($(patchABase) + {(\i-0.1)}*(1,0,-0.2)+\j*(0,1,-0.4)$) 
+		($(patchABase) + {(\i-0.1)}*(baseVx)+\j*(baseVy)$) 
 		-- 
-		($(patchABase) + \i*(1,0,-0.2)+\j*(0,1,-0.4)$);
+		($(patchABase) + \i*(baseVx)+\j*(baseVy)$);
 	}
 }
 
@@ -62,13 +65,13 @@
 	\foreach \j in {0.1,0.2,..., 4}
 	{		
 		\draw[thick,blue] 
-		($(patchABaseUp) + \i*(1,0,-0.2)+{(\j-0.1)}*(0,1,-0.4) - {(\i*(\i-4) + (\j-0.1)*(\j-0.1-4))}*(0,0,0.25)$) 
+		($(patchABaseUp) + \i*(baseVx)+{(\j-0.1)}*(baseVy) - {(\i*(\i-4) + (\j-0.1)*(\j-0.1-4))}*(0,0,0.25)$) 
 		-- 
-		($(patchABaseUp) + \i*(1,0,-0.2)+\j*(0,1,-0.4) - {(\i*(\i-4) + \j*(\j-4))}*(0,0,0.25)$);
+		($(patchABaseUp) + \i*(baseVx)+\j*(baseVy) - {(\i*(\i-4) + \j*(\j-4))}*(0,0,0.25)$);
 		\draw[very thin] 
-		($(patchABase) + \i*(1,0,-0.2)+{(\j-0.1)}*(0,1,-0.4)$) 
+		($(patchABase) + \i*(baseVx)+{(\j-0.1)}*(baseVy)$) 
 		-- 
-		($(patchABase) + \i*(1,0,-0.2)+\j*(0,1,-0.4)$);						
+		($(patchABase) + \i*(baseVx)+\j*(baseVy)$);						
 	}
 }
 
@@ -76,19 +79,19 @@
 (patchABaseUp)
 \foreach \i in {0,0.1,..., 4}
 {
--- ($(patchABaseUp) + \i*(1,0,-0.2) - {\i*(\i-4)}*(0,0,0.25)$)
+-- ($(patchABaseUp) + \i*(baseVx) - {\i*(\i-4)}*(0,0,0.25)$)
 }
 \foreach \j in {0,0.1,..., 4}
 {
--- ($(patchABaseUp) + 4*(1,0,-0.2)+\j*(0,1,-0.4) - {\j*(\j-4)}*(0,0,0.25)$)
+-- ($(patchABaseUp) + 4*(baseVx)+\j*(baseVy) - {\j*(\j-4)}*(0,0,0.25)$)
 }
 \foreach \i in {4,3.9,..., 0}
 {
--- ($(patchABaseUp) + \i*(1,0,-0.2)+4*(0,1,-0.4) - {\i*(\i-4)}*(0,0,0.25)$)
+-- ($(patchABaseUp) + \i*(baseVx)+4*(baseVy) - {\i*(\i-4)}*(0,0,0.25)$)
 }
 \foreach \j in {4,3.9,..., .1}
 {
--- ($(patchABaseUp) + \j*(0,1,-0.4) - {\j*(\j-4)}*(0,0,0.25)$)
+-- ($(patchABaseUp) + \j*(baseVy) - {\j*(\j-4)}*(0,0,0.25)$)
 };
 
 \contourlength{.15em}
@@ -105,7 +108,7 @@
 {
 	\foreach \j in {0,..., 4}
 	{
-		\coordinate(Bo \i \j) at ($(patchBBase) + \i*(1,0,-0.2)+\j*(0,1,-0.4)$);
+		\coordinate(Bo \i \j) at ($(patchBBase) + \i*(baseVx)+\j*(baseVy)$);
 		\coordinate(B \i \j) at ($(Bo \i \j)$);					
 	}
 }
@@ -115,9 +118,9 @@
 	\foreach \j in {0,..., 4}
 	{			
 		\draw[very thin] 
-		($(patchBBase) + {(\i-0.1)}*(1,0,-0.2)+\j*(0,1,-0.4)$) 
+		($(patchBBase) + {(\i-0.1)}*(baseVx)+\j*(baseVy)$) 
 		-- 
-		($(patchBBase) + \i*(1,0,-0.2)+\j*(0,1,-0.4)$);	
+		($(patchBBase) + \i*(baseVx)+\j*(baseVy)$);	
 	}
 }
 
@@ -126,9 +129,9 @@
 	\foreach \j in {0.1,0.2,..., 4}
 	{		
 		\draw[very thin] 
-		($(patchBBase) + \i*(1,0,-0.2)+{(\j-0.1)}*(0,1,-0.4)$) 
+		($(patchBBase) + \i*(baseVx)+{(\j-0.1)}*(baseVy)$) 
 		-- 
-		($(patchBBase) + \i*(1,0,-0.2)+\j*(0,1,-0.4)$);	
+		($(patchBBase) + \i*(baseVx)+\j*(baseVy)$);	
 	}
 }
 
@@ -136,11 +139,11 @@
 {
 	\foreach \j in {1,1.5,2}
 	{
-	\node[circle, fill=OliveGreen, draw=black,inner sep=2pt] at ($(patchBBase) + \i*(1,0,-0.2)+\j*(0,1,-0.4)$){};
+	\node[circle, fill=OliveGreen, draw=black,inner sep=2pt] at ($(patchBBase) + \i*(baseVx)+\j*(baseVy)$){};
 	}
 }
 \contourlength{.15em}
-\node[label={[OliveGreen,yshift=.1cm,xshift=-.1cm]below right:\contour{white}{$\vec{B}_{i,j}^{B\acute{e}z}$}}] at ($(patchBBase) + 2*(1,0,-0.2)+1.5*(0,1,-0.4)$){};
+\node[label={[OliveGreen,yshift=.1cm,xshift=-.1cm]below right:\contour{white}{$\vec{p}_{i,j}$}}] at ($(patchBBase) + 2*(baseVx)+1.5*(baseVy)$){};
 
 
 %%% third patch
@@ -150,7 +153,7 @@
 {
 	\foreach \j in {0,..., 4}
 	{
-		\coordinate(Co \i \j) at ($(patchCBase) + \i*(1,0,-0.2)+\j*(0,1,-0.4)$);
+		\coordinate(Co \i \j) at ($(patchCBase) + \i*(baseVx)+\j*(baseVy)$);
 		\coordinate(C \i \j) at ($(Co \i \j)$);						
 	}
 }
@@ -160,9 +163,9 @@
 	\foreach \j in {0,..., 4}
 	{			
 		\draw[very thin] 
-		($(patchCBase) + {(\i-0.1)}*(1,0,-0.2)+\j*(0,1,-0.4)$) 
+		($(patchCBase) + {(\i-0.1)}*(baseVx)+\j*(baseVy)$) 
 		-- 
-		($(patchCBase) + \i*(1,0,-0.2)+\j*(0,1,-0.4)$);	
+		($(patchCBase) + \i*(baseVx)+\j*(baseVy)$);	
 	}
 }
 
@@ -171,9 +174,9 @@
 	\foreach \j in {0.1,0.2,..., 4}
 	{		
 		\draw[very thin] 
-		($(patchCBase) + \i*(1,0,-0.2)+{(\j-0.1)}*(0,1,-0.4)$) 
+		($(patchCBase) + \i*(baseVx)+{(\j-0.1)}*(baseVy)$) 
 		-- 
-		($(patchCBase) + \i*(1,0,-0.2)+\j*(0,1,-0.4)$);	
+		($(patchCBase) + \i*(baseVx)+\j*(baseVy)$);	
 	}
 }
 
@@ -181,7 +184,7 @@
 {
 	\foreach \j in {0.5,1.5,2.5}
 	{
-	\node[circle, fill=orange, draw=black,inner sep=2pt] at ($(patchCBase) + \i*(1,0,-0.2)+\j*(0,1,-0.4)$){};
+	\node[circle, fill=orange, draw=black,inner sep=2pt] at ($(patchCBase) + \i*(baseVx)+\j*(baseVy)$){};
 	}
 }
 
@@ -193,7 +196,7 @@
 	}
 }
 \contourlength{.15em}
-\node[label={[Gray,yshift=.1cm]below:\contour{white}{$\vec{m_k}\in M$}}] at (C 44){};
+\node[label={[Gray,yshift=-.1cm]above:\contour{white}{$\vec{m}\in M$}}] at (C 44){};
 \node[label={[orange]right:\contour{white}{$\vec{B}_{i,j}^{PS}\in V_x$}}] at (C 31){};
 
 %%% arrows and stuff
@@ -212,20 +215,20 @@ node[align=center]{Peters' scheme \\ gives coefficients $C^{PS}$}
 \draw[->,>=stealth',auto]
 ($(C 40)+(180:.5cm)$) 
 to [out=210,in=-30] 
-node[align=center]{Rows $\left[C^{PS}P\right]_{i,j}$ \\ give control points $\bm{p}_{i,j}$} 
+node[align=center]{Rows $\left[C^{PS}P\right]_{p}$ \\ give control points $\bm{p}_{p}$} 
 ($(B 40)+(0:.5cm)$);
 
 \draw[->,>=stealth',auto]
 ($(B 40)+(180:.5cm)$) 
 to [out=210,in=-30] 
-node[align=center]{$\sum\left[C\left(u_k,v_k\right)\right]_{i,j}\bm{p}_{i,j} $ \\ gives surface point $\vec{S}\left(u_k,v_k\right)$} 
+node[align=center]{$\sum\left[C\left(u_k,v_k\right)\right]_{p}\bm{p}_{p} $ \\ gives surface point $\vec{S}\left(u_k,v_k\right)$} 
 ($(Ao 40)+(0:.5cm)$);
 
 %%% loop arrow 
 \draw [->,>=stealth',auto]
 ($(C 04)+(0:.5cm)$)
 to [out=30,in=-30,looseness=3]
-node[pos=0.125,align=center]{Least squares fitting \\ $ \norm{\lsDataPointMatrix - \lsControlPointCoefMatrix(\vec{u},\vec{v})\lsControlPointMatrix}^2$}
+node[pos=0.125,align=center]{Least squares fitting \\ $\underset{P}{\text{argmin}} \norm{\lsDataPointMatrix - \lsControlPointCoefMatrix(\vec{u},\vec{v})\lsControlPointMatrix}^2$}
 ($(C 40)+(0:.5cm)$);
 
 \end{tikzpicture}
