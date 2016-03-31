@@ -35,8 +35,7 @@ Since we want to deduce a first estimate for the topology of the \ac{NURBS} surf
 \end{enumerate}
 We illustrate the procedure of remeshing for a 2D example in \autoref{fig:manifoldResolution2D}. 
 In 3D we do not have non-manifold vertices, but edges, which have to treated. Please note that for the 3D case additional patterns come up. In 3D not only the \acp{quad} which are connected to the whole non-manifold edge have to be considered, but also the \acp{quad} connected to only one vertex of the edge. This also implies the introduction of new \acp{quad} at other locations. For an overview over some of the possible patterns in 3D see \autoref{fig:manifoldPatterns3D}.
-
-\begin{figure}
+\begin{figure}[t]
 \begin{center}
 \begin{subfigure}{.5\linewidth}
 \centering
@@ -52,7 +51,6 @@ In 3D we do not have non-manifold vertices, but edges, which have to treated. Pl
 \caption{Illustration of the remeshing process. Blue dots denote outer voxels, red dots inner voxels. Crosses denote voxels considered for resolving ambiguities. We first copy the non-manifold vertex and then move the resulting pair of vertices in opposite directions. The direction is determined from the gradient at the datapoint with the cross, which goes in the direction of the blue dots (from inside to outside). Please note that we can only estimate the gradient if additional information is available in the middle of the cube which contains the non-manifold vertex. Otherwise it is not possible to resolve the ambiguity in a proper way and therefore we cannot eliminate the non-manifold vertex.}
 \label{fig:manifoldResolution2D}
 \end{figure}
-
 \begin{figure}
 \begin{center}
 \begin{subfigure}[b]{.45\textwidth}

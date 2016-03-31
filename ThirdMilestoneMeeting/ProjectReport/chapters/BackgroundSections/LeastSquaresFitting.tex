@@ -7,11 +7,11 @@ In order to make a surface adhere as closely as possible to our desired form, so
 %\end{itemize}
 
 \subsection{Fitting Problem: Parametric Surfaces}
-In order to fit a \Bez surface or NURBS surface to a set of datapoints with fixed locations and parameters on this surface, linear least-squares fitting can be applied, using an approach of mapping the parameters of the datapoints to control points on the surface. The base of the approach is using either Bernstein polynomials (\Bez curves) or B--spline basis functions (NURBS) to evaluate how control points should be combined for those surface parameters, and obtain this as a linear combination on the control points. That means, that from the parameters $(u,v)$ of each data point on the surface, we get a set of coefficients on the control points that define the surface. Expressing this as a sum, we have for the point $\lsDataPointi{k}$ with the parameters $(u_k,v_k)$ on the surface defined by the $N \times M$ control points $\lsControlPointi{i,j}$: \todourgent[inline,author=Benni]{@ Erik, Benni: give rule for construction of $c_{i,j}$.}
+In order to fit a \Bez surface or NURBS surface to a set of datapoints with fixed locations and parameters on this surface, linear least-squares fitting can be applied, using an approach of mapping the parameters of the datapoints to control points on the surface. The base of the approach is using either Bernstein polynomials (\Bez curves) or B--spline basis functions (NURBS) to evaluate how control points should be combined for those surface parameters, and obtain this as a linear combination on the control points. That means, that from the parameters $(u,v)$ of each data point on the surface, we get a set of coefficients on the control points that define the surface. Expressing this as a sum, we have for the point $\lsDataPointi{k}$ with the parameters $(u_k,v_k)$ on the surface defined by the $N \times M$ control points $\lsControlPointi{i,j}$:
 \begin{equation}
 \lsDataPointi{k} = \sum\limits_{i,j=1}^{N,M} \lsControlPointCoefi{i,j}(u_k,v_k) \lsControlPointi{i,j}
 \end{equation} 
-where $\lsControlPointCoefi{i,j}(u,v)$ are the coefficients calculated on control point $\lsControlPointi{i,j}$ from the parameters $(u,v)$. Realizing that the matrix indexing $i,j$ can be flattened to a vector index $p = 1,2,...,S$, where $S=N\times M$, mapping to $i$ and $j$, we can express this as:
+where $\lsControlPointCoefi{i,j}(u,v)$ are the coefficients calculated on control point $\lsControlPointi{i,j}$ from the parameters $(u,v)$, using the definition of the parametric curve (see \autoref{subsec:paracurves}). Realizing that the matrix indexing $i,j$ can be flattened to a vector index $p = 1,2,...,S$, where $S=N\times M$, mapping to $i$ and $j$, we can express this as:
 \begin{equation}
 \lsDataPointi{k} = \sum\limits_{p=1}^{S} \lsControlPointCoefi{p}(u_k,v_k) \lsControlPointi{p} \equiv \vec{\lsControlPointCoef}(u_k,v_k)\lsControlPointMatrix
 \label{eqn:lsmatrix1}
@@ -90,7 +90,7 @@ or minimize the least squares error for the only unknowns in this case, the posi
 \label{eqn:petersminimisation}
 \end{equation}
 
-To summarize, using the standard methods of minimisation of least-squares errors, we compute a set of points, which when used in Peters' scheme produces a surface with the smallest error to a set of datapoints. By including a Fairness term, we also reduce the curvature of the surface.
+To summarize, using the standard methods of minimisation of least-squares errors, we compute a set of points, which when used in Peters' scheme produces a surface with the smallest error to a set of datapoints. By including a fairness term, we also reduce the curvature of the surface.
 
 For the computation of  $\lsControlPointCoefMatrix(\vec{u},\vec{v})$ (and therefore of $\lsControlCoefConcMatrix(\vec{u},\vec{v})$), we require the parametrisations of these datapoints on the surface, and in order to obtain $\petersControlPointCoefMatrix$, we also need to know how the patches connect with each other. 
 
