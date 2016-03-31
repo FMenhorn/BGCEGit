@@ -8,7 +8,7 @@ The software pipeline executed in CADO from a specified input can be described a
 
 Next, we execute our algorithm to describe the optimized topology by NURBS surfaces. Firstly, a two-stage Dual Contouring surface reconstruction scheme is executed on the output of topology optimization. This gives a mesh of quadrilaterals, on which a set of datapoints describing the surface are parameterized.
 
-This forms the inputs for a B-Spline surface fitting algorithm, which on each quadrilateral fits $\4times4$ \Bezier patches, which are connected smoothly (with $G^1$ continuity) over the whole domain. This follows an similar approach to that by Eck and Hoppe in \cite{eck1996automatic}, by using least-squares fitting to an underlying set of points, from which the network of \Bez patches are built with guaranteed smoothness, as described by Peters in \cite{peters1992constructing}. The sets of $\4times4$ \Bezier patches per quad are then combined into single NURBS patches.
+This forms the inputs for a B-Spline surface fitting algorithm, which on each quadrilateral fits $4 \times 4$ \Bez patches, which are connected smoothly (with $G^1$ continuity) over the whole domain. This follows an similar approach to that by Eck and Hoppe in \cite{eck1996automatic}, by using least-squares fitting to an underlying set of points, from which the network of \Bez patches are built with guaranteed smoothness, as described by Peters in \cite{peters1992constructing}. The sets of $4 \times 4$ \Bez patches per quad are then combined into single NURBS patches.
 
 Lastly, a FreeCAD macro script performs boolean operations to enforce geometric constraints and exports the geometry to a standardized CAD file \cite{FreeCAD}.
 
