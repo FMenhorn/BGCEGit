@@ -1,17 +1,14 @@
 \section{From \acs{CAD} Model to Voxel Representation}
 \label{sec: CADToVoxels}
-\begin{figure}
-  \centering
+Converting the CAD input to ToPy input along with all the boundary conditions is the first problem that needs to be addressed in our pipeline. The procedure has been described in four sections: the first section explains the logic behind specifying boundary conditions using a CAD software. Subsequent sections then talk about what the code does with this CAD input. The second section explains the extraction of different boundaries from the CAD geometry with extensive use of the OpenCascade C++ library. This is followed by two more sections on voxelization and writing of the output file. Finally, the last section explains the input file format for ToPy, and describes its operation. \autoref{fig:umlCADToVoxel} shows an overview of the structure of the code used for this part of the pipeline.
+
+\begin{figure}[H]
+\begin{center}
   \includegraphics[scale=0.5]{Pictures/CADToVoxel/UML_Complete_PNG.png}
 \caption{UML diagram of the pipeline from CAD to a voxelized output. Many sections of the code use data-structures and algorithms from OpenCascade\cite{OpenCascade}.}
 \label{fig:umlCADToVoxel}
+\end{center}
 \end{figure}
-
-In the modern world, some branch of almost every engineering discipline involves the design and construction of structural components. Engineers in these sectors rely heavily on CAD software for this purpose. This makes CAD files the natural choice of input for our pipeline. This input then needs to be optimized using a topology optimization algorithm.
-
-However, one of the hurdles with most state-of-the-art open source topology optimization tools is their input format, where many of them (including ToPy, the topology optimizer of our choice) require input to be specified as a 3-dimensional voxel grid. Converting the CAD input to ToPy input along with all the boundary conditions is the first problem that needs to be addressed in our pipeline.
-
-The procedure has been described in four sections: the first section explains the logic behind specifying boundary conditions using a CAD software. Subsequent sections then talk about what the code does with this CAD input. The second section explains the extraction of different boundaries from the CAD geometry with extensive use of the OpenCascade C++ library. This is followed by two more sections on voxelization and writing of the output file. Finally, the last section explains the input file format for ToPy, and describes its operation. \autoref{fig:umlCADToVoxel} shows an overview of the structure of the code used for this part of the pipeline.
 
 \input{chapters/ImplementationSections/CADImpl/GeomCreation}
 

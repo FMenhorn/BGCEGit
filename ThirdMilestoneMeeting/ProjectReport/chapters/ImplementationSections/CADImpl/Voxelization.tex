@@ -2,13 +2,13 @@
 \label{sec: Voxelization}
 %what is voxelisation
 
-As pointed out in section \ref{sec:TopOpt}, a very common formulation of domains for topology optimization is through regions that are specified as filled or empty. The minimum compliance problem is then solved on a discretized grid; the most common one is a volume raster in the form of cubes - so called voxels. Thus, the next step is to render the geometry with a 3D raster of voxels.
+As pointed out in section \ref{sec:TopOpt}, a very common formulation of domains for topology optimization is through specifying regions as either filled or empty. The minimum compliance problem is then solved on a discretized grid; the most common one is a volume raster in the form of cubes, or so called \emph{voxels}. Thus, the next step is to render the geometry with a 3D raster of voxels.
 
 From the face extraction pipeline, the geometry shape and faces for each boundary condition type are stored in OpenCascade through the internal data type \lstinline|TopoDSShape|. The \lstinline|voxelise| function is called internally for the complete geometry and each face separately (see \autoref{fig:umlCADToVoxel}) since boundary conditions may consist of more than one face. The voxelisation is then performed as follows: 
 \begin{enumerate}
-\item In order to combine the 3D voxel raster consistently, a bounding box is introduced. As a consequence the coordinate system is kept uniform and voxel numbers are consistent between different voxelization types (faces and shapes). 
-\item In each dimension $2^n*l_d$ voxels are created, where $n$ is the user specified refinement level and $l_d$ is the size of the bounding box in the respective dimension $d$
-\item Voxelization is performed with the OpenCascade  \lstinline|Voxel_FastConverter.hxx| class creating a \lstinline|VoxelShape|
+\item In order to combine the 3D voxel raster consistently, a bounding box is introduced. This allows keeping the coordinate system uniform, making voxel numbers consistent between different voxelization types (faces and shapes). 
+\item In each dimension, $2^n \cdot l_d$ voxels are created, where $n$ is the user specified refinement level and $l_d$ is the size of the bounding box in the respective dimension $d$.
+\item Voxelization is performed with the OpenCascade  \lstinline|Voxel_FastConverter.hxx| class creating a \lstinline|VoxelShape|.
 \end{enumerate}
-
 Consequentially, a 3D boolean voxel raster is created for each type.
+\newpage

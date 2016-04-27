@@ -44,16 +44,19 @@ Of course this simple approach comes with drawbacks:
 \end{itemize}
 These drawbacks are especially bad for complex surfaces -- like the output of topology optimization -- where the topological details mentioned above are not an exception, but the default case. There are more elaborate surface extraction schemes that handle these problems. For the interested reader, alternative schemes such as \emph{Dual Marching Cubes} \cite{ScottSchaefer2004} or \emph{Manifold Dual Contouring} \cite{Schaefer2007}, are included in \autoref{appx:AltSurfRecon}.
 \subsubsection{Projection of Datapoints onto Quads}
+\label{sssec:projection}
 Now that we have constructed a \ac{NURBS}-patch distribution, we can estimate the parametrization of the datapoints on the fine scale by projecting them onto the patches: 
 
 For this procedure we do the following steps:
 
 \begin{enumerate}
 \item Find out onto which of these patches a datapoint should be projected. This can be done by simply measuring the distance from the datapoint to the centroid of each patch and deciding to project onto the patch with the smallest distance.
-\item Project the point onto the target patch. For this, we want the whole \ac{quad} to be parametrized on $u,v\in\left[0,1\right]^2$. This is done by first approximating the quad (which may not necessarily be planar) with its least squares fit plane. Then a projection onto this plane is done by applying a simple basis transformation\footnote{This basis transformation is computed in a very efficient way by computing the QR-decomposition for the basis of each patch only once and applying it to each datapoint projected onto this patch.}.
+\item Project the point onto the target patch. For this, we want the whole \ac{quad} to be parametrized on $\left(u,v\right)\in\left[0,1\right]^2$. This is done by first approximating the quad (which may not necessarily be planar) with its least squares fit plane. Then a projection onto this plane is done by applying a simple basis transformation\footnote{This basis transformation is computed in a very efficient way by computing the QR-decomposition for the basis of each patch only once and applying it to each datapoint projected onto this patch.}.
 \end{enumerate}
 
-The projection might lead to parameters $u,v\not\in\left[0,1\right]^2$ for some of the datapoints. As these are not directly above a \ac{quad}, they might lead to inconsistencies in where the datapoints of a quad belong to, especially along interfaces of quads, where points on different quads might lie overlapping\todourgent[author=Benni]{@Erik: Whaaaaaat?}. To simplify the treatment, these inconsistent points are omitted.
+The projection might lead to parameters $\left(u,v\right)\not\in\left[0,1\right]^2$ for some of the datapoints. As we only produce surfaces for $\left(u,v\right)\in\left[0,1\right]^2$, these are then not on the surface. If we still include them in the fitting, these will then influence parts of the surface that are not there, leading to unwanted fitting behaviour such as wiggles and turns. 
+
+We have tried several methods to solve this problem. For example, one might consider scaling the parameter space of each quad to $\left[0,1\right]^2$, which however leads to inconsistencies in parameter assignemt between neighbouring quads with different scaling. Another solution, cropping the parameter domain by shifting all parameters outside $\left[0,1\right]^2$ to the closest border (i.e. for $u \text{ or } v < 0$ is assigned to $0$, $u \text{ or } v >1$ is assigned to $1$), also leads to problems, as points in different regions of space then can end up having the same parameter values. To simplify the treatment, we therefore currently only consider the points parametrized inside $\left[0,1\right]^2$, and omit all points outside from this step onwards.
 
 After completing all these steps we obtain the following data for the subsequent steps of our algorithm:
 \begin{itemize}
@@ -69,6 +72,7 @@ For a sample output of our algorithm for a 2D case, see \autoref{fig:TwoScale}.
 \label{fig:TwoScale}
 \end{center}
 \end{figure}
+\newpage
 \begin{comment}
 \subsubsection{Parameter estimation}
 \todo[inline]{explain different strategies, comparison of final results would be great (could also be part of third milestone?)}

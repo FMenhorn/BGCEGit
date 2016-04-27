@@ -1,10 +1,24 @@
 \section{In a Nutshell:\ \acl{CADTopOpt}}
 \label{sec:nutshell}
-\todointern[author=erik]{maybe talk a bit more about summary of the report?}
-In this report, we present CADO, Computer Aided Design Optimizer, which is the result of this project. In summary, CADO works as a fully integrated tool-chain from the CAD input file to an optimized CAD file. First, the input geometry undergoes voxelization using OpenCASCADE to ensure compatibility with the topology optimizer. Second, the topology is optimized by employing the open-source tool ToPy \cite{ToPy}.  
-Next, a two-stage Dual Contouring surface reconstruction scheme is executed on the output of topology optimization. This gives us coarse parametrization patches and fine vertices as output.
-A B-Spline surface is then fitted through this data by a least-square approach using control points described by the Peters' scheme \cite{peters1992constructing} in order to ensure continuous and smooth surfaces. Lastly, a FreeCAD macro script performs boolean operations to enforce geometric constraints and exports the geometry to a standardized CAD file \cite{FreeCAD}.
-Note that intermediate steps can be replaced in the future with more suitable solutions. 
+\todourgent[author=Benni]{@ Erik: please proofread! Especially discussion or results.}
+\todourgent[author=erik]{@Erik:maybe talk a bit more about summary of the report?}
+To address a lack of software integrating Topology Optimization within a CAD framework, we have developed CADO, Computer Aided Design Optimizer. In summary, CADO works as a fully integrated tool-chain from the CAD input file to an optimized CAD file. It is fully Open Source, implemented using other freely available libraries and written in non-propietary languages. It is also developed in a modular fashion to allow further development and exchanging of parts of the software. An algorithm to fit a NURBS surface to a surface defined by voxel data was also developed, as a solution to this problem was not found in current software or literature.
 
-In conclusion, the implementation provides a user-friendly CAD-integrated topology optimization tool. The functionality of the tool is tested by three test cases explained in chapter \ref{sec:tests}.
+The software pipeline executed in CADO from a specified input can be described as follows. Firstly, the input geometry undergoes voxelization using OpenCASCADE to ensure compatibility with the topology optimizer. Secondly, the topology is optimized by employing the open-source tool ToPy \cite{ToPy}.  
 
+Next, we execute our algorithm to describe the optimized topology by NURBS surfaces. Firstly, a two-stage Dual Contouring surface reconstruction scheme is executed on the output of topology optimization. This gives a mesh of quadrilaterals, on which a set of datapoints describing the surface are parameterized.
+
+This forms the inputs for a B-Spline surface fitting algorithm, which on each quadrilateral fits $4 \times 4$ \Bez patches, which are connected smoothly (with $G^1$ continuity) over the whole domain. This follows an similar approach to that by Eck and Hoppe in \cite{eck1996automatic}, by using least-squares fitting to an underlying set of points, from which the network of \Bez patches are built with guaranteed smoothness, as described by Peters in \cite{peters1992constructing}. The sets of $4 \times 4$ \Bez patches per quad are then combined into single NURBS patches.
+
+Lastly, a FreeCAD macro script performs boolean operations to enforce geometric constraints and exports the geometry to a standardized CAD file \cite{FreeCAD}.
+
+As already mentioned, the modular structure of the software allows for future replacement of parts with more appropriate or suitable solutions. 
+
+The functionality of the tool was tested through three test cases described in \autoref{sec:tests}. We made the following observations:
+\begin{itemize}
+\item The design problem could be easily formulated in the form of CAD files.
+\item The CAD files were parsed well to construct the topology optimization problem. Only small problems (Bridge, Cantilever) could be handled using ToPy. For bigger problems (GE Jet Engine Bracket) ToPy was not sufficient, due to runtime and memory constraints.
+\item Smooth NURBS surfaces of arbitrary topology were successfully reconstructed from the optimization solution, albeit with a high number of patches. Deformations of the resulting NURBS surfaces were observed ("dents" in the bridge). The reason for this is limited accuracy in the projection scheme described in \autoref{sssec:projection}. Additionally, conservation of topological features was not guaranteed (GE Jet Engine Bracket).
+\item Finally, after post-processing for geometry constraints, the result was readily exported as a standard CAD \emph{.step} file.
+\end{itemize}
+CADO is a strong proof of concept for CAD integrated topology optimization. It solved the proposed test scenarios to a qualitative level of satisfaction. Nevertheless, CADO's maturity to a full-fledged software package for engineering problems requires further improvements and additions.

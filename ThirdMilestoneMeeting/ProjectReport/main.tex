@@ -18,7 +18,7 @@
 %% Final document mode (no todos, with pictures)
 %\documentclass[final,11pt,a4paper,bibtotoc,idxtotoc,headsepline,footsepline,footexclude,DIV13,oneside]{scrbook}
 %% Intermediate document mode (todos and pictures)
-\documentclass[11pt,a4paper,bibtotoc,idxtotoc,headsepline,footsepline,footexclude,DIV13,oneside]{scrbook}
+\documentclass[11pt, a4paper, bibtotoc, idxtotoc, headsepline, footsepline, footexclude, DIV13, oneside, final]{scrbook}
 
 %\usepackage{epstopdf}
 % KOMA-Optionen:
@@ -128,17 +128,12 @@
 
   	\clearemptydoublepage
   
-\todourgent[inline, author=Benni]{@Severin: Do the bibliography}
-	\bibliography{bibliography/literature}
-	\todourgent[author = Benni,inline]{@Benni: think about this comment: insert all the acronym stuff for final delivery of report}
-	%\cleardoublepage
-	%\printacronyms[	include-classes=abbrev,
-	%				name=Abbreviations,
-	%				sort = true]
-	%
-	%\printacronyms[	include-classes=nomencl,
-	%				name=Nomenclature,
-	%				sort = true]
+	\bibliography{bibliography/literature}	
+\begin{comment}	
+\cleardoublepage
+\printacronyms[	include-classes=abbrev, name=Abbreviations, sort = true]
+\printacronyms[	include-classes=nomencl, name=Nomenclature, sort = true]
+\end{comment}
 	
  
 \end{document}

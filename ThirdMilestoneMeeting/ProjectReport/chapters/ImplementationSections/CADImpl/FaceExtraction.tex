@@ -2,7 +2,7 @@
 \label{sec: FaceExtraction}
 
 %\tododone[inline]{}
-With the input geometry, the workflow is transferred to the face-extraction pipeling that parses the geometry and sorts out the faces based on their type. Here is an explanation of how the faces are extracted from the CAD input and how they are categorised based on the color:
+Using the input geometry, the first task to parse the geometry, while extracting the faces and sorting them out based on their type. In the software, this is done as follows:
 
 \begin{enumerate}
 	\item An instance of \lstinline|Reader| is created with the CAD source directory and file name as input. \lstinline|Reader| wraps the OpenCascade classes for reading STEP and IGES files into a single class, reads the two files, and holds them in two handles. Also \lstinline|Reader| instances are created for the non-changing domain and load file input.

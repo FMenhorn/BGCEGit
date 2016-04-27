@@ -1,6 +1,6 @@
 \subsection{Construction of ToPy Input File}
 \label{sec: ToPyInputConstruction}
-\begin{figure}
+\begin{figure}[b]
 \begin{lstlisting}
 [ToPy Problem Definition File v2007]
 PROB_TYPE:   comp
@@ -15,7 +15,7 @@ LOAD_VALU_Y: -1@100
 \caption{Sample ToPy input file: Active, fixture or force elements are passed as lists of voxel numbers; load strengths are specified with corresponding value.}
 \label{fig:TPDfile}
 \end{figure}
-The topology optimization library ToPy works with ToPy Problem Definition files ({\it.tpd}, see \autoref{fig:TPDfile}). The file starts with a header and internal parameters; they are used to define the domain size and to steer the topology optimization using grey-scale filters. Geometry shape and boundary conditions are passed specifying the type (load, active, passive, force) followed by lists of element indexes. The numbering is defined as follows:
+The topology optimization library ToPy works with ToPy Problem Definition files ({\it.tpd}, see \autoref{fig:TPDfile}). The file starts with a header and internal parameters; they are used to define the domain size and to steer the topology optimization using grey-scale filters. Geometry shape and boundary conditions are passed specifying the type (load, active, passive, force) followed by lists of element indexes. The numbering is defined as follows:\enlargethispage{1cm}
 \begin{itemize}
 \item Voxel Zero lies at the bounding box corner with the minimal coordinate values
 \item Neighboring elements in y-direction are then numbered 1,2,3, ...

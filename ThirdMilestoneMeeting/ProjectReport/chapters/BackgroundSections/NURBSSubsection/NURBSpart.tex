@@ -1,16 +1,15 @@
 \subsection{Parametric Curves}
 \label{subsec:paracurves}
-\todointern{add thing about control points in description and possibly names, because they're kinda important}
-%As mentioned in the Introduction, the main challenge of our project is to convert the mesh based geometry, obtained on a previous step, back to CAD representation. 
-
 To define NURBS from a mathematical standpoint, we first define so-called \emph{\Bez curves} and use them later for the definition of NURBS. 
 \subsubsection{\Bez Curves}
+\label{subsub:bezcurvsurf}
 A \Bez curve is a \textit{parametric} curve, which is often used for producing a smooth approximation of a given set of data points.
  
 An analytical expression for the \Bez curve parametrized by the variable $u$ is given by:
-\begin{equation*}
+\begin{equation}
+\label{eq:beziercurve}
 \vec{B}(u)=\sum\limits_{i=0}^n b_i^n(u) \vec{p}_i
-\end{equation*}
+\end{equation}
 where $\vec{p}_i$ is the $i^{\text{th}}$ control point, $i\in0,1, \dots ,n$ ($n+1$ control points in total), and
 \begin{equation*}
 b_i^n(u)=\binom{n}{i}(1-u)^{(n-i)}u^i
@@ -35,7 +34,7 @@ Given a knot vector $[u_{0}, u_{m}]$ and a degree of B-spline $p$, the $i$-th B-
 N_{i,0}(u) =  \begin{cases} 1, & \mbox{if } u_{i} \leq u < u_{i+1} \\ 0, & \mbox{otherwise } \end{cases}
 \end{equation} 
 \begin{equation}
-N_{i,p}(u) = \frac{u - u_{i}}{u_{i+p} - u_{i}}N_{i, p-1}(u)  + \frac{u_{i+p+1}-u}{u_{i+p+1} - u_{i+1}}N_{i+1, p-1}(u)
+N_{i}^p(u) = \frac{u - u_{i}}{u_{i+p} - u_{i}}N_{i}^{p-1}(u)  + \frac{u_{i+p+1}-u}{u_{i+p+1} - u_{i+1}}N_{i+1}^{p-1}(u)
 \end{equation}
 For $p=0$ the basis fucntions are simply step functions, and for $p=1$ we end up with so-called "hat" functions. Quadratic basis functions ($p=2$) look more complicated (\autoref{fig:bsplineBases}).
 \begin{figure}
@@ -62,7 +61,8 @@ For $p=0$ the basis fucntions are simply step functions, and for $p=1$ we end up
 
 By giving each of these basis functions a weight $\omega_i$ and normalizing them at each point by dividing by the total sum, we get the rational basis functions. Writing them out explicitly, in terms of B-spline basis functions $N_{i,p}$, the $n^{\text{th}}$-degree NURBS surface with $k$ control points $P_i$ is finally given by:
 \begin{equation}
-C(u) = \frac{\sum_{i=1}^{k}N_{i,n}\omega_{i}p_{i}}{\sum_{i=1}^{k}N_{i,n}\omega_{i}}.
+\label{eq:nurbscurve}
+\vec{C}(u) = \frac{\sum_{i=1}^{k}N_i^n\left(u\right)\omega_{i}\vec{p}_{i}}{\sum_{i=1}^{k}N_i^n\omega_{i}}.
 \end{equation}
 
 B-splines have the following properties, which are useful for our problem:
@@ -71,4 +71,9 @@ B-splines have the following properties, which are useful for our problem:
 \item B-Splines only change locally (depending on the degree $n$) when a control point is changed.
 \end{itemize}
 
-Analogous to the tensor product \Bez curve surfaces, one can define tensor product B-spline or NURBS surfaces. With varying degrees and number of control points, these can be made to fit a variety of shapes. However, as the parameters $u$ and $v$ define a square in their two-dimensional parameter domain, there is a limit to what topologies may be realized with just one such NURBS surface. For example, an open cylinder could be constructed by one such surface where one of the sides meets its own beginning, whereas something with multiple holes - like a double torus, or a non-flat 8-shaped surface, would be impossible. Therefore, when using NURBS, surfaces are most often modelled using a network of connected patches. \todointern{maybe should include an example picture here} For more information about NURBS, see \cite{farin1999nurbs}.
+Analogous to the tensor product \Bez curve surfaces (see \autoref{eq:bezsurface}), one can define tensor product B-spline or NURBS surfaces:
+\begin{equation}
+\label{eq:nurbssurface}
+\vec{S_\text{NURBS}}(u,v)=\frac{\sum\limits_{i=0}^n \sum\limits_{j=0}^m N_{i}^n(u) N_{j}^m(v) \omega_{i,j}\vec{p}_{i,j}}{\sum\limits_{i=0}^n \sum\limits_{j=0}^m N_{i}^n(u) N_{j}^m(v) \omega_{i,j}},
+\end{equation}
+where the case with all $\omega_{i,j} = 1$ corresponds to a B-Spline surface; respectively a NURBS surface if any $\omega_{i,j} \neq 1 $. With varying degrees and number of control points, these can be made to fit a variety of shapes. However, as the parameters $u$ and $v$ define a square in their two-dimensional parameter domain, there is a limit to what topologies may be realized with just one such NURBS surface. For example, an open cylinder could be constructed by one such surface where one of the sides meets its own beginning, whereas something with multiple holes - like a double torus, or a non-flat 8-shaped surface, would be impossible. Therefore, when using NURBS, surfaces are most often modelled using a network of connected patches. \todointern{maybe should include an example picture here} For more information about NURBS, see \cite{farin1999nurbs}.
