@@ -1,4 +1,4 @@
-\documentclass[9pt,pdftex]{beamer}
+﻿\documentclass[9pt,pdftex]{beamer}
 \setbeamertemplate{section in toc}[sections numbered]
 \setbeamertemplate{subsection in toc}%
 {\leavevmode\leftskip=3em\rlap{\hskip-2em\inserttocsectionnumber.\inserttocsubsectionnumber}\inserttocsubsection\par}
@@ -109,6 +109,12 @@ Supervisors: D. Hartmann, U. Wever, A. Bakhtiari} %[displayed in footer]{display
 \frame{\maketitle}
 
 \input{Sections/Team}
+\begin{frame}{Contents}
+\setcounter{tocdepth}{1}
+\tableofcontents
+\end{frame}
+
+\input{Sections/Organization}
 \begin{frame}{Contents}
 \setcounter{tocdepth}{1}
 \tableofcontents
