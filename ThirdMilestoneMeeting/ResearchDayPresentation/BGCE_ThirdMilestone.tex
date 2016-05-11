@@ -1,4 +1,4 @@
-﻿\documentclass[9pt,pdftex]{beamer}
+\documentclass[9pt,pdftex]{beamer}
 \setbeamertemplate{section in toc}[sections numbered]
 \setbeamertemplate{subsection in toc}%
 {\leavevmode\leftskip=3em\rlap{\hskip-2em\inserttocsectionnumber.\inserttocsubsectionnumber}\inserttocsubsection\par}
@@ -114,6 +114,16 @@ Supervisors: D. Hartmann, U. Wever, A. Bakhtiari} %[displayed in footer]{display
 \tableofcontents
 \end{frame}
 
+%-------------------------------------------------------
+\section{What was the Task?}
+%  \begin{frame}
+%  \setcounter{tocdepth}{1}
+%  \frametitle{Contents}
+%  \tableofcontents[currentsection]  
+%  \end{frame}
+\input{Sections/Motivation}
+%-------------------------------------------------------
+
 \input{Sections/Organization}
 \begin{frame}{Contents}
 \setcounter{tocdepth}{1}
@@ -121,14 +131,8 @@ Supervisors: D. Hartmann, U. Wever, A. Bakhtiari} %[displayed in footer]{display
 \end{frame}
 
 %-------------------------------------------------------
-\section{Product Presentation}
-  \begin{frame}
-  \setcounter{tocdepth}{1}
-  \frametitle{Contents}
-  \tableofcontents[currentsection]  
-  \end{frame}
-\input{Sections/Pitch}
-%-------------------------------------------------------
+
+
 \section{Topology Optimization Pipeline}
 
   \begin{frame}
@@ -186,11 +190,11 @@ Supervisors: D. Hartmann, U. Wever, A. Bakhtiari} %[displayed in footer]{display
 \input{Sections/BackToCAD}
 
 \section{Summary \& Outlook}
-  \begin{frame}
-  \setcounter{tocdepth}{1}
-  \frametitle{Contents}
-  \tableofcontents[hideallsubsections,currentsection]
-  \end{frame}
+%  \begin{frame}
+%  \setcounter{tocdepth}{1}
+%  \frametitle{Contents}
+%  \tableofcontents[hideallsubsections,currentsection]
+%  \end{frame}
 \input{Sections/SummaryOutlook}
 %\section*{Thank You}
 %\input{Sections/ThankYou}
