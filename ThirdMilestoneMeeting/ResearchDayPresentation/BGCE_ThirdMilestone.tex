@@ -1,0 +1,195 @@
+\documentclass[9pt,pdftex]{beamer}
+\setbeamertemplate{section in toc}[sections numbered]
+\setbeamertemplate{subsection in toc}%
+{\leavevmode\leftskip=3em\rlap{\hskip-2em\inserttocsectionnumber.\inserttocsubsectionnumber}\inserttocsubsection\par}
+% use git: import repository as new project in eclipse: http://www.eclipse.org/forums/index.php/t/226301/
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amsfonts, amsmath, amssymb}
+\usepackage[bf,small, format=plain]{caption}
+\usepackage{color}
+
+%\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{graphicx}
+\usepackage{tikz,tikzscale,pgfplots,grffile}
+\usepackage{3dplot}
+\usetikzlibrary{arrows,shapes,backgrounds}
+\usetikzlibrary{positioning,decorations.text}
+\usetikzlibrary{calc}
+\usetikzlibrary{plotmarks}
+\usetikzlibrary{spy}
+\tikzset{
+    invisible/.style={opacity=0,text opacity=0},
+    visible on/.style={alt={#1{}{invisible}}},
+    alt/.code args={<#1>#2#3}{%
+      \alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} 
+    },
+}
+\usetikzlibrary{shapes.misc}
+\usetikzlibrary{calc}
+\tikzset{cross/.style={cross out, draw=black, minimum size=2*(#1-\pgflinewidth), inner sep=0pt, outer sep=0pt},
+%default radius will be 1pt. 
+cross/.default={2pt}}
+\tikzstyle{dot}=[fill, draw, circle,inner sep=1pt]
+
+\usepackage{bbding}
+
+\usepackage[clock]{ifsym}
+
+\usepackage{pgfplots}
+\usepackage{grffile}
+\pgfplotsset{compat=newest}
+
+%\author{}
+%\title{}
+%\setbeamercovered{transparent} 
+%\setbeamertemplate{navigation symbols}{} 
+%\logo{} 
+%\institute{} 
+%\date{} 
+%\subject{} 
+
+\pgfdeclarelayer{bg}
+\pgfsetlayers{bg,main}
+
+\usepackage{mdframed}
+\usepackage{multicol}
+\usepackage{tcolorbox}
+%\usepackage{multirow}
+% \usepackage{paralist}
+%\usepackage[colorinlistoftodos]{todonotes}
+%\usepackage{biblatex}
+%usepackage[nolist,nohyperlinks]{acronym}
+%\usepackage{amstext}
+%\usepackage{hyperref} 
+%\usepackage{comment}
+\usepackage{caption}
+\captionsetup[figure]{labelformat=empty}%to no have figure
+%\renewcommand*{\figureautorefname}{fig.}
+%\renewcommand*{\equationautorefname}{eq.}
+\usepackage{bm}
+\usepackage{comment}
+\usepackage[export]{adjustbox} % figure positioning
+%\usepackage{beamerthemeshadow}
+%\usepackage{tikz}
+%\usepackage{pgfplots}
+%\usepackage{ulem}
+%\usepackage[lofdepth,lotdepth]{subfig}
+%\newenvironment{figure*}%
+%{\begin{figure}}
+%{\end{figure}}
+%\usepackage[style=mla,babel=hyphen,backend=biber]{biblatex}
+% CSE-Beamer-Styles:
+\usepackage[course]{beamertheme_sccstalk}
+%\usepackage[lecture]{beamertheme_sccstalk}
+\usepackage{beamercolorscheme_sccs}
+\usepackage{beamerfontthemestructurebold}
+\setcounter{tocdepth}{3} 
+%colored blocks, example \begin{variableblock}{Title}{bg=blue,fg=white}{bg=white,fg=black}
+\newenvironment{variableblock}[4]{%
+\setbeamercolor{block title}{#2}
+\setbeamercolor{block body}{#3}
+\begin{block}{#1}\begin{mdframed}{#4}\end{mdframed}\end{block}}
+
+%some useful commands
+%\newcommand{\der}[2]{\frac{\text{d}#1}{\text{d}#2}}
+\title{BGCE Project: CAD -- Integrated Topology Optimization}
+\subtitle{Final Milestone Meeting}
+\author[S. Joshi, S. Reiz] {
+BGCE Students \\
+Supervisors: D. Hartmann, U. Wever, A. Bakhtiari} %[displayed in footer]{displayed on title page}
+\date{\today}
+\institute{Technische Universität München}
+\newtheorem*{rem}{Remark}
+
+
+\begin{document}
+\setbeamertemplate{caption}{\raggedright\insertcaption\par}
+\setbeamertemplate{caption}{\raggedright\insertcaption\par} % removes "figure" label at figures
+\frame{\maketitle}
+
+\input{Sections/Team}
+\begin{frame}{Contents}
+\setcounter{tocdepth}{1}
+\tableofcontents
+\end{frame}
+
+%-------------------------------------------------------
+\section{Product Presentation}
+  \begin{frame}
+  \setcounter{tocdepth}{1}
+  \frametitle{Contents}
+  \tableofcontents[currentsection]  
+  \end{frame}
+\input{Sections/Pitch}
+%-------------------------------------------------------
+\section{Topology Optimization Pipeline}
+
+  \begin{frame}
+    \setcounter{tocdepth}{2}
+  \frametitle{Contents}
+  \tableofcontents[currentsection]
+  \end{frame}
+
+\subsection{Overview: Workflow}
+%  \begin{frame}
+%  \frametitle{Contents}
+%  \tableofcontents[currentsubsection]
+%  \end{frame}
+\input{Sections/Workflow}
+
+%-------------------------------------------------------
+%\subsection{Organization}
+%\input{Sections/Organization}
+
+
+
+%-------------------------------------------------------
+\subsection{Topology optimization}
+%  \begin{frame}
+%  \frametitle{Contents}
+%  \tableofcontents[currentsubsection]
+%  \end{frame}
+\input{Sections/TopologyOptimization}
+%-------------------------------------------------------
+
+%-------------------------------------------------------
+%
+
+
+\subsection{Surface Extraction}
+%  \begin{frame}
+%  \frametitle{Contents}
+%  \tableofcontents[currentsubsection]
+%  \end{frame}
+\input{Sections/SurfaceExtraction}
+
+
+\subsection{B--Spline Fitting}
+%  \begin{frame}
+%  \frametitle{Contents}
+%  \tableofcontents[currentsubsection]
+%  \end{frame}
+\input{Sections/Nurbs}
+
+\subsection{Back to CAD}
+%  \begin{frame}
+%  \frametitle{Contents}
+%  \tableofcontents[currentsubsection]
+%  \end{frame}
+\input{Sections/BackToCAD}
+
+\section{Summary \& Outlook}
+  \begin{frame}
+  \setcounter{tocdepth}{1}
+  \frametitle{Contents}
+  \tableofcontents[hideallsubsections,currentsection]
+  \end{frame}
+\input{Sections/SummaryOutlook}
+%\section*{Thank You}
+%\input{Sections/ThankYou}
+\section*{Literature}
+\input{Sections/Literature}
+\section*{Theory}
+\input{Sections/BackupSlidesProjection}
+\end{document}

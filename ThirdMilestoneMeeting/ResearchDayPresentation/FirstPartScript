@@ -1,0 +1,76 @@
+
+Script for Dave:
+
+Slide 1: (Only Dave)
+	
+	Meet Dave. Dave is a designer. Dave just finished a major project at work, and plans to throw a party tonight. He has a brilliant idea to jazz up his party ..
+
+Slide 2: (Dave with only the pinyata)
+
+	.. he's gonna hang a Pinyata! But there's a problem ..
+
+Slide 3: (Dave, pinyata, and the ultimate question)
+
+	.. what does it hang from? He needs a well-designed, optimal CANTILEVER to hang it from.
+
+Slide 4: (Dave, idea-bulb)
+
+	Dave has an idea! He can design one himself .. 
+
+Slide 5: (Dave, idea-bulb, printer)
+
+	.. and print it on his awesome 3D printer that he won last month. Dave quickly whips out a design, and goes ..
+
+Slide 6: (Dave, design, Ed)
+
+	.. to his friend Ed the Engineer to get his engineering opinion.
+
+Slide 7: (Dave, design Ed-disappering)
+
+	Ed, being an engineer, is skeptical. He warns that getting the optimal CANTILEVER would take a lot of effort - Dave would constantly need to alter his design to Ed's suggestions.
+
+Slide 8: (Dave)
+
+	Dave doesn't quite like this. In fact, he's quite tired of this back-and-forth thing. He now turns to this fancy computational miracle that goes by the name of ..
+
+Slide 9: (Dave, top-opt)
+
+	.. Topology Optimization - An algorithm that at the press of a button gives an optimized structure for your design constraints.
+
+Slide 10: (Dave, computer--loading)
+
+	Dave is excited! He installs the best Open-source Top-Opt software out there, and waits for the result. It turns out to be great and all, but there's one problem ..
+
+Slide 11: (Dave, computer-obscure)
+
+	The result is in an obscure, never-before-heard-of data representation. The format is of no use to him - he cannot work further on it, nor can he port it to his 3D printer.
+	Ultimately, Dave the Designer is left disappointed.
+
+Slide 12a: (Design issues)
+
+	- And Dave is not the only one. These issues plague the design community the world over, especially those in Small-to-medium design firms.
+	- The repetitive design-engineering process consumes both time and money.
+	- What little open-source topology optimization options do exist are a dead-end in terms or portability of results.
+
+Slide 12b: (Design issues)
+
+	- What could solve this issue?
+	- A one-click topology optimization software that would bring the obscure top-opt output to a usable format for designers.
+
+Slide 13: (Introducing CADO)
+
+	- This is exactly what CADO does. 
+	- CADO, short for Computer-Aided Design Optimization, provides a fully integrated pipeline for recovering usable geometry.
+
+Slide 14a: (Features: Effective and Easy)
+
+	- CADO reconstructs a full 3D parametric representation from the results of topology optimization
+	- The output it provides is in standard engineering and design geometry format, which can directly be sent for production, or can be further worked on by designers on their favourite CAD editors.
+	- Furthermore, in terms of technical details of FEM and geometry representations, it works like a black box.
+
+Slide 14b: (Features: Flexible)
+
+	- However, as a designer, you have full control on the solution
+	- CADO provides functionality to specify detailed geometry features
+	- You can supply a host of design constraints, such as fixtures, loads, non-changing regions
+	- In terms of optimization, you can choose how accurate you want the topology optimization to be
